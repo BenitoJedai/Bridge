@@ -1,0 +1,2 @@
+rem C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild  "c:\projects\ext.net\ScriptKit.NET\ScriptKit.Sandbox\TestProject\TestProject.csproj " /t:Rebuild /p:Configuation=Debug
+C:\Windows\Microsoft.NET\Framework\v3.5\msbuild  "c:\projects\ext.net\ScriptKit.NET\ScriptKit.Sandbox\TestProject\TestProject.csproj " /t:Rebuild /p:Configuation=Debug
