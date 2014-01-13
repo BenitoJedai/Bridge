@@ -12,10 +12,12 @@ namespace ScriptKit.NET
             {
                 message = String.Format("Language construction {0} is not supported", node.GetType().Name);
             }
+
             return Exception.Create("{0} {1}", message, node.StartLocation); 
         }
 
-        protected Exception CreateException(AstNode node) {
+        protected Exception CreateException(AstNode node) 
+        {
             return this.CreateException(node, null);
         }
 

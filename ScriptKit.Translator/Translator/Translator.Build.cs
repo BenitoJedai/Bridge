@@ -38,6 +38,7 @@ namespace ScriptKit.NET
             using (var p = Process.Start(info))
             {
                 p.WaitForExit();
+
                 if (p.ExitCode != 0)
                 {
                     ScriptKit.NET.Exception.Throw("Compilation was not successful, exit code - " + p.ExitCode);

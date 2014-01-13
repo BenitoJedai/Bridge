@@ -90,12 +90,14 @@ namespace ScriptKit.NET
                 }
 
                 Expression initializer = item.Initializer;
+
                 if (initializer.IsNull)
                 {
                     if (this.CurrentType.ClassType == ClassType.Enum)
                     {
                         throw this.CreateException(fieldDeclaration, "Enum items must be explicitly numbered");
                     }
+
                     initializer = this.GetDefaultFieldInitializer(fieldDeclaration.ReturnType);
                 }
 

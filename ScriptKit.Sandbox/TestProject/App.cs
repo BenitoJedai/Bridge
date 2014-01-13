@@ -60,6 +60,7 @@ namespace TestProject
             int i = Class1.Property0;
             Class1 c1 = new Class1();
             int i2 = c1.Property1;
+
             return base.Sum(x1, x2) + x2 + x1;
         }
     }

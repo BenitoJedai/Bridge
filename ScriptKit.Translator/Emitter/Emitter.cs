@@ -38,9 +38,11 @@ namespace ScriptKit.NET
         protected virtual HashSet<string> CreateNamespaces()
         {
             var result = new HashSet<string>();
+
             foreach (string typeName in this.TypeDefinitions.Keys)
             {
                 int index = typeName.LastIndexOf('.');
+
                 if (index >= 0)
                 {
                     this.RegisterNamespace(typeName.Substring(0, index), result);
@@ -69,6 +71,7 @@ namespace ScriptKit.NET
 
                 builder.Append(part);
                 string item = builder.ToString();
+
                 if (!repository.Contains(item))
                 {
                     repository.Add(item);
@@ -166,6 +169,7 @@ namespace ScriptKit.NET
         {
             var names = new List<string>(properties.Keys);
             names.Sort();
+
             foreach (var name in names)
             {
                 this.VisitPropertyDeclaration(properties[name]);
@@ -173,6 +177,7 @@ namespace ScriptKit.NET
 
             names = new List<string>(methods.Keys);
             names.Sort();
+
             foreach (var name in names)
             {
                 this.VisitMethodDeclaration(methods[name]);
@@ -202,6 +207,7 @@ namespace ScriptKit.NET
             {
                 var names = new List<string>(this.TypeInfo.InstanceFields.Keys);
                 names.Sort();
+
                 foreach (var name in names)
                 {
                     this.Write("this.", name, " = ");
@@ -209,6 +215,7 @@ namespace ScriptKit.NET
                     this.Write(";");
                     this.NewLine();
                 }
+
                 requireNewLine = true;
             }            
 
@@ -243,6 +250,7 @@ namespace ScriptKit.NET
             }
 
             var script = this.GetScript(ctor);
+
             if (script == null)
             {
                 if (ctor.Body.HasChildren)
@@ -281,6 +289,7 @@ namespace ScriptKit.NET
 
                 this.Write("init: function");
                 this.BeginBlock();
+
                 for (var i = 0; i < sortedNames.Count; i++)
                 {
                     var name = sortedNames[i];
@@ -289,6 +298,7 @@ namespace ScriptKit.NET
                     this.Write(";");
                     this.NewLine();
                 }
+
                 this.EndBlock();
                 this.Comma = true;
             }            
@@ -301,6 +311,7 @@ namespace ScriptKit.NET
 
             var list = new List<string>();
             var baseType = this.GetBaseTypeDefinition();
+
             if (baseType != null)
             {
                 list.Add(Helpers.GetScriptFullName(baseType));
@@ -322,12 +333,14 @@ namespace ScriptKit.NET
             }
 
             bool needComma = false;
+
             foreach (var item in list)
             {
                 if (needComma)
                 {
                     sb.Append(",");
                 }
+
                 needComma = true;
                 sb.Append(this.ShortenTypeName(item));
             }
@@ -396,7 +409,7 @@ namespace ScriptKit.NET
 
             if (!block)
             {
-                Outdent();
+                this.Outdent();
             }
         }
 
@@ -404,28 +417,34 @@ namespace ScriptKit.NET
         {
             this.Write("(");
             bool needComma = false;
+
             foreach (var p in declarations)
             {
                 this.CheckIdentifier(p.Name, context);
+
                 if (needComma)
                 {
                     this.WriteComma();
                 }
+
                 needComma = true;
                 this.Write(p.Name);
             }
+
             this.Write(")");
         }
 
         protected virtual void EmitExpressionList(IEnumerable<Expression> expressions)
         {
             bool needComma = false;
+
             foreach (var expr in expressions)
             {
                 if (needComma)
                 {
                     this.WriteComma();
                 }
+
                 needComma = true;
                 expr.AcceptVisitor(this);
             }
@@ -512,6 +531,7 @@ namespace ScriptKit.NET
         protected virtual void WriteComma(bool newLine)
         {
             this.Write(",");
+
             if (newLine)
             {
                 this.NewLine();
@@ -531,12 +551,14 @@ namespace ScriptKit.NET
         protected virtual void WriteObjectInitializer(IEnumerable<Expression> expressions)
         {
             bool needComma = false;
+
             foreach (NamedArgumentExpression item in expressions)
             {
                 if (needComma)
                 {
                     this.WriteComma();
                 }
+
                 needComma = true;
                 this.Write(item.Name, ": ");
                 item.Expression.AcceptVisitor(this);
@@ -551,6 +573,7 @@ namespace ScriptKit.NET
         protected virtual bool KeepLineAfterBlock(BlockStatement block)
         {
             var parent = block.Parent;
+
             if (parent is AnonymousMethodExpression)
             {
                 return true;
@@ -567,6 +590,7 @@ namespace ScriptKit.NET
             }
 
             var loop = parent as DoWhileStatement;
+
             if (loop != null)
             {
                 return true;
@@ -707,6 +731,7 @@ namespace ScriptKit.NET
                 while (true)
                 {
                     guess = namespacePrefix + "." + id;
+
                     if (allowNamespaces && this.Namespaces.Contains(guess))
                     {
                         return guess;
@@ -718,10 +743,12 @@ namespace ScriptKit.NET
                     }
 
                     int index = namespacePrefix.LastIndexOf(".");
+
                     if (index < 0)
                     {
                         break;
                     }
+
                     namespacePrefix = namespacePrefix.Substring(0, index);
                 }
             }
@@ -729,6 +756,7 @@ namespace ScriptKit.NET
             foreach (string usingPrefix in this.TypeInfo.Usings)
             {
                 guess = usingPrefix + "." + id;
+
                 if (this.TypeDefinitions.ContainsKey(guess))
                 {
                     return guess;
@@ -752,6 +780,7 @@ namespace ScriptKit.NET
         {
             string name = Helpers.GetScriptName(reference);
             name = this.ResolveType(name);
+
             return this.TypeDefinitions[name];
         }
 
@@ -763,16 +792,19 @@ namespace ScriptKit.NET
         protected virtual TypeDefinition GetBaseTypeDefinition(TypeDefinition type)
         {
             var reference = this.TypeDefinitions[Helpers.GetTypeMapKey(type)].BaseType;
+
             if (reference == null)
             {
                 return null;
             }
+
             return this.TypeDefinitions[Helpers.GetTypeMapKey(reference)];
         }
 
         protected virtual TypeDefinition GetBaseMethodOwnerTypeDefinition(string methodName, int genericParamCount)
         {
             TypeDefinition type = this.GetBaseTypeDefinition();
+
             while (true)
             {
                 var methods = type.Methods.Where(m => m.Name == methodName);
@@ -784,6 +816,7 @@ namespace ScriptKit.NET
                         return type;
                     }
                 }
+
                 type = this.GetBaseTypeDefinition(type);
             }
         }
@@ -808,6 +841,7 @@ namespace ScriptKit.NET
                     }
                 }
             }
+
             return null;
         }
 
@@ -825,34 +859,42 @@ namespace ScriptKit.NET
             while (true)
             {
                 MemberReferenceExpression member = current as MemberReferenceExpression;
+
                 if (member != null)
                 {
                     parts.Insert(0, member.MemberName);
                     current = member.Target;
+
                     if (genericCount < 0)
                     {
                         genericCount = member.TypeArguments.Count;
                     }
+
                     continue;
                 }
 
                 IdentifierExpression id = current as IdentifierExpression;
+
                 if (id != null)
                 {
                     parts.Insert(0, id.Identifier);
+
                     if (genericCount < 0)
                     {
                         genericCount = id.TypeArguments.Count;
                     }
+
                     break;
                 }
 
                 TypeReferenceExpression typeRef = current as TypeReferenceExpression;
+
                 if (typeRef != null)
                 {
                     parts.Insert(0, Helpers.GetScriptName(typeRef.Type));
                     break;
                 }
+
                 break;
             }
 
@@ -885,7 +927,10 @@ namespace ScriptKit.NET
                 if (method.IsStatic
                     && method.Parameters.Count == node.Arguments.Count
                     && method.GenericParameters.Count == genericCount)
+                {
                     return this.Validator.GetInlineCode(method);
+
+                }
             }
 
             return null;
@@ -894,12 +939,14 @@ namespace ScriptKit.NET
         protected virtual IEnumerable<string> GetScript(EntityDeclaration method)
         {
             var attr = this.GetAttribute(method.Attributes, "ScriptKit.Core.Script");
+
             return this.GetScriptArguments(attr);
         }
 
         protected virtual string GetInline(EntityDeclaration method)
         {
             var attr = this.GetAttribute(method.Attributes, "ScriptKit.Core.Inline");
+
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
         }
 
@@ -911,11 +958,13 @@ namespace ScriptKit.NET
             }
 
             var result = new List<string>();
+
             foreach (var arg in attr.Arguments)
             {
                 PrimitiveExpression expr = (PrimitiveExpression)arg;
                 result.Add((string)expr.Value);
             }
+
             return result;
         }
 
@@ -953,14 +1002,17 @@ namespace ScriptKit.NET
                 this.EnsureComma();
 
                 this.ResetLocals();
+
                 if (setter)
                 {
                     this.AddLocals(new ParameterDeclaration[] { new ParameterDeclaration { Name = "value" } });
                 }
+
                 this.Write((setter ? "set" : "get") + propertyDeclaration.Name);
                 this.Write(" : function (" + (setter ? "value" : "") + ") ");
 
                 var script = this.GetScript(accessor);
+
                 if (script == null)
                 {
                     if (!accessor.Body.IsNull)
@@ -970,6 +1022,7 @@ namespace ScriptKit.NET
                     else
                     {
                         this.BeginBlock();
+
                         if (setter)
                         {
                             this.Write("this." + propertyDeclaration.Name.ToLowerCamelCase() + " = value;");
@@ -978,6 +1031,7 @@ namespace ScriptKit.NET
                         {
                             this.Write("return this." + propertyDeclaration.Name.ToLowerCamelCase() + ";");
                         }
+
                         this.NewLine();
                         this.EndBlock();
                     }
@@ -985,11 +1039,13 @@ namespace ScriptKit.NET
                 else
                 {
                     this.BeginBlock();
+
                     foreach (var line in script)
                     {
                         this.Write(line);
                         this.NewLine();
                     }
+
                     this.EndBlock();
                 }
 
@@ -1011,15 +1067,18 @@ namespace ScriptKit.NET
             }
 
             IdentifierExpression expr = memberReferenceExpression.Target as IdentifierExpression;
+
             if (expr != null)
             {
                 if (this.Locals.ContainsKey(expr.Identifier)) 
                 {
                     var type = this.Locals[expr.Identifier];
                     string resolved = this.ResolveType(type.ToString());
+
                     if(!string.IsNullOrEmpty(resolved)) 
                     {
                         var typeInfo = this.Types.FirstOrDefault(t => t.FullName == resolved);
+
                         if (typeInfo != null)
                         {
                             if (typeInfo.InstanceProperties.ContainsKey(name))
@@ -1037,13 +1096,16 @@ namespace ScriptKit.NET
                 else
                 {
                     IMemberDefinition member = this.ResolveFieldOrMethod(expr.Identifier, 0);
+
                     if (member != null && member is FieldDefinition)
                     {
                         FieldDefinition field = member as FieldDefinition;
                         string resolved = this.ResolveType(field.FieldType.Name);
+
                         if (!string.IsNullOrEmpty(resolved))
                         {
                             var typeInfo = this.Types.FirstOrDefault(t => t.FullName == resolved);
+
                             if (typeInfo != null)
                             {
                                 if (typeInfo.InstanceProperties.ContainsKey(name))
@@ -1061,9 +1123,11 @@ namespace ScriptKit.NET
                     else
                     {
                         string resolved = this.ResolveType(expr.Identifier);
+
                         if (!string.IsNullOrEmpty(resolved))
                         {
                             var typeInfo = this.Types.FirstOrDefault(t => t.FullName == resolved);
+
                             if (typeInfo != null)
                             {
                                 if (typeInfo.InstanceProperties.ContainsKey(name))
@@ -1087,6 +1151,7 @@ namespace ScriptKit.NET
         protected virtual void EmitTypeReference(AstType astType)
         {
             var composedType = astType as ComposedType;
+
             if (composedType != null && composedType.ArraySpecifiers != null && composedType.ArraySpecifiers.Count > 0)
             {
                 this.Write("Array");
@@ -1094,10 +1159,12 @@ namespace ScriptKit.NET
             else
             {
                 string type = this.ResolveType(Helpers.GetScriptName(astType));
+
                 if (String.IsNullOrEmpty(type))
                 {
                     throw CreateException(astType, "Cannot resolve type " + astType.ToString());
                 }
+
                 this.Write(this.ShortenTypeName(type));
             }
         }                

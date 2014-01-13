@@ -27,6 +27,7 @@ namespace ScriptKit.NET
                     }
                 }
             }
+
             return false;
         }
 
@@ -86,6 +87,7 @@ namespace ScriptKit.NET
             }
 
             var arrayExpr = expr as ArrayCreateExpression;
+
             if (arrayExpr == null)
             {
                 return false;
@@ -94,6 +96,7 @@ namespace ScriptKit.NET
             try 
             {
                 new ArrayInitializerVisitor().VisitArrayCreateExpression(arrayExpr);
+
                 return true;
             } 
             catch(Exception) 

@@ -96,6 +96,7 @@ namespace ScriptKit.NET
         {
             bool foundInstance = false;
             bool foundStatic = false;
+
             if (type.HasMethods) 
             {
                 var ctors = type.Methods.Where(method => method.IsConstructor);
@@ -167,12 +168,14 @@ namespace ScriptKit.NET
         public virtual void CheckDuplicateNames(IDictionary<string, TypeDefinition> allTypes) 
         {
             var parents = this.GetParentTypes(allTypes);
+
             foreach(var name in allTypes.Keys) 
             {
                 if (parents.Contains(name))
                 {
                     continue;
                 }
+
                 this.CheckDuplicateNames(allTypes, allTypes[name]);
             }
         }
@@ -180,11 +183,13 @@ namespace ScriptKit.NET
         public virtual HashSet<string> GetParentTypes(IDictionary<string, TypeDefinition> allTypes) 
         {
             var result = new HashSet<string>();
+
             foreach(var type in allTypes.Values) 
             {
                 if(type.BaseType != null) 
                 {
                     string parentName = type.BaseType.FullName;
+
                     if (!allTypes.ContainsKey(parentName))
                     {
                         ScriptKit.NET.Exception.Throw("Unknown type {0}", parentName);
@@ -219,14 +224,17 @@ namespace ScriptKit.NET
                     {
                         continue;
                     }
+                    
                     if (instanceFields.ContainsKey(field.Name))
                     {
                         ScriptKit.NET.Exception.Throw("All instance fields within an hierarchy must have unique names: {0} and {1}", field, instanceFields[field.Name]);
                     }
+
                     if (instanceMethods.ContainsKey(field.Name))
                     {
                         ScriptKit.NET.Exception.Throw("A field and a method cannot have the same name: {0} and {1}", field, instanceMethods[field.Name]);
                     }
+
                     instanceFields.Add(field.Name, field);
                 }
 
@@ -286,10 +294,12 @@ namespace ScriptKit.NET
         public virtual string GetMethodSignatureKey(MethodDefinition method) 
         {
             var list = new List<string>(method.Parameters.Count);
+
             foreach (ParameterDefinition p in method.Parameters)
             {
                 list.Add(p.ParameterType.FullName);
             }
+            
             return String.Join("$", list.ToArray());
         }
     }

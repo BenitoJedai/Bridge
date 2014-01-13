@@ -109,6 +109,7 @@ namespace ScriptKit.NET
         }
 
         HashSet<string> namespaces;
+
         protected virtual HashSet<string> Namespaces
         {
             get

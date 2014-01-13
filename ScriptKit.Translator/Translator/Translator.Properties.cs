@@ -30,6 +30,7 @@ namespace ScriptKit.NET
         }
 
         private string msbuildVersion="3.5";
+
         public string MSBuildVersion
         {
             get
@@ -49,6 +50,7 @@ namespace ScriptKit.NET
         }
 
         private bool rebuild = true;
+
         public bool Rebuild 
         {
             get

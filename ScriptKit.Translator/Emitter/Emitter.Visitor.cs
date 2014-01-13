@@ -33,6 +33,7 @@ namespace ScriptKit.NET
             this.Write(" ");
 
             var script = this.GetScript(methodDeclaration);
+
             if (script == null)
             {
                 methodDeclaration.Body.AcceptVisitor(this);
@@ -40,11 +41,13 @@ namespace ScriptKit.NET
             else
             {
                 this.BeginBlock();
+
                 foreach (var line in script)
                 {
                     this.Write(line);
                     this.NewLine();
                 }
+                
                 this.EndBlock();
             }
 
@@ -77,6 +80,7 @@ namespace ScriptKit.NET
         {
             this.Write("var ");
             bool needComma = false;
+
             foreach (var variable in variableDeclarationStatement.Variables)
             {
                 this.CheckIdentifier(variable.Name, variableDeclarationStatement);
@@ -86,9 +90,11 @@ namespace ScriptKit.NET
                 {
                     this.WriteComma();
                 }
+
                 needComma = true;
 
                 this.Write(variable.Name);
+
                 if (!variable.Initializer.IsNull)
                 {
                     this.Write(" = ");
@@ -109,6 +115,7 @@ namespace ScriptKit.NET
             {
                 return;
             }
+
             this.WriteScript(primitiveExpression.Value);
         }
 
@@ -179,6 +186,7 @@ namespace ScriptKit.NET
         {
             binaryOperatorExpression.Left.AcceptVisitor(this);
             this.Write(" ");
+
             switch (binaryOperatorExpression.Operator)
             {
                 case BinaryOperatorType.Add:
@@ -239,6 +247,7 @@ namespace ScriptKit.NET
                 default:
                     throw this.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
             }
+
             this.Write(" ");
             binaryOperatorExpression.Right.AcceptVisitor(this);
         }
@@ -261,6 +270,7 @@ namespace ScriptKit.NET
                 MethodDefinition method = member as MethodDefinition;
                 FieldDefinition field = member as FieldDefinition;
                 bool isStatic = method != null && method.IsStatic || field != null && field.IsStatic;
+
                 if (isStatic)
                 {
                     this.Write(Helpers.GetScriptFullName(member.DeclaringType));
@@ -280,17 +290,21 @@ namespace ScriptKit.NET
                 {
                     this.Write(id);
                 }
+
                 return;
             }
 
             string resolved = this.ResolveNamespaceOrType(id, true);
+
             if (!String.IsNullOrEmpty(resolved))
             {
                 if (this.TypeDefinitions.ContainsKey(resolved))
                 {
                     resolved = this.ShortenTypeName(resolved);
                 }
+
                 this.Write(resolved);
+                
                 return;
             }
 
@@ -304,6 +318,7 @@ namespace ScriptKit.NET
             if (prop != null)
             {
                 string inline = this.GetInline(this.IsAssignment ? prop.Setter : prop.Getter);
+
                 if (!string.IsNullOrEmpty(inline))
                 {
                     this.Write(inline);
@@ -353,14 +368,17 @@ namespace ScriptKit.NET
                 this.Write("");
                 StringBuilder savedBuilder = this.Output;
                 var args = new List<string>(invocationExpression.Arguments.Count);
+
                 foreach (var arg in invocationExpression.Arguments)
                 {
                     this.Output = new StringBuilder();
                     arg.AcceptVisitor(this);
                     args.Add(this.Output.ToString());
                 }
+                
                 this.Output = savedBuilder;
                 this.Output.Append(String.Format(inlineCode, args.ToArray()));
+                
                 return;
             }
 
@@ -371,6 +389,7 @@ namespace ScriptKit.NET
                 var baseType = this.GetBaseMethodOwnerTypeDefinition(targetMember.MemberName, targetMember.TypeArguments.Count);
                 string currentMethod = "";
                 var method = invocationExpression.GetParent<MethodDeclaration>();
+                
                 if (method != null)
                 {
                     currentMethod = method.Name;
@@ -403,9 +422,11 @@ namespace ScriptKit.NET
                     {
                         this.WriteComma();
                     }
+
                     needComma = true;
                     arg.AcceptVisitor(this);
                 }
+
                 this.Write(")");
             }
             else
@@ -422,10 +443,12 @@ namespace ScriptKit.NET
             this.IsAssignment = true;
             assignmentExpression.Left.AcceptVisitor(this);
             this.IsAssignment = false;
+
             if (!this.CloseAssignment)
             {
                 this.Write(" ");
             }
+            
             switch (assignmentExpression.Operator)
             {
                 case AssignmentOperatorType.Assign:
@@ -468,6 +491,7 @@ namespace ScriptKit.NET
             {
                 this.Write("= ");
             }
+
             assignmentExpression.Right.AcceptVisitor(this);
 
             if (this.CloseAssignment)
@@ -497,10 +521,12 @@ namespace ScriptKit.NET
             this.Write("[ ");
             var elements = arrayCreateExpression.Initializer.Elements;
             this.EmitExpressionList(elements);
+
             if (elements.Count > 0)
             {
                 this.Write(" ");
             }
+            
             this.Write("]");
         }
 
@@ -529,6 +555,7 @@ namespace ScriptKit.NET
             if (Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
             {
                 this.Write("{ ");
+
                 if (hasInitializer)
                 {
                     this.WriteObjectInitializer(objectCreateExpression.Initializer.Elements);
@@ -566,16 +593,19 @@ namespace ScriptKit.NET
                     this.Write("{ ");
                     var elements = objectCreateExpression.Initializer.Elements;
                     bool needComma = false;
+
                     foreach (NamedArgumentExpression item in elements)
                     {
                         if (needComma)
                         {
                             this.WriteComma();
                         }
+
                         needComma = true;
                         this.Write(item.Name, ": ");
                         item.Expression.AcceptVisitor(this);
                     }
+
                     this.Write(" }");
                     this.Write(")");
                 }
@@ -585,10 +615,11 @@ namespace ScriptKit.NET
 
         public override void VisitIfElseStatement(IfElseStatement ifElseStatement)
         {
-            this.Write("if(");
+            this.Write("if (");
             ifElseStatement.Condition.AcceptVisitor(this);
             this.Write(")");
             this.EmitBlockOrIndentedLine(ifElseStatement.TrueStatement);
+
             if (ifElseStatement.FalseStatement != null && !ifElseStatement.FalseStatement.IsNull)
             {
                 this.Write("else");
@@ -614,12 +645,14 @@ namespace ScriptKit.NET
                 {
                     WriteComma();
                 }
+
                 item.AcceptVisitor(this);
             }
+
             this.Write("; ");
 
             forStatement.Condition.AcceptVisitor(this);
-            Write("; ");
+            this.Write("; ");
 
             foreach (var item in forStatement.Iterators)
             {
@@ -627,8 +660,10 @@ namespace ScriptKit.NET
                 {
                     this.WriteComma();
                 }
+
                 item.AcceptVisitor(this);
             }
+
             this.Write(")");
             this.EnableSemicolon = true;
 

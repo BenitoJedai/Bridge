@@ -46,6 +46,7 @@ namespace ScriptKit.NET
             else
             {
                 PrimitiveType primType = type as PrimitiveType;
+
                 if (primType != null)
                 {
                     result = Helpers.GetScriptName(primType.KnownTypeCode.ToString(), 0);
@@ -57,10 +58,12 @@ namespace ScriptKit.NET
             }
             
             var composedType = type as ComposedType;
+
             if (composedType != null)
             {
                 result = Helpers.GetScriptName(composedType.BaseType) + "." + result;
             }
+            
             return result;
         }
 
@@ -72,11 +75,14 @@ namespace ScriptKit.NET
         public static string GetScriptFullName(TypeReference type) 
         {
             StringBuilder builder = new StringBuilder(type.Namespace);
+
             if (builder.Length > 0)
             {
                 builder.Append('.');
             }
+            
             builder.Append(Helpers.ReplaceSpecialChars(type.Name));
+            
             return builder.ToString();
         }
 

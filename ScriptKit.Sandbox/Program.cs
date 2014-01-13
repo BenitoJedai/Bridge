@@ -10,10 +10,13 @@ namespace ScriptKit.Sandbox
     {
         static void Main(string[] args)
         {
-            // PLEASE ENSURE THAT ScriptKit.CLR.dll file is presented in output folder (in bin/Debug/)
-            
-            var projectLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.Sandbox\TestProject\TestProject.csproj ";
-            var clrLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
+            // PLEASE ENSURE THAT ScriptKit.CLR.dll file is available in the output folder (bin/Debug/)
+
+            //var projectLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.Sandbox\TestProject\TestProject.csproj ";
+            //var clrLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
+
+            var projectLocation = @"C:\Users\Geoffrey McGill\Dropbox\Ext.NET\Projects\ScriptKit.NET\ScriptKit.Sandbox\TestProject\TestProject.csproj ";
+            var clrLocation = @"C:\Users\Geoffrey McGill\Dropbox\Ext.NET\Projects\ScriptKit.NET\ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
             var outputLocation = Path.ChangeExtension(projectLocation, "js");
             
             try
