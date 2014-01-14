@@ -689,6 +689,12 @@ namespace ScriptKit.NET
 
         protected virtual void WriteCloseBracket()
         {
+            this.WriteCloseBracket(false);
+        }
+
+        protected virtual void WriteCloseBracket(bool addSpace)
+        {
+            this.WriteSpace(addSpace);
             this.Write("]");
         }
 
@@ -705,6 +711,12 @@ namespace ScriptKit.NET
 
         protected virtual void WriteCloseParentheses()
         {
+            this.WriteCloseParentheses(false);
+        }
+
+        protected virtual void WriteCloseParentheses(bool addSpace)
+        {
+            this.WriteSpace(addSpace);
             this.Write(")");
         }
 
@@ -732,6 +744,12 @@ namespace ScriptKit.NET
 
         protected virtual void WriteCloseBrace()
         {
+            this.WriteCloseBrace(false);
+        }
+
+        protected virtual void WriteCloseBrace(bool addSpace)
+        {
+            this.WriteSpace(addSpace);
             this.Write("}");
         }
 

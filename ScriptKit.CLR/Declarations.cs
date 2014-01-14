@@ -102,6 +102,7 @@ namespace System.Collections
         { 
             get; 
         }
+
         bool MoveNext();
     }
 }

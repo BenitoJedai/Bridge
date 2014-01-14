@@ -40,7 +40,7 @@ namespace TestProject
             {
                 int iii = 0;
                 this.PropertyOne = iii;
-                // TODO: Getter is emitted with extra newline after end block
+                // TODO: Setter is emitted with extra newline after end block
             }
         }
 
@@ -68,6 +68,15 @@ namespace TestProject
 
             return base.Sum(x1, x2) + x2 + x1;
         }
+
+        /// TODO: implement DateTime type properties
+        //public DateTime Now
+        //{
+        //    get
+        //    {
+        //        return new DateTime();
+        //    }
+        //}
     }
 
     public static class App 
