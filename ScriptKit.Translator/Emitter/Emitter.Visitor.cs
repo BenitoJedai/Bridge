@@ -28,9 +28,12 @@ namespace ScriptKit.NET
                 this.Write(Helpers.GetScriptName(methodDeclaration));
             }
 
-            this.Write(" : function");
+            this.WriteColon();
+            this.WriteFunction();
+            
             this.EmitMethodParameters(methodDeclaration.Parameters, methodDeclaration);
-            this.Write(" ");
+            
+            this.WriteSpace();
 
             var script = this.GetScript(methodDeclaration);
 
@@ -45,7 +48,7 @@ namespace ScriptKit.NET
                 foreach (var line in script)
                 {
                     this.Write(line);
-                    this.NewLine();
+                    this.WriteNewLine();
                 }
                 
                 this.EndBlock();
@@ -70,7 +73,7 @@ namespace ScriptKit.NET
 
             if (!this.KeepLineAfterBlock(blockStatement))
             {
-                NewLine();
+                this.WriteNewLine();
             }
 
             this.PopLocals();
@@ -78,7 +81,7 @@ namespace ScriptKit.NET
 
         public override void VisitVariableDeclarationStatement(VariableDeclarationStatement variableDeclarationStatement)
         {
-            this.Write("var ");
+            this.WriteVar();
             bool needComma = false;
 
             foreach (var variable in variableDeclarationStatement.Variables)
@@ -104,8 +107,7 @@ namespace ScriptKit.NET
 
             if (this.EnableSemicolon)
             {
-                this.Write(";");
-                this.NewLine();
+                this.WriteSemiColon(true);
             }
         }
 
@@ -130,15 +132,13 @@ namespace ScriptKit.NET
 
             if (this.EnableSemicolon)
             {
-                this.Write(";");
-                this.NewLine();
+                this.WriteSemiColon(true);
             }
         }
 
         public override void VisitEmptyStatement(EmptyStatement emptyStatement)
         {
-            this.Write(";");
-            this.NewLine();
+            this.WriteSemiColon(true);
         }
 
         public override void VisitUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression)
@@ -185,7 +185,7 @@ namespace ScriptKit.NET
         public override void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
         {
             binaryOperatorExpression.Left.AcceptVisitor(this);
-            this.Write(" ");
+            this.WriteSpace();
 
             switch (binaryOperatorExpression.Operator)
             {
@@ -248,7 +248,7 @@ namespace ScriptKit.NET
                     throw this.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
             }
 
-            this.Write(" ");
+            this.WriteSpace();
             binaryOperatorExpression.Right.AcceptVisitor(this);
         }
 
@@ -260,6 +260,7 @@ namespace ScriptKit.NET
             if (this.Locals.ContainsKey(id))
             {
                 this.Write(id);
+
                 return;
             }
 
@@ -280,7 +281,7 @@ namespace ScriptKit.NET
                     this.WriteThis();
                 }
 
-                this.Write(".");
+                this.WriteDot();
 
                 if (method != null)
                 {
@@ -326,14 +327,15 @@ namespace ScriptKit.NET
                 else
                 {
                     memberReferenceExpression.Target.AcceptVisitor(this);
-                    this.Write(".");
+
+                    this.WriteDot();
                     this.Write(this.IsAssignment ? "set" : "get");
                     this.Write(memberReferenceExpression.MemberName);
-                    this.Write("(");
+                    this.WriteOpenParentheses();
 
                     if (!this.IsAssignment)
                     {
-                        this.Write(")");
+                        this.WriteCloseParentheses();
                     }
                     else
                     {
@@ -344,7 +346,7 @@ namespace ScriptKit.NET
             else
             {
                 memberReferenceExpression.Target.AcceptVisitor(this);
-                this.Write(".");
+                this.WriteDot();
                 this.Write(Helpers.GetScriptName(memberReferenceExpression));
             }
         }
@@ -387,8 +389,9 @@ namespace ScriptKit.NET
             if (targetMember != null && targetMember.Target is BaseReferenceExpression)
             {
                 var baseType = this.GetBaseMethodOwnerTypeDefinition(targetMember.MemberName, targetMember.TypeArguments.Count);
-                string currentMethod = "";
                 var method = invocationExpression.GetParent<MethodDeclaration>();
+                
+                string currentMethod = "";
                 
                 if (method != null)
                 {
@@ -406,12 +409,18 @@ namespace ScriptKit.NET
                 if (currentMethod == baseMethod)
                 {
                     this.WriteThis();
-                    this.Write(".base(");
+                    this.WriteDot();
+                    this.Write("base");
+                    this.WriteOpenParentheses();
                 }
                 else
                 {
                     this.Write(Helpers.GetScriptFullName(baseType), ".", baseMethod);
-                    this.Write(".call(");
+
+                    this.WriteDot();
+                    this.Write("call");
+                    this.WriteOpenParentheses();
+                    
                     this.WriteThis();
                     needComma = true;
                 }
@@ -427,14 +436,14 @@ namespace ScriptKit.NET
                     arg.AcceptVisitor(this);
                 }
 
-                this.Write(")");
+                this.WriteCloseParentheses();
             }
             else
             {
                 invocationExpression.Target.AcceptVisitor(this);
-                this.Write("(");
+                this.WriteOpenParentheses();
                 this.EmitExpressionList(invocationExpression.Arguments);
-                this.Write(")");
+                this.WriteCloseParentheses();
             }
         }
 
@@ -446,7 +455,7 @@ namespace ScriptKit.NET
 
             if (!this.CloseAssignment)
             {
-                this.Write(" ");
+                this.WriteSpace();
             }
             
             switch (assignmentExpression.Operator)
@@ -496,7 +505,7 @@ namespace ScriptKit.NET
 
             if (this.CloseAssignment)
             {
-                this.Write(")");
+                this.WriteCloseParentheses();
             }
             this.CloseAssignment = false;
         }
@@ -518,16 +527,17 @@ namespace ScriptKit.NET
                 throw this.CreateException(arrayCreateExpression, "Multi-dimensional arrays are not supported");
             }
 
-            this.Write("[ ");
+            this.WriteOpenBracket();
+            this.WriteSpace();
             var elements = arrayCreateExpression.Initializer.Elements;
             this.EmitExpressionList(elements);
 
             if (elements.Count > 0)
             {
-                this.Write(" ");
+                this.WriteSpace();
             }
-            
-            this.Write("]");
+
+            this.WriteCloseBracket();
         }
 
         public override void VisitLambdaExpression(LambdaExpression lambdaExpression)
@@ -554,28 +564,34 @@ namespace ScriptKit.NET
 
             if (Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
             {
-                this.Write("{ ");
+                this.WriteOpenBrace();
+                this.WriteSpace();
 
                 if (hasInitializer)
                 {
                     this.WriteObjectInitializer(objectCreateExpression.Initializer.Elements);
-                    this.Write(" }");
+
+                    this.WriteSpace();
+                    this.WriteCloseBrace();
                 }
                 else
                 {
-                    this.Write("}");
+                    this.WriteCloseBrace();
                 }
             }
             else
             {
                 if (hasInitializer)
                 {
-                    this.Write(Emitter.ROOT, ".", Emitter.APPLY_OBJECT, "(");
+                    this.Write(Emitter.ROOT);
+                    this.WriteDot();
+                    this.Write(Emitter.APPLY_OBJECT);
+                    this.WriteOpenParentheses();
                 }
 
                 if (String.IsNullOrEmpty(customCtor))
                 {
-                    this.Write("new ");
+                    this.WriteNew();
                     objectCreateExpression.Type.AcceptVisitor(this);
                 }
                 else
@@ -583,14 +599,16 @@ namespace ScriptKit.NET
                     this.Write(customCtor);
                 }
 
-                this.Write("(");
+                this.WriteOpenParentheses();
                 this.EmitExpressionList(objectCreateExpression.Arguments);
-                this.Write(")");
+                this.WriteCloseParentheses();
 
                 if (hasInitializer)
                 {
                     this.WriteComma();
-                    this.Write("{ ");
+
+                    this.WriteOpenBrace(true);
+
                     var elements = objectCreateExpression.Initializer.Elements;
                     bool needComma = false;
 
@@ -602,12 +620,15 @@ namespace ScriptKit.NET
                         }
 
                         needComma = true;
-                        this.Write(item.Name, ": ");
+                        this.Write(item.Name);
+                        this.WriteColon();
+
                         item.Expression.AcceptVisitor(this);
                     }
 
-                    this.Write(" }");
-                    this.Write(")");
+                    this.WriteCloseBrace();
+                    this.WriteSpace();
+                    this.WriteCloseParentheses();
                 }
             }
         }
@@ -615,14 +636,17 @@ namespace ScriptKit.NET
 
         public override void VisitIfElseStatement(IfElseStatement ifElseStatement)
         {
-            this.Write("if (");
+            this.WriteIf();
+            this.WriteOpenParentheses();
+
             ifElseStatement.Condition.AcceptVisitor(this);
-            this.Write(")");
+            
+            this.WriteCloseParentheses();
             this.EmitBlockOrIndentedLine(ifElseStatement.TrueStatement);
 
             if (ifElseStatement.FalseStatement != null && !ifElseStatement.FalseStatement.IsNull)
             {
-                this.Write("else");
+                this.WriteElse();
                 this.EmitBlockOrIndentedLine(ifElseStatement.FalseStatement);
             }
         }
@@ -637,7 +661,8 @@ namespace ScriptKit.NET
             this.PushLocals();
 
             this.EnableSemicolon = false;
-            this.Write("for(");
+            this.WriteFor();
+            this.WriteOpenParentheses();
 
             foreach (var item in forStatement.Initializers)
             {
@@ -649,10 +674,13 @@ namespace ScriptKit.NET
                 item.AcceptVisitor(this);
             }
 
-            this.Write("; ");
+            this.WriteSemiColon();
+            this.WriteSpace();
 
             forStatement.Condition.AcceptVisitor(this);
-            this.Write("; ");
+
+            this.WriteSemiColon();
+            this.WriteSpace();
 
             foreach (var item in forStatement.Iterators)
             {
@@ -664,7 +692,8 @@ namespace ScriptKit.NET
                 item.AcceptVisitor(this);
             }
 
-            this.Write(")");
+            this.WriteCloseParentheses();
+
             this.EnableSemicolon = true;
 
             this.EmitBlockOrIndentedLine(forStatement.EmbeddedStatement);
@@ -684,69 +713,76 @@ namespace ScriptKit.NET
             var index = indexerExpression.Arguments.First();
 
             var primitive = index as PrimitiveExpression;
+
             if (primitive != null && primitive.Value != null && Regex.Match(primitive.Value.ToString(), "^[_$a-z][_$a-z0-9]*$", RegexOptions.IgnoreCase).Success)
             {
-                this.Write(".", primitive.Value);
+                this.WriteDot();
+                this.Write(primitive.Value);
             }
             else
             {
-                this.Write("[");
+                this.WriteOpenBracket();
                 index.AcceptVisitor(this);
-                this.Write("]");
+                this.WriteCloseBracket();
             }
         }
 
         public override void VisitCastExpression(CastExpression castExpression)
         {
             this.Write(Emitter.ROOT);
-            this.Write(".");
+            this.WriteDot();
             this.Write(Emitter.CAST);
-            this.Write("(");
+            this.WriteOpenParentheses();
             castExpression.Expression.AcceptVisitor(this);
             this.WriteComma();
             castExpression.Type.AcceptVisitor(this);
-            this.Write(")");
+            this.WriteCloseParentheses();
         }
 
         public override void VisitAsExpression(AsExpression asExpression)
         {
             this.Write(Emitter.ROOT);
-            this.Write(".");
+            this.WriteDot();
             this.Write(Emitter.AS);
-            this.Write("(");
+            this.WriteOpenParentheses();
             asExpression.Expression.AcceptVisitor(this);
             this.WriteComma();
             asExpression.Type.AcceptVisitor(this);
-            this.Write(")");
+            this.WriteCloseParentheses();
         }
 
         public override void VisitIsExpression(IsExpression isExpression)
         {
-            this.Write(Emitter.ROOT, ".", Emitter.IS, "(");
+            this.Write(Emitter.ROOT);
+            this.WriteDot();
+            this.Write(Emitter.IS);
+            this.WriteOpenParentheses();
             isExpression.Expression.AcceptVisitor(this);
             this.WriteComma();
             isExpression.Type.AcceptVisitor(this);
-            this.Write(")");
+            this.WriteCloseParentheses();
         }
 
         public override void VisitReturnStatement(ReturnStatement returnStatement)
         {
-            this.Write("return");
+            this.WriteReturn(false);
+
             if (!returnStatement.Expression.IsNull)
             {
-                this.Write(" ");
+                this.WriteSpace();
                 returnStatement.Expression.AcceptVisitor(this);
             }
-            this.Write(";");
-            this.NewLine();
+            
+            this.WriteSemiColon();
+            this.WriteNewLine();
         }
 
         public override void VisitThrowStatement(ThrowStatement throwStatement)
         {
-            this.Write("throw ");
+            this.WriteThrow();
             throwStatement.Expression.AcceptVisitor(this);
-            this.Write(";");
-            this.NewLine();
+            this.WriteSemiColon();
+            this.WriteNewLine();
         }
 
         public override void VisitForeachStatement(ForeachStatement foreachStatement)
@@ -758,22 +794,41 @@ namespace ScriptKit.NET
 
             var iteratorName = this.GetNextIteratorName();
 
-            this.Write("var ", iteratorName, " = ", Emitter.ROOT, ".", Emitter.ITERATOR);
-            this.Write("(");
-            foreachStatement.InExpression.AcceptVisitor(this);
-            this.Write(");");
-            this.NewLine();
+            this.WriteVar();
+            this.Write(iteratorName, " = ", Emitter.ROOT);
+            this.WriteDot();
+            this.Write(Emitter.ITERATOR);
 
-            this.Write("while(", iteratorName, ".", Emitter.HAS_NEXT, "()", ") ");
+            this.WriteOpenParentheses();
+            foreachStatement.InExpression.AcceptVisitor(this);
+            this.WriteCloseParentheses();
+            this.WriteNewLine();
+
+            this.WriteWhile();
+            this.WriteOpenParentheses();
+            this.Write(iteratorName);
+            this.WriteDot();
+            this.Write(Emitter.HAS_NEXT);
+            this.WriteOpenCloseParentheses();
+            this.WriteCloseParentheses();
+            this.WriteSpace();
             this.BeginBlock();
 
-            this.Write("var ", foreachStatement.VariableName, " = ", iteratorName, ".", Emitter.NEXT, "();");
-            this.NewLine();
+            this.WriteVar();
+            this.Write(foreachStatement.VariableName, " = ", iteratorName);
+            
+            this.WriteDot();
+            this.Write(Emitter.NEXT);
+            
+            this.WriteOpenCloseParentheses();
+            this.WriteSemiColon();
+            this.WriteNewLine();
 
             this.PushLocals();
             this.Locals.Add(foreachStatement.VariableName, foreachStatement.VariableType);
 
             BlockStatement block = foreachStatement.EmbeddedStatement as BlockStatement;
+
             if (block != null)
             {
                 block.AcceptChildren(this);
@@ -786,7 +841,7 @@ namespace ScriptKit.NET
             this.PopLocals();
 
             this.EndBlock();
-            this.NewLine();
+            this.WriteNewLine();
         }
 
         public override void VisitConditionalExpression(ConditionalExpression conditionalExpression)
@@ -805,8 +860,10 @@ namespace ScriptKit.NET
                 throw this.CreateException(tryCatchStatement, "Multiple catch statements are not supported");
             }
 
-            this.Write("try ");
+            this.WriteTry();
+
             tryCatchStatement.TryBlock.AcceptVisitor(this);
+
             foreach (var clause in tryCatchStatement.CatchClauses)
             {
                 this.PushLocals();
@@ -818,7 +875,9 @@ namespace ScriptKit.NET
                         throw this.CreateException(clause, "Only System.Exception type is allowed in catch clauses");
                     }
                 }
+
                 var varName = clause.VariableName;
+                
                 if (String.IsNullOrEmpty(varName))
                 {
                     varName = "$e";
@@ -827,49 +886,68 @@ namespace ScriptKit.NET
                 {
                     this.Locals.Add(varName, clause.Type);
                 }
-                this.Write("catch(", varName, ") ");
+
+                this.WriteCatch();
+                this.WriteOpenParentheses();
+                this.Write(varName);
+                this.WriteCloseParentheses();
+
                 clause.Body.AcceptVisitor(this);
 
                 this.PopLocals();
             }
+
             if (!tryCatchStatement.FinallyBlock.IsNull)
             {
-                this.Write("finally ");
+                this.WriteFinally();
                 tryCatchStatement.FinallyBlock.AcceptVisitor(this);
             }
         }
 
         public override void VisitWhileStatement(WhileStatement whileStatement)
         {
-            this.Write("while(");
+            this.WriteWhile();
+            this.WriteOpenParentheses();
             whileStatement.Condition.AcceptVisitor(this);
-            this.Write(")");
+            this.WriteOpenCloseParentheses();
             this.EmitBlockOrIndentedLine(whileStatement.EmbeddedStatement);
         }
 
         public override void VisitDoWhileStatement(DoWhileStatement doWhileStatement)
         {
-            this.Write("do");
+            this.WriteDo();
             this.EmitBlockOrIndentedLine(doWhileStatement.EmbeddedStatement);
+
             if (doWhileStatement.EmbeddedStatement is BlockStatement)
             {
-                Write(" ");
+                this.WriteSpace();
             }
-            this.Write("while(");
+
+            this.WriteWhile();
+            this.WriteOpenCloseParentheses();
+
             doWhileStatement.Condition.AcceptVisitor(this);
-            this.Write(");");
-            this.NewLine();
+
+            this.WriteOpenCloseParentheses();
+            this.WriteSemiColon();
+
+            this.WriteNewLine();
         }
 
         public override void VisitSwitchStatement(SwitchStatement switchStatement)
         {
-            this.Write("switch(");
+            this.WriteSwitch();
+            this.WriteOpenParentheses();
+
             switchStatement.Expression.AcceptVisitor(this);
-            this.Write(") ");
+
+            this.WriteCloseParentheses();
+            this.WriteSpace();
+
             this.BeginBlock();
             switchStatement.SwitchSections.ToList().ForEach(s => s.AcceptVisitor(this));
             this.EndBlock();
-            this.NewLine();
+            this.WriteNewLine();
         }
 
         public override void VisitSwitchSection(SwitchSection switchSection)
@@ -891,27 +969,32 @@ namespace ScriptKit.NET
                 this.Write("case ");
                 caseLabel.Expression.AcceptVisitor(this);
             }
-            this.Write(":");
-            this.NewLine();
+
+            this.WriteColon();
+            this.WriteNewLine();
         }
 
         public override void VisitBreakStatement(BreakStatement breakStatement)
         {
-            this.Write("break;");
-            this.NewLine();
+            this.Write("break");
+            this.WriteSemiColon();
+            this.WriteNewLine();
         }
 
         public override void VisitContinueStatement(ContinueStatement continueStatement)
         {
-            this.Write("continue;");
-            this.NewLine();
+            this.Write("continue");
+            this.WriteSemiColon();
+            this.WriteNewLine();
         }
 
         public override void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
         {
-            this.Write("(");
+            this.WriteOpenParentheses();
+            this.WriteOpenParentheses();
+
             parenthesizedExpression.Expression.AcceptVisitor(this);
-            this.Write(")");
+            this.WriteCloseParentheses();
         }
 
         public override void VisitTypeOfExpression(TypeOfExpression typeOfExpression)

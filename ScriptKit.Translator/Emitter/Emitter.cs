@@ -115,22 +115,26 @@ namespace ScriptKit.NET
 
         protected virtual void EmitClassEnd()
         {
-            this.NewLine();
-            this.EndBlock();            
-            this.Write(");");
-            this.NewLine();
-            this.NewLine();
+            this.WriteNewLine();
+            this.EndBlock();
+            this.WriteCloseParentheses();
+            this.WriteSemiColon();
+            this.WriteNewLine();
+            this.WriteNewLine();
         }
         
         protected virtual void EmitClassHeader()
         {
             TypeDefinition baseType = this.GetBaseTypeDefinition();           
             
-            this.Write("Class.extend(");
+            this.Write("Class.extend");
+            this.WriteOpenParentheses();
             this.Write("'" + this.TypeInfo.FullName, "', ");
             this.BeginBlock();
 
-            this.Write("$extend: " + this.GetTypeHierarchy());
+            this.Write("$extend");
+            this.WriteColon();
+            this.Write(this.GetTypeHierarchy());
             this.Comma = true;
         }
 
@@ -139,13 +143,14 @@ namespace ScriptKit.NET
             if (this.TypeInfo.HasStatic)
             {
                 this.EnsureComma();
-                this.Write("$statics : ");
+                this.Write("$statics");
+                this.WriteColon();
                 this.BeginBlock();
 
                 this.EmitCtorForStaticClass();
                 this.EmitMethods(this.TypeInfo.StaticMethods, this.TypeInfo.StaticProperties);
 
-                this.NewLine();
+                this.WriteNewLine();
                 this.EndBlock();
                 this.Comma = true;
             }            
@@ -196,9 +201,13 @@ namespace ScriptKit.NET
             this.ResetLocals();
             this.AddLocals(ctor.Parameters);
 
-            this.Write("init: function");
+            this.Write("init");
+            this.WriteColon();
+            this.WriteFunction();
+
             this.EmitMethodParameters(ctor.Parameters, ctor);
-            this.Write(" ");
+            
+            this.WriteSpace();
             this.BeginBlock();
 
             var requireNewLine = false;
@@ -212,8 +221,8 @@ namespace ScriptKit.NET
                 {
                     this.Write("this.", name, " = ");
                     this.TypeInfo.InstanceFields[name].AcceptVisitor(this);
-                    this.Write(";");
-                    this.NewLine();
+                    this.WriteSemiColon();
+                    this.WriteNewLine();
                 }
 
                 requireNewLine = true;
@@ -223,7 +232,7 @@ namespace ScriptKit.NET
             {
                 if (requireNewLine)
                 {
-                    this.NewLine();
+                    this.WriteNewLine();
                 }
 
                 var initializer = ctor.Initializer ?? new ConstructorInitializer()
@@ -233,10 +242,11 @@ namespace ScriptKit.NET
 
                 if (initializer.ConstructorInitializerType == ConstructorInitializerType.This)
                 {
-                    throw CreateException(ctor, "Multiple ctors are not supported");
+                    throw CreateException(ctor, "Multiple constructors are not supported");
                 }
                 
-                this.Write("this.base(");
+                this.Write("this.base");
+                this.WriteOpenParentheses();
 
                 foreach (var p in initializer.Arguments)
                 {
@@ -244,8 +254,9 @@ namespace ScriptKit.NET
                     p.AcceptVisitor(this);
                 }
 
-                this.Write(");");
-                this.NewLine();
+                this.WriteCloseParentheses();
+                this.WriteSemiColon();
+                this.WriteNewLine();
                 requireNewLine = true;
             }
 
@@ -257,8 +268,9 @@ namespace ScriptKit.NET
                 {
                     if (requireNewLine)
                     {
-                        this.NewLine();
+                        this.WriteNewLine();
                     }
+
                     ctor.Body.AcceptChildren(this);
                 }
             }
@@ -266,13 +278,13 @@ namespace ScriptKit.NET
             {
                 if (requireNewLine)
                 {
-                    this.NewLine();
+                    this.WriteNewLine();
                 }
 
                 foreach (var line in script)
                 {
                     this.Write(line);
-                    this.NewLine();
+                    this.WriteNewLine();
                 }
             }
 
@@ -287,7 +299,14 @@ namespace ScriptKit.NET
                 var sortedNames = new List<string>(this.TypeInfo.StaticFields.Keys);
                 sortedNames.Sort();
 
-                this.Write("init: function");
+                this.Write("init");
+                this.WriteColon();
+                this.WriteFunction();
+
+                /// TODO: Are parameters (zero to many) required here before BeginBlock?
+                /// init: function () {}
+                this.WriteOpenCloseParentheses(true);
+
                 this.BeginBlock();
 
                 for (var i = 0; i < sortedNames.Count; i++)
@@ -295,8 +314,8 @@ namespace ScriptKit.NET
                     var name = sortedNames[i];
                     this.Write("this.", name, " = ");
                     this.TypeInfo.StaticFields[name].AcceptVisitor(this);
-                    this.Write(";");
-                    this.NewLine();
+                    this.WriteSemiColon();
+                    this.WriteNewLine();
                 }
 
                 this.EndBlock();
@@ -357,35 +376,40 @@ namespace ScriptKit.NET
 
             bool block = body is BlockStatement;
 
+
+            /// TODO: Is this next line required?
             this.Write("");
+
             var savedPos = this.Output.Length;
             var savedThisCount = this.ThisRefCounter;
 
-            this.Write("function");
+            this.WriteFunction();
             this.EmitMethodParameters(parameters, context);
-            this.Write(" ");
+            this.WriteSpace();
 
             if (!block)
             {
-                this.Write("{ ");
+                this.WriteOpenBrace();
+                this.WriteSpace();
             }
 
             if (body.Parent is LambdaExpression && !block)
             {
-                this.Write("return ");
+                this.WriteReturn(true);
             }
 
             body.AcceptVisitor(this);
 
             if (!block)
             {
-                this.Write(" }");
+                this.WriteSpace();
+                this.WriteCloseBrace();
             }
 
             if (this.ThisRefCounter > savedThisCount)
             {
                 this.Output.Insert(savedPos, Emitter.ROOT + "." + Emitter.BIND + "(this, ");
-                this.Write(")");
+                this.WriteCloseParentheses();
             }
 
             this.PopLocals();
@@ -397,12 +421,12 @@ namespace ScriptKit.NET
 
             if (!block)
             {
-                this.NewLine();
+                this.WriteNewLine();
                 this.Indent();
             }
             else
             {
-                this.Write(" ");
+                this.WriteSpace();
             }
 
             node.AcceptVisitor(this);
@@ -415,7 +439,7 @@ namespace ScriptKit.NET
 
         protected virtual void EmitMethodParameters(IEnumerable<ParameterDeclaration> declarations, AstNode context)
         {
-            this.Write("(");
+            this.WriteOpenParentheses();
             bool needComma = false;
 
             foreach (var p in declarations)
@@ -431,7 +455,7 @@ namespace ScriptKit.NET
                 this.Write(p.Name);
             }
 
-            this.Write(")");
+            this.WriteCloseParentheses();
         }
 
         protected virtual void EmitExpressionList(IEnumerable<Expression> expressions)
@@ -472,13 +496,13 @@ namespace ScriptKit.NET
 
             for (var i = 0; i < this.Level; i++)
             {
-                this.Output.Append("  ");
+                this.Output.Append("    ");
             }
 
             this.IsNewLine = false;
         }
 
-        protected virtual void NewLine()
+        protected virtual void WriteNewLine()
         {
             this.Output.Append('\n');
             this.IsNewLine = true;
@@ -486,15 +510,15 @@ namespace ScriptKit.NET
 
         protected virtual void BeginBlock()
         {
-            this.Write("{");
-            this.NewLine();
+            this.WriteOpenBrace();
+            this.WriteNewLine();
             this.Indent();
         }
 
         protected virtual void EndBlock()
         {
             this.Outdent();
-            this.Write("}");
+            this.WriteCloseBrace();
         }
 
         protected virtual void Write(object value)
@@ -520,7 +544,7 @@ namespace ScriptKit.NET
         protected virtual void WriteComment(string text)
         {
             this.Write("/* " + text + " */");
-            this.NewLine();
+            this.WriteNewLine();
         }
 
         protected virtual void WriteComma()
@@ -534,11 +558,11 @@ namespace ScriptKit.NET
 
             if (newLine)
             {
-                this.NewLine();
+                this.WriteNewLine();
             }
             else
             {
-                this.Write(" ");
+                this.WriteSpace();
             }
         }
 
@@ -546,6 +570,179 @@ namespace ScriptKit.NET
         {
             this.Write("this");
             this.ThisRefCounter++;
+        }
+
+        protected virtual void WriteSpace()
+        {
+            this.WriteSpace(true);
+        }
+
+        protected virtual void WriteSpace(bool addSpace)
+        {
+            if (addSpace)
+            {
+                this.Write(" ");
+            }
+        }
+
+        protected virtual void WriteDot()
+        {
+            this.Write(".");
+        }
+
+        protected virtual void WriteColon()
+        {
+            this.Write(": ");
+        }
+
+        protected virtual void WriteSemiColon()
+        {
+            this.WriteSemiColon(false);
+        }
+
+        protected virtual void WriteSemiColon(bool newLine)
+        {
+            this.Write(";");
+
+            if (newLine)
+            {
+                this.WriteNewLine();
+            }
+        }
+
+        protected virtual void WriteNew()
+        {
+            this.Write("new ");
+        }
+
+        protected virtual void WriteVar()
+        {
+            this.Write("var ");
+        }
+
+        protected virtual void WriteIf()
+        {
+            this.Write("if ");
+        }
+
+        protected virtual void WriteElse()
+        {
+            this.Write("else ");
+        }
+
+        protected virtual void WriteWhile()
+        {
+            this.Write("while ");
+        }
+
+        protected virtual void WriteFor()
+        {
+            this.Write("for ");
+        }
+
+        protected virtual void WriteThrow()
+        {
+            this.Write("throw ");
+        }
+
+        protected virtual void WriteTry()
+        {
+            this.Write("try ");
+        }
+
+        protected virtual void WriteCatch()
+        {
+            this.Write("catch ");
+        }
+
+        protected virtual void WriteFinally()
+        {
+            this.Write("finally ");
+        }
+
+        protected virtual void WriteDo()
+        {
+            this.Write("do ");
+        }
+
+        protected virtual void WriteSwitch()
+        {
+            this.Write("switch ");
+        }
+
+        protected virtual void WriteReturn(bool addSpace)
+        {
+            this.Write("return");
+            this.WriteSpace(addSpace);
+        }
+
+        protected virtual void WriteOpenBracket()
+        {
+            this.WriteOpenBracket(false);
+        }
+
+        protected virtual void WriteOpenBracket(bool addSpace)
+        {
+            this.Write("[");
+            this.WriteSpace(addSpace);
+        }
+
+        protected virtual void WriteCloseBracket()
+        {
+            this.Write("]");
+        }
+
+        protected virtual void WriteOpenParentheses()
+        {
+            this.WriteOpenParentheses(false);
+        }
+
+        protected virtual void WriteOpenParentheses(bool addSpace)
+        {
+            this.Write("(");
+            this.WriteSpace(addSpace);
+        }
+
+        protected virtual void WriteCloseParentheses()
+        {
+            this.Write(")");
+        }
+
+        protected virtual void WriteOpenCloseParentheses()
+        {
+            this.WriteOpenCloseParentheses(false);
+        }
+
+        protected virtual void WriteOpenCloseParentheses(bool addSpace)
+        {
+            this.Write("()");
+            this.WriteSpace(addSpace);
+        }
+
+        protected virtual void WriteOpenBrace()
+        {
+            this.WriteOpenBrace(false);
+        }
+
+        protected virtual void WriteOpenBrace(bool addSpace)
+        {
+            this.Write("{");
+            this.WriteSpace(addSpace);
+        }
+
+        protected virtual void WriteCloseBrace()
+        {
+            this.Write("}");
+        }
+
+        protected virtual void WriteOpenCloseBrace()
+        {
+            this.Write("{ }");
+        }
+
+        protected virtual void WriteFunction()
+        {
+            this.Write("function ");
         }
 
         protected virtual void WriteObjectInitializer(IEnumerable<Expression> expressions)
@@ -595,7 +792,7 @@ namespace ScriptKit.NET
             {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -1009,7 +1206,12 @@ namespace ScriptKit.NET
                 }
 
                 this.Write((setter ? "set" : "get") + propertyDeclaration.Name);
-                this.Write(" : function (" + (setter ? "value" : "") + ") ");
+                this.WriteColon();
+                this.WriteFunction();
+                this.WriteOpenParentheses();
+                this.Write(setter ? "value" : "");
+                this.WriteCloseParentheses();
+                this.WriteSpace();
 
                 var script = this.GetScript(accessor);
 
@@ -1029,10 +1231,12 @@ namespace ScriptKit.NET
                         }
                         else
                         {
-                            this.Write("return this." + propertyDeclaration.Name.ToLowerCamelCase() + ";");
+                            this.WriteReturn(true);
+                            this.Write("this." + propertyDeclaration.Name.ToLowerCamelCase());
+                            this.WriteSemiColon();
                         }
 
-                        this.NewLine();
+                        this.WriteNewLine();
                         this.EndBlock();
                     }
                 }
@@ -1043,7 +1247,7 @@ namespace ScriptKit.NET
                     foreach (var line in script)
                     {
                         this.Write(line);
-                        this.NewLine();
+                        this.WriteNewLine();
                     }
 
                     this.EndBlock();

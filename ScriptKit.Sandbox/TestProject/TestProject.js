@@ -1,75 +1,89 @@
 Class.extend('TestProject.App', {
-  $extend: [Object],
-  $statics : {
-    init: function{
-      this.i = 5;
-    },
-    Run : function() {
-      var sum = TestProject.App.Sum(5, 6);
-    },
-    Sum : function(x1, x2) {
-      return x1 + x2;
+    $extend: [Object],
+    $statics: {
+        init: function () {
+            this.i = 5;
+        },
+        DoSomething: function (x1) {
+            var temp = "test";
+            if (x1 > 6) {
+                /*  test comment */
+                x1 = 1;
+            }
+            var val = 6;
+            TestProject.App.Sum(TestProject.App.i, val);
+            var temp2 = "another string";
+        },
+        Run: function () {
+            var sum = TestProject.App.Sum(5, 6);
+        },
+        Sum: function (x1, x2) {
+            return x1 + x2;
+        }
     }
-  }
 });
 
-Class.extend('TestProject.Class1', {
-  $extend: [Object],
-  $statics : {
-    init: function{
-      this.property0 = 0;
+Class.extend('TestProject.ClassOne', {
+    $extend: [Object],
+    $statics: {
+        init: function () {
+            this.propertyZero = 0;
+        },
+        getPropertyZero: function () {
+            return this.propertyZero;
+        },
+        setPropertyZero: function (value) {
+            this.propertyZero = value;
+        }
     },
-    getProperty0 : function () {
-      return this.property0;
-    },
-    setProperty0 : function (value) {
-      this.property0 = value;
-    }
-  },
-  init: function() {
-    this.b1 = false;
-    this.f1 = 0;
-    this.property1 = 0;
-    this.s1 = null;
+    init: function () {
+        this.b1 = false;
+        this.f1 = 0;
+        this.propertyOne = 0;
+        this.s1 = null;
 
-    /*  comment here */
-    var fn = function(s) {
-      return s;
-    };
-  },
-  getProperty1 : function () {
-    return this.property1;
-  },
-  setProperty1 : function (value) {
-    this.property1 = value;
-  },
-  getProperty2 : function () {
-    return this.getProperty1()++;
-  }
-  ,
-  setProperty2 : function (value) {
-    var iii = 0;
-    this.setProperty1(iii);
-  }
-  ,
-  Run : function() {
-    var sum = this.Sum(5, 6);
-  },
-  Sum : function(x1, x2) {
-    return x1 + x2;
-  }
+        /*  test comment */
+        var fn = function (s) {
+            return s;
+        };
+    },
+    getPropertyOne: function () {
+        return this.propertyOne;
+    },
+    setPropertyOne: function (value) {
+        this.propertyOne = value;
+    },
+    getPropertyTwo: function () {
+        return this.getPropertyOne()++;
+        /*  TODO: Getter is emitted with extra newline after end block */
+    }
+    ,
+    setPropertyTwo: function (value) {
+        var iii = 0;
+        this.setPropertyOne(iii);
+        /*  TODO: Getter is emitted with extra newline after end block */
+    }
+    ,
+    Run: function () {
+        var sum = this.Sum(5, 6);
+    },
+    Sum: function (x1, x2) {
+        return x1 + x2;
+    }
 });
 
-Class.extend('TestProject.Class2', {
-  $extend: [TestProject.Class1],
-  init: function() {
-    this.base();
-  },
-  Sum : function(x1, x2) {
-    var i = TestProject.Class1.getProperty0();
-    var c1 = new ();
-    var i2 = c1.getProperty1();
-    return this.base(x1, x2) + x2 + x1;
-  }
+Class.extend('TestProject.ClassTwo', {
+    $extend: [TestProject.ClassOne],
+    init: function () {
+        this.base();
+    },
+    Sum: function (x1, x2) {
+        var i = TestProject.ClassOne.getPropertyZero();
+        /*  TODO: this "new" instance is not getting emitted properly. */
+        /*  missing class name */
+        var c1 = new ();
+        var i2 = c1.getPropertyOne();
+        return this.base(x1, x2) + x2 + x1;
+    }
 });
 
