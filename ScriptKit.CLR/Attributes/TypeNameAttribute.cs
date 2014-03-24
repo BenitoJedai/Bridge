@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ScriptKit.Core
+namespace ScriptKit.CLR
 {
-    [ScriptKit.Core.Ignore, AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [ScriptKit.CLR.Ignore, AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public sealed class TypeNameAttribute : Attribute
     {
         public TypeNameAttribute(string value) { }

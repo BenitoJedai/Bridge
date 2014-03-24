@@ -56,7 +56,8 @@ namespace ScriptKit.NET
 
         public virtual bool IsIgnoreType(TypeDefinition type) 
         {
-            return type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.FullName == "ScriptKit.Core.IgnoreAttribute");
+            string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
+            return type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
         }
 
         public virtual string GetAttributeValue(IEnumerable<CustomAttribute> attributes, string name)
@@ -74,22 +75,22 @@ namespace ScriptKit.NET
 
         public virtual string GetInlineCode(MethodDefinition method) 
         {
-            return this.GetAttributeValue(method.CustomAttributes, "ScriptKit.Core.InlineAttribute");
+            return this.GetAttributeValue(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
         }
 
         public virtual string GetInlineCode(PropertyDefinition property)
         {
-            return this.GetAttributeValue(property.CustomAttributes, "ScriptKit.Core.InlineAttribute");
+            return this.GetAttributeValue(property.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
         }
 
         public virtual string GetCustomTypeName(TypeDefinition type) 
         {
-            return this.GetAttributeValue(type.CustomAttributes, "ScriptKit.Core.TypeNameAttribute");
+            return this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".TypeNameAttribute");
         }
 
         public virtual string GetCustomConstructor(TypeDefinition type) 
         {
-            return this.GetAttributeValue(type.CustomAttributes, "ScriptKit.Core.ConstructorAttribute");
+            return this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ConstructorAttribute");
         }
 
         public virtual void CheckConstructors(TypeDefinition type) 

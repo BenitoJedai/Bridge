@@ -1,4 +1,4 @@
-﻿[ScriptKit.Core.Ignore]
+﻿[ScriptKit.CLR.Ignore]
 public sealed class RegExp 
 {
     public int lastIndex = 0;

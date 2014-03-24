@@ -43,14 +43,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestProject\App.cs" />
-    <Compile Include="TestProject\ClassThree.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScriptKit.Core\ScriptKit.Core.csproj">
-      <Project>{015126f7-cc03-4ac3-9570-19979a1e740b}</Project>
-      <Name>ScriptKit.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ScriptKit.Translator\ScriptKit.NET.csproj">
       <Project>{44124331-c60a-4071-b387-4b8e71324b10}</Project>
       <Name>ScriptKit.NET</Name>
@@ -58,9 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestProject\TestProject.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

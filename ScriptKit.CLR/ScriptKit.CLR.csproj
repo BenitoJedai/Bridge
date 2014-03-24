@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,17 +31,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup>
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
     <AdditionalExplicitAssemblyReferences />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Attributes\Attribute.cs" />
+    <Compile Include="Attributes\AllowAttribute.cs" />
     <Compile Include="Attributes\ConstructorAttribute.cs" />
     <Compile Include="Attributes\TypeNameAttribute.cs" />
     <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="Attributes\ScriptAttribute.cs" />
     <Compile Include="Attributes\InlineAttribute.cs" />
+    <Compile Include="Html\Console.cs" />
     <Compile Include="NET\Array.cs" />
     <Compile Include="NET\Boolean.cs" />
     <Compile Include="NET\Date.cs" />
@@ -49,15 +54,22 @@
     <Compile Include="NET\Number.cs" />
     <Compile Include="NET\Object.cs" />
     <Compile Include="NET\RegExp.cs" />
+    <Compile Include="NET\Runtime.cs" />
     <Compile Include="NET\String.cs" />
-    <Compile Include="Declarations.cs" />
+    <Compile Include="NET\Stubs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\Class.debug.js" />
     <Content Include="resources\Class.js" />
+    <Content Include="resources\Iterator.js" />
+    <Content Include="resources\Core.js" />
+    <EmbeddedResource Include="resources\scriptkit-debug.js" />
+    <EmbeddedResource Include="resources\scriptkit.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

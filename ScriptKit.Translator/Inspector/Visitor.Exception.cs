@@ -13,7 +13,7 @@ namespace ScriptKit.NET
                 message = String.Format("Language construction {0} is not supported", node.GetType().Name);
             }
 
-            return Exception.Create("{0} {1}", message, node.StartLocation); 
+            return Exception.Create("{0} {1}: {2}", message, node.StartLocation, node.GetText()); 
         }
 
         protected Exception CreateException(AstNode node) 
@@ -68,7 +68,7 @@ namespace ScriptKit.NET
 
         public virtual void VisitAttributeSection(AttributeSection attributeSection)
         {
-            throw this.CreateException(attributeSection);
+            //throw this.CreateException(attributeSection);
         }
 
         public virtual void VisitBaseReferenceExpression(BaseReferenceExpression baseReferenceExpression)
@@ -554,6 +554,6 @@ namespace ScriptKit.NET
         public virtual void VisitYieldReturnStatement(YieldReturnStatement yieldReturnStatement)
         {
             throw this.CreateException(yieldReturnStatement);
-        }
+        }        
     }
 }

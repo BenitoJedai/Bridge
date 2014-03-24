@@ -1,7 +1,7 @@
 ﻿namespace System 
 {
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Array")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Array")]
     public sealed class Array 
     {
         public readonly int length = 0;
@@ -9,6 +9,17 @@
         private Array() 
         { 
         }
+
+        public object this[int index]
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+            }
+        } 
 
         public Array concat(params object[] items) 
         { 

@@ -1,9 +1,9 @@
 ﻿namespace System 
 {
 
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Error")]
-    [ScriptKit.Core.Constructor("Error")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Error")]
+    [ScriptKit.CLR.Constructor("Error")]
     public class Exception 
     {
         public string name;
@@ -18,7 +18,7 @@
         }
     }
 
-    [ScriptKit.Core.Ignore]
+    [ScriptKit.CLR.Ignore]
     public class NotImplementedException : Exception 
     {
     }

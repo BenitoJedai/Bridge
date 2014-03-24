@@ -1,11 +1,11 @@
-﻿using System.IO;
+﻿using Mono.Cecil;
+using System.IO;
 
 namespace ScriptKit.NET
 {
     public partial class Translator
     {
-        const string CLR_ASSEMBLY = "ScriptKit.CLR";
-        const string CORE_ASSEMBLY = "ScriptKit.Core";
+        public const string CLR_ASSEMBLY = "ScriptKit.CLR";
         
         public Translator(string location)
         {
@@ -22,9 +22,12 @@ namespace ScriptKit.NET
                 this.BuildAssembly();
             }
 
-            this.InspecReferences();
+            var references = this.InspectReferences();
+            references.Add(AssemblyDefinition.ReadAssembly(this.AssemblyLocation));
 
             var emitter = this.CreateEmitter();
+            emitter.References = references;
+            emitter.SourceFiles = this.SourceFiles;
             emitter.Emit();
 
             return emitter.Output.ToString();

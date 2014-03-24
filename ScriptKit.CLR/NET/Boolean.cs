@@ -1,8 +1,8 @@
 ﻿namespace System 
 {
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Boolean")]
-    [ScriptKit.Core.Constructor("!!")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Boolean")]
+    [ScriptKit.CLR.Constructor("!!")]
     public struct Boolean 
     {
         public Boolean(object value) 

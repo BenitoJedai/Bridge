@@ -32,21 +32,21 @@ namespace ScriptKit.NET
         public virtual void VisitPreProcessorDirective(PreProcessorDirective preProcessorDirective)
         {
             //throw this.CreateException(preProcessorDirective);
+        }        
+
+        public virtual void VisitTypeParameterDeclaration(TypeParameterDeclaration typeParameterDeclaration)
+        {
+            //throw this.CreateException(typeParameterDeclaration);
         }
 
         public virtual void VisitPrimitiveType(PrimitiveType primitiveType)
         {
             //throw this.CreateException(primitiveType);
         }
-        
+
         public virtual void VisitSimpleType(SimpleType simpleType)
         {
             //throw this.CreateException(simpleType);
-        }
-
-        public virtual void VisitTypeParameterDeclaration(TypeParameterDeclaration typeParameterDeclaration)
-        {
-            //throw this.CreateException(typeParameterDeclaration);
         }
     }
 }

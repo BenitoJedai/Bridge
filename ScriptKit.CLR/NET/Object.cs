@@ -1,8 +1,8 @@
 ﻿namespace System
 {
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Object")]
-    [ScriptKit.Core.Constructor("{ }")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Object")]
+    [ScriptKit.CLR.Constructor("{ }")]
     public class Object
     {
         public object this[string name] 

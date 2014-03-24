@@ -8,6 +8,7 @@ using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
 using Newtonsoft.Json;
 using Ext.Net.Utilities;
+using ICSharpCode.NRefactory.TypeSystem;
 
 namespace ScriptKit.NET
 {
@@ -101,6 +102,9 @@ namespace ScriptKit.NET
 
         public virtual void Emit()
         {
+            this.Writers = new Stack<Tuple<string, StringBuilder, bool>>();
+            ScriptKit.NET.MemberResolver.InitResolver(this.SourceFiles, this.AssemblyReferences);
+            
             foreach (var type in this.Types)
             {
                 this.TypeInfo = type;
@@ -127,15 +131,20 @@ namespace ScriptKit.NET
         {
             TypeDefinition baseType = this.GetBaseTypeDefinition();           
             
-            this.Write("Class.extend");
+            this.Write(Emitter.ROOT + ".Class.extend");
             this.WriteOpenParentheses();
             this.Write("'" + this.TypeInfo.FullName, "', ");
             this.BeginBlock();
 
-            this.Write("$extend");
-            this.WriteColon();
-            this.Write(this.GetTypeHierarchy());
-            this.Comma = true;
+            string extend = this.GetTypeHierarchy();
+
+            if (extend.IsNotEmpty()) 
+            { 
+                this.Write("$extend");
+                this.WriteColon();
+                this.Write(extend);
+                this.Comma = true;
+            }
         }
 
         protected virtual void EmitStaticBlock()
@@ -349,6 +358,11 @@ namespace ScriptKit.NET
                 }
 
                 list.Add(Helpers.GetScriptFullName(i));
+            }
+
+            if (list.Count == 1 && baseType.FullName == "System.Object")
+            {
+                return "";
             }
 
             bool needComma = false;
@@ -1071,6 +1085,11 @@ namespace ScriptKit.NET
             Expression current = node.Target;
             var genericCount = -1;
 
+            if (current is MemberReferenceExpression)
+            {
+
+            }
+
             while (true)
             {
                 MemberReferenceExpression member = current as MemberReferenceExpression;
@@ -1153,16 +1172,45 @@ namespace ScriptKit.NET
 
         protected virtual IEnumerable<string> GetScript(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, "ScriptKit.Core.Script");
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Script");
 
             return this.GetScriptArguments(attr);
         }
 
         protected virtual string GetInline(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, "ScriptKit.Core.Inline");
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Inline");
 
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
+        }
+
+        protected virtual string GetInline(IEntity entity)
+        {
+            string attrName = Translator.CLR_ASSEMBLY + ".InlineAttribute";
+            IMethod method = null;
+
+            if (entity.EntityType == EntityType.Method)
+            {
+                method = (IMethod)entity;                
+            }
+            else if (entity.EntityType == EntityType.Property) 
+            {
+                var prop = (IProperty)entity;
+                method = this.IsAssignment ? prop.Setter : prop.Getter;
+            }
+
+            if (method != null)
+            {                 
+                var attr = method.Attributes.FirstOrDefault(a =>
+                {
+                    
+                    return a.AttributeType.FullName == attrName;
+                });
+                
+                return attr != null ? attr.PositionalArguments[0].ConstantValue.ToString() : null;
+            }
+
+            return null;
         }
 
         protected virtual IEnumerable<string> GetScriptArguments(ICSharpCode.NRefactory.CSharp.Attribute attr)
@@ -1361,7 +1409,16 @@ namespace ScriptKit.NET
                                 {
                                     return typeInfo.StaticProperties[name];
                                 }
-                            }                        
+                            }
+                            else if (this.TypeDefinitions.ContainsKey(resolved))
+                            {
+                                TypeDefinition typeDef = this.TypeDefinitions[resolved];
+                                PropertyDefinition propDef = typeDef.Properties.FirstOrDefault(p => p.Name == name);
+
+                                if (propDef != null)
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -1389,6 +1446,28 @@ namespace ScriptKit.NET
 
                 this.Write(this.ShortenTypeName(type));
             }
-        }                
+        }
+
+        protected virtual void PushWriter(string format)
+        {
+            this.Writers.Push(new Tuple<string, StringBuilder, bool>(format, this.Output, this.IsNewLine));
+            this.IsNewLine = false;
+            this.Output = new StringBuilder();
+        }
+
+        protected virtual string PopWriter(bool preventWrite = false)
+        {
+            string result = this.Output.ToString();
+            var tuple = this.Writers.Pop();
+            this.Output = tuple.Item2;
+            result = tuple.Item1 != null ? string.Format(tuple.Item1, result) : result;
+            this.IsNewLine = tuple.Item3;
+            if (!preventWrite)
+            {                
+                this.Write(result);
+            }
+
+            return result;
+        }
     }
 }

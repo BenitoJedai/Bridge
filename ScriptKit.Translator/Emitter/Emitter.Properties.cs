@@ -2,6 +2,8 @@
 using System.Text;
 using Mono.Cecil;
 using ICSharpCode.NRefactory.CSharp;
+using ICSharpCode.NRefactory.TypeSystem;
+using System;
 
 namespace ScriptKit.NET
 {
@@ -34,13 +36,6 @@ namespace ScriptKit.NET
             get;
             set;
         }
-
-        protected bool CloseAssignment
-        {
-            get;
-            set;
-        }
-
         
         protected Dictionary<string, AstType> Locals 
         { 
@@ -102,6 +97,12 @@ namespace ScriptKit.NET
             protected set; 
         }
 
+        protected Stack<Tuple<string, StringBuilder, bool>> Writers
+        {
+            get;
+            set;
+        }
+
         protected bool Comma
         {
             get;
@@ -120,6 +121,46 @@ namespace ScriptKit.NET
                 }
                 return this.namespaces;
             }
-        }        
+        }
+
+        public virtual IEnumerable<AssemblyDefinition> References
+        {
+            get;
+            set;
+        }
+
+        public virtual IList<string> SourceFiles 
+        { 
+            get; 
+            set; 
+        }
+
+        private List<IAssemblyReference> list;
+        protected virtual IEnumerable<IAssemblyReference> AssemblyReferences
+        {
+            get
+            {
+                if (this.list != null)
+                {
+                    return this.list;
+                }
+                
+                this.list = new List<IAssemblyReference>();
+
+                if (this.References == null)
+                {
+                    return this.list;
+                }
+
+                foreach (var reference in this.References)
+                {
+                    var loader = new CecilLoader();
+                    loader.IncludeInternalMembers = true;
+                    this.list.Add(loader.LoadAssembly(reference));
+                }
+
+                return this.list;
+            }
+        }
     }
 }

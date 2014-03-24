@@ -7,47 +7,24 @@ namespace ScriptKit.NET
 {
     public partial class Translator
     {     
-        private bool clrLoaded = false;
-
         protected virtual AssemblyDefinition LoadAssembly(string location, HashSet<AssemblyDefinition> references)
         {
             var assemblyDefinition = AssemblyDefinition.ReadAssembly(location);
-
+            string name;
+            string path;
+            AssemblyDefinition reference;
+            
             foreach (AssemblyNameReference r in assemblyDefinition.MainModule.AssemblyReferences)
             {
-                string name = r.Name;
+                name = r.Name;
 
-                if (r.Name == Translator.CORE_ASSEMBLY)
+                if (r.Name == "mscorlib" || r.Name == "System.Core")
                 {
                     continue;
                 }
 
-                if (r.Name == "mscorlib" || r.Name == "System.Core")
-                {
-                    if (this.clrLoaded)
-                    {
-                        continue;
-                    }
-
-                    this.clrLoaded = true;
-                    name = Translator.CLR_ASSEMBLY;
-                }
-
-                string path = Path.Combine(Path.GetDirectoryName(location), name) + ".dll";
-
-                if (name == Translator.CLR_ASSEMBLY)
-                {
-                    if (string.IsNullOrEmpty(this.CLRLocation))
-                    {
-                        path = Translator.CLR_ASSEMBLY + ".dll";
-                    }
-                    else
-                    {
-                        path = this.CLRLocation;
-                    }                    
-                }
-
-                var reference = this.LoadAssembly(path, references);
+                path = Path.Combine(Path.GetDirectoryName(location), name) + ".dll";
+                reference = this.LoadAssembly(path, references);
 
                 if (!references.Contains(reference))
                 {
@@ -72,7 +49,7 @@ namespace ScriptKit.NET
             }
         }
 
-        protected virtual void InspecReferences()
+        protected virtual HashSet<AssemblyDefinition> InspectReferences()
         {
             var references = new HashSet<AssemblyDefinition>();
             var assembly = this.LoadAssembly(this.AssemblyLocation, references);
@@ -93,12 +70,15 @@ namespace ScriptKit.NET
             Inspector inspector = this.CreateInspector();
             var prefix = Path.GetDirectoryName(this.Location);
 
-            foreach (var path in this.SourceFiles)
+            for (int i = 0; i < this.SourceFiles.Count; i++)
             {
-                inspector.VisitSyntaxTree(this.GetSyntaxTree(Path.Combine(prefix, path)));
+                this.SourceFiles[i] = Path.Combine(prefix, this.SourceFiles[i]);
+                inspector.VisitSyntaxTree(this.GetSyntaxTree(this.SourceFiles[i]));
             }
 
             this.Types = inspector.Types;
+
+            return references;
         }
 
         protected virtual Inspector CreateInspector()
@@ -111,7 +91,7 @@ namespace ScriptKit.NET
             using (var reader = new StreamReader(fileName))
             {
                 var parser = new ICSharpCode.NRefactory.CSharp.CSharpParser();
-                var syntaxTree = parser.Parse(reader);
+                var syntaxTree = parser.Parse(reader, fileName);
 
                 if (parser.HasErrors)
                 {

@@ -1,8 +1,11 @@
 ﻿using System;
 
-namespace ScriptKit.Core
+namespace ScriptKit.CLR
 {
-    [ScriptKit.Core.Ignore, AttributeUsage(AttributeTargets.Method)]
+    /// <summary>
+    /// ScriptAttribute is instruction how to convert method declaration (signature + implementation) to javascript
+    /// </summary>
+    [ScriptKit.CLR.Ignore, AttributeUsage(AttributeTargets.Method)]
     public sealed class ScriptAttribute : Attribute
     {
         public ScriptAttribute(params string[] lines) { }

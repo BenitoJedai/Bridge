@@ -8,6 +8,14 @@ using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
 using Newtonsoft.Json;
 using Ext.Net.Utilities;
+using ICSharpCode.NRefactory.Completion;
+using ICSharpCode.NRefactory.Editor;
+using ICSharpCode.NRefactory.CSharp.Completion;
+using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.CSharp.Refactoring;
+using ICSharpCode.NRefactory.CSharp.Resolver;
+using ICSharpCode.NRefactory;
+using ICSharpCode.NRefactory.Semantics;
 
 namespace ScriptKit.NET
 {
@@ -313,42 +321,53 @@ namespace ScriptKit.NET
         }
 
         public override void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
-        {
-            PropertyDeclaration prop = this.GetPropertyMember(memberReferenceExpression);
+        {            
+            var resolveResult = ScriptKit.NET.MemberResolver.Resolve(memberReferenceExpression);
 
-            if (prop != null)
+            if (resolveResult == null || resolveResult.IsError)
             {
-                string inline = this.GetInline(this.IsAssignment ? prop.Setter : prop.Getter);
-
-                if (!string.IsNullOrEmpty(inline))
-                {
-                    this.Write(inline);
-                }
-                else
-                {
-                    memberReferenceExpression.Target.AcceptVisitor(this);
-
-                    this.WriteDot();
-                    this.Write(this.IsAssignment ? "set" : "get");
-                    this.Write(memberReferenceExpression.MemberName);
-                    this.WriteOpenParentheses();
-
-                    if (!this.IsAssignment)
-                    {
-                        this.WriteCloseParentheses();
-                    }
-                    else
-                    {
-                        this.CloseAssignment = true;
-                    }
-                }
+                //throw new Exception("MemberReferenceExpression resolving is failed: " + memberReferenceExpression.ToString());
+                memberReferenceExpression.Target.AcceptVisitor(this);
+                this.WriteDot();
+                this.Write(Helpers.GetScriptName(memberReferenceExpression));
+                return;
+            }
+            
+            MemberResolveResult member = resolveResult as MemberResolveResult;           
+            
+            string inline = this.GetInline(member.Member);
+            if (!string.IsNullOrEmpty(inline) && member.Member.IsStatic)
+            {
+                this.PushWriter(inline);                
             }
             else
             {
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
-                this.Write(Helpers.GetScriptName(memberReferenceExpression));
-            }
+
+                if (!string.IsNullOrEmpty(inline))
+                {
+                    this.PushWriter(inline);
+                }
+                else if (member.Member.EntityType == EntityType.Property)
+                {
+                    if (!this.IsAssignment)
+                    {
+                        this.Write("get");
+                        this.Write(memberReferenceExpression.MemberName);
+                        this.WriteOpenParentheses();
+                        this.WriteCloseParentheses();
+                    }
+                    else
+                    {
+                        this.PushWriter("set" + memberReferenceExpression.MemberName + "({0})");
+                    }
+                }
+                else
+                {
+                    this.Write(Helpers.GetScriptName(memberReferenceExpression));
+                }                    
+            }            
         }
 
         public override void VisitThisReferenceExpression(ThisReferenceExpression thisReferenceExpression)
@@ -385,6 +404,15 @@ namespace ScriptKit.NET
             }
 
             MemberReferenceExpression targetMember = invocationExpression.Target as MemberReferenceExpression;
+            if (targetMember != null)
+            {
+                var member = MemberResolver.ResolveParent(targetMember);
+
+                if (member != null && member.Type.Kind == TypeKind.Delegate)
+                {
+                    throw this.CreateException(invocationExpression, "Delegate's methods are not supported. Please use direct delegate invoke.");
+                }
+            }
 
             if (targetMember != null && targetMember.Target is BaseReferenceExpression)
             {
@@ -441,9 +469,16 @@ namespace ScriptKit.NET
             else
             {
                 invocationExpression.Target.AcceptVisitor(this);
-                this.WriteOpenParentheses();
-                this.EmitExpressionList(invocationExpression.Arguments);
-                this.WriteCloseParentheses();
+                if (this.Writers.Count > 0)
+                {
+                    this.PopWriter();
+                }
+                else
+                {
+                    this.WriteOpenParentheses();
+                    this.EmitExpressionList(invocationExpression.Arguments);
+                    this.WriteCloseParentheses();
+                }                
             }
         }
 
@@ -453,7 +488,7 @@ namespace ScriptKit.NET
             assignmentExpression.Left.AcceptVisitor(this);
             this.IsAssignment = false;
 
-            if (!this.CloseAssignment)
+            if (this.Writers.Count == 0)
             {
                 this.WriteSpace();
             }
@@ -496,18 +531,17 @@ namespace ScriptKit.NET
                     throw this.CreateException(assignmentExpression, "Unsupported assignment operator: " + assignmentExpression.Operator.ToString());
             }
 
-            if (!this.CloseAssignment)
+            if (this.Writers.Count == 0)
             {
                 this.Write("= ");
             }
 
             assignmentExpression.Right.AcceptVisitor(this);
 
-            if (this.CloseAssignment)
+            if (this.Writers.Count > 0)
             {
-                this.WriteCloseParentheses();
+                this.PopWriter();
             }
-            this.CloseAssignment = false;
         }
 
         public override void VisitTypeReferenceExpression(TypeReferenceExpression typeReferenceExpression)
@@ -518,6 +552,16 @@ namespace ScriptKit.NET
         public override void VisitComposedType(ComposedType composedType)
         {
             this.EmitTypeReference(composedType);
+        }
+
+        public override void VisitPrimitiveType(PrimitiveType primitiveType)
+        {
+            this.EmitTypeReference(primitiveType);
+        }
+
+        public override void VisitSimpleType(SimpleType simpleType)
+        {
+            this.EmitTypeReference(simpleType);
         }
 
         public override void VisitArrayCreateExpression(ArrayCreateExpression arrayCreateExpression)

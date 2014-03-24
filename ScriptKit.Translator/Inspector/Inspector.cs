@@ -34,17 +34,17 @@ namespace ScriptKit.NET
         protected virtual bool HasIgnore(EntityDeclaration declaration) 
         {
 
-            return this.HasAttribute(declaration, "ScriptKit.Core.Ignore");
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Ignore");
         }
 
         protected virtual bool HasInline(EntityDeclaration declaration) 
         {
-            return this.HasAttribute(declaration, "ScriptKit.Core.Inline");
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Inline");
         }
 
         protected virtual bool HasScript(EntityDeclaration declaration)
         {
-            return this.HasAttribute(declaration, "ScriptKit.Core.Script");
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Script");
         }
 
         private Expression GetDefaultFieldInitializer(AstType type) 

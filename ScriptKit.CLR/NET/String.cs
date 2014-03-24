@@ -1,8 +1,8 @@
 ﻿namespace System
 {
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("String")]
-    [ScriptKit.Core.Constructor("String")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("String")]
+    [ScriptKit.CLR.Constructor("String")]
     public sealed class String
     {
         public readonly int length = 0;

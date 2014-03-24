@@ -15,9 +15,10 @@ namespace ScriptKit.Sandbox
             //var projectLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.Sandbox\TestProject\TestProject.csproj ";
             //var clrLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
 
-            var root = @"C:\Users\Geoffrey McGill\Dropbox\Ext.NET\Projects\ScriptKit.NET\";
-            
-            var projectLocation = root + @"ScriptKit.Sandbox\TestProject\TestProject.csproj ";
+            //var root = @"C:\Users\Geoffrey McGill\Dropbox\Ext.NET\Projects\ScriptKit.NET\";
+            var root = @"c:\projects\ext.net\git\ScriptKit\";
+
+            var projectLocation = root + @"ScriptKit.TestLibrary\ScriptKit.TestLibrary.csproj ";
             var clrLocation = root + @"ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
             var outputLocation = Path.ChangeExtension(projectLocation, "js");
             
@@ -25,6 +26,7 @@ namespace ScriptKit.Sandbox
             {
                 var translator = new ScriptKit.NET.Translator(projectLocation);
                 translator.CLRLocation = clrLocation;
+                translator.Rebuild = false;
                 string code = translator.Translate();
                 File.WriteAllText(outputLocation, code);
                 Console.WriteLine(code);

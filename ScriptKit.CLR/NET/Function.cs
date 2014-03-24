@@ -1,8 +1,8 @@
 ﻿namespace System 
 {
 
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Function")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Function")]
     public class Delegate 
     {
         public readonly int length = 0;
@@ -27,8 +27,8 @@
         }
     }
 
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Function")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Function")]
     public class MulticastDelegate : Delegate 
     {
         protected MulticastDelegate() { }

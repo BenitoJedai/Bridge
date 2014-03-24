@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ScriptKit.Core")]
+[assembly: AssemblyTitle("ScriptKit.TestLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ScriptKit.Core")]
-[assembly: AssemblyProduct("ScriptKit.Core")]
-[assembly: AssemblyCopyright("Copyright © ScriptKit.Core 2014")]
+[assembly: AssemblyCompany("ScriptKit")]
+[assembly: AssemblyProduct("ScriptKit.TestLibrary")]
+[assembly: AssemblyCopyright("Copyright © ScriptKit 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2612a5d3-5564-43b0-a099-a2e53fedbf19")]
+[assembly: Guid("dcda79cf-de3e-4903-bf51-4bcf8e731f78")]
 
 // Version information for an assembly consists of the following four values:
 //

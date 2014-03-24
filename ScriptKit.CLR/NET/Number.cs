@@ -1,9 +1,9 @@
 ﻿namespace System 
 {
 
-    [ScriptKit.Core.Ignore] 
-    [ScriptKit.Core.TypeName("Number")]
-    [ScriptKit.Core.Constructor("~~")]
+    [ScriptKit.CLR.Ignore] 
+    [ScriptKit.CLR.TypeName("Number")]
+    [ScriptKit.CLR.Constructor("~~")]
     public struct Int32  
     {
         public const int MAX_VALUE = 0;
@@ -19,9 +19,9 @@
         }
     }
 
-    [ScriptKit.Core.Ignore]
-    [ScriptKit.Core.TypeName("Number")]
-    [ScriptKit.Core.Constructor("Number")]
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.TypeName("Number")]
+    [ScriptKit.CLR.Constructor("Number")]
     public struct Double 
     {
         public const double MAX_VALUE = 0;
