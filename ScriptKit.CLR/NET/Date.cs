@@ -1,7 +1,7 @@
 ﻿namespace System
 {
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("Date")]
+    [ScriptKit.CLR.Name("Date")]
     public sealed class Date
     {
         [ScriptKit.CLR.Inline("now({0})")]

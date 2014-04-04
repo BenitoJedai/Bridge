@@ -40,16 +40,21 @@
   <ItemGroup>
     <Compile Include="Attributes\AllowAttribute.cs" />
     <Compile Include="Attributes\ConstructorAttribute.cs" />
-    <Compile Include="Attributes\TypeNameAttribute.cs" />
+    <Compile Include="Attributes\NameAttribute.cs" />
     <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="Attributes\ScriptAttribute.cs" />
     <Compile Include="Attributes\InlineAttribute.cs" />
     <Compile Include="Html\Console.cs" />
+    <Compile Include="NET\Action.cs" />
     <Compile Include="NET\Array.cs" />
     <Compile Include="NET\Boolean.cs" />
+    <Compile Include="NET\Collections\ICollection.cs" />
+    <Compile Include="NET\Collections\IEnumerable.cs" />
+    <Compile Include="NET\Collections\IEnumerator.cs" />
+    <Compile Include="NET\Func.cs" />
     <Compile Include="NET\Date.cs" />
     <Compile Include="NET\Error.cs" />
-    <Compile Include="NET\Function.cs" />
+    <Compile Include="NET\Delegate.cs" />
     <Compile Include="NET\Math.cs" />
     <Compile Include="NET\Number.cs" />
     <Compile Include="NET\Object.cs" />
@@ -72,6 +77,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)*.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

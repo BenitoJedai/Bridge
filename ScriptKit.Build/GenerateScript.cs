@@ -6,10 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ScriptKit.NET.Tasks
+namespace ScriptKit.Build
 {
     public class GenerateScript : Task
-    {
+    {        
         [Required]
         public ITaskItem Assembly
         {
@@ -29,39 +29,50 @@ namespace ScriptKit.NET.Tasks
         {
             get;
             set;
-        }        
+        }
+
+        [Required]
+        public string AssemliesPath
+        {
+            get;
+            set;
+        }
+
+        private bool changeCase = true;
+        public bool ChangeCase
+        {
+            get
+            {
+                return this.changeCase;
+            }
+            set
+            {
+                this.changeCase = value;
+            }
+        }
+
+        public bool NoCore
+        {
+            get;
+            set;
+        }
 
         public override bool Execute()
         {
             var success = true;
             try
-            {                
-                var translator = new ScriptKit.NET.Translator(this.BuildEngine3.ProjectFileOfTaskNode);
-                translator.CLRLocation = "ScriptKit\\ScriptKit.CLR.dll";
+            {
+                var translator = new ScriptKit.NET.Translator(this.ProjectPath);
+                translator.CLRLocation = Path.Combine(this.AssemliesPath, "ScriptKit.CLR.dll");                
                 translator.Rebuild = false;
-                string code = translator.Translate();                
+                translator.ChangeCase = this.ChangeCase;
+                string code = translator.Translate();
                 File.WriteAllText(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js"), code);
 
-                var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom("ScriptKit\\ScriptKit.CLR.dll");
-                var resourceName = "ScriptKit.CLR.resources.scriptkit.js";
-
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                if (!this.NoCore)
                 {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        File.WriteAllText(Path.Combine(this.OutputPath, "scriptkit.js"), reader.ReadToEnd());
-                    }
+                    ScriptKit.NET.Translator.ExtractCore(translator.CLRLocation, this.OutputPath);
                 }
-
-                resourceName = "ScriptKit.CLR.resources.scriptkit-debug.js";
-
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        File.WriteAllText(Path.Combine(this.OutputPath, "scriptkit-debug.js"), reader.ReadToEnd());
-                    }
-                }              
             }
             catch (Exception e)
             {

@@ -1177,6 +1177,46 @@ namespace ScriptKit.NET
             return this.GetScriptArguments(attr);
         }
 
+        protected virtual string GetMethodName(IParameterizedMember member)
+        {
+            bool changeCase = this.ChangeCase; 
+            var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
+            if (attr != null) 
+            {
+                var value = attr.PositionalArguments.First().ConstantValue;
+                if (value is string)
+                {
+                    return value.ToString();
+                }
+
+                changeCase = (bool)changeCase;
+            }
+
+            string name = member.Name;
+            return changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+        }
+
+        protected virtual string GetMethodName(EntityDeclaration method)
+        {
+            bool changeCase = this.ChangeCase; 
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Name");
+
+            if (attr != null)
+            {
+                var expr = (PrimitiveExpression)attr.Arguments.First();
+                if (expr.Value is string)
+                {
+                    return expr.Value.ToString();
+                }
+
+                changeCase = (bool)expr.Value;
+            }
+
+            string name = method.Name;
+
+            return changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+        }
+
         protected virtual string GetInline(EntityDeclaration method)
         {
             var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Inline");

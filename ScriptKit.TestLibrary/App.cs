@@ -3,14 +3,54 @@ using System;
 
 namespace TestProject 
 {
-    public static class App 
+    public class Class1
+    {
+        [ScriptKit.CLR.Name("m1")]
+        public virtual Class1 Method1()
+        {
+            Action a = this.Method2;
+            a();
+            return this;
+        }
+
+        [ScriptKit.CLR.Name("m2")]
+        public void Method2()
+        {
+            this.Method1().Method2();
+        }
+
+        public Class1 Property1
+        {
+            get;
+            set;
+        }
+
+        public Class1 Property2
+        {
+            get
+            {
+                return this.Property1.Method1();
+            }
+        }
+    }
+
+    public class Class2 : Class1
+    {
+        public override Class1 Method1()
+        {
+            base.Method2();
+            return this;
+        } 
+    }
+    
+    /*public static class App 
     {
         public static void CalculateMetrics(int[] numbers)
-        {
-            Console.info("Average: %d", App.Average(numbers));
-            Console.info("Sum: %d", App.Sum(numbers));
+        {            
             Console.info("Max: %d", App.Max(numbers));
             Console.info("Min: %d", App.Min(numbers));
+            Console.info("Average: %d", App.Average(numbers));
+            Console.info("Sum: %d", App.Sum(numbers));
         }
 
         public static float Average(int[] numbers)
@@ -67,5 +107,5 @@ namespace TestProject
 
             return result;
         }
-    }
+    }*/
 }

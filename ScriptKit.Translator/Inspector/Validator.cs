@@ -85,7 +85,7 @@ namespace ScriptKit.NET
 
         public virtual string GetCustomTypeName(TypeDefinition type) 
         {
-            return this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".TypeNameAttribute");
+            return this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NameAttribute");
         }
 
         public virtual string GetCustomConstructor(TypeDefinition type) 

@@ -2,7 +2,7 @@
 {
 
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("Error")]
+    [ScriptKit.CLR.Name("Error")]
     [ScriptKit.CLR.Constructor("Error")]
     public class Exception 
     {

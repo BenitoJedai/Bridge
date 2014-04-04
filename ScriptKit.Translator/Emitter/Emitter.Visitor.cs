@@ -27,14 +27,8 @@ namespace ScriptKit.NET
             this.ResetLocals();
             this.AddLocals(methodDeclaration.Parameters);
 
-            if (methodDeclaration.HasModifier(Modifiers.Static))
-            {
-                this.Write(Helpers.GetScriptName(methodDeclaration));
-            }
-            else
-            {
-                this.Write(Helpers.GetScriptName(methodDeclaration));
-            }
+            //this.Write(Helpers.GetScriptName(methodDeclaration));
+            this.Write(this.GetMethodName(methodDeclaration));
 
             this.WriteColon();
             this.WriteFunction();
@@ -329,7 +323,18 @@ namespace ScriptKit.NET
                 //throw new Exception("MemberReferenceExpression resolving is failed: " + memberReferenceExpression.ToString());
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
-                this.Write(Helpers.GetScriptName(memberReferenceExpression));
+                string name = Helpers.GetScriptName(memberReferenceExpression);
+                this.Write(this.ChangeCase ? name.ToLowerCamelCase() : name);
+                return;
+            }
+
+            if (resolveResult is MethodGroupResolveResult)
+            {
+                MethodGroupResolveResult group = (MethodGroupResolveResult)resolveResult;
+                IMethod method = group.Methods.First();
+                memberReferenceExpression.Target.AcceptVisitor(this);
+                this.WriteDot();
+                this.Write(this.GetMethodName(method));
                 return;
             }
             
@@ -362,6 +367,11 @@ namespace ScriptKit.NET
                     {
                         this.PushWriter("set" + memberReferenceExpression.MemberName + "({0})");
                     }
+                }
+                else if (resolveResult is InvocationResolveResult)
+                {
+                    InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
+                    this.Write(this.GetMethodName(invocationResult.Member));
                 }
                 else
                 {
@@ -443,7 +453,16 @@ namespace ScriptKit.NET
                 }
                 else
                 {
-                    this.Write(Helpers.GetScriptFullName(baseType), ".", baseMethod);
+                    var resolveResult = MemberResolver.Resolve(targetMember);
+                    if (resolveResult != null && !resolveResult.IsError && resolveResult is InvocationResolveResult)
+                    {
+                        InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
+                        this.Write(Helpers.GetScriptFullName(baseType), ".", this.GetMethodName(invocationResult.Member));
+                    }
+                    else
+                    {
+                        this.Write(Helpers.GetScriptFullName(baseType), ".", this.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
+                    }                    
 
                     this.WriteDot();
                     this.Write("call");

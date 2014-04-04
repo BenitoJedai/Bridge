@@ -29,6 +29,19 @@ namespace ScriptKit.NET
             protected set; 
         }
 
+        private bool changeCase = true;
+        public bool ChangeCase
+        {
+            get
+            {
+                return this.changeCase;
+            }
+            set
+            {
+                this.changeCase = value;
+            }
+        }
+
         private string msbuildVersion="3.5";
 
         public string MSBuildVersion

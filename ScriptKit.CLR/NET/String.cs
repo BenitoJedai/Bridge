@@ -1,7 +1,7 @@
 ﻿namespace System
 {
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("String")]
+    [ScriptKit.CLR.Name("String")]
     [ScriptKit.CLR.Constructor("String")]
     public sealed class String
     {

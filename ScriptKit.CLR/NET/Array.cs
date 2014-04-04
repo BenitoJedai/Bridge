@@ -1,7 +1,7 @@
 ﻿namespace System 
 {
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("Array")]
+    [ScriptKit.CLR.Name("Array")]
     public sealed class Array 
     {
         public readonly int length = 0;

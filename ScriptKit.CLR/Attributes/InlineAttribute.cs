@@ -3,7 +3,7 @@
 namespace ScriptKit.CLR
 {
     /// <summary>
-    /// InlineAttribute is unstruction to replace method calling (in expression) by required code
+    /// InlineAttribute is instruction to replace method calling (in expression) by required code
     /// </summary>
     [ScriptKit.CLR.Ignore, AttributeUsage(AttributeTargets.Method)]
     public sealed class InlineAttribute : Attribute

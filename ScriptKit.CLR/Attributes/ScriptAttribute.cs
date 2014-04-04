@@ -8,6 +8,8 @@ namespace ScriptKit.CLR
     [ScriptKit.CLR.Ignore, AttributeUsage(AttributeTargets.Method)]
     public sealed class ScriptAttribute : Attribute
     {
-        public ScriptAttribute(params string[] lines) { }
+        public ScriptAttribute(params string[] lines) 
+        { 
+        }
     }
 }

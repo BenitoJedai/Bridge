@@ -1,7 +1,7 @@
 ﻿namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("console")]
+    [ScriptKit.CLR.Name("console")]
     public static class Console
     {
         public static void log(object message)

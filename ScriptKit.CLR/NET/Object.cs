@@ -1,7 +1,7 @@
 ﻿namespace System
 {
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("Object")]
+    [ScriptKit.CLR.Name("Object")]
     [ScriptKit.CLR.Constructor("{ }")]
     public class Object
     {

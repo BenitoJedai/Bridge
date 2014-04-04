@@ -11,7 +11,6 @@
     <AssemblyName>ScriptKit.TestLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,17 +28,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ScriptKit.CLR, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>ScriptKit\ScriptKit.CLR.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="test.html">
@@ -48,13 +39,8 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <UsingTask TaskName="ScriptKit.NET.Tasks.GenerateScript" AssemblyFile="ScriptKit\ScriptKit.Build.dll" />
-  <Target Name="AfterBuild">
-    <Message Text="Generating script..." />
-    <GenerateScript OutputPath="$(OutputPath)" Assembly="@(IntermediateAssembly)" ProjectPath="$(MSBuildProjectFullPath)">
-    </GenerateScript>
-  </Target>
+  <Import Project="..\assemblies\ScriptKitNoTask.targets" />
   <PropertyGroup>
-    <PostBuildEvent>test.html</PostBuildEvent>
+    <PostBuildEvent>$(ProjectDir)build.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>

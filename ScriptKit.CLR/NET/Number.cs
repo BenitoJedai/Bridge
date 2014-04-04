@@ -2,7 +2,7 @@
 {
 
     [ScriptKit.CLR.Ignore] 
-    [ScriptKit.CLR.TypeName("Number")]
+    [ScriptKit.CLR.Name("Number")]
     [ScriptKit.CLR.Constructor("~~")]
     public struct Int32  
     {
@@ -20,7 +20,7 @@
     }
 
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.TypeName("Number")]
+    [ScriptKit.CLR.Name("Number")]
     [ScriptKit.CLR.Constructor("Number")]
     public struct Double 
     {

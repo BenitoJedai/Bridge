@@ -16,6 +16,8 @@ namespace ScriptKit.NET
 
         public static string GetScriptName(MethodDeclaration method) 
         {
+            
+            
             return Helpers.GetScriptName(method.Name, method.Parameters.Count);
         }
 

@@ -67,6 +67,19 @@ namespace ScriptKit.NET
             set; 
         }
 
+        private bool changeCase = true;
+        public bool ChangeCase
+        {
+            get
+            {
+                return this.changeCase;
+            }
+            set
+            {
+                this.changeCase = value;
+            }
+        }
+
         protected int IteratorCount 
         { 
             get; 

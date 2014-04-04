@@ -26,6 +26,7 @@ namespace ScriptKit.NET
             references.Add(AssemblyDefinition.ReadAssembly(this.AssemblyLocation));
 
             var emitter = this.CreateEmitter();
+            emitter.ChangeCase = this.ChangeCase;
             emitter.References = references;
             emitter.SourceFiles = this.SourceFiles;
             emitter.Emit();
@@ -41,6 +42,38 @@ namespace ScriptKit.NET
         protected virtual Validator CreateValidator()
         {
             return new Validator();
+        }
+
+        public static void ExtractCore(string clrPath, string outputDir)
+        {
+            Translator.ExtractCore(clrPath, outputDir, false);
+        }
+
+        public static void ExtractCore(string clrPath, string outputDir, bool nodebug)
+        {
+            var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(clrPath);
+            var resourceName = "ScriptKit.CLR.resources.scriptkit.js";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    File.WriteAllText(Path.Combine(outputDir, "scriptkit.js"), reader.ReadToEnd());
+                }
+            }
+
+            if (!nodebug)
+            {
+                resourceName = "ScriptKit.CLR.resources.scriptkit-debug.js";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        File.WriteAllText(Path.Combine(outputDir, "scriptkit-debug.js"), reader.ReadToEnd());
+                    }
+                }
+            }
         }
     }
 }
