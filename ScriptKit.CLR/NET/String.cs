@@ -5,9 +5,9 @@
     [ScriptKit.CLR.Constructor("String")]
     public sealed class String
     {
-        public readonly int length = 0;
+        public readonly int Length = 0;
 
-        public static string fromCharCode(params int[] chars) 
+        public static string FromCharCode(params int[] chars) 
         { 
             return null; 
         }
@@ -20,172 +20,172 @@
         { 
         }
 
-        public string charAt(int pos) 
+        public string CharAt(int pos) 
         { 
             return null; 
         }
         
-        public int charCodeAt(int pos) 
+        public int CharCodeAt(int pos) 
         { 
             return 0; 
         }
 
-        public string concat(params object[] items) 
+        public string Concat(params object[] items) 
         { 
             return null; 
         }
 
-        public int indexOf(string searchString) 
+        public int IndexOf(string searchString) 
         { 
             return 0; 
         }
 
-        public int indexOf(string searchString, int position) 
+        public int IndexOf(string searchString, int position) 
         { 
             return 0; 
         }
 
-        public int lastIndexOf(string searchString) 
+        public int LastIndexOf(string searchString) 
         { 
             return 0; 
         }
 
-        public int lastIndexOf(string searchString, int position) 
+        public int LastIndexOf(string searchString, int position) 
         { 
             return 0; 
         }
 
-        public int localeCompare(object that) 
+        public int LocaleCompare(object that) 
         { 
             return 0; 
         }
 
-        public string[] match(RegExp regexp) 
+        public string[] Match(RegExp regexp) 
         { 
             return null; 
         }
 
-        public string[] match(string regexp) 
+        public string[] Match(string regexp) 
         { 
             return null; 
         }
 
-        public string replace(RegExp regexp, string replacement) 
+        public string Replace(RegExp regexp, string replacement) 
         { 
             return null; 
         }
 
-        public string replace(RegExp regexp, Func<string, string> callback) 
+        public string Replace(RegExp regexp, Func<string, string> callback) 
         { 
             return null; 
         }
 
-        public string replace(RegExp regexp, Func<string, int, string> callback) 
+        public string Replace(RegExp regexp, Func<string, int, string> callback) 
         { 
             return null; 
         }
 
-        public string replace(RegExp regexp, Func<string, int, string, string> callback) 
+        public string Replace(RegExp regexp, Func<string, int, string, string> callback) 
         { 
             return null; 
         }
 
-        public string replace(string regexp, string replacement) 
+        public string Replace(string regexp, string replacement) 
         { 
             return null; 
         }
 
-        public string replace(string regexp, Func<string, string> callback) 
+        public string Replace(string regexp, Func<string, string> callback) 
         { 
             return null; 
         }
 
-        public string replace(string regexp, Func<string, int, string> callback) 
+        public string Replace(string regexp, Func<string, int, string> callback) 
         { 
             return null; 
         }
 
-        public string replace(string regexp, Func<string, int, string, string> callback)
+        public string Replace(string regexp, Func<string, int, string, string> callback)
         { 
             return null; 
         }
 
-        public int search(RegExp regexp) 
+        public int Search(RegExp regexp) 
         { 
             return 0; 
         }
         
-        public int search(string regexp) 
+        public int Search(string regexp) 
         { 
             return 0; 
         }
 
-        public string slice(int start) 
+        public string Slice(int start) 
         { 
             return null; 
         }
 
-        public string slice(int start, int end) 
+        public string Slice(int start, int end) 
         { 
             return null; 
         }
 
-        public string[] split(string separator) 
+        public string[] Split(string separator) 
         { 
             return null; 
         }
 
-        public string[] split(RegExp separator) 
+        public string[] Split(RegExp separator) 
         { 
             return null; 
         }
 
-        public string[] split(string separator, int limit) 
+        public string[] Split(string separator, int limit) 
         { 
             return null; 
         }
 
-        public string[] split(RegExp separator, int limit) 
+        public string[] Split(RegExp separator, int limit) 
         { 
             return null; 
         }
 
-        public string substring(int start) 
+        public string Substring(int start) 
         { 
             return null; 
         }
 
-        public string substring(int start, int end) 
+        public string Substring(int start, int end) 
         { 
             return null; 
         }
 
-        public string substr(int start) 
+        public string Substr(int start) 
         { 
             return null; 
         }
 
-        public string substr(int start, int length) 
+        public string Substr(int start, int length) 
         { 
             return null; 
         }
 
-        public string toLowerCase() 
+        public string ToLowerCase() 
         { 
             return null; 
         }
         
-        public string toLocaleLowerCase() 
+        public string ToLocaleLowerCase() 
         { 
             return null; 
         }
         
-        public string toUpperCase() 
+        public string ToUpperCase() 
         { 
             return null; 
         }
         
-        public string toLocaleUpperCase() 
+        public string ToLocaleUpperCase() 
         { 
             return null; 
         }

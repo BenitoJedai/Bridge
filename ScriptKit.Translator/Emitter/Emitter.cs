@@ -1179,7 +1179,7 @@ namespace ScriptKit.NET
 
         protected virtual string GetMethodName(IParameterizedMember member)
         {
-            bool changeCase = this.ChangeCase; 
+            bool changeCase = !member.FullName.Contains(Translator.CLR_ASSEMBLY) ? this.ChangeCase : false; 
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
             if (attr != null) 
             {
@@ -1189,7 +1189,7 @@ namespace ScriptKit.NET
                     return value.ToString();
                 }
 
-                changeCase = (bool)changeCase;
+                changeCase = (bool)value;
             }
 
             string name = member.Name;

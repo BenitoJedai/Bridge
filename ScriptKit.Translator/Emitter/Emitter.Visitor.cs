@@ -324,7 +324,8 @@ namespace ScriptKit.NET
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
                 string name = Helpers.GetScriptName(memberReferenceExpression);
-                this.Write(this.ChangeCase ? name.ToLowerCamelCase() : name);
+                //this.Write(this.ChangeCase ? name.ToLowerCamelCase() : name);
+                this.Write(name.ToLowerCamelCase());
                 return;
             }
 
