@@ -676,18 +676,52 @@ namespace ScriptKit.NET
                     var elements = objectCreateExpression.Initializer.Elements;
                     bool needComma = false;
 
-                    foreach (NamedArgumentExpression item in elements)
-                    {
+                    foreach (Expression item in elements)
+                    {                        
                         if (needComma)
                         {
                             this.WriteComma();
                         }
 
                         needComma = true;
-                        this.Write(item.Name);
-                        this.WriteColon();
 
-                        item.Expression.AcceptVisitor(this);
+                        if (item is NamedExpression)
+                        {
+                            var namedExpression = (NamedExpression)item;
+                            var resolveResult = MemberResolver.ResolveExpression(item);
+                            var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedExpression.Name);
+
+                            if (resolveResult != null && !resolveResult.IsError && resolveResult is MemberResolveResult)
+                            {
+                                var isMember = ((MemberResolveResult)resolveResult).Member.EntityType == EntityType.Property;
+                                this.Write((isMember ? "set" : "") + (isMember ? namedExpression.Name : lowerCaseName));
+                            }
+                            else
+                            {
+                                this.Write(lowerCaseName);
+                            }
+                            this.WriteColon();
+                            namedExpression.Expression.AcceptVisitor(this);
+                        }
+                        else if (item is NamedArgumentExpression)
+                        {
+                            var namedArgumentExpression = (NamedArgumentExpression)item;
+                            var resolveResult = MemberResolver.ResolveExpression(item);
+                            var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedArgumentExpression.Name);
+
+                            if (resolveResult != null && !resolveResult.IsError && resolveResult is MemberResolveResult)
+                            {
+                                var isMember = ((MemberResolveResult)resolveResult).Member.EntityType == EntityType.Property;
+                                this.Write((isMember ? "set" : "") + (isMember ? namedArgumentExpression.Name : lowerCaseName));
+                            }
+                            else
+                            {
+                                this.Write(lowerCaseName);
+                            }
+                            this.WriteColon();
+                            namedArgumentExpression.Expression.AcceptVisitor(this);
+                        }                       
+                        
                     }
 
                     this.WriteCloseBrace();

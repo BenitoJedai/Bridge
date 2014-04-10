@@ -56,7 +56,7 @@ namespace ScriptKit.NET
             {
                 return;
             }            
-
+            
             this.CurrentType = new TypeInfo()
             {
                 Name = Helpers.GetScriptName(typeDeclaration),

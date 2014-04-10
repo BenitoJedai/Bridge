@@ -30,9 +30,49 @@
             return 0; 
         }
 
-        public string Concat(params object[] items) 
-        { 
-            return null; 
+        public static string Concat(string s1, string s2)
+        {
+            return null;
+        }
+
+        public static string Concat(string s1, string s2, string s3)
+        {
+            return null;
+        }
+
+        public static string Concat(string s1, string s2, string s3, string s4)
+        {
+            return null;
+        }
+
+        
+        public static string Concat(params string[] strings)
+        {
+            return null;
+        }
+
+        
+        public static string Concat(object o1, object o2)
+        {
+            return null;
+        }
+
+        
+        public static string Concat(object o1, object o2, object o3)
+        {
+            return null;
+        }
+
+        
+        public static string Concat(object o1, object o2, object o3, object o4)
+        {
+            return null;
+        }
+
+        
+        public static string Concat(params object[] o)
+        {
+            return null;
         }
 
         public int IndexOf(string searchString) 

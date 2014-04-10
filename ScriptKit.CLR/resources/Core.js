@@ -40,8 +40,14 @@ ScriptKit = {
 	apply : function (obj, values) {
 	  var names = ScriptKit.getPropertyNames(values, false);
 	  for(var i = 0; i < names.length; i++) {
-		var name = names[i];
-		obj[name] = values[name];
+	      var name = names[i];
+
+	      if (typeof obj[name] == "function") {
+	          obj[name](values[name]);
+	      }
+	      else {
+	          obj[name] = values[name];
+	      }
 	  }
 	  return obj;
 	},

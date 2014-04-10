@@ -75,5 +75,15 @@ namespace ScriptKit.NET
             var unresolvedFile = syntaxTree.ToTypeSystem();
             return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, location);
         }
+
+        public static ResolveResult ResolveExpression(Expression expression)
+        {
+            var syntaxTree = expression.GetParent<SyntaxTree>();
+            var offset = MemberResolver.InitDocument(expression.StartLocation, syntaxTree);
+            var location = MemberResolver.document.GetLocation(offset);
+            syntaxTree.Freeze();
+            var unresolvedFile = syntaxTree.ToTypeSystem();
+            return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, location);
+        }
     }
 }
