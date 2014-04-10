@@ -27,7 +27,7 @@
         // Instantiate a base class (but only create the instance,
         // don't run the init constructor)
         initializing = true;
-        prototype = new this();
+        prototype = extend ? new extend[0]() : new Object();
         initializing = false;
 
         // Copy the properties over onto the new prototype

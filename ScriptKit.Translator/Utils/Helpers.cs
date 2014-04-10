@@ -124,5 +124,39 @@ namespace ScriptKit.NET
             //return name + separator + paramCount;
         }
 
+        public static bool IsSubclassOf(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition)
+        {
+            if (thisTypeDefinition.BaseType != null)
+            {
+                TypeDefinition baseTypeDefinition = null;
+                try { baseTypeDefinition = thisTypeDefinition.BaseType.Resolve(); }
+                catch { }
+                if (baseTypeDefinition != null)
+                    return (baseTypeDefinition == typeDefinition || IsSubclassOf(baseTypeDefinition, typeDefinition));
+            }
+            return false;
+        }
+
+        public static bool IsImplementationOf(TypeDefinition thisTypeDefinition, TypeDefinition interfaceTypeDefinition)
+        {
+            foreach (TypeReference interfaceReference in thisTypeDefinition.Interfaces)
+            {
+                if (interfaceReference == interfaceTypeDefinition)
+                    return true;
+                TypeDefinition interfaceDefinition = null;
+                try { interfaceDefinition = interfaceReference.Resolve(); }
+                catch { }
+                if (interfaceDefinition != null && IsImplementationOf(interfaceDefinition, interfaceTypeDefinition))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool IsAssignableFrom(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition)
+        {
+            return (thisTypeDefinition == typeDefinition || (typeDefinition.IsClass && !typeDefinition.IsValueType && IsSubclassOf(typeDefinition, thisTypeDefinition))
+                || (typeDefinition.IsInterface && IsImplementationOf(typeDefinition, thisTypeDefinition)));
+        }
+
     }
 }

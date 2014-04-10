@@ -97,6 +97,29 @@ namespace ScriptKit.NET
                 return 1;
             }
 
+            var xTypeDefinition = this.TypeDefinitions[Helpers.GetTypeMapKey(x)];
+            var yTypeDefinition = this.TypeDefinitions[Helpers.GetTypeMapKey(y)];
+
+            if (Helpers.IsSubclassOf(xTypeDefinition, yTypeDefinition))
+            {
+                return 1;
+            }
+
+            if (Helpers.IsSubclassOf(yTypeDefinition, xTypeDefinition))
+            {
+                return -1;
+            }
+
+            if (xTypeDefinition.IsInterface && Helpers.IsImplementationOf(yTypeDefinition, xTypeDefinition))
+            {
+                return -1;
+            }
+
+            if (yTypeDefinition.IsInterface && Helpers.IsImplementationOf(xTypeDefinition, yTypeDefinition))
+            {
+                return 1;
+            }
+
             return Comparer.Default.Compare(x.FullName, y.FullName);
         }
 
