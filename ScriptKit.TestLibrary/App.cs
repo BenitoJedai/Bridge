@@ -3,51 +3,38 @@ using System;
 
 namespace TestProject 
 {
-    //public class Class1
-    //{
-    //    [ScriptKit.CLR.Name("m1")]
-    //    public virtual Class1 Method1()
-    //    {
-    //        Action a = this.Method2;
-    //        a();
-    //        return this;
-    //    }
+    public class Person
+    {
+        public string Name { get; set; }
+        //public DateTime DateOfBirth { get; set; }
+    }
 
-    //    [ScriptKit.CLR.Name("m2")]
-    //    public void Method2()
-    //    {
-    //        this.Method1().Method2();
-    //    }
+    public class Customer : Person
+    {
+        public Customer(string name)
+        {
+            this.Name = name;
+        }
 
-    //    public Class1 Property1
-    //    {
-    //        get;
-    //        set;
-    //    }
+        public int CustomerId { get; set; }
+    }
 
-    //    public Class1 Property2
-    //    {
-    //        get
-    //        {
-    //            return this.Property1.Method1();
-    //        }
-    //    }
-    //}
-
-    //public class Class2 : Class1
-    //{
-    //    public override Class1 Method1()
-    //    {
-    //        base.Method2();
-    //        return this;
-    //    } 
-    //}
-    
     public static class App 
     {
         public static void CalculateMetrics(int[] numbers)
         {
+            //var customer = new Customer { Name = "Geoff" };
+
+            var customer = new Customer("Geoff");
+
+            customer.Name = "Geoff";
+
+            customer.CustomerId = 1234;
+
+            Console.Log(customer.Name);
+
             Date date = new Date();
+
             Console.Log(date.getDay());
             Console.Info("Max: %d", App.Max(numbers));
             Console.Info("Min: %d", App.Min(numbers));

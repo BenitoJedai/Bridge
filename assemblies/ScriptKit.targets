@@ -17,7 +17,7 @@
 	  NoCore="False"
       OutputPath="$(OutputPath)"
       Assembly="@(IntermediateAssembly)"
-	  AssemliesPath="$(MSBuildThisFileDirectory)"
+	    AssemliesPath="$(MSBuildThisFileDirectory)"
       ProjectPath="$(MSBuildProjectFullPath)">
     </GenerateScript>
   </Target>
