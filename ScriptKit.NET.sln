@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptKit.NET", "ScriptKit.Translator\ScriptKit.NET.csproj", "{44124331-C60A-4071-B387-4B8E71324B10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptKit.CLR", "ScriptKit.CLR\ScriptKit.CLR.csproj", "{DE78B8B7-C0F5-415B-A70B-02194433F450}"
@@ -18,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptKit.Sandbox", "ScriptKit.Sandbox\ScriptKit.Sandbox.csproj", "{82F62EA8-8F17-4922-94D4-466E1B453AE9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptKit.Builder", "ScriptKit.Builder\ScriptKit.Builder.csproj", "{243BB709-3912-4C65-82D4-787A5E2201D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyX", "CompanyX\CompanyX.csproj", "{48F4269A-C055-42CF-8C84-ED1ACF7A5AE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,10 @@ Global
 		{243BB709-3912-4C65-82D4-787A5E2201D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{243BB709-3912-4C65-82D4-787A5E2201D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{243BB709-3912-4C65-82D4-787A5E2201D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F4269A-C055-42CF-8C84-ED1ACF7A5AE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F4269A-C055-42CF-8C84-ED1ACF7A5AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F4269A-C055-42CF-8C84-ED1ACF7A5AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F4269A-C055-42CF-8C84-ED1ACF7A5AE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
