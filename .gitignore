@@ -116,3 +116,11 @@ Backup*/
 UpgradeLog*.XML
 
 
+
+/assemblies/ScriptKit.Build.dll
+
+/assemblies/ScriptKit.Builder.exe
+
+/assemblies/ScriptKit.CLR.dll
+
+/assemblies/ScriptKit.Translator.dll
