@@ -4,26 +4,6 @@
     [ScriptKit.CLR.Name("Date")]
     public sealed class Date
     {
-        [ScriptKit.CLR.Inline("now({0})")]
-        public static Date NowMethod(int code)
-        {
-            return null;
-        }
-
-        [ScriptKit.CLR.Inline("nowInstance()")]
-        public Date NowInstanceMethod()
-        {
-            return null;
-        }
-
-        public static Date NowProperty
-        {
-            get
-            {
-                return null;
-            }
-        }
-
         public static double operator -(Date d1, Date d2)
         {
             return 0;

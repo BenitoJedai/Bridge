@@ -4,91 +4,91 @@
     [ScriptKit.CLR.Name("console")]
     public static class Console
     {
-        public static void log(object message)
+        public static void Log(object message)
         {
         }
 
-        public static void log(object message, params object[] args)
+        public static void Log(object message, params object[] args)
         {
         }
 
-        public static void debug(object message)
+        public static void Debug(object message)
         {
         }
 
-        public static void debug(object message, params object[] args)
+        public static void Debug(object message, params object[] args)
         {
         }
 
-        public static void info(object message)
+        public static void Info(object message)
         {
         }
 
-        public static void info(object message, params object[] args)
+        public static void Info(object message, params object[] args)
         {
         }
 
-        public static void warn(object message)
+        public static void Warn(object message)
         {
         }
 
-        public static void warn(object message, params object[] args)
+        public static void Warn(object message, params object[] args)
         {
         }
 
-        public static void error(object message)
+        public static void Error(object message)
         {
         }
 
-        public static void error(object message, params object[] args)
+        public static void Error(object message, params object[] args)
         {
         }
 
-        public static void clear()
+        public static void Clear()
         {
         }
 
-        public static void trace()
+        public static void Trace()
         {
         }
 
-        public static void group(object message)
+        public static void Group(object message)
         {
         }
 
-        public static void group(object message, params object[] args)
+        public static void Group(object message, params object[] args)
         {
         }
 
-        public static void groupCollapsed(object message)
+        public static void GroupCollapsed(object message)
         {
         }
 
-        public static void groupCollapsed(object message, params object[] args)
+        public static void GroupCollapsed(object message, params object[] args)
         {
         }
 
-        public static void groupEnd()
+        public static void GroupEnd()
         {
         }
 
-        public static void time(object name)
+        public static void Time(object name)
         {
         }
 
-        public static void timeEnd(object name)
+        public static void TimeEnd(object name)
         {
         }
 
-        public static void timeStamp(object name)
+        public static void TimeStamp(object name)
         {
         }
 
-        public static void profile()
+        public static void Profile()
         {
         }
 
-        public static void profileEnd()
+        public static void ProfileEnd()
         {
         }
     }
