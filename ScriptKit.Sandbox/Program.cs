@@ -17,7 +17,7 @@ namespace ScriptKit.Sandbox
 
             //var root = @"C:\Users\Geoffrey McGill\Dropbox\Ext.NET\Projects\ScriptKit.NET\";
             //var root = @"c:\projects\ext.net\git\ScriptKit\";
-            var root = @"c:\Users\Владимир\Documents\GitHub\ScriptKit\";
+            var root = @"c:\projects\ext.net\git\ScriptKit\";
 
             var projectLocation = root + @"ScriptKit.TestLibrary\ScriptKit.TestLibrary.csproj ";
             var clrLocation = root + @"ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
