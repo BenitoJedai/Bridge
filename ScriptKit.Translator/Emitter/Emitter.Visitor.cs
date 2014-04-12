@@ -371,11 +371,19 @@ namespace ScriptKit.NET
                 }
                 else if (member.Member.EntityType == EntityType.Field)
                 {
+                    if (member.Member.IsStatic && Emitter.IsReservedStaticName(member.Member.Name))
+                    {
+                        this.Write("$");
+                    }
                     bool changeCase = !member.Member.FullName.Contains(Translator.CLR_ASSEMBLY) ? this.ChangeCase : true;
                     this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(memberReferenceExpression.MemberName) : memberReferenceExpression.MemberName);
                 }
                 else if (resolveResult is InvocationResolveResult)
                 {
+                    if (member.Member.IsStatic && Emitter.IsReservedStaticName(member.Member.Name))
+                    {
+                        this.Write("$");
+                    }
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
                     this.Write(this.GetMethodName(invocationResult.Member));
                 }

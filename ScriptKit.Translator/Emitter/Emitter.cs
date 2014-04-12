@@ -9,6 +9,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.TypeSystem;
+using System.Globalization;
 
 namespace ScriptKit.NET
 {
@@ -344,7 +345,16 @@ namespace ScriptKit.NET
                 for (var i = 0; i < sortedNames.Count; i++)
                 {
                     var name = sortedNames[i];
-                    this.Write("this.", name, " = ");
+
+                    if (Emitter.IsReservedStaticName(name))
+                    {
+                        this.Write("this.$", name, " = ");
+                    }
+                    else
+                    {
+                        this.Write("this.", name, " = ");
+                    }
+                    
                     this.TypeInfo.StaticFields[name].AcceptVisitor(this);
                     this.WriteSemiColon();
                     this.WriteNewLine();
@@ -353,6 +363,11 @@ namespace ScriptKit.NET
                 this.EndBlock();
                 this.Comma = true;
             }            
+        }
+
+        private static bool IsReservedStaticName(string name)
+        {
+            return Emitter.reservedStaticNames.Any(n => String.Equals(name, n, StringComparison.InvariantCultureIgnoreCase));
         }
 
         protected virtual string GetTypeHierarchy()
@@ -1352,16 +1367,18 @@ namespace ScriptKit.NET
                     }
                     else
                     {
+                        bool isReserved = propertyDeclaration.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(propertyDeclaration.Name);
+                        
                         this.BeginBlock();
 
                         if (setter)
                         {
-                            this.Write("this." + propertyDeclaration.Name.ToLowerCamelCase() + " = value;");
+                            this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase() + " = value;");
                         }
                         else
                         {
                             this.WriteReturn(true);
-                            this.Write("this." + propertyDeclaration.Name.ToLowerCamelCase());
+                            this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase());
                             this.WriteSemiColon();
                         }
 

@@ -19,6 +19,9 @@ namespace ScriptKit.NET
         const string NEXT = "next";
         const string APPLY_OBJECT = "apply";
 
+
+        private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };
+
         public Validator Validator
         {
             get;
