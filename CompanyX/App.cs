@@ -5,9 +5,11 @@ namespace CompanyX
 {
     public static class App
     {
+        public static string name = "Geoff";
         public static void Start()
         {
             int l = "sas".Length;
+            Console.Log("Name: " + App.name);
         }
 
     }
