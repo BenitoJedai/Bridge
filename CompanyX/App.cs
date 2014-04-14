@@ -22,6 +22,8 @@ namespace CompanyX
 
             Console.Log("Company", customer.CompanyName);
 
+            // Window
+            // Document
         }
     }
 
