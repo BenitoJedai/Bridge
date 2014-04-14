@@ -342,9 +342,11 @@ namespace ScriptKit.NET
 
                 this.BeginBlock();
 
+                var changeCase = this.ChangeCase;
+
                 for (var i = 0; i < sortedNames.Count; i++)
                 {
-                    var name = sortedNames[i];
+                    var name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(sortedNames[i]) : sortedNames[i];
 
                     if (Emitter.IsReservedStaticName(name))
                     {
@@ -1217,7 +1219,7 @@ namespace ScriptKit.NET
 
         protected virtual string GetMethodName(IParameterizedMember member)
         {
-            bool changeCase = !member.FullName.Contains(Translator.CLR_ASSEMBLY) ? this.ChangeCase : true; 
+            bool changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true; 
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
             if (attr != null) 
             {
@@ -1548,6 +1550,11 @@ namespace ScriptKit.NET
             }
 
             return result;
+        }
+
+        protected virtual bool IsNativeMember(string fullName)
+        {
+            return fullName.Contains(Translator.CLR_ASSEMBLY) || fullName.StartsWith("System");
         }
     }
 }

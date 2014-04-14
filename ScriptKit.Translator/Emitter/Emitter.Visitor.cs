@@ -375,7 +375,7 @@ namespace ScriptKit.NET
                     {
                         this.Write("$");
                     }
-                    bool changeCase = !member.Member.FullName.Contains(Translator.CLR_ASSEMBLY) ? this.ChangeCase : true;
+                    bool changeCase = !this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true;
                     this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(memberReferenceExpression.MemberName) : memberReferenceExpression.MemberName);
                 }
                 else if (resolveResult is InvocationResolveResult)

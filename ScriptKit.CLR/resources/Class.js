@@ -101,6 +101,10 @@
             scope.$inheritors.push(Class);
         }
 
+        if (Class.init) {
+            Class.init.call(Class);
+        }
+
         return Class;
     };
 })();

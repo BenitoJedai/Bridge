@@ -26,6 +26,7 @@ scope=scope[nameParts[i]];}
 scope[nameParts[nameParts.length-1]]=Class;if(!extend){extend=[Object];}
 Class.$extend=extend;for(i=0;i<extend.length;i++){scope=extend[i];if(!scope.$inheritors){scope.$inheritors=[];}
 scope.$inheritors.push(Class);}
+if(Class.init){Class.init.call(Class);}
 return Class;};})();
 
 ScriptKit.Class.extend("ScriptKit.ArrayIterator",{init:function(array){this.array=array;this.index=0;},hasNext:function(){return this.index<this.array.length;},next:function(){return this.array[this.index++];}});
