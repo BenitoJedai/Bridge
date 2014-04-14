@@ -13,7 +13,7 @@
 
   <Target Name="AfterBuild">
     <GenerateScript
-	  ChangeCase="True"
+	  ChangeCase="False"
 	  NoCore="False"
       OutputPath="$(ProjectDir)Build" 
       Assembly="@(IntermediateAssembly)"

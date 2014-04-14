@@ -36,6 +36,7 @@ namespace ScriptKit.Build
         }
 
         private bool changeCase = true;
+
         public bool ChangeCase
         {
             get
