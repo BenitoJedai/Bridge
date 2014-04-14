@@ -5,11 +5,14 @@ namespace CompanyX
 {
     public static class App
     {
+        public static string Name = "Geoff";
+
         public static void Start()
         {
-            int l = "sas".Length;
-        }
+            //int l = "sas".Length;
 
+            Console.Log("Name", App.Name);
+        }
     }
 
     [ScriptKit.CLR.Name("App.direct")]
