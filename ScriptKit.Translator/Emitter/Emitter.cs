@@ -347,6 +347,7 @@ namespace ScriptKit.NET
                 for (var i = 0; i < sortedNames.Count; i++)
                 {
                     var name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(sortedNames[i]) : sortedNames[i];
+                    var origName = sortedNames[i];
 
                     if (Emitter.IsReservedStaticName(name))
                     {
@@ -357,7 +358,7 @@ namespace ScriptKit.NET
                         this.Write("this.", name, " = ");
                     }
                     
-                    this.TypeInfo.StaticFields[name].AcceptVisitor(this);
+                    this.TypeInfo.StaticFields[origName].AcceptVisitor(this);
                     this.WriteSemiColon();
                     this.WriteNewLine();
                 }

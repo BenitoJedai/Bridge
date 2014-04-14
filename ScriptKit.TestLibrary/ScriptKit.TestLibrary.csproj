@@ -38,6 +38,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ScriptKit.Translator\ScriptKit.NET.csproj">
+      <Project>{44124331-c60a-4071-b387-4b8e71324b10}</Project>
+      <Name>ScriptKit.NET</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\assemblies\ScriptKitNoTask.targets" />
   <PropertyGroup>
