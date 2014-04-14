@@ -9,9 +9,19 @@ namespace CompanyX
 
         public static void Start()
         {
-            //int l = "sas".Length;
+            int val = "sas".Length + 100;
+
+            Console.Log("Length", val);
 
             Console.Log("Name", App.Name);
+
+            var customer = new Customer {
+                Name = "Vladimir",
+                CompanyName = "Object.NET"
+            };
+
+            Console.Log("Company", customer.CompanyName);
+
         }
     }
 

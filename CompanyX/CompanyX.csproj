@@ -36,12 +36,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompanyX.Helpers\CompanyX.Helpers.csproj">
-      <Project>{a257e910-2a54-4a14-a2e6-9ebf2a1a42c9}</Project>
-      <Name>CompanyX.Helpers</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Build\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
