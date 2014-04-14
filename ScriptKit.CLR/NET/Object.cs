@@ -1,8 +1,10 @@
-﻿namespace System
+﻿using ScriptKit.CLR;
+
+namespace System
 {
-    [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.Name("Object")]
-    [ScriptKit.CLR.Constructor("{ }")]
+    [Ignore]
+    [Name("Object")]
+    [Constructor("{ }")]
     public class Object
     {
         public object this[string name] 
@@ -16,32 +18,32 @@
             } 
         }
 
-        public virtual string toString() 
+        public virtual string ToString() 
         { 
             return null; 
         }
 
-        public virtual string toLocaleString() 
+        public virtual string ToLocaleString() 
         { 
             return null; 
         }
 
-        public virtual object valueOf() 
+        public virtual object ValueOf() 
         { 
             return null; 
         }
 
-        public bool hasOwnProperty(object v) 
+        public bool HasOwnProperty(object v) 
         { 
             return false; 
         }
 
-        public bool isPrototypeOf(object v) 
+        public bool IsPrototypeOf(object v) 
         { 
             return false; 
         }
 
-        public bool propertyIsEnumerable(object v) 
+        public bool PropertyIsEnumerable(object v) 
         { 
             return false; 
         }
