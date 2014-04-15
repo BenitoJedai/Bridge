@@ -295,3 +295,15 @@ namespace System.Runtime.Versioning
         }
     }
 }
+
+namespace System.Runtime.CompilerServices
+{
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
+    [ScriptKit.CLR.Ignore]
+    public sealed class ExtensionAttribute : Attribute
+    {
+        public ExtensionAttribute()
+        {
+        }
+    }
+}

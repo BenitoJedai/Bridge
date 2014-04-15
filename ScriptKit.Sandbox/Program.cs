@@ -16,10 +16,10 @@ namespace ScriptKit.Sandbox
             //var clrLocation = @"c:\projects\ext.net\ScriptKit.NET\ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
 
             //var root = @"C:\Users\Geoffrey McGill\Dropbox\Ext.NET\Projects\ScriptKit.NET\";
-            //var root = @"c:\projects\ext.net\git\ScriptKit\";
-            var root = @"C:\Users\geoffreymcgill\Dropbox\Ext.NET\Projects\Bridge.NET\";
+            var root = @"c:\projects\ext.net\git\ScriptKit\";
+            //var root = @"C:\Users\geoffreymcgill\Dropbox\Ext.NET\Projects\Bridge.NET\";
 
-            var projectLocation = root + @"CompanyX\CompanyX.csproj ";
+            var projectLocation = root + @"ScriptKit.TestLibrary\ScriptKit.TestLibrary.csproj ";
             var clrLocation = root + @"ScriptKit.CLR\bin\Debug\ScriptKit.CLR.dll";
             var outputLocation = Path.ChangeExtension(projectLocation, "js");
             

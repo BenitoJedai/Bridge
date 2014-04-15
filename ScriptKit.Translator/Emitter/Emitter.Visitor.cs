@@ -16,6 +16,7 @@ using ICSharpCode.NRefactory.CSharp.Refactoring;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Semantics;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace ScriptKit.NET
 {
@@ -436,6 +437,46 @@ namespace ScriptKit.NET
                 {
                     throw this.CreateException(invocationExpression, "Delegate's methods are not supported. Please use direct delegate invoke.");
                 }
+
+                var targetResolve = MemberResolver.Resolve(targetMember);
+
+                if (targetResolve != null && !targetResolve.IsError)
+                {
+                    var invocationResult = targetResolve as InvocationResolveResult;
+
+                    if (invocationResult != null)
+                    {
+                        var resolvedMethod = invocationResult.Member as DefaultResolvedMethod;
+
+                        if (resolvedMethod != null && resolvedMethod.IsExtensionMethod)
+                        {
+                            string name = resolvedMethod.FullName;
+                            this.Write(name);
+                            this.WriteOpenParentheses();
+
+                            if (invocationExpression.Target.HasChildren)
+                            {
+                                var first = invocationExpression.Target.Children.ElementAt(0);
+                                var invocation = first as InvocationExpression;
+                                if (invocation != null)
+                                {
+                                    invocation.AcceptVisitor(this);
+                                }
+
+                                if (invocationExpression.Arguments.Count > 0) 
+                                {
+                                    this.WriteComma();
+                                    this.WriteSpace();
+                                }
+                            }
+
+                            this.EmitExpressionList(invocationExpression.Arguments);                            
+
+                            this.WriteCloseParentheses();
+                            return;
+                        }
+                    }
+                }
             }
 
             if (targetMember != null && targetMember.Target is BaseReferenceExpression)
@@ -504,6 +545,7 @@ namespace ScriptKit.NET
                 invocationExpression.Target.AcceptVisitor(this);
                 if (this.Writers.Count > 0)
                 {
+                    this.EmitExpressionList(invocationExpression.Arguments);
                     this.PopWriter();
                 }
                 else
@@ -1101,7 +1143,6 @@ namespace ScriptKit.NET
 
         public override void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
         {
-            this.WriteOpenParentheses();
             this.WriteOpenParentheses();
 
             parenthesizedExpression.Expression.AcceptVisitor(this);

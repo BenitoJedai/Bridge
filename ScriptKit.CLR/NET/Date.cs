@@ -2,204 +2,200 @@
 {
     [ScriptKit.CLR.Ignore]
     [ScriptKit.CLR.Name("Date")]
-    public sealed class Date
+    public struct DateTime
     {
-        public static double operator -(Date d1, Date d2)
+        public static double operator -(DateTime d1, DateTime d2)
         {
             return 0;
         }
 
-        public static double operator -(Date d1, int d2)
+        public static double operator -(DateTime d1, int d2)
         {
             return 0;
         }
 
-        public static double operator -(Date d1, double d2)
+        public static double operator -(DateTime d1, double d2)
         {
             return 0;
         }
 
-        public static bool operator <(Date d1, Date d2)
+        public static bool operator <(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator <(Date d1, int d2)
+        public static bool operator <(DateTime d1, int d2)
         {
             return false;
         }
 
-        public static bool operator <(Date d1, double d2)
+        public static bool operator <(DateTime d1, double d2)
         {
             return false;
         }
 
-        public static bool operator <(int d1, Date d2)
+        public static bool operator <(int d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator <(double d1, Date d2)
+        public static bool operator <(double d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >(Date d1, Date d2)
+        public static bool operator >(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >(Date d1, int d2)
+        public static bool operator >(DateTime d1, int d2)
         {
             return false;
         }
 
-        public static bool operator >(Date d1, double d2)
+        public static bool operator >(DateTime d1, double d2)
         {
             return false;
         }
 
-        public static bool operator >(int d1, Date d2)
+        public static bool operator >(int d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >(double d1, Date d2)
+        public static bool operator >(double d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator <=(Date d1, Date d2)
+        public static bool operator <=(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator <=(Date d1, int d2)
+        public static bool operator <=(DateTime d1, int d2)
         {
             return false;
         }
 
-        public static bool operator <=(Date d1, double d2)
+        public static bool operator <=(DateTime d1, double d2)
         {
             return false;
         }
 
-        public static bool operator <=(int d1, Date d2)
+        public static bool operator <=(int d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator <=(double d1, Date d2)
+        public static bool operator <=(double d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >=(Date d1, Date d2)
+        public static bool operator >=(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >=(Date d1, int d2)
+        public static bool operator >=(DateTime d1, int d2)
         {
             return false;
         }
 
-        public static bool operator >=(Date d1, double d2)
+        public static bool operator >=(DateTime d1, double d2)
         {
             return false;
         }
 
-        public static bool operator >=(int d1, Date d2)
+        public static bool operator >=(int d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >=(double d1, Date d2)
+        public static bool operator >=(double d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator ==(Date d1, object d2)
+        public static bool operator ==(DateTime d1, object d2)
         {
             return false;
         }
 
-        public static bool operator ==(Date d1, Date d2)
+        public static bool operator ==(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator !=(Date d1, object d2)
+        public static bool operator !=(DateTime d1, object d2)
         {
             return false;
         }
 
-        public static bool operator !=(Date d1, Date d2)
+        public static bool operator !=(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public Date()
+        public DateTime(int year, int month, int date, int hours, int minutes, int seconds, int ms)
         {
         }
 
-        public Date(int year, int month, int date, int hours, int minutes, int seconds, int ms)
+        public DateTime(int year, int month, int date, int hours, int minutes, int seconds)
         {
         }
 
-        public Date(int year, int month, int date, int hours, int minutes, int seconds)
+        public DateTime(int year, int month, int date, int hours, int minutes)
         {
         }
 
-        public Date(int year, int month, int date, int hours, int minutes)
+        public DateTime(int year, int month, int date, int hours)
         {
         }
 
-        public Date(int year, int month, int date, int hours)
+        public DateTime(int year, int month, int date)
         {
         }
 
-        public Date(int year, int month, int date)
+        public DateTime(int year, int month)
         {
         }
 
-        public Date(int year, int month)
+        public static DateTime parse(string value)
         {
+            return new DateTime();
         }
 
-        public static Date parse(string value)
+        public static DateTime UTC(int year, int month, int date, int hours, int minutes, int seconds, int ms)
         {
-            return null;
+            return new DateTime();
         }
 
-        public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds, int ms)
+        public static DateTime UTC(int year, int month, int date, int hours, int minutes, int seconds)
         {
-            return null;
+            return new DateTime();
         }
 
-        public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds)
+        public static DateTime UTC(int year, int month, int date, int hours, int minutes)
         {
-            return null;
+            return new DateTime();
         }
 
-        public static Date UTC(int year, int month, int date, int hours, int minutes)
+        public static DateTime UTC(int year, int month, int date, int hours)
         {
-            return null;
+            return new DateTime();
         }
 
-        public static Date UTC(int year, int month, int date, int hours)
+        public static DateTime UTC(int year, int month, int date)
         {
-            return null;
+            return new DateTime();
         }
 
-        public static Date UTC(int year, int month, int date)
+        public static DateTime UTC(int year, int month)
         {
-            return null;
-        }
-
-        public static Date UTC(int year, int month)
-        {
-            return null;
+            return new DateTime();
         }
 
         public string toDateString()
@@ -212,7 +208,7 @@
             return null;
         }
 
-        public string toLocaleDateString()
+        public string toLocaleDateString(string value)
         {
             return null;
         }

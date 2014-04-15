@@ -48,8 +48,14 @@ ScriptKit = {
 	apply : function (obj, values) {
 	  var names = ScriptKit.getPropertyNames(values, false);
 	  for(var i = 0; i < names.length; i++) {
-		var name = names[i];
-		obj[name] = values[name];
+	      var name = names[i];
+
+	      if (typeof obj[name] == "function") {
+	          obj[name](values[name]);
+	      }
+	      else {
+	          obj[name] = values[name];
+	      }
 	  }
 	  return obj;
 	},
@@ -99,7 +105,7 @@ ScriptKit = {
         // Instantiate a base class (but only create the instance,
         // don't run the init constructor)
         initializing = true;
-        prototype = new this();
+        prototype = extend ? new extend[0]() : new Object();
         initializing = false;
 
         // Copy the properties over onto the new prototype
@@ -171,6 +177,10 @@ ScriptKit = {
                 scope.$inheritors = [];
             }
             scope.$inheritors.push(Class);
+        }
+
+        if (Class.init) {
+            Class.init.call(Class);
         }
 
         return Class;
