@@ -139,6 +139,10 @@
             return false;
         }
 
+        public Date()
+        {
+        }
+
         public Date(int year, int month, int date, int hours, int minutes, int seconds, int ms)
         {
         }
