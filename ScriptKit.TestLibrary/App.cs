@@ -1,4 +1,5 @@
 ﻿using ScriptKit.CLR.Html;
+using ScriptKit.TestLibrary;
 using System;
 
 namespace TestProject
@@ -14,7 +15,7 @@ namespace TestProject
 
         public static void Start()
         {
-            Console.Log("IsEmpty", App.Name.IsEmpty());
+            Console.Log("IsEmpty", ScriptKit.TestLibrary.MyLibrary.GetName());
         }
 
     }   

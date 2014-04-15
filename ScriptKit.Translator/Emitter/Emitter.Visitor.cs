@@ -342,7 +342,7 @@ namespace ScriptKit.NET
             
             MemberResolveResult member = resolveResult as MemberResolveResult;           
             
-            string inline = this.GetInline(member.Member);
+            string inline = member != null ? this.GetInline(member.Member) : null;
             if (!string.IsNullOrEmpty(inline) && member.Member.IsStatic)
             {
                 this.PushWriter(inline);                
@@ -352,7 +352,11 @@ namespace ScriptKit.NET
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
 
-                if (!string.IsNullOrEmpty(inline))
+                if (member == null)
+                {
+                    this.Write(Helpers.GetScriptName(memberReferenceExpression));
+                }
+                else if (!string.IsNullOrEmpty(inline))
                 {
                     this.PushWriter(inline);
                 }
@@ -394,7 +398,7 @@ namespace ScriptKit.NET
                 {
                     this.Write(Helpers.GetScriptName(memberReferenceExpression));
                 }                    
-            }            
+            }
         }
 
         public override void VisitThisReferenceExpression(ThisReferenceExpression thisReferenceExpression)

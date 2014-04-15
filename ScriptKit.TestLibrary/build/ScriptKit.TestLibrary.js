@@ -1,3 +1,11 @@
+ScriptKit.Class.extend('ScriptKit.TestLibrary.MyLibrary', {
+    $statics: {
+        getName: function () {
+            return "Name";
+        }
+    }
+});
+
 ScriptKit.Class.extend('TestProject.App', {
     $statics: {
         init: function () {
@@ -7,7 +15,7 @@ ScriptKit.Class.extend('TestProject.App', {
             return instance.length > 0;
         },
         start: function () {
-            console.log("IsEmpty", TestProject.App.isEmpty(TestProject.App.$name));
+            console.log("IsEmpty", ScriptKit.TestLibrary.MyLibrary.getName());
         }
     }
 });
