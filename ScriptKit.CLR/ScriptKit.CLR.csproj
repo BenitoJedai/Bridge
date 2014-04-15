@@ -45,6 +45,7 @@
     <Compile Include="Attributes\ScriptAttribute.cs" />
     <Compile Include="Attributes\InlineAttribute.cs" />
     <Compile Include="Html\Console.cs" />
+    <Compile Include="Html\Window.cs" />
     <Compile Include="NET\Action.cs" />
     <Compile Include="NET\Array.cs" />
     <Compile Include="NET\Boolean.cs" />

@@ -452,17 +452,18 @@ namespace ScriptKit.NET
 
                         if (resolvedMethod != null && resolvedMethod.IsExtensionMethod)
                         {
-                            string name = resolvedMethod.FullName;
+                            string name = resolvedMethod.DeclaringType.FullName + "." + this.GetMethodName(resolvedMethod);
+                            
                             this.Write(name);
                             this.WriteOpenParentheses();
 
                             if (invocationExpression.Target.HasChildren)
                             {
                                 var first = invocationExpression.Target.Children.ElementAt(0);
-                                var invocation = first as InvocationExpression;
-                                if (invocation != null)
+                                var expression = first as Expression;
+                                if (expression != null)
                                 {
-                                    invocation.AcceptVisitor(this);
+                                    expression.AcceptVisitor(this);
                                 }
 
                                 if (invocationExpression.Arguments.Count > 0) 
