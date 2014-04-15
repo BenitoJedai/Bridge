@@ -376,7 +376,9 @@ namespace ScriptKit.NET
                     {
                         this.Write("$");
                     }
-                    bool changeCase = !this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true;
+
+                    bool isConst = (member.Member is DefaultResolvedField) && (((DefaultResolvedField)member.Member).IsConst && member.Member.DeclaringType.Kind != TypeKind.Enum);
+                    bool changeCase = (!this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true) && !isConst;
                     this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(memberReferenceExpression.MemberName) : memberReferenceExpression.MemberName);
                 }
                 else if (resolveResult is InvocationResolveResult)

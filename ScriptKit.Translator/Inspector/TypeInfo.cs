@@ -9,6 +9,7 @@ namespace ScriptKit.NET
         public TypeInfo() 
         {
             this.StaticFields = new Dictionary<string, Expression>();
+            this.Consts = new Dictionary<string, Expression>();
             this.InstanceFields = new Dictionary<string, Expression>();
             this.StaticMethods = new Dictionary<string, MethodDeclaration>();
             this.InstanceMethods = new Dictionary<string, MethodDeclaration>();
@@ -64,6 +65,12 @@ namespace ScriptKit.NET
             protected set; 
         }
 
+        public Dictionary<string, Expression> Consts
+        {
+            get;
+            protected set;
+        }
+
         public Dictionary<string, Expression> InstanceFields 
         { 
             get; 
@@ -101,6 +108,7 @@ namespace ScriptKit.NET
                 return this.StaticFields.Count > 0 
                        || this.StaticMethods.Count > 0 
                        || this.StaticProperties.Count > 0
+                       || this.Consts.Count > 0
                        || this.StaticCtor != null;
             }
         }
@@ -126,6 +134,21 @@ namespace ScriptKit.NET
                 }
                 return this.Namespace + "." + this.Name;
             }
+        }
+
+        private int enumValue = 0;
+        public virtual int LastEnumValue
+        {
+            get
+            {
+                return enumValue++;
+            }
+        }
+
+        public bool IsEnum 
+        { 
+            get; 
+            set; 
         }
     }
 }

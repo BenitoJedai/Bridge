@@ -44,7 +44,7 @@ namespace ScriptKit.NET
                 Exception.Throw("Events are not supported: {0}", type);
             }
 
-            if (type.IsValueType)
+            if (type.IsValueType && !type.IsEnum)
             {
                 Exception.Throw("Struct types not supported, use classes instead: {0}", type);
             }

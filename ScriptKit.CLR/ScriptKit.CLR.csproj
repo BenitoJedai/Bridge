@@ -52,7 +52,7 @@
     <Compile Include="NET\Collections\IEnumerable.cs" />
     <Compile Include="NET\Collections\IEnumerator.cs" />
     <Compile Include="NET\Func.cs" />
-    <Compile Include="NET\Date.cs" />
+    <Compile Include="NET\DateTime.cs" />
     <Compile Include="NET\Error.cs" />
     <Compile Include="NET\Delegate.cs" />
     <Compile Include="NET\Math.cs" />

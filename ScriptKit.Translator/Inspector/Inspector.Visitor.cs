@@ -3,6 +3,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
+using System.Linq;
 
 namespace ScriptKit.NET
 {
@@ -62,7 +63,8 @@ namespace ScriptKit.NET
                 Name = Helpers.GetScriptName(typeDeclaration),
                 ClassType = typeDeclaration.ClassType,
                 Namespace = this.Namespace,
-                Usings = new HashSet<string>(Usings)
+                Usings = new HashSet<string>(Usings),
+                IsEnum = typeDeclaration.ClassType == ClassType.Enum
             };
 
             CurrentType.IsStatic = typeDeclaration.ClassType == ClassType.Enum || typeDeclaration.HasModifier(Modifiers.Static);
@@ -103,7 +105,14 @@ namespace ScriptKit.NET
 
                 if (isStatic)
                 {
-                    this.CurrentType.StaticFields.Add(item.Name, initializer);
+                    if (fieldDeclaration.HasModifier(Modifiers.Const))
+                    {
+                        this.CurrentType.Consts.Add(item.Name, initializer);
+                    }
+                    else
+                    {
+                        this.CurrentType.StaticFields.Add(item.Name, initializer);
+                    }
                 }
                 else
                 {
@@ -196,6 +205,17 @@ namespace ScriptKit.NET
 
         public override void VisitDelegateDeclaration(DelegateDeclaration delegateDeclaration)
         {
+        }
+
+        public override void VisitEnumMemberDeclaration(EnumMemberDeclaration enumMemberDeclaration)
+        {
+            Expression initializer = enumMemberDeclaration.Initializer;
+            if (enumMemberDeclaration.Initializer.IsNull)
+            {
+                initializer = new PrimitiveExpression(this.CurrentType.LastEnumValue);
+            }
+
+            this.CurrentType.StaticFields.Add(enumMemberDeclaration.Name.ToLowerCamelCase(), initializer);
         }
     }
 }

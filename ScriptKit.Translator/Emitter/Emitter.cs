@@ -162,7 +162,7 @@ namespace ScriptKit.NET
 
             string extend = this.GetTypeHierarchy();
 
-            if (extend.IsNotEmpty()) 
+            if (extend.IsNotEmpty() && !this.TypeInfo.IsEnum) 
             { 
                 this.Write("$extend");
                 this.WriteColon();
@@ -327,9 +327,13 @@ namespace ScriptKit.NET
 
         protected virtual void EmitCtorForStaticClass()
         {
-            if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0)
+            if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0)
             {
-                var sortedNames = new List<string>(this.TypeInfo.StaticFields.Keys);
+                var sortedNames = this.TypeInfo.StaticFields.Count > 0 ? new List<string>(this.TypeInfo.StaticFields.Keys) : new List<string>();
+                if (this.TypeInfo.Consts.Count > 0)
+                {
+                    sortedNames.AddRange(this.TypeInfo.Consts.Keys);
+                }
                 sortedNames.Sort();
 
                 this.Write("init");
@@ -345,9 +349,10 @@ namespace ScriptKit.NET
                 var changeCase = this.ChangeCase;
 
                 for (var i = 0; i < sortedNames.Count; i++)
-                {
-                    var name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(sortedNames[i]) : sortedNames[i];
+                {                    
                     var origName = sortedNames[i];
+                    var isField = this.TypeInfo.StaticFields.ContainsKey(origName);
+                    var name = (changeCase && isField) ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(sortedNames[i]) : sortedNames[i];
 
                     if (Emitter.IsReservedStaticName(name))
                     {
@@ -357,8 +362,16 @@ namespace ScriptKit.NET
                     {
                         this.Write("this.", name, " = ");
                     }
+
+                    if (isField)
+                    {
+                        this.TypeInfo.StaticFields[origName].AcceptVisitor(this);
+                    }
+                    else
+                    {
+                        this.TypeInfo.Consts[origName].AcceptVisitor(this);
+                    }
                     
-                    this.TypeInfo.StaticFields[origName].AcceptVisitor(this);
                     this.WriteSemiColon();
                     this.WriteNewLine();
                 }
