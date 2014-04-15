@@ -5,23 +5,23 @@
     [ScriptKit.CLR.Name("Function")]
     public class Delegate 
     {
-        public readonly int length = 0;
+        public readonly int Length = 0;
 
         protected Delegate() 
         { 
         }
 
-        public object apply(object thisArg) 
+        public object Apply(object thisArg) 
         { 
             return null; 
         }
 
-        public object apply(object thisArg, Array args) 
+        public object Apply(object thisArg, Array args) 
         { 
             return null; 
         }
 
-        public object call(object thisArg, params object[] args) 
+        public object Call(object thisArg, params object[] args) 
         { 
             return null; 
         }

@@ -13,7 +13,7 @@ namespace ScriptKit.NET
             this.Usings = new HashSet<string>();
             this.Types = new List<TypeInfo>();
         }
-
+        
         protected virtual bool HasAttribute(EntityDeclaration type, string name)
         {
 

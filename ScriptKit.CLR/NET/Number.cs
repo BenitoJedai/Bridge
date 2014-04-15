@@ -13,7 +13,7 @@
         { 
         }
 
-        public string toString(int radix) 
+        public string ToString(int radix) 
         { 
             return null; 
         }
@@ -32,22 +32,22 @@
 
         public Double(object value) { }
 
-        public string toString(int radix) 
+        public string ToString(int radix) 
         { 
             return null; 
         }
 
-        public string toFixed(int fractionDigits) 
+        public string ToFixed(int fractionDigits) 
         { 
             return null; 
         }
 
-        public string toExponential(int fractionDigits) 
+        public string ToExponential(int fractionDigits) 
         { 
             return null; 
         }
 
-        public string toPrecision(int precision) 
+        public string ToPrecision(int precision) 
         { 
             return null; 
         }

@@ -1,125 +1,60 @@
 ﻿namespace System
 {
     [ScriptKit.CLR.Ignore]
-    [ScriptKit.CLR.Name("Date")]
+    [ScriptKit.CLR.Name("DateTime")]
     public struct DateTime
     {
-        public static double operator -(DateTime d1, DateTime d2)
-        {
-            return 0;
+        public static readonly DateTime MaxValue;
+        public static readonly DateTime MinValue;
+
+        public DateTime(long ticks) 
+        { 
         }
 
-        public static double operator -(DateTime d1, int d2)
+        //public DateTime(long ticks, DateTimeKind kind) { }
+
+        public DateTime(int year, int month, int day)
         {
-            return 0;
         }
 
-        public static double operator -(DateTime d1, double d2)
+        public DateTime(int year, int month, int day, int hour, int minute, int second)
         {
-            return 0;
         }
 
-        public static bool operator <(DateTime d1, DateTime d2)
+        //public DateTime(int year, int month, int day, int hour, int minute, int second, DateTimeKind kind);
+
+        public DateTime(int year, int month, int day, int hour, int minute, int second, int millisecond)
         {
-            return false;
         }
 
-        public static bool operator <(DateTime d1, int d2)
+        //public DateTime(int year, int month, int day, int hour, int minute, int second, int millisecond, DateTimeKind kind);
+
+        public static TimeSpan operator -(DateTime d1, DateTime d2)
         {
-            return false;
+            return new TimeSpan();
         }
 
-        public static bool operator <(DateTime d1, double d2)
+        public static DateTime operator -(DateTime d, TimeSpan t)
         {
-            return false;
+            return new DateTime();
         }
 
-        public static bool operator <(int d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator <(double d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator >(DateTime d1, DateTime d2)
+        public static bool operator !=(DateTime d1, DateTime d2)
         {
             return false;
         }
 
-        public static bool operator >(DateTime d1, int d2)
+        public static DateTime operator +(DateTime d, TimeSpan t)
+        {
+            return new DateTime();
+        }
+
+        public static bool operator <(DateTime t1, DateTime t2)
         {
             return false;
         }
 
-        public static bool operator >(DateTime d1, double d2)
-        {
-            return false;
-        }
-
-        public static bool operator >(int d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator >(double d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator <=(DateTime d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator <=(DateTime d1, int d2)
-        {
-            return false;
-        }
-
-        public static bool operator <=(DateTime d1, double d2)
-        {
-            return false;
-        }
-
-        public static bool operator <=(int d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator <=(double d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator >=(DateTime d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator >=(DateTime d1, int d2)
-        {
-            return false;
-        }
-
-        public static bool operator >=(DateTime d1, double d2)
-        {
-            return false;
-        }
-
-        public static bool operator >=(int d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator >=(double d1, DateTime d2)
-        {
-            return false;
-        }
-
-        public static bool operator ==(DateTime d1, object d2)
+        public static bool operator <=(DateTime t1, DateTime t2)
         {
             return false;
         }
@@ -129,320 +64,315 @@
             return false;
         }
 
-        public static bool operator !=(DateTime d1, object d2)
+        public static bool operator >(DateTime t1, DateTime t2)
         {
             return false;
         }
 
-        public static bool operator !=(DateTime d1, DateTime d2)
+        public static bool operator >=(DateTime t1, DateTime t2)
         {
             return false;
         }
 
-        public DateTime(int year, int month, int date, int hours, int minutes, int seconds, int ms)
+        public DateTime Date 
         {
+            get
+            {
+                return new DateTime();
+            }
         }
 
-        public DateTime(int year, int month, int date, int hours, int minutes, int seconds)
+        public int Day 
         {
+            get
+            {
+                return 0;
+            }
         }
 
-        public DateTime(int year, int month, int date, int hours, int minutes)
+        public int DayOfWeek 
         {
+            get
+            {
+                return 0;
+            }
+        }
+        public int DayOfYear 
+        {
+            get
+            {
+                return 0;
+            }
         }
 
-        public DateTime(int year, int month, int date, int hours)
+        public int Hour
         {
+            get
+            {
+                return 0;
+            }
         }
 
-        public DateTime(int year, int month, int date)
+        //public DateTimeKind Kind { get; }
+        public int Millisecond
         {
+            get
+            {
+                return 0;
+            }
         }
 
-        public DateTime(int year, int month)
+        public int Minute
         {
+            get
+            {
+                return 0;
+            }
         }
 
-        public static DateTime parse(string value)
+        public int Month
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public static DateTime Now 
+        {
+            get
+            {
+                return new DateTime();
+            }
+        }
+        public int Second
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public long Ticks
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public TimeSpan TimeOfDay
+        {
+            get
+            {
+                return new TimeSpan();
+            }
+        }
+
+        public static DateTime Today
+        {
+            get
+            {
+                return new DateTime();
+            }
+        }
+
+        public static DateTime UtcNow
+        {
+            get
+            {
+                return new DateTime();
+            }
+        }
+        public int Year
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public DateTime Add(TimeSpan value)
         {
             return new DateTime();
         }
 
-        public static DateTime UTC(int year, int month, int date, int hours, int minutes, int seconds, int ms)
+        public DateTime AddDays(double value)
         {
             return new DateTime();
         }
 
-        public static DateTime UTC(int year, int month, int date, int hours, int minutes, int seconds)
+        public DateTime AddHours(double value)
         {
             return new DateTime();
         }
 
-        public static DateTime UTC(int year, int month, int date, int hours, int minutes)
+        public DateTime AddMilliseconds(double value)
         {
             return new DateTime();
         }
 
-        public static DateTime UTC(int year, int month, int date, int hours)
+        public DateTime AddMinutes(double value)
         {
             return new DateTime();
         }
 
-        public static DateTime UTC(int year, int month, int date)
+        public DateTime AddMonths(int months)
         {
             return new DateTime();
         }
 
-        public static DateTime UTC(int year, int month)
+        public DateTime AddSeconds(double value)
         {
             return new DateTime();
         }
 
-        public string toDateString()
+        public DateTime AddTicks(long value)
+        {
+            return new DateTime();
+        }
+
+        public DateTime AddYears(int value)
+        {
+            return new DateTime();
+        }
+
+        public static int Compare(DateTime t1, DateTime t2)
+        {
+            return 0;
+        }
+
+        public int CompareTo(DateTime value)
+        {
+            return 0;
+        }
+
+        public int CompareTo(object value)
+        {
+            return 0;
+        }
+
+        public static int DaysInMonth(int year, int month)
+        {
+            return 0;
+        }
+
+        public bool Equals(DateTime value)
+        {
+            return false;
+        }
+
+        public static bool Equals(DateTime t1, DateTime t2)
+        {
+            return false;
+        }
+
+        public static DateTime FromBinary(long dateData)
+        {
+            return new DateTime();
+        }
+
+        public static DateTime FromFileTime(long fileTime)
+        {
+            return new DateTime();
+        }
+
+        public static DateTime FromFileTimeUtc(long fileTime)
+        {
+            return new DateTime();
+        }
+
+        public static DateTime FromOADate(double d)
+        {
+            return new DateTime();
+        }
+
+        public bool IsDaylightSavingTime()
+        {
+            return false;
+        }
+
+        public static bool IsLeapYear(int year)
+        {
+            return false;
+        }
+
+        public static DateTime Parse(string s)
+        {
+            return new DateTime();
+        }
+
+        /*public static DateTime Parse(string s, IFormatProvider provider);
+        public static DateTime Parse(string s, IFormatProvider provider, DateTimeStyles styles);
+        public static DateTime ParseExact(string s, string format, IFormatProvider provider);
+        public static DateTime ParseExact(string s, string format, IFormatProvider provider, DateTimeStyles style);
+        public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);
+        public static DateTime SpecifyKind(DateTime value, DateTimeKind kind);*/
+
+        public TimeSpan Subtract(DateTime value)
+        {
+            return new TimeSpan();
+        }
+
+        public DateTime Subtract(TimeSpan value)
+        {
+            return new DateTime();
+        }
+
+        public long ToBinary()
+        {
+            return 0;
+        }
+
+        public long ToFileTime()
+        {
+            return 0;
+        }
+
+        public long ToFileTimeUtc()
+        {
+            return 0;
+        }
+
+        public DateTime ToLocalTime()
+        {
+            return new DateTime();
+        }
+
+        public string ToLongDateString()
         {
             return null;
         }
 
-        public string toTimeString()
+        public string ToLongTimeString()
         {
             return null;
         }
 
-        public string toLocaleDateString(string value)
+        public double ToOADate()
+        {
+            return 0;
+        }
+
+        public string ToShortDateString()
         {
             return null;
         }
 
-        public string toLocaleTimeString()
+        public string ToShortTimeString()
         {
             return null;
         }
 
-        public string toUTCString()
+        //public string ToString(IFormatProvider provider);
+        public string ToString(string format)
         {
-            return null;
+            return "";
         }
-
-        public double getTime()
+        //public string ToString(string format, IFormatProvider provider);
+        public DateTime ToUniversalTime()
         {
-            return 0;
+            return new DateTime();
         }
-
-        public void setTime(double time)
-        {
-        }
-
-        public int getTimezoneOffset()
-        {
-            return 0;
-        }
-
-        public int getFullYear()
-        {
-            return 0;
-        }
-
-        public int getUTCFullYear()
-        {
-            return 0;
-        }
-
-        public int getMonth()
-        {
-            return 0;
-        }
-
-        public int getUTCMonth()
-        {
-            return 0;
-        }
-
-        public int getDate()
-        {
-            return 0;
-        }
-
-        public int getUTCDate()
-        {
-            return 0;
-        }
-
-        public int getDay()
-        {
-            return 0;
-        }
-
-        public int getUTCDay()
-        {
-            return 0;
-        }
-
-        public int getHours()
-        {
-            return 0;
-        }
-
-        public int getUTCHours()
-        {
-            return 0;
-        }
-
-        public int getMinutes()
-        {
-            return 0;
-        }
-
-        public int getUTCMinutes()
-        {
-            return 0;
-        }
-
-        public int getSeconds()
-        {
-            return 0;
-        }
-
-        public int getUTCSeconds()
-        {
-            return 0;
-        }
-
-        public int getMilliseconds()
-        {
-            return 0;
-        }
-
-        public int getUTCMilliseconds()
-        {
-            return 0;
-        }
-
-        public void setMilliseconds(int ms)
-        {
-        }
-
-        public void setUTCMilliseconds(int ms)
-        {
-        }
-
-        public void setSeconds(int sec)
-        {
-        }
-
-        public void setSeconds(int sec, int ms)
-        {
-        }
-
-        public void setUTCSeconds(int sec)
-        {
-        }
-
-        public void setUTCSeconds(int sec, int ms)
-        {
-        }
-
-        public void setMinutes(int min)
-        {
-        }
-
-        public void setMinutes(int min, int sec)
-        {
-        }
-
-        public void setMinutes(int min, int sec, int ms)
-        {
-        }
-
-        public void setUTCMinutes(int min)
-        {
-        }
-
-        public void setUTCMinutes(int min, int sec)
-        {
-        }
-
-        public void setUTCMinutes(int min, int sec, int ms)
-        {
-        }
-
-        public void setHours(int hour)
-        {
-        }
-
-        public void setHours(int hour, int min)
-        {
-        }
-
-        public void setHours(int hour, int min, int sec)
-        {
-        }
-
-        public void setHours(int hour, int min, int sec, int ms)
-        {
-        }
-
-        public void setUTCHours(int hour)
-        {
-        }
-
-        public void setUTCHours(int hour, int min)
-        {
-        }
-
-        public void setUTCHours(int hour, int min, int sec)
-        {
-        }
-
-        public void setUTCHours(int hour, int min, int sec, int ms)
-        {
-        }
-
-        public void setDate(int day)
-        {
-        }
-
-        public void setUTCDate(int day)
-        {
-        }
-
-        public void setMonth(int month)
-        {
-        }
-
-        public void setMonth(int month, int date)
-        {
-        }
-
-        public void setUTCMonth(int month)
-        {
-        }
-
-        public void setUTCMonth(int month, int date)
-        {
-        }
-
-        public void setFullYear(int year)
-        {
-        }
-
-        public void setFullYear(int year, int month)
-        {
-        }
-
-        public void setFullYear(int year, int month, int date)
-        {
-        }
-
-        public void setUTCFullYear(int year)
-        {
-        }
-
-        public void setUTCFullYear(int year, int month)
-        {
-        }
-
-        public void setUTCFullYear(int year, int month, int date)
-        {
-        }        
     }
 }

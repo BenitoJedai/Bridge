@@ -1,13 +1,13 @@
 ﻿[ScriptKit.CLR.Ignore]
 public sealed class RegExp 
 {
-    public int lastIndex = 0;
+    public int LastIndex = 0;
 
-    public readonly string source = null;
+    public readonly string Source = null;
     
-    public readonly bool global = false;
-    public readonly bool ignoreCase = false;
-    public readonly bool multiline = false;
+    public readonly bool Global = false;
+    public readonly bool IgnoreCase = false;
+    public readonly bool Multiline = false;
 
     public RegExp(string pattern) 
     { 
@@ -22,7 +22,7 @@ public sealed class RegExp
         return null; 
     }
 
-    public bool test(string value) 
+    public bool Test(string value) 
     { 
         return false; 
     }

@@ -10,107 +10,107 @@ public static class Math
     public const double SQRT1_2 = 0;
     public const double SQRT2 = 0;
 
-    public static int abs(int x) 
+    public static int Abs(int x) 
     { 
         return 0; 
     }
 
-    public static double abs(double x) 
+    public static double Abs(double x) 
     { 
         return 0; 
     }
 
-    public static int max(params int[] values) 
+    public static int Max(params int[] values) 
     { 
         return 0; 
     }
 
-    public static double max(params double[] values) 
+    public static double Max(params double[] values) 
     { 
         return 0; 
     }
 
-    public static int min(params int[] values) 
+    public static int Min(params int[] values) 
     { 
         return 0; 
     }
 
-    public static double min(params double[] values) 
+    public static double Min(params double[] values) 
     { 
         return 0; 
     }
 
-    public static double random() 
+    public static double Random() 
     { 
         return 0; 
     }
 
-    public static double sqrt(double x) 
+    public static double Sqrt(double x) 
     { 
         return 0; 
     }
 
-    public static double ceil(double x) 
+    public static double Ceil(double x) 
     { 
         return 0; 
     }
 
-    public static double floor(double x) 
+    public static double Floor(double x) 
     { 
         return 0; 
     }
 
-    public static double round(double x) 
+    public static double Round(double x) 
     { 
         return 0; 
     }
 
-    public static double exp(double x) 
+    public static double Exp(double x) 
     { 
         return 0; 
     }
 
-    public static double log(double x) 
+    public static double Log(double x) 
     { 
         return 0; 
     }
 
-    public static double pow(double x, double y) 
+    public static double Pow(double x, double y) 
     { 
         return 0; 
     }
 
-    public static double acos(double x) 
+    public static double Acos(double x) 
     { 
         return 0; 
     }
 
-    public static double asin(double x) 
+    public static double Asin(double x) 
     { 
         return 0; 
     }
 
-    public static double atan(double x) 
+    public static double Atan(double x) 
     { 
         return 0; 
     }
 
-    public static double atan2(double y, double x) 
+    public static double Atan2(double y, double x) 
     { 
         return 0; 
     }    
 
-    public static double cos(double x) 
+    public static double Cos(double x) 
     { 
         return 0; 
     }
 
-    public static double sin(double x) 
+    public static double Sin(double x) 
     { 
         return 0; 
     }
 
-    public static double tan(double x) 
+    public static double Tan(double x) 
     { 
         return 0; 
     }

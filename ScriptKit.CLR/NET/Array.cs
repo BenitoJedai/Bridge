@@ -4,7 +4,7 @@
     [ScriptKit.CLR.Name("Array")]
     public sealed class Array 
     {
-        public readonly int length = 0;
+        public readonly int Length = 0;
 
         private Array() 
         { 
@@ -21,58 +21,58 @@
             }
         } 
 
-        public Array concat(params object[] items) 
+        public Array Concat(params object[] items) 
         { 
             return null; 
         }
 
-        public string join(string separator) 
+        public string Join(string separator) 
         { 
             return null; 
         }
 
-        public object pop() 
+        public object Pop() 
         { 
             return null; 
         }
 
-        public void push(params object[] items) 
+        public void Push(params object[] items) 
         {
         }
 
-        public void reverse() 
+        public void Reverse() 
         { 
         }
 
-        public object shift() 
-        { 
-            return null; 
-        }
-
-        public Array slice(int start) 
+        public object Shift() 
         { 
             return null; 
         }
 
-        public Array slice(int start, int end) 
+        public Array Slice(int start) 
         { 
             return null; 
         }
 
-        public void sort() 
-        { 
-        }
-
-        public void sort(object compareFunction) 
-        { 
-        }
-
-        public Array splice(int start, int deleteCount, params object[] newItems) 
+        public Array Slice(int start, int end) 
         { 
             return null; 
         }
 
-        public void unshift(params object[] items) 
+        public void Sort() 
+        { 
+        }
+
+        public void Sort(object compareFunction) 
+        { 
+        }
+
+        public Array Splice(int start, int deleteCount, params object[] newItems) 
+        { 
+            return null; 
+        }
+
+        public void Unshift(params object[] items) 
         { 
         }
     }
