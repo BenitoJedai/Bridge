@@ -1,40 +1,29 @@
+ScriptKit.Class.extend('ScriptKit.TestLibrary.MyLibrary', {
+    $statics: {
+        getName: function () {
+            return "Name";
+        }
+    }
+});
+
 ScriptKit.Class.extend('TestProject.App', {
     $statics: {
         init: function () {
-            this.iNDEX = "index";
-            this.$name = null;
+            this.config = { Item: "Value", Item1: "Value1" };
+            this.$name = "Geoff";
         },
-        extMethod1: function (str, i) {
-            return str;
+        isEmpty: function (instance) {
+            return instance.length > 0;
         },
-        extMethod2: function (str, i) {
-            return str;
-        },
-        run: function () {
-            var e = TestProject.MyEnum.$Name;
-            var c = TestProject.App.INDEX;
-            var s = (TestProject.App.ExtMethod2(TestProject.App.ExtMethod1("m".toLocaleLowerCase(),  1).toLocaleString(),  2));
-        }
-    }
-});
-
-ScriptKit.Class.extend('TestProject.Coolness', {
-    $statics: {
-        init: function () {
-            this.cool = 0;
-            this.notSoCool = 5;
-            this.superCool = 1;
-            this.veryCool = TestProject.Coolness.NotSoCool + 7;
-        }
-    }
-});
-
-ScriptKit.Class.extend('TestProject.MyEnum', {
-    $statics: {
-        init: function () {
-            this.item1 = 0;
-            this.item2 = 1;
-            this.$name = 2;
+        start: function () {
+            var isEmpty = TestProject.App.isEmpty(TestProject.App,  "");
+            var obj = { };
+            obj = ScriptKit.apply(obj, { Item: "Value", Item1: "Value1" });
+            var cf = { Item: "Value", Item1: "Value1" };
+            console.log(cf.Item1);
+            console.log(TestProject.App.config.Item1);
+            var name = "Item";
+            console.log(TestProject.App.config[name]);
         }
     }
 });

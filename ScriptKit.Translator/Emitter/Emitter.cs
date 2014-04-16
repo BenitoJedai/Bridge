@@ -835,16 +835,22 @@ namespace ScriptKit.NET
         {
             bool needComma = false;
 
-            foreach (NamedArgumentExpression item in expressions)
+            foreach (Expression item in expressions)
             {
+                NamedExpression namedExression = item as NamedExpression;
+                NamedArgumentExpression namedArgumentExpression = item as NamedArgumentExpression;
+                
                 if (needComma)
                 {
                     this.WriteComma();
                 }
 
                 needComma = true;
-                this.Write(item.Name, ": ");
-                item.Expression.AcceptVisitor(this);
+                string name = namedExression != null ? namedExression.Name : namedArgumentExpression.Name;
+                Expression expression = namedExression != null ? namedExression.Expression : namedArgumentExpression.Expression;
+
+                this.Write(name, ": ");
+                expression.AcceptVisitor(this);
             }
         }
 

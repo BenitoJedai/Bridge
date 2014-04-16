@@ -88,7 +88,7 @@ namespace ScriptKit.NET
             {
                 if (isStatic && !this.IsValidStaticInitializer(item.Initializer))
                 {
-                    throw CreateException(fieldDeclaration, "Only primitive or array initializers for static fields are supported");
+                    //throw CreateException(fieldDeclaration, "Only primitive or array initializers for static fields are supported");
                 }
 
                 Expression initializer = item.Initializer;

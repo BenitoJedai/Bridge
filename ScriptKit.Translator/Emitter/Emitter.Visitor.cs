@@ -349,7 +349,19 @@ namespace ScriptKit.NET
             }
             else
             {
-                memberReferenceExpression.Target.AcceptVisitor(this);
+                if (resolveResult is TypeResolveResult)
+                {
+                    TypeResolveResult typeResolveResult = (TypeResolveResult)resolveResult;
+
+                    this.Write(this.ShortenTypeName(typeResolveResult.Type.FullName));
+                    return;
+                }
+                else
+                {
+                    memberReferenceExpression.Target.AcceptVisitor(this);
+                }
+                
+                
                 this.WriteDot();
 
                 if (member == null)
@@ -360,7 +372,7 @@ namespace ScriptKit.NET
                 {
                     this.PushWriter(inline);
                 }
-                else if (member.Member.EntityType == EntityType.Property)
+                else if (member.Member.EntityType == EntityType.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous)
                 {
                     if (!this.IsAssignment)
                     {
@@ -448,7 +460,17 @@ namespace ScriptKit.NET
 
                 if (targetResolve != null && !targetResolve.IsError)
                 {
-                    var invocationResult = targetResolve as InvocationResolveResult;
+                    var csharpInvocation = targetResolve as CSharpInvocationResolveResult;
+                    InvocationResolveResult invocationResult;
+                    
+                    if (csharpInvocation != null)
+                    {
+                        invocationResult = csharpInvocation.IsExtensionMethodInvocation ? csharpInvocation : null;
+                    }
+                    else
+                    {
+                        invocationResult = targetResolve as InvocationResolveResult;
+                    }                    
 
                     if (invocationResult != null)
                     {
@@ -1170,6 +1192,24 @@ namespace ScriptKit.NET
             }
 
             this.WriteComment(comment.Content);            
+        }
+
+        public override void VisitAnonymousTypeCreateExpression(AnonymousTypeCreateExpression anonymousTypeCreateExpression)
+        {
+            this.WriteOpenBrace();
+            this.WriteSpace();
+
+            if (anonymousTypeCreateExpression.Initializers.Count > 0)
+            {
+                this.WriteObjectInitializer(anonymousTypeCreateExpression.Initializers);
+
+                this.WriteSpace();
+                this.WriteCloseBrace();
+            }
+            else
+            {
+                this.WriteCloseBrace();
+            }
         }
     }
 }
