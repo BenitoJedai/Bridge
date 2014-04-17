@@ -46,7 +46,16 @@
     <Compile Include="Attributes\InlineAttribute.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Html\Console.cs" />
+    <Compile Include="Html\DocumentInstance.cs" />
+    <Compile Include="Html\Document.cs" />
+    <Compile Include="Html\Element.cs" />
     <Compile Include="Html\Event.cs" />
+    <Compile Include="Html\History.cs" />
+    <Compile Include="Html\IFrameElement.cs" />
+    <Compile Include="Html\Storage.cs" />
+    <Compile Include="Html\Location.cs" />
+    <Compile Include="Html\LocationBar.cs" />
+    <Compile Include="Html\WindowInstance.cs" />
     <Compile Include="Html\Window.cs" />
     <Compile Include="NET\Action.cs" />
     <Compile Include="NET\Array.cs" />

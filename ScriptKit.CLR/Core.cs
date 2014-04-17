@@ -1,4 +1,5 @@
-﻿namespace ScriptKit.CLR
+﻿using System.Collections.Generic;
+namespace ScriptKit.CLR
 {
     [ScriptKit.CLR.Name("ScriptKit")]
     [ScriptKit.CLR.Ignore]
@@ -17,6 +18,16 @@
         public static bool IsDefined(object value)
         {
             return false;
+        }
+
+        public static bool IsArray(object obj)
+        {
+            return false;
+        }
+
+        public static T[] ToArray<T>(IEnumerable<T> items)
+        {
+            return null;
         }
 
         [ScriptKit.CLR.Inline("delete {0}")]
