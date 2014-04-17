@@ -60,7 +60,8 @@ namespace ScriptKit.NET
             
             this.CurrentType = new TypeInfo()
             {
-                Name = Helpers.GetScriptName(typeDeclaration),
+                Name = Helpers.GetScriptName(typeDeclaration, false),
+                GenericName = Helpers.GetScriptName(typeDeclaration, true),
                 ClassType = typeDeclaration.ClassType,
                 Namespace = this.Namespace,
                 Usings = new HashSet<string>(Usings),
@@ -158,7 +159,7 @@ namespace ScriptKit.NET
                 ? CurrentType.StaticMethods
                 : CurrentType.InstanceMethods;
 
-            var key = Helpers.GetScriptName(methodDeclaration);
+            var key = Helpers.GetScriptName(methodDeclaration, false);
 
             if (dict.ContainsKey(key))
             {

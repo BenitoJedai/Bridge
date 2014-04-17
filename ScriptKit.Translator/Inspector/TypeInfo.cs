@@ -150,5 +150,7 @@ namespace ScriptKit.NET
             get; 
             set; 
         }
+
+        public string GenericName { get; set; }
     }
 }

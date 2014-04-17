@@ -1,8 +1,9 @@
-﻿namespace System 
+﻿using System.Collections;
+namespace System 
 {
     [ScriptKit.CLR.Ignore]
     [ScriptKit.CLR.Name("Array")]
-    public sealed class Array 
+    public sealed class Array : IEnumerable 
     {
         public readonly int Length = 0;
 
@@ -74,6 +75,11 @@
 
         public void Unshift(params object[] items) 
         { 
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return null;
         }
     }
 }

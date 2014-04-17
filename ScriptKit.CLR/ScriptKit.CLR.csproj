@@ -51,10 +51,19 @@
     <Compile Include="NET\Action.cs" />
     <Compile Include="NET\Array.cs" />
     <Compile Include="NET\Boolean.cs" />
+    <Compile Include="NET\Collections\Generic\Dictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NET\Collections\Generic\ICollection.cs" />
     <Compile Include="NET\Collections\Generic\IEnumerable.cs" />
     <Compile Include="NET\Collections\Generic\IEnumerator.cs" />
     <Compile Include="NET\Collections\Generic\IEqualityComparer.cs" />
+    <Compile Include="NET\Collections\Generic\KeyValuePair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NET\Collections\Generic\List.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NET\Collections\IEnumerable.cs" />
     <Compile Include="NET\Collections\IEnumerator.cs" />
     <Compile Include="NET\Collections\IEqualityComparer.cs" />
@@ -74,7 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\Class.js" />
-    <Content Include="resources\Iterator.js" />
+    <Content Include="resources\Collections.js" />
     <Content Include="resources\Core.js" />
     <EmbeddedResource Include="resources\scriptkit-debug.js" />
     <EmbeddedResource Include="resources\scriptkit.js" />

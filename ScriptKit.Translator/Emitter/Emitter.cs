@@ -1067,7 +1067,7 @@ namespace ScriptKit.NET
 
         protected virtual TypeDefinition GetTypeDefinition(AstType reference)
         {
-            string name = Helpers.GetScriptName(reference);
+            string name = Helpers.GetScriptName(reference, true);
             name = this.ResolveType(name);
 
             return this.TypeDefinitions[name];
@@ -1185,7 +1185,7 @@ namespace ScriptKit.NET
 
                 if (typeRef != null)
                 {
-                    parts.Insert(0, Helpers.GetScriptName(typeRef.Type));
+                    parts.Insert(0, Helpers.GetScriptName(typeRef.Type, false));
                     break;
                 }
 
@@ -1539,14 +1539,14 @@ namespace ScriptKit.NET
             }
             else
             {
-                string type = this.ResolveType(Helpers.GetScriptName(astType));
+                string type = this.ResolveType(Helpers.GetScriptName(astType, true));
 
                 if (String.IsNullOrEmpty(type))
                 {
                     throw CreateException(astType, "Cannot resolve type " + astType.ToString());
                 }
 
-                this.Write(this.ShortenTypeName(type));
+                this.Write(Ext.Net.Utilities.StringUtils.LeftOfRightmostOf(this.ShortenTypeName(type), "$"));
             }
         }
 

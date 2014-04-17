@@ -2,36 +2,44 @@
 using ScriptKit.CLR.Html;
 using ScriptKit.TestLibrary;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace TestProject
 {
     public static class App
     {
-        public static string Name = "Geoff";
-        public static object Config = new { Item = "Value", Item1 = "Value1" };
-        
-
-        public static bool IsEmpty(this string instance)
+        /*public static void Start()
         {
-            return instance.Length > 0;
-        }
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+
+            dict.Add("item1", 1);
+            dict.Add("item2", 2);
+            dict.Add("item3", 3);
+
+            object obj = dict["Item2"];
+            object obj1 = new Dictionary<string, object>().Count;
+
+            foreach (var item in dict)
+            {
+                Console.Log(item.Key + " - " + item.Value);
+            }
+        }*/
 
         public static void Start()
         {
-            bool isEmpty = !TestProject.App.IsEmpty("");
-            bool isEmpty1 = "".IsEmpty();
-            
-            object obj = new object();
-            string s = ScriptKit.CLR.Core.Apply<string>("", new { Item = "Value", Item1 = "Value1" });
-            
-            
-            var cf = new { Item = "Value", Item1 = "Value1" };
-            Console.Log(cf.Item1);
-            
-            Console.Log(App.Config["Item1"]);
+            List<string> list = new List<string>(new string[]{
+                "Item1",
+                "Item2",
+                "Item3"
+            });
 
-            string name = "Item";
-            Console.Log(App.Config[name]);
+            list.Remove("Item2");
+
+            foreach (var item in list)
+            {
+                Console.Log(item);
+            }
         }
 
     }   

@@ -4,15 +4,12 @@ namespace System.Collections.Generic
     [ScriptKit.CLR.Name("ScriptKit.ICollection")]
     public interface ICollection<T> : IEnumerable<T> 
     {
-        int Length 
+        int Count 
         {
             get;
         }
 
-        T this[int index] 
-        {
-            get;
-            set;
-        }
+        T Get(int index);
+        void Set(int index, T value);
     }
 }

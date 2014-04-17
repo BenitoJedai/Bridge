@@ -14,36 +14,34 @@ namespace ScriptKit.NET
             }
         }
 
-        public static string GetScriptName(MethodDeclaration method) 
-        {
-            
-            
-            return Helpers.GetScriptName(method.Name, method.Parameters.Count);
+        public static string GetScriptName(MethodDeclaration method, bool separator) 
+        {            
+            return Helpers.GetScriptName(method.Name, method.Parameters.Count, separator);
         }
 
-        public static string GetScriptName(MemberReferenceExpression member) 
+        public static string GetScriptName(MemberReferenceExpression member, bool separator) 
         {
-            return Helpers.GetScriptName(member.MemberName, member.TypeArguments.Count);
+            return Helpers.GetScriptName(member.MemberName, member.TypeArguments.Count, separator);
         }
 
-        public static string GetScriptName(MethodDefinition method) 
+        public static string GetScriptName(MethodDefinition method, bool separator) 
         {
-            return Helpers.GetScriptName(method.Name, method.GenericParameters.Count);
+            return Helpers.GetScriptName(method.Name, method.GenericParameters.Count, separator);
         }
 
-        public static string GetScriptName(TypeDeclaration type) 
+        public static string GetScriptName(TypeDeclaration type, bool separator) 
         {
-            return Helpers.GetScriptName(type.Name, type.TypeParameters.Count);
+            return Helpers.GetScriptName(type.Name, type.TypeParameters.Count, separator);
         }
 
-        public static string GetScriptName(AstType type) 
+        public static string GetScriptName(AstType type, bool separator) 
         {
             string result = null;
             SimpleType simpleType = type as SimpleType;
 
             if (simpleType != null) 
             {
-                result = Helpers.GetScriptName(simpleType.Identifier, simpleType.TypeArguments.Count);
+                result = Helpers.GetScriptName(simpleType.Identifier, simpleType.TypeArguments.Count, separator);
             }
             else
             {
@@ -51,11 +49,11 @@ namespace ScriptKit.NET
 
                 if (primType != null)
                 {
-                    result = Helpers.GetScriptName(primType.KnownTypeCode.ToString(), 0);
+                    result = Helpers.GetScriptName(primType.KnownTypeCode.ToString(), 0, separator);
                 }
                 else
                 {
-                    result = Helpers.GetScriptName(type.ToString(), 0);
+                    result = Helpers.GetScriptName(type.ToString(), 0, separator);
                 }
             }
             
@@ -63,7 +61,7 @@ namespace ScriptKit.NET
 
             if (composedType != null)
             {
-                result = Helpers.GetScriptName(composedType.BaseType) + "." + result;
+                result = Helpers.GetScriptName(composedType.BaseType, separator) + "." + result;
             }
             
             return result;
@@ -95,7 +93,7 @@ namespace ScriptKit.NET
 
         public static string GetTypeMapKey(TypeInfo info) 
         {
-            return info.FullName;
+            return (!string.IsNullOrEmpty(info.Namespace) ? (info.Namespace + ".") : "") + (!string.IsNullOrEmpty(info.GenericName) ? info.GenericName : info.FullName);
         }
 
         public static string GetTypeMapKey(TypeReference type) 
@@ -103,9 +101,9 @@ namespace ScriptKit.NET
             return Helpers.GetScriptFullName(type);
         }
 
-        private static string GetScriptName(string name, int paramCount) 
+        private static string GetScriptName(string name, int paramCount, bool separator) 
         {
-            return Helpers.GetPostfixedName(name, paramCount, "$");
+            return Helpers.GetPostfixedName(name, paramCount, separator ? "$" : null);
         }
 
         private static string ReplaceSpecialChars(string name) 
@@ -120,8 +118,12 @@ namespace ScriptKit.NET
                 return name;
             }
 
-            return name;
-            //return name + separator + paramCount;
+            if (string.IsNullOrEmpty(separator))
+            {
+                return name;
+            }
+            
+            return name + separator + paramCount;
         }
 
         public static bool IsSubclassOf(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition)

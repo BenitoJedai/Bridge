@@ -14,7 +14,7 @@ namespace ScriptKit.NET
         const string CAST = "cast";
         const string AS = "as";
         const string IS = "is";
-        const string ITERATOR = "getIterator";
+        const string ENUMERATOR = "getEnumerator";
         const string HAS_NEXT = "hasNext";
         const string NEXT = "next";
         const string APPLY_OBJECT = "apply";

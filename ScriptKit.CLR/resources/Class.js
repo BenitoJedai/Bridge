@@ -54,7 +54,7 @@
               prop[name];
         }
 
-        prototype.$name = className;
+        prototype.$$name = className;        
 
         // The dummy class constructor
         function Class() {
@@ -68,6 +68,8 @@
 
         // Enforce the constructor to be what we expect
         Class.prototype.constructor = Class;
+
+        Class.$$name = className;
 
         if (statics) {
             for (name in statics) {
@@ -91,14 +93,14 @@
             extend = [Object];
         }
 
-        Class.$extend = extend;
+        Class.$$extend = extend;
 
         for (i = 0; i < extend.length; i++) {
             scope = extend[i];
-            if (!scope.$inheritors) {
-                scope.$inheritors = [];
+            if (!scope.$$inheritors) {
+                scope.$$inheritors = [];
             }
-            scope.$inheritors.push(Class);
+            scope.$$inheritors.push(Class);
         }
 
         if (Class.init) {

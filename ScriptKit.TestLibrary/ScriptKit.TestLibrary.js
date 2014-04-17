@@ -8,23 +8,23 @@ ScriptKit.Class.extend('ScriptKit.TestLibrary.MyLibrary', {
 
 ScriptKit.Class.extend('TestProject.App', {
     $statics: {
-        init: function () {
-            this.config = { Item: "Value", Item1: "Value1" };
-            this.$name = "Geoff";
-        },
-        isEmpty: function (instance) {
-            return instance.length > 0;
-        },
         start: function () {
-            var isEmpty = TestProject.App.isEmpty(TestProject.App,  "");
-            var obj = { };
-            obj = ScriptKit.apply(obj, { Item: "Value", Item1: "Value1" });
-            var cf = { Item: "Value", Item1: "Value1" };
-            console.log(cf.Item1);
-            console.log(TestProject.App.config.Item1);
-            var name = "Item";
-            console.log(TestProject.App.config[name]);
+            var gt = new TestProject.GType();
+            var s1 = gt.doSomething();
+            var s2 = gt.doSomething2();
+            var dict = new ScriptKit.Dictionary();
         }
+    }
+});
+
+ScriptKit.Class.extend('TestProject.GType', {
+    init: function () {
+    },
+    doSomething: function () {
+        return ;
+    },
+    doSomething2: function () {
+        return ;
     }
 });
 

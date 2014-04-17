@@ -1,12 +1,22 @@
 ScriptKit = {
 	is : function (obj, type) {
-	  if (obj == null || !type.inheritors) {
+	  if (obj == null) {
 		return false;
 	  }
+
 	  if (obj.constructor == type) {
 		return true;
 	  }
-	  var inheritors = type.inheritors;	  
+
+	  if (ScriptKit.isArray(obj) && type == ScriptKit.IEnumerable) {
+	      return true;
+	  }
+
+	  if (!type.$$inheritors) {
+	      return false;
+	  }
+
+	  var inheritors = type.$$inheritors;	  
 	  for (var i = 0; i < inheritors.length; i++) {
 		if (ScriptKit.is(obj, inheritors[i])) {
 		  return true;
@@ -52,12 +62,16 @@ ScriptKit = {
 	  return obj;
 	},
 
-	getIterator : function (obj) {
+	getEnumerator: function (obj) {
+	    if (obj && obj.getEnumerator) {
+	        return obj.getEnumerator();
+	    }
+
 	    if (Object.prototype.toString.call(obj) === '[object Array]') {
-	        return new ScriptKit.ArrayIterator(obj);
+	        return new ScriptKit.ArrayEnumerator(obj);
 	    }
 	    
-	    throw Error('Cannot create iterator');
+	    throw Error('Cannot create enumerator');
 	},
 
 	getPropertyNames : function(obj, includeFunctions) {
@@ -69,5 +83,35 @@ ScriptKit = {
 	        }
 	    }
 	    return names;
-	}
+	},
+
+	isDefined: function (value) {
+	    return typeof value !== 'undefined';
+	},
+
+	toArray: function (ienumerable) {
+	    var i,
+	        item,
+            len
+	        result = [];
+
+	    if (ScriptKit.isArray(ienumerable)) {
+	        for (i = 0, len = ienumerable.length; i < len; ++i) {
+	            result.push(ienumerable[i]);
+	        }
+	    }
+	    else {
+	        i = ScriptKit.getEnumerator(ienumerable);
+	        while (i.hasNext()) {
+	            item = i.next();
+	            result.push(item);
+	        }
+	    }	    
+
+	    return result;
+	},
+
+    isArray: function (obj) {
+        return Object.prototype.toString.call(obj) === '[object Array]';
+    }
 };

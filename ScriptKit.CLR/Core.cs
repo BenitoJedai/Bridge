@@ -13,5 +13,15 @@
         {
             return default(T);
         }
+
+        public static bool IsDefined(object value)
+        {
+            return false;
+        }
+
+        [ScriptKit.CLR.Inline("delete {0}")]
+        public static void Delete(object value)
+        {
+        }
     }
 }

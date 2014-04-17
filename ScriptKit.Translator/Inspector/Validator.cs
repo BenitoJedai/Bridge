@@ -251,7 +251,7 @@ namespace ScriptKit.NET
                         continue;
                     }
 
-                    string key = Helpers.GetScriptName(method);
+                    string key = Helpers.GetScriptName(method, false);
 
                     if(method.IsStatic) 
                     {                        

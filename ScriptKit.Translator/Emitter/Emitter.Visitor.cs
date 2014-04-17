@@ -288,7 +288,7 @@ namespace ScriptKit.NET
 
                 if (method != null)
                 {
-                    this.Write(Helpers.GetScriptName(method));
+                    this.Write(Helpers.GetScriptName(method, false));
                 }
                 else
                 {
@@ -324,7 +324,7 @@ namespace ScriptKit.NET
                 //throw new Exception("MemberReferenceExpression resolving is failed: " + memberReferenceExpression.ToString());
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
-                string name = Helpers.GetScriptName(memberReferenceExpression);
+                string name = Helpers.GetScriptName(memberReferenceExpression, false);
                 //this.Write(this.ChangeCase ? name.ToLowerCamelCase() : name);
                 this.Write(name.ToLowerCamelCase());
                 return;
@@ -366,7 +366,7 @@ namespace ScriptKit.NET
 
                 if (member == null)
                 {
-                    this.Write(Helpers.GetScriptName(memberReferenceExpression));
+                    this.Write(Helpers.GetScriptName(memberReferenceExpression, false));
                 }
                 else if (!string.IsNullOrEmpty(inline))
                 {
@@ -408,7 +408,7 @@ namespace ScriptKit.NET
                 }
                 else
                 {
-                    this.Write(Helpers.GetScriptName(memberReferenceExpression));
+                    this.Write(Helpers.GetScriptName(memberReferenceExpression, false));
                 }                    
             }
         }
@@ -525,7 +525,7 @@ namespace ScriptKit.NET
                     throw this.CreateException(targetMember.Target, "Cannot call base method, because parent class code is ignored");
                 }
 
-                string baseMethod = Helpers.GetScriptName(targetMember);
+                string baseMethod = Helpers.GetScriptName(targetMember, false);
                 bool needComma = false;
 
                 if (currentMethod == baseMethod)
@@ -979,11 +979,12 @@ namespace ScriptKit.NET
             this.WriteVar();
             this.Write(iteratorName, " = ", Emitter.ROOT);
             this.WriteDot();
-            this.Write(Emitter.ITERATOR);
+            this.Write(Emitter.ENUMERATOR);
 
             this.WriteOpenParentheses();
             foreachStatement.InExpression.AcceptVisitor(this);
             this.WriteCloseParentheses();
+            this.WriteSemiColon();
             this.WriteNewLine();
 
             this.WriteWhile();
@@ -1210,6 +1211,11 @@ namespace ScriptKit.NET
             {
                 this.WriteCloseBrace();
             }
+        }
+
+        public override void VisitDefaultValueExpression(DefaultValueExpression defaultValueExpression)
+        {
+            this.Write("null");
         }
     }
 }
