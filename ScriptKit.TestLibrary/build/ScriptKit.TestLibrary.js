@@ -16,6 +16,7 @@ ScriptKit.Class.extend('TestProject.App', {
                 var item = $i.next();
                 console.log(item);
             }
+            window.location.href = "http://google.com/";
         }
     }
 });

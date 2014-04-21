@@ -69,7 +69,19 @@ namespace ScriptKit.CLR.Html
         /// <summary>
         /// Returns the locationbar object, whose visibility can be checked.
         /// </summary>
-        public static readonly LocationBar Locationbar;
+        public static readonly BarProp Locationbar;
+
+        /// <summary>
+        /// Returns a reference to the local storage object used to store data that may only be accessed by the origin that created it.
+        /// </summary>
+        public static readonly Storage LocalStorage;
+
+        /// <summary>
+        /// Returns the menubar object, whose visibility can be toggled in the window.
+        /// </summary>
+        public static readonly BarProp Menubar;
+
+
 
 
         [ScriptKit.CLR.Inline("debugger")]

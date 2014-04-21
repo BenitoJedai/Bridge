@@ -54,7 +54,7 @@
     <Compile Include="Html\IFrameElement.cs" />
     <Compile Include="Html\Storage.cs" />
     <Compile Include="Html\Location.cs" />
-    <Compile Include="Html\LocationBar.cs" />
+    <Compile Include="Html\BarProp.cs" />
     <Compile Include="Html\WindowInstance.cs" />
     <Compile Include="Html\Window.cs" />
     <Compile Include="NET\Action.cs" />

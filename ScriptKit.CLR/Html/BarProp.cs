@@ -1,9 +1,9 @@
 ﻿namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
-    public class LocationBar
+    public class BarProp
     {
-        private LocationBar()
+        private BarProp()
         {
         }
 
