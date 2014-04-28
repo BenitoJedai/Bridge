@@ -28,7 +28,6 @@ namespace ScriptKit.NET
             this.ResetLocals();
             this.AddLocals(methodDeclaration.Parameters);
 
-            //this.Write(Helpers.GetScriptName(methodDeclaration));
             this.Write(this.GetMethodName(methodDeclaration));
 
             this.WriteColon();
@@ -260,6 +259,10 @@ namespace ScriptKit.NET
             var id = identifierExpression.Identifier;
             this.CheckIdentifier(id, identifierExpression);
 
+            var resolveResult = MemberResolver.ResolveExpression(identifierExpression);
+            var isResolved = resolveResult != null && !resolveResult.IsError;
+            var memberResult = resolveResult as MemberResolveResult;
+
             if (this.Locals.ContainsKey(id))
             {
                 this.Write(id);
@@ -274,6 +277,17 @@ namespace ScriptKit.NET
                 MethodDefinition method = member as MethodDefinition;
                 FieldDefinition field = member as FieldDefinition;
                 bool isStatic = method != null && method.IsStatic || field != null && field.IsStatic;
+                
+                if (method != null)
+                {
+                    string inline = this.GetInline(method);
+
+                    if (!string.IsNullOrWhiteSpace(inline))
+                    {
+                        
+                        return;
+                    }
+                }
 
                 if (isStatic)
                 {
@@ -288,11 +302,19 @@ namespace ScriptKit.NET
 
                 if (method != null)
                 {
-                    this.Write(Helpers.GetScriptName(method, false));
+                    this.Write(this.GetMethodName(method));
+
                 }
                 else
                 {
-                    this.Write(id);
+                    if (field.IsStatic && Emitter.IsReservedStaticName(field.Name))
+                    {
+                        this.Write("$");
+                    }
+
+                    bool isConst = this.IsMemberConst(memberResult.Member);
+                    bool changeCase = (!this.IsNativeMember(memberResult.Member.FullName) ? this.ChangeCase : true) && !isConst;
+                    this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(id) : id);
                 }
 
                 return;
@@ -312,8 +334,36 @@ namespace ScriptKit.NET
                 return;
             }
 
-            throw this.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
-        }
+            if (memberResult != null && memberResult.Member.EntityType == EntityType.Property && memberResult.TargetResult.Type.Kind != TypeKind.Anonymous)
+            {
+                if (memberResult.Member.IsStatic)
+                {
+                    this.Write(Helpers.ReplaceSpecialChars(memberResult.Member.DeclaringType.FullName));
+                }
+                else
+                {
+                    this.WriteThis();
+                }
+
+                this.WriteDot();
+
+                if (!this.IsAssignment)
+                {
+                    this.Write("get");
+                    this.Write(id);
+                    this.WriteOpenParentheses();
+                    this.WriteCloseParentheses();
+                }
+                else
+                {
+                    this.PushWriter("set" + id + "({0})");
+                }
+            }
+            else
+            {
+                throw this.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
+            }
+        }        
 
         public override void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
         {            
@@ -328,6 +378,11 @@ namespace ScriptKit.NET
                 //this.Write(this.ChangeCase ? name.ToLowerCamelCase() : name);
                 this.Write(name.ToLowerCamelCase());
                 return;
+            }
+
+            if (resolveResult is DynamicInvocationResolveResult)
+            {
+                resolveResult = ((DynamicInvocationResolveResult)resolveResult).Target;
             }
 
             if (resolveResult is MethodGroupResolveResult)
@@ -349,6 +404,16 @@ namespace ScriptKit.NET
             }
             else
             {
+                if (member != null && member.IsCompileTimeConstant && member.Member.DeclaringType.Kind == TypeKind.Enum)
+                {
+                    var typeDef = member.Member.DeclaringType as DefaultResolvedTypeDefinition;
+                    if (typeDef != null && (this.Validator.IsIgnoreType(typeDef) && !this.Validator.IsNameEnum(typeDef)))
+                    {
+                        this.Write(member.ConstantValue);
+                        return;                    
+                    }                    
+                }
+                
                 if (resolveResult is TypeResolveResult)
                 {
                     TypeResolveResult typeResolveResult = (TypeResolveResult)resolveResult;
@@ -393,16 +458,12 @@ namespace ScriptKit.NET
                         this.Write("$");
                     }
 
-                    bool isConst = (member.Member is DefaultResolvedField) && (((DefaultResolvedField)member.Member).IsConst && member.Member.DeclaringType.Kind != TypeKind.Enum);
+                    bool isConst = this.IsMemberConst(member.Member);
                     bool changeCase = (!this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true) && !isConst;
                     this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(memberReferenceExpression.MemberName) : memberReferenceExpression.MemberName);
                 }
                 else if (resolveResult is InvocationResolveResult)
-                {
-                    if (member.Member.IsStatic && Emitter.IsReservedStaticName(member.Member.Name))
-                    {
-                        this.Write("$");
-                    }
+                {                    
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
                     this.Write(this.GetMethodName(invocationResult.Member));
                 }
@@ -425,10 +486,11 @@ namespace ScriptKit.NET
 
         public override void VisitInvocationExpression(InvocationExpression invocationExpression)
         {
-            string inlineCode = this.GetInlineCode(invocationExpression);
+            Tuple<bool, string> inlineCode = this.GetInlineCode(invocationExpression);
 
-            if (!String.IsNullOrEmpty(inlineCode))
+            if (inlineCode != null && !String.IsNullOrEmpty(inlineCode.Item2) && invocationExpression.Target is IdentifierExpression/* && inlineCode.Item1*/)
             {
+                bool isStatic = inlineCode.Item1;
                 this.Write("");
                 StringBuilder savedBuilder = this.Output;
                 var args = new List<string>(invocationExpression.Arguments.Count);
@@ -441,9 +503,21 @@ namespace ScriptKit.NET
                 }
                 
                 this.Output = savedBuilder;
-                this.Output.Append(String.Format(inlineCode, args.ToArray()));
+
+                if (!isStatic) 
+                {
+                    this.WriteThis();
+                    this.WriteDot();                    
+                }
+
+                this.Output.Append(String.Format(inlineCode.Item2, args.ToArray()));
+
+                if (!isStatic)
+                {
+                    invocationExpression.Target.AcceptVisitor(this);
+                }
                 
-                return;
+                return;                
             }
 
             MemberReferenceExpression targetMember = invocationExpression.Target as MemberReferenceExpression;
@@ -478,30 +552,42 @@ namespace ScriptKit.NET
 
                         if (resolvedMethod != null && resolvedMethod.IsExtensionMethod)
                         {
-                            string name = resolvedMethod.DeclaringType.FullName + "." + this.GetMethodName(resolvedMethod);
-                            
-                            this.Write(name);
-                            this.WriteOpenParentheses();
-
-                            if (invocationExpression.Target.HasChildren)
+                            string inline = this.GetInline(resolvedMethod);
+                            if (string.IsNullOrWhiteSpace(inline))
                             {
-                                var first = invocationExpression.Target.Children.ElementAt(0);
-                                var expression = first as Expression;
-                                if (expression != null)
+                                this.Write("");
+                                StringBuilder savedBuilder = this.Output;
+                                var args = new List<string>(invocationExpression.Arguments.Count + 1);
+
+                                this.Output = new StringBuilder();
+                                this.WriteThisExtension(invocationExpression);
+                                args.Add(this.Output.ToString());
+
+                                foreach (var arg in invocationExpression.Arguments)
                                 {
-                                    expression.AcceptVisitor(this);
+                                    this.Output = new StringBuilder();
+                                    arg.AcceptVisitor(this);
+                                    args.Add(this.Output.ToString());
                                 }
 
-                                if (invocationExpression.Arguments.Count > 0) 
-                                {
-                                    this.WriteComma();
-                                    this.WriteSpace();
-                                }
+                                this.Output = savedBuilder;
+
+                                this.Output.Append(String.Format(inline, args.ToArray()));
                             }
+                            else
+                            {
+                                string name = resolvedMethod.DeclaringType.FullName + "." + this.GetMethodName(resolvedMethod);
 
-                            this.EmitExpressionList(invocationExpression.Arguments);                            
+                                this.Write(name);
+                                this.WriteOpenParentheses();
 
-                            this.WriteCloseParentheses();
+                                this.WriteThisExtension(invocationExpression);
+
+                                this.EmitExpressionList(invocationExpression.Arguments);
+
+                                this.WriteCloseParentheses();
+                            }
+                            
                             return;
                         }
                     }
@@ -574,7 +660,7 @@ namespace ScriptKit.NET
                 invocationExpression.Target.AcceptVisitor(this);
                 if (this.Writers.Count > 0)
                 {
-                    this.EmitExpressionList(invocationExpression.Arguments);
+                    this.EmitExpressionList(invocationExpression.Arguments);                    
                     this.PopWriter();
                 }
                 else
@@ -583,6 +669,25 @@ namespace ScriptKit.NET
                     this.EmitExpressionList(invocationExpression.Arguments);
                     this.WriteCloseParentheses();
                 }                
+            }
+        }
+
+        protected virtual void WriteThisExtension(InvocationExpression invocationExpression)
+        {
+            if (invocationExpression.Target.HasChildren)
+            {
+                var first = invocationExpression.Target.Children.ElementAt(0);
+                var expression = first as Expression;
+                if (expression != null)
+                {
+                    expression.AcceptVisitor(this);
+                }
+
+                if (invocationExpression.Arguments.Count > 0)
+                {
+                    this.WriteComma();
+                    this.WriteSpace();
+                }
             }
         }
 

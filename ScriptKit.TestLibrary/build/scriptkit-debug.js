@@ -181,8 +181,8 @@ ScriptKit = {
         // The dummy class constructor
         function Class() {
             // All construction is actually done in the init method
-            if (!initializing && this.init)
-                this.init.apply(this, arguments);
+            if (!initializing && this.$init)
+                this.$init.apply(this, arguments);
         }
 
         // Populate our constructed prototype object
@@ -225,8 +225,8 @@ ScriptKit = {
             scope.$$inheritors.push(Class);
         }
 
-        if (Class.init) {
-            Class.init.call(Class);
+        if (Class.$init) {
+            Class.$init.call(Class);
         }
 
         return Class;

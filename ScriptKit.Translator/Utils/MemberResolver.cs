@@ -58,12 +58,7 @@ namespace ScriptKit.NET
 
         public static ResolveResult Resolve(MemberReferenceExpression memberReferenceExpression)
         {
-            var syntaxTree = memberReferenceExpression.GetParent<SyntaxTree>();
-            var offset = MemberResolver.InitDocument(memberReferenceExpression.DotToken.EndLocation, syntaxTree);
-            var location = MemberResolver.document.GetLocation(offset);
-            syntaxTree.Freeze();
-            var unresolvedFile = syntaxTree.ToTypeSystem();
-            return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, location);
+            return MemberResolver.Resolve(memberReferenceExpression, memberReferenceExpression.DotToken.EndLocation);
         }
 
         public static ResolveResult ResolveParent(MemberReferenceExpression memberReferenceExpression)
@@ -78,12 +73,17 @@ namespace ScriptKit.NET
 
         public static ResolveResult ResolveExpression(Expression expression)
         {
+            return MemberResolver.Resolve(expression, expression.StartLocation);
+        }
+
+        private static ResolveResult Resolve(Expression expression, TextLocation location)
+        {
             var syntaxTree = expression.GetParent<SyntaxTree>();
-            var offset = MemberResolver.InitDocument(expression.StartLocation, syntaxTree);
-            var location = MemberResolver.document.GetLocation(offset);
+            var offset = MemberResolver.InitDocument(location, syntaxTree);
+            var newLocation = MemberResolver.document.GetLocation(offset);
             syntaxTree.Freeze();
             var unresolvedFile = syntaxTree.ToTypeSystem();
-            return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, location);
+            return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, newLocation);
         }
     }
 }

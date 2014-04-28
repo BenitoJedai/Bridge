@@ -34,7 +34,7 @@ namespace ScriptKit.CLR.Html
         /// <summary>
         /// Returns the element (such as <iframe> or <object>) in which the window is embedded, or null if the window is top-level.
         /// </summary>
-        public static readonly IFrameElement IFrameElement;
+        public static readonly IFrameElement FrameElement;
 
         /// <summary>
         /// Returns the window itself, which is an array-like object, listing the direct sub-frames of the current window.
@@ -81,8 +81,112 @@ namespace ScriptKit.CLR.Html
         /// </summary>
         public static readonly BarProp Menubar;
 
+        /// <summary>
+        /// Gets/sets the name of the window.
+        /// The name of the window is used primarily for setting targets for hyperlinks and forms. Windows do not need to have names.
+        /// </summary>
+        public static string Name;
 
+        /// <summary>
+        /// The Window.navigator read-only property returns a reference to the Navigator object, which can be queried for information about the application running the script.
+        /// </summary>
+        public static readonly Navigator Navigator;
 
+        /// <summary>
+        /// Returns a reference to the window that opened this current window.
+        /// </summary>
+        public static readonly WindowInstance Opener;
+
+        /// <summary>
+        /// Gets the height of the outside of the browser window.
+        /// </summary>
+        public static readonly int OuterHeight;
+
+        /// <summary>
+        /// Gets the width of the outside of the browser window.
+        /// </summary>
+        public static readonly int OuterWidth;
+
+        /// <summary>
+        /// An alias for window.scrollX.
+        /// </summary>
+        public static readonly int PageXOffset;
+
+        /// <summary>
+        /// An alias for window.scrollY.
+        /// </summary>
+        public static readonly int PageYOffset;
+
+        /// <summary>
+        /// Returns a reference to the parent of the current window or subframe.
+        /// </summary>
+        public static readonly WindowInstance Parent;
+
+        /// <summary>
+        /// Provides a hosting area for performance related attributes.
+        /// </summary>
+        public static readonly Performance Performance;
+
+        /// <summary>
+        /// The return value to be returned to the function that called window.showModalDialog() to display the window as a modal dialog.
+        /// </summary>
+        public static readonly object ReturnValue;
+
+        /// <summary>
+        /// Returns a reference to the screen object associated with the window.
+        /// The screen object is a special object for inspecting properties of the screen on which the current window is being rendered.
+        /// </summary>
+        public static readonly Screen Screen;
+
+        /// <summary>
+        /// Returns the horizontal distance of the left border of the user's browser from the left side of the screen.
+        /// </summary>
+        public static readonly int ScreenX;
+
+        /// <summary>
+        /// Returns the vertical distance of the top border of the user's browser from the top side of the screen.
+        /// </summary>
+        public static readonly int ScreenY;
+
+        /// <summary>
+        /// Returns the scrollbars object, whose visibility can be toggled in the window.
+        /// </summary>
+        public static readonly BarProp Scrollbars;
+
+        /// <summary>
+        /// Returns the number of pixels that the document has already been scrolled horizontally.
+        /// </summary>
+        public static readonly int ScrollX;
+
+        /// <summary>
+        /// Returns the number of pixels that the document has already been scrolled vertically.
+        /// </summary>
+        public static readonly int ScrollY;
+
+        /// <summary>
+        /// Returns an object reference to the window object itself.
+        /// </summary>
+        public static readonly WindowInstance Self;
+
+        /// <summary>
+        /// A storage object for storing data within a single page session.
+        /// </summary>
+        public static readonly Storage SessionStorage;
+
+        /// <summary>
+        /// Gets/sets the text in the statusbar at the bottom of the browser.
+        /// </summary>
+        public static string Status;
+
+        /// <summary>
+        /// Returns the statusbar object, whose visibility can be toggled in the window.
+        /// </summary>
+        public static readonly BarProp Statusbar;
+
+        /// <summary>
+        /// Returns a reference to the topmost window in the window hierarchy. This property is read only.
+        /// </summary>
+        public static readonly WindowInstance Top;
 
         [ScriptKit.CLR.Inline("debugger")]
         public static void Debugger()
@@ -93,5 +197,16 @@ namespace ScriptKit.CLR.Html
         public static void Delete(object value)
         {
         }
+
+        [ScriptKit.CLR.Inline("typeof {0} !== 'undefined'")]
+        public static bool IsDefined(object value)
+        {
+            return false;
+        }
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public class WindowInstance
+    {
     }
 }

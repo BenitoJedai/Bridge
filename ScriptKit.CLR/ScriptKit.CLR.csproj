@@ -38,6 +38,7 @@
     <AdditionalExplicitAssemblyReferences />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Attributes\EnumEmitAttribute.cs" />
     <Compile Include="Attributes\AllowAttribute.cs" />
     <Compile Include="Attributes\ConstructorAttribute.cs" />
     <Compile Include="Attributes\NameAttribute.cs" />
@@ -46,16 +47,27 @@
     <Compile Include="Attributes\InlineAttribute.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Html\Console.cs" />
-    <Compile Include="Html\DocumentInstance.cs" />
     <Compile Include="Html\Document.cs" />
     <Compile Include="Html\Element.cs" />
-    <Compile Include="Html\Event.cs" />
+    <Compile Include="Html\Events\WheelEvent.cs" />
+    <Compile Include="Html\Events\ProgressEvent.cs" />
+    <Compile Include="Html\Events\HashChangeEvent.cs" />
+    <Compile Include="Html\Events\FocusEvent.cs" />
+    <Compile Include="Html\Events\AnimationEvent.cs" />
+    <Compile Include="Html\Events\Event.cs" />
+    <Compile Include="Html\Geolocation\GeolocationCoordinates.cs" />
+    <Compile Include="Html\Geolocation\GeolocationPositionError.cs" />
+    <Compile Include="Html\Geolocation\GeolocationPosition.cs" />
+    <Compile Include="Html\Geolocation\GeolocationPositionOptions.cs" />
+    <Compile Include="Html\Geolocation\Geolocation.cs" />
     <Compile Include="Html\History.cs" />
     <Compile Include="Html\IFrameElement.cs" />
+    <Compile Include="Html\Navigator.cs" />
+    <Compile Include="Html\Performance.cs" />
+    <Compile Include="Html\Screen.cs" />
     <Compile Include="Html\Storage.cs" />
     <Compile Include="Html\Location.cs" />
     <Compile Include="Html\BarProp.cs" />
-    <Compile Include="Html\WindowInstance.cs" />
     <Compile Include="Html\Window.cs" />
     <Compile Include="NET\Action.cs" />
     <Compile Include="NET\Array.cs" />

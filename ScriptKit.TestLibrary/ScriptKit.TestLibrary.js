@@ -1,30 +1,28 @@
-ScriptKit.Class.extend('ScriptKit.TestLibrary.MyLibrary', {
-    $statics: {
-        getName: function () {
-            return "Name";
-        }
-    }
-});
-
 ScriptKit.Class.extend('TestProject.App', {
     $statics: {
         start: function () {
-            var gt = new TestProject.GType();
-            var s1 = gt.doSomething();
-            var s2 = gt.doSomething2();
-            var dict = new ScriptKit.Dictionary();
         }
     }
 });
 
-ScriptKit.Class.extend('TestProject.GType', {
-    init: function () {
+ScriptKit.Class.extend('TestProject.Class1', {
+    $statics: {
+        $init: function () {
+        },
+        methodTakingThose: function (inputs) {
+        }
+    }
+});
+
+ScriptKit.Class.extend('TestProject.StructureA', {
+    $init: function () {
+        this.prop = 0;
     },
-    doSomething: function () {
-        return ;
+    getProp: function () {
+        return this.prop;
     },
-    doSomething2: function () {
-        return ;
+    setProp: function (value) {
+        this.prop = value;
     }
 });
 

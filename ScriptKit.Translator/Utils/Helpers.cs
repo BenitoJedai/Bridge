@@ -101,12 +101,12 @@ namespace ScriptKit.NET
             return Helpers.GetScriptFullName(type);
         }
 
-        private static string GetScriptName(string name, int paramCount, bool separator) 
+        public static string GetScriptName(string name, int paramCount, bool separator) 
         {
             return Helpers.GetPostfixedName(name, paramCount, separator ? "$" : null);
         }
 
-        private static string ReplaceSpecialChars(string name) 
+        public static string ReplaceSpecialChars(string name) 
         {
             return name.Replace('`', '$').Replace('/', '.');
         }

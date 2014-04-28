@@ -24,15 +24,15 @@ else{i=ScriptKit.getEnumerator(ienumerable);while(i.hasNext()){item=i.next();res
 return result;},isArray:function(obj){return Object.prototype.toString.call(obj)==='[object Array]';}};
 
 (function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;ScriptKit.Class=function(){};ScriptKit.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=="function"&&typeof base[name]=="function"&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
-prototype.$$name=className;function Class(){if(!initializing&&this.init)
-this.init.apply(this,arguments);}
+prototype.$$name=className;function Class(){if(!initializing&&this.$init)
+this.$init.apply(this,arguments);}
 Class.prototype=prototype;Class.prototype.constructor=Class;Class.$$name=className;if(statics){for(name in statics){Class[name]=statics[name];}}
 nameParts=className.split('.');scope=window;for(i=0;i<(nameParts.length-1);i++){if(typeof scope[nameParts[i]]=='undefined'){scope[nameParts[i]]={};}
 scope=scope[nameParts[i]];}
 scope[nameParts[nameParts.length-1]]=Class;if(!extend){extend=[Object];}
 Class.$$extend=extend;for(i=0;i<extend.length;i++){scope=extend[i];if(!scope.$$inheritors){scope.$$inheritors=[];}
 scope.$$inheritors.push(Class);}
-if(Class.init){Class.init.call(Class);}
+if(Class.$init){Class.$init.call(Class);}
 return Class;};})();
 
 ScriptKit.Class.extend('ScriptKit.IEnumerable',{});ScriptKit.Class.extend('ScriptKit.IEnumerator',{});ScriptKit.Class.extend('ScriptKit.Dictionary',{$extend:[ScriptKit.IEnumerable],init:function(obj){if(Object.prototype.toString.call(obj)==='[object Object]'){this.entries=obj;this.count=ScriptKit.getPropertyNames(this.entries).length;}

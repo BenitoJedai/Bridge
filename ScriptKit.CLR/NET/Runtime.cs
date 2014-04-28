@@ -1,4 +1,8 @@
-﻿namespace System
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+namespace System
 {
     [ScriptKit.CLR.Ignore]
     public class Attribute
@@ -305,5 +309,294 @@ namespace System.Runtime.CompilerServices
         public ExtensionAttribute()
         {
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue)]
+    [ScriptKit.CLR.Ignore]
+    public sealed class DynamicAttribute : Attribute
+    {        
+        public DynamicAttribute() 
+        { 
+        }
+
+        public DynamicAttribute(bool[] transformFlags) 
+        { 
+        }
+        public List<bool> TransformFlags 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public class CallSite
+    {
+        public CallSiteBinder Binder 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }
+
+        public static CallSite Create(Type delegateType, CallSiteBinder binder)
+        {
+            return null;
+        }
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public sealed class CallSite<T> : CallSite where T : class
+    {
+        public T Update 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }
+
+        public T Target;
+
+        public static CallSite<T> Create(CallSiteBinder binder)
+        {
+            return null;
+        }
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public abstract class CallSiteBinder
+    {
+        public static LabelTarget UpdateLabel 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }
+
+        public virtual T BindDelegate<T>(CallSite<T> site, object[] args) where T : class
+        {
+            return null;
+        }
+    }
+}
+
+namespace Microsoft.CSharp.RuntimeBinder
+{
+    [ScriptKit.CLR.Ignore]
+    public static class Binder
+    {
+        public static CallSiteBinder BinaryOperation(CSharpBinderFlags flags, ExpressionType operation, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder Convert(CSharpBinderFlags flags, Type type, Type context)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder GetIndex(CSharpBinderFlags flags, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder GetMember(CSharpBinderFlags flags, string name, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder Invoke(CSharpBinderFlags flags, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder InvokeMember(CSharpBinderFlags flags, string name, IEnumerable<Type> typeArguments, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder InvokeConstructor(CSharpBinderFlags flags, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder IsEvent(CSharpBinderFlags flags, string name, Type context)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder SetIndex(CSharpBinderFlags flags, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder SetMember(CSharpBinderFlags flags, string name, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+
+        public static CallSiteBinder UnaryOperation(CSharpBinderFlags flags, ExpressionType operation, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
+        {
+            return null;
+        }
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public enum CSharpBinderFlags
+    {
+        None = 0,
+        CheckedContext = 1,
+        InvokeSimpleName = 2,
+        InvokeSpecialName = 4,
+        BinaryOperationLogical = 8,
+        ConvertExplicit = 16,
+        ConvertArrayIndex = 32,
+        ResultIndexed = 64,
+        ValueFromCompoundAssignment = 128,
+        ResultDiscarded = 256,
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public sealed class CSharpArgumentInfo
+    {
+        public static CSharpArgumentInfo Create(CSharpArgumentInfoFlags flags, string name)
+        {
+            return null;
+        }
+    }
+
+    [ScriptKit.CLR.Ignore]
+    public enum CSharpArgumentInfoFlags
+    {
+        None = 0,
+        UseCompileTimeType = 1,
+        Constant = 2,
+        NamedArgument = 4,
+        IsRef = 8,
+        IsOut = 16,
+        IsStaticType = 32,
+    }
+}
+
+namespace System.Linq.Expressions
+{
+    [ScriptKit.CLR.Ignore]
+    public sealed class LabelTarget
+    {
+        internal LabelTarget() 
+        { 
+        }
+
+        public string Name 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        
+        }
+        
+        public Type Type 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }        
+    } 
+
+    [ScriptKit.CLR.Ignore]
+    public enum ExpressionType
+    {
+        Add,
+        AddChecked,
+        And,
+        AndAlso,
+        ArrayLength,
+        ArrayIndex,
+        Call,
+        Coalesce,
+        Conditional,
+        Constant,
+        Convert,
+        ConvertChecked,
+        Divide,
+        Equal,
+        ExclusiveOr,
+        GreaterThan,
+        GreaterThanOrEqual,
+        Invoke,
+        Lambda,
+        LeftShift,
+        LessThan,
+        LessThanOrEqual,
+        ListInit,
+        MemberAccess,
+        MemberInit,
+        Modulo,
+        Multiply,
+        MultiplyChecked,
+        Negate,
+        UnaryPlus,
+        NegateChecked,
+        New,
+        NewArrayInit,
+        NewArrayBounds,
+        Not,
+        NotEqual,
+        Or,
+        OrElse,
+        Parameter,
+        Power,
+        Quote,
+        RightShift,
+        Subtract,
+        SubtractChecked,
+        TypeAs,
+        TypeIs,
+        Assign,
+        Block,
+        DebugInfo,
+        Decrement,
+        Dynamic,
+        Default,
+        Extension,
+        Goto,
+        Increment,
+        Index,
+        Label,
+        RuntimeVariables,
+        Loop,
+        Switch,
+        Throw,
+        Try,
+        Unbox,
+        AddAssign,
+        AndAssign,
+        DivideAssign,
+        ExclusiveOrAssign,
+        LeftShiftAssign,
+        ModuloAssign,
+        MultiplyAssign,
+        OrAssign,
+        PowerAssign,
+        RightShiftAssign,
+        SubtractAssign,
+        AddAssignChecked,
+        MultiplyAssignChecked,
+        SubtractAssignChecked,
+        PreIncrementAssign,
+        PreDecrementAssign,
+        PostIncrementAssign,
+        PostDecrementAssign,
+        TypeEqual,
+        OnesComplement,
+        IsTrue,
+        IsFalse,
     }
 }

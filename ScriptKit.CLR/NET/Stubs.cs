@@ -2,7 +2,11 @@
 {
     [ScriptKit.CLR.Ignore]
     public class Type 
-    { 
+    {
+        public static Type GetTypeFromHandle(RuntimeTypeHandle typeHandle)
+        {
+            return null;
+        } 
     }
 
     [ScriptKit.CLR.Ignore]

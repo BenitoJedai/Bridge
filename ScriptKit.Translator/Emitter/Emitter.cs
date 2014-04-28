@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Globalization;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace ScriptKit.NET
 {
@@ -234,7 +235,7 @@ namespace ScriptKit.NET
             this.ResetLocals();
             this.AddLocals(ctor.Parameters);
 
-            this.Write("init");
+            this.Write("$init");
             this.WriteColon();
             this.WriteFunction();
 
@@ -244,6 +245,7 @@ namespace ScriptKit.NET
             this.BeginBlock();
 
             var requireNewLine = false;
+            var changeCase = this.ChangeCase;
 
             if (this.TypeInfo.InstanceFields.Count > 0)
             {
@@ -252,7 +254,9 @@ namespace ScriptKit.NET
 
                 foreach (var name in names)
                 {
-                    this.Write("this.", name, " = ");
+                    var changedName = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+
+                    this.Write("this.", changedName, " = ");
                     this.TypeInfo.InstanceFields[name].AcceptVisitor(this);
                     this.WriteSemiColon();
                     this.WriteNewLine();
@@ -336,7 +340,7 @@ namespace ScriptKit.NET
                 }
                 sortedNames.Sort();
 
-                this.Write("init");
+                this.Write("$init");
                 this.WriteColon();
                 this.WriteFunction();
 
@@ -374,6 +378,16 @@ namespace ScriptKit.NET
                     
                     this.WriteSemiColon();
                     this.WriteNewLine();
+                }
+
+                if (this.TypeInfo.StaticCtor != null)
+                {
+                    var ctor = this.TypeInfo.StaticCtor;
+
+                    if (ctor.Body.HasChildren)
+                    {
+                        ctor.Body.AcceptChildren(this);
+                    }
                 }
 
                 this.EndBlock();
@@ -1134,21 +1148,29 @@ namespace ScriptKit.NET
             return null;
         }
 
+        protected virtual CustomAttribute GetAttribute(IEnumerable<CustomAttribute> attributes, string name)
+        {
+            foreach (var attr in attributes)
+            {
+                if (attr.AttributeType.FullName == name)
+                {
+                    return attr;
+                }
+            }
+
+            return null;
+        }
+
         protected virtual bool HasDelegateAttribute(MethodDeclaration method)
         {
             return this.GetAttribute(method.Attributes, "Delegate") != null;
         }
 
-        protected virtual string GetInlineCode(InvocationExpression node)
+        protected virtual Tuple<bool, string> GetInlineCode(InvocationExpression node)
         {
             var parts = new List<string>();
             Expression current = node.Target;
             var genericCount = -1;
-
-            if (current is MemberReferenceExpression)
-            {
-
-            }
 
             while (true)
             {
@@ -1218,11 +1240,10 @@ namespace ScriptKit.NET
 
             foreach (var method in methods)
             {
-                if (method.IsStatic
-                    && method.Parameters.Count == node.Arguments.Count
+                if (method.Parameters.Count == node.Arguments.Count
                     && method.GenericParameters.Count == genericCount)
                 {
-                    return this.Validator.GetInlineCode(method);
+                    return new Tuple<bool,string>(method.IsStatic, this.Validator.GetInlineCode(method));
 
                 }
             }
@@ -1237,49 +1258,114 @@ namespace ScriptKit.NET
             return this.GetScriptArguments(attr);
         }
 
-        protected virtual string GetMethodName(IParameterizedMember member)
+        protected virtual string GetMethodName(MethodDefinition method)
+        {
+            bool changeCase = !this.IsNativeMember(method.FullName) ? this.ChangeCase : true;
+            var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
+            bool isReserved = method.IsStatic && Emitter.IsReservedStaticName(method.Name);
+            string name = method.Name;
+
+            if (attr != null)
+            {
+                var value = attr.ConstructorArguments.First().Value;
+                if (value is string)
+                {
+                    name = value.ToString();
+                    if (isReserved)
+                    {
+                        name = "$" + name;
+                    }
+                    return name;
+                }
+
+                changeCase = (bool)value;
+            }
+            
+            name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            if (isReserved)
+            {
+                name = "$" + name;
+            }
+
+            return name;
+        }
+
+        protected virtual string GetMethodName(IEntity member)
         {
             bool changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true; 
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
+            bool isReserved = member.IsStatic && Emitter.IsReservedStaticName(member.Name);
+            string name = member.Name;
+
             if (attr != null) 
             {
                 var value = attr.PositionalArguments.First().ConstantValue;
                 if (value is string)
                 {
-                    return value.ToString();
+                    name = value.ToString();
+                    if (isReserved)
+                    {
+                        name = "$" + name;
+                    }
+                    return name;
                 }
 
                 changeCase = (bool)value;
             }
+                        
+            name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            
+            if (isReserved)
+            {
+                name = "$" + name;
+            }
 
-            string name = member.Name;
-            return changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            return name;
         }
 
         protected virtual string GetMethodName(EntityDeclaration method)
         {
             bool changeCase = this.ChangeCase; 
             var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Name");
+            bool isReserved = method.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(method.Name);
+            string name = method.Name;
 
             if (attr != null)
             {
                 var expr = (PrimitiveExpression)attr.Arguments.First();
                 if (expr.Value is string)
                 {
-                    return expr.Value.ToString();
+                    name = expr.Value.ToString();
+                    if (isReserved)
+                    {
+                        name = "$" + name;
+                    }
+                    return name;
                 }
 
                 changeCase = (bool)expr.Value;
+            }            
+
+            name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+
+            if (isReserved)
+            {
+                name = "$" + name;
             }
 
-            string name = method.Name;
+            return name;
+        }        
 
-            return changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+        protected virtual string GetInline(ICustomAttributeProvider provider)
+        {
+            var attr = this.GetAttribute(provider.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            
+            return attr != null ? ((string)attr.ConstructorArguments.First().Value) : null;
         }
-
+        
         protected virtual string GetInline(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Inline");
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
 
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
         }
@@ -1575,6 +1661,11 @@ namespace ScriptKit.NET
         protected virtual bool IsNativeMember(string fullName)
         {
             return fullName.Contains(Translator.CLR_ASSEMBLY) || fullName.StartsWith("System");
+        }
+
+        protected virtual bool IsMemberConst(IMember member)
+        {
+            return (member is DefaultResolvedField) && (((DefaultResolvedField)member).IsConst && member.DeclaringType.Kind != TypeKind.Enum);
         }
     }
 }

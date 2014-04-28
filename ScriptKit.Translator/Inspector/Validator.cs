@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mono.Cecil;
 using System.Linq;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace ScriptKit.NET
 {
@@ -54,10 +55,45 @@ namespace ScriptKit.NET
             this.CheckMethods(type);
         }
 
-        public virtual bool IsIgnoreType(TypeDefinition type) 
+        public virtual bool IsIgnoreType(ICustomAttributeProvider type) 
         {
             string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
             return type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
+        }
+
+        public virtual bool IsIgnoreType(DefaultResolvedTypeDefinition type)
+        {
+            string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
+            return type.Attributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
+        }
+
+        public virtual bool IsEnumEmit(DefaultResolvedTypeDefinition type, bool? checkName)
+        {
+            string enumAttr = Translator.CLR_ASSEMBLY + ".EnumEmitAttribute";
+            return type.Attributes.Any(attr => {
+                if (attr.Constructor.DeclaringType.FullName == enumAttr && attr.PositionalArguments.Count > 0)
+                {
+                    if (checkName.HasValue) {
+                        var obj = attr.PositionalArguments.First().ConstantValue;
+
+                        return checkName.Value ? ((int)obj) == 1 : ((int)obj) == 0;
+                    }
+                    
+                    return true;
+                }
+
+                return false;
+            });
+        }
+
+        public virtual bool IsValueEnum(DefaultResolvedTypeDefinition type)
+        {
+            return this.IsEnumEmit(type, false);
+        }
+
+        public virtual bool IsNameEnum(DefaultResolvedTypeDefinition type)
+        {
+            return this.IsEnumEmit(type, true);
         }
 
         public virtual string GetAttributeValue(IEnumerable<CustomAttribute> attributes, string name)

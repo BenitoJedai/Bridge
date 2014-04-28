@@ -1,23 +1,43 @@
-ScriptKit.Class.extend('ScriptKit.TestLibrary.MyLibrary', {
+ScriptKit.Class.extend('TestProject.App', {
     $statics: {
-        getName: function () {
-            return "Name";
+        start: function () {
         }
     }
 });
 
-ScriptKit.Class.extend('TestProject.App', {
+ScriptKit.Class.extend('TestProject.Class1', {
     $statics: {
-        start: function () {
-            var list = new ScriptKit.List([ "Item1", "Item2", "Item3" ]);
-            list.remove("Item2");
-            var $i = ScriptKit.getEnumerator(list);
-            while ($i.hasNext()) {
-                var item = $i.next();
-                console.log(item);
-            }
-            window.location.href = "http://google.com/";
+        $name: function () {
         }
+    },
+    $init: function () {
+        this.myField = 0;
+        this.myProperty = 0;
+
+        this.setMyProperty(this.getMyProperty());
+        this.myField = 1;
+        this.myMethod();
+        TestProject.Class1.$name();
+    },
+    getMyProperty: function () {
+        return this.myProperty;
+    },
+    setMyProperty: function (value) {
+        this.myProperty = value;
+    },
+    myMethod: function () {
+    }
+});
+
+ScriptKit.Class.extend('TestProject.StructureA', {
+    $init: function () {
+        this.prop = 0;
+    },
+    getProp: function () {
+        return this.prop;
+    },
+    setProp: function (value) {
+        this.prop = value;
     }
 });
 
