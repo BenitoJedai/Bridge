@@ -11,6 +11,7 @@ using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Globalization;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using ICSharpCode.NRefactory.Semantics;
 
 namespace ScriptKit.NET
 {
@@ -254,9 +255,18 @@ namespace ScriptKit.NET
 
                 foreach (var name in names)
                 {
-                    var changedName = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+                    string fieldName = name;
+                    
+                    if (this.TypeInfo.FieldsDeclarations.ContainsKey(name))
+                    {
+                        fieldName = this.GetEntityName(this.TypeInfo.FieldsDeclarations[name]);
+                    }
+                    else
+                    {
+                        fieldName = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+                    }
 
-                    this.Write("this.", changedName, " = ");
+                    this.Write("this.", fieldName, " = ");
                     this.TypeInfo.InstanceFields[name].AcceptVisitor(this);
                     this.WriteSemiColon();
                     this.WriteNewLine();
@@ -343,9 +353,6 @@ namespace ScriptKit.NET
                 this.Write("$init");
                 this.WriteColon();
                 this.WriteFunction();
-
-                /// TODO: Are parameters (zero to many) required here before BeginBlock?
-                /// init: function () {}
                 this.WriteOpenCloseParentheses(true);
 
                 this.BeginBlock();
@@ -353,27 +360,33 @@ namespace ScriptKit.NET
                 var changeCase = this.ChangeCase;
 
                 for (var i = 0; i < sortedNames.Count; i++)
-                {                    
-                    var origName = sortedNames[i];
-                    var isField = this.TypeInfo.StaticFields.ContainsKey(origName);
-                    var name = (changeCase && isField) ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(sortedNames[i]) : sortedNames[i];
+                {
+                    var fieldName = sortedNames[i];
+                    var isField = this.TypeInfo.StaticFields.ContainsKey(fieldName);
+                    string name = null;
 
-                    if (Emitter.IsReservedStaticName(name))
+                    if (this.TypeInfo.FieldsDeclarations.ContainsKey(fieldName))
                     {
-                        this.Write("this.$", name, " = ");
+                        name = this.GetEntityName(this.TypeInfo.FieldsDeclarations[fieldName]);
                     }
                     else
                     {
-                        this.Write("this.", name, " = ");
+                        name = (changeCase && isField) ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
+                        if (Emitter.IsReservedStaticName(name))
+                        {
+                            name = "$" + name;
+                        }
                     }
+
+                    this.Write("this.", name, " = ");
 
                     if (isField)
                     {
-                        this.TypeInfo.StaticFields[origName].AcceptVisitor(this);
+                        this.TypeInfo.StaticFields[fieldName].AcceptVisitor(this);
                     }
                     else
                     {
-                        this.TypeInfo.Consts[origName].AcceptVisitor(this);
+                        this.TypeInfo.Consts[fieldName].AcceptVisitor(this);
                     }
                     
                     this.WriteSemiColon();
@@ -1134,6 +1147,7 @@ namespace ScriptKit.NET
 
         protected virtual ICSharpCode.NRefactory.CSharp.Attribute GetAttribute(AstNodeCollection<AttributeSection> attributes, string name)
         {
+            string fullName = name + "Attribute";
             foreach (var i in attributes)
             {
                 foreach (var j in i.Attributes)
@@ -1141,6 +1155,17 @@ namespace ScriptKit.NET
                     if (j.Type.ToString() == name)
                     {
                         return j;
+                    }
+
+                    var resolveResult = MemberResolver.Resolve(j);
+                    if (resolveResult != null && !resolveResult.IsError)
+                    {
+                        var typeResult = resolveResult as TypeResolveResult;
+
+                        if (typeResult != null && typeResult.Type.FullName == fullName)
+                        {
+                            return j;
+                        }
                     }
                 }
             }
@@ -1262,7 +1287,7 @@ namespace ScriptKit.NET
         {
             bool changeCase = !this.IsNativeMember(method.FullName) ? this.ChangeCase : true;
             var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
-            bool isReserved = method.IsStatic && Emitter.IsReservedStaticName(method.Name);
+            bool isReserved = method.IsStatic && Emitter.IsReservedStaticName(method.Name) && !this.Validator.IsIgnoreType(method.DeclaringType);
             string name = method.Name;
 
             if (attr != null)
@@ -1290,11 +1315,11 @@ namespace ScriptKit.NET
             return name;
         }
 
-        protected virtual string GetMethodName(IEntity member)
+        protected virtual string GetEntityName(IEntity member, bool cancelChangeCase = false)
         {
             bool changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true; 
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
-            bool isReserved = member.IsStatic && Emitter.IsReservedStaticName(member.Name);
+            bool isReserved = member.IsStatic && Emitter.IsReservedStaticName(member.Name) && !this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);
             string name = member.Name;
 
             if (attr != null) 
@@ -1313,7 +1338,7 @@ namespace ScriptKit.NET
                 changeCase = (bool)value;
             }
                         
-            name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            name = changeCase && !cancelChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
             
             if (isReserved)
             {
@@ -1323,7 +1348,7 @@ namespace ScriptKit.NET
             return name;
         }
 
-        protected virtual string GetMethodName(EntityDeclaration method)
+        protected virtual string GetEntityName(EntityDeclaration method, bool cancelChangeCase = false)
         {
             bool changeCase = this.ChangeCase; 
             var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Name");
@@ -1344,9 +1369,9 @@ namespace ScriptKit.NET
                 }
 
                 changeCase = (bool)expr.Value;
-            }            
+            }
 
-            name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            name = changeCase && !cancelChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
 
             if (isReserved)
             {

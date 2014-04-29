@@ -10,11 +10,8 @@ namespace ScriptKit.CLR.Html
     [ScriptKit.CLR.Name("window")]
     public static class Window
     {
-        [ScriptKit.CLR.Inline("arguments")]
-        public static object[] Arguments()
-        {
-            return null;
-        }
+        [ScriptKit.CLR.Name("arguments")]
+        public static object[] Arguments;
 
         /// <summary>
         /// This read-only property indicates whether the referenced window is closed or not.

@@ -87,11 +87,6 @@ namespace ScriptKit.NET
 
             foreach (var item in fieldDeclaration.Variables)
             {
-                if (isStatic && !this.IsValidStaticInitializer(item.Initializer))
-                {
-                    //throw CreateException(fieldDeclaration, "Only primitive or array initializers for static fields are supported");
-                }
-
                 Expression initializer = item.Initializer;
 
                 if (initializer.IsNull)
@@ -103,6 +98,8 @@ namespace ScriptKit.NET
 
                     initializer = this.GetDefaultFieldInitializer(fieldDeclaration.ReturnType);
                 }
+
+                this.CurrentType.FieldsDeclarations.Add(item.Name, fieldDeclaration);
 
                 if (isStatic)
                 {

@@ -28,7 +28,7 @@ namespace ScriptKit.NET
             this.ResetLocals();
             this.AddLocals(methodDeclaration.Parameters);
 
-            this.Write(this.GetMethodName(methodDeclaration));
+            this.Write(this.GetEntityName(methodDeclaration));
 
             this.WriteColon();
             this.WriteFunction();
@@ -307,14 +307,9 @@ namespace ScriptKit.NET
                 }
                 else
                 {
-                    if (field.IsStatic && Emitter.IsReservedStaticName(field.Name))
-                    {
-                        this.Write("$");
-                    }
-
                     bool isConst = this.IsMemberConst(memberResult.Member);
                     bool changeCase = (!this.IsNativeMember(memberResult.Member.FullName) ? this.ChangeCase : true) && !isConst;
-                    this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(id) : id);
+                    this.Write(this.GetEntityName(memberResult.Member, !changeCase));
                 }
 
                 return;
@@ -391,7 +386,7 @@ namespace ScriptKit.NET
                 IMethod method = group.Methods.First();
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
-                this.Write(this.GetMethodName(method));
+                this.Write(this.GetEntityName(method));
                 return;
             }
             
@@ -452,20 +447,15 @@ namespace ScriptKit.NET
                     }
                 }
                 else if (member.Member.EntityType == EntityType.Field)
-                {
-                    if (member.Member.IsStatic && Emitter.IsReservedStaticName(member.Member.Name))
-                    {
-                        this.Write("$");
-                    }
-
+                {                    
                     bool isConst = this.IsMemberConst(member.Member);
                     bool changeCase = (!this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true) && !isConst;
-                    this.Write(changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(memberReferenceExpression.MemberName) : memberReferenceExpression.MemberName);
+                    this.Write(this.GetEntityName(member.Member, !changeCase));
                 }
                 else if (resolveResult is InvocationResolveResult)
                 {                    
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                    this.Write(this.GetMethodName(invocationResult.Member));
+                    this.Write(this.GetEntityName(invocationResult.Member));
                 }
                 else
                 {
@@ -576,7 +566,7 @@ namespace ScriptKit.NET
                             }
                             else
                             {
-                                string name = resolvedMethod.DeclaringType.FullName + "." + this.GetMethodName(resolvedMethod);
+                                string name = resolvedMethod.DeclaringType.FullName + "." + this.GetEntityName(resolvedMethod);
 
                                 this.Write(name);
                                 this.WriteOpenParentheses();
@@ -627,7 +617,7 @@ namespace ScriptKit.NET
                     if (resolveResult != null && !resolveResult.IsError && resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.Write(Helpers.GetScriptFullName(baseType), ".", this.GetMethodName(invocationResult.Member));
+                        this.Write(Helpers.GetScriptFullName(baseType), ".", this.GetEntityName(invocationResult.Member));
                     }
                     else
                     {

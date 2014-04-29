@@ -76,9 +76,26 @@ namespace ScriptKit.NET
             return MemberResolver.Resolve(expression, expression.StartLocation);
         }
 
-        private static ResolveResult Resolve(Expression expression, TextLocation location)
+        public static ResolveResult Resolve(Expression expression, TextLocation location)
         {
             var syntaxTree = expression.GetParent<SyntaxTree>();
+            return MemberResolver.ResolveLocation(syntaxTree, location);
+        }
+
+        public static ResolveResult Resolve(AstNode node)
+        {
+            var syntaxTree = node.GetParent<SyntaxTree>();
+            return MemberResolver.ResolveLocation(syntaxTree, node.StartLocation);
+        }
+
+        public static ResolveResult Resolve(AstNode node, TextLocation location)
+        {
+            var syntaxTree = node.GetParent<SyntaxTree>();
+            return MemberResolver.ResolveLocation(syntaxTree, location);
+        }
+
+        private static ResolveResult ResolveLocation(SyntaxTree syntaxTree, TextLocation location)
+        {
             var offset = MemberResolver.InitDocument(location, syntaxTree);
             var newLocation = MemberResolver.document.GetLocation(offset);
             syntaxTree.Freeze();

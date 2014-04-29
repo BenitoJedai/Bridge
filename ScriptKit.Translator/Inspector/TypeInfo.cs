@@ -15,6 +15,7 @@ namespace ScriptKit.NET
             this.InstanceMethods = new Dictionary<string, MethodDeclaration>();
             this.StaticProperties = new Dictionary<string, PropertyDeclaration>();
             this.InstanceProperties = new Dictionary<string, PropertyDeclaration>();
+            this.FieldsDeclarations = new Dictionary<string, FieldDeclaration>();
         }
 
         public bool IsStatic 
@@ -57,6 +58,12 @@ namespace ScriptKit.NET
         {
             get;
             set;
+        }
+
+        public Dictionary<string, FieldDeclaration> FieldsDeclarations
+        {
+            get;
+            protected set;
         }
 
         public Dictionary<string, Expression> StaticFields 

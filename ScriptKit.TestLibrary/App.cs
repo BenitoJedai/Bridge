@@ -15,16 +15,33 @@ namespace TestProject
     {
         public Class1()
         {
+            Name = Name;
+            Class1.Name = Class1.Name;
+
             MyProperty = MyProperty;
+            this.MyProperty = this.MyProperty;
+
             MyField = 1;
-            MyMethod();
-            Name();
+            this.MyField = 1;
+
+            MyStaticField = 1;
+            Class1.MyStaticField = 1;
+
+            MyStaticField = MyStaticField;
+            Class1.MyStaticField = Class1.MyStaticField;
+
+            var args = Window.Arguments;
         }
 
-        public void MyMethod() { }
-        public static void Name() { }
         public int MyProperty { get; set; }
+        
+        [Name("myf")]
         public int MyField;
+
+        [Name("mysf")]
+        public static int MyStaticField;
+
+        public static int Name { get; set; }
     }
 
     public static class App

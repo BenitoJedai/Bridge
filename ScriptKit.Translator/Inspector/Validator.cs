@@ -61,10 +61,10 @@ namespace ScriptKit.NET
             return type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
         }
 
-        public virtual bool IsIgnoreType(DefaultResolvedTypeDefinition type)
+        internal bool IsIgnoreType(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition typeDefinition)
         {
             string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
-            return type.Attributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
+            return typeDefinition.Attributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
         }
 
         public virtual bool IsEnumEmit(DefaultResolvedTypeDefinition type, bool? checkName)
@@ -338,6 +338,6 @@ namespace ScriptKit.NET
             }
             
             return String.Join("$", list.ToArray());
-        }
+        }        
     }
 }
