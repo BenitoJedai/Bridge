@@ -67,33 +67,36 @@ namespace ScriptKit.NET
             return typeDefinition.Attributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
         }
 
-        public virtual bool IsEnumEmit(DefaultResolvedTypeDefinition type, bool? checkName)
+        public virtual int EnumEmitMode(DefaultResolvedTypeDefinition type)
         {
             string enumAttr = Translator.CLR_ASSEMBLY + ".EnumEmitAttribute";
-            return type.Attributes.Any(attr => {
+            int result = -1;
+            type.Attributes.Any(attr => {
                 if (attr.Constructor.DeclaringType.FullName == enumAttr && attr.PositionalArguments.Count > 0)
                 {
-                    if (checkName.HasValue) {
-                        var obj = attr.PositionalArguments.First().ConstantValue;
-
-                        return checkName.Value ? ((int)obj) == 1 : ((int)obj) == 0;
-                    }
-                    
+                    result = (int)attr.PositionalArguments.First().ConstantValue;                    
                     return true;
                 }
 
                 return false;
             });
+
+            return result;
         }
 
         public virtual bool IsValueEnum(DefaultResolvedTypeDefinition type)
         {
-            return this.IsEnumEmit(type, false);
+            return this.EnumEmitMode(type) == 2;
         }
 
         public virtual bool IsNameEnum(DefaultResolvedTypeDefinition type)
         {
-            return this.IsEnumEmit(type, true);
+            return this.EnumEmitMode(type) == 1;
+        }
+
+        public virtual bool IsStringNameEnum(DefaultResolvedTypeDefinition type)
+        {
+            return this.EnumEmitMode(type) == 3;
         }
 
         public virtual string GetAttributeValue(IEnumerable<CustomAttribute> attributes, string name)

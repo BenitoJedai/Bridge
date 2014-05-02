@@ -7,6 +7,7 @@ namespace ScriptKit.CLR.Html
     /// The Coordinates interface represents the position and attitude of the device on Earth, as well as the accuracy with which these data are computed.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Object")]
     public class GeolocationCoordinates
     {
         private GeolocationCoordinates()

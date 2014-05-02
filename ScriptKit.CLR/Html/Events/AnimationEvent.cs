@@ -4,6 +4,7 @@
     /// The AnimationEvent interface represents events providing information related to animations.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("AnimationEvent")]
     public class AnimationEvent : Event
     {
         private AnimationEvent()

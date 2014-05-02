@@ -308,8 +308,15 @@ namespace ScriptKit.NET
                 else
                 {
                     bool isConst = this.IsMemberConst(memberResult.Member);
-                    bool changeCase = (!this.IsNativeMember(memberResult.Member.FullName) ? this.ChangeCase : true) && !isConst;
-                    this.Write(this.GetEntityName(memberResult.Member, !changeCase));
+                    if (isConst && this.IsInlineConst(memberResult.Member))
+                    {
+                        this.WriteScript(memberResult.ConstantValue);
+                    }
+                    else
+                    {
+                        bool changeCase = (!this.IsNativeMember(memberResult.Member.FullName) ? this.ChangeCase : true) && !isConst;
+                        this.Write(this.GetEntityName(memberResult.Member, !changeCase));
+                    }                    
                 }
 
                 return;
@@ -402,11 +409,49 @@ namespace ScriptKit.NET
                 if (member != null && member.IsCompileTimeConstant && member.Member.DeclaringType.Kind == TypeKind.Enum)
                 {
                     var typeDef = member.Member.DeclaringType as DefaultResolvedTypeDefinition;
-                    if (typeDef != null && (this.Validator.IsIgnoreType(typeDef) && !this.Validator.IsNameEnum(typeDef)))
+
+                    if (typeDef != null)
                     {
-                        this.Write(member.ConstantValue);
-                        return;                    
-                    }                    
+                        var enumMode = this.Validator.EnumEmitMode(typeDef);
+
+                        if ((this.Validator.IsIgnoreType(typeDef) && enumMode == -1) || enumMode == 2)
+                        {
+                            this.WriteScript(member.ConstantValue);
+                            return;
+                        }
+                        
+                        if (enumMode >= 3) 
+                        {
+                            string enumStringName = member.Member.Name;
+                            var attr = this.GetAttribute(member.Member.Attributes, Translator.CLR_ASSEMBLY + ".NameAttribute");
+
+                            if (attr != null)
+                            {
+                                enumStringName = this.GetEntityName(member.Member);
+                            }
+                            else
+                            {
+                                switch (enumMode)
+                                {
+                                    case 3:
+                                        enumStringName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(member.Member.Name);
+                                        break;
+                                    case 4:
+                                        break;
+                                    case 5:
+                                        enumStringName = enumStringName.ToLowerInvariant();
+                                        break;
+                                    case 6:
+                                        enumStringName = enumStringName.ToUpperInvariant();
+                                        break;
+                                }
+                            }
+                            
+
+                            this.WriteScript(enumStringName);
+                            return;
+                        }
+                    }
                 }
                 
                 if (resolveResult is TypeResolveResult)
@@ -449,8 +494,15 @@ namespace ScriptKit.NET
                 else if (member.Member.EntityType == EntityType.Field)
                 {                    
                     bool isConst = this.IsMemberConst(member.Member);
-                    bool changeCase = (!this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true) && !isConst;
-                    this.Write(this.GetEntityName(member.Member, !changeCase));
+                    if (isConst && this.IsInlineConst(member.Member))
+                    {
+                        this.WriteScript(member.ConstantValue);
+                    }
+                    else
+                    {
+                        bool changeCase = (!this.IsNativeMember(member.Member.FullName) ? this.ChangeCase : true) && !isConst;
+                        this.Write(this.GetEntityName(member.Member, !changeCase));
+                    }                    
                 }
                 else if (resolveResult is InvocationResolveResult)
                 {                    
@@ -543,7 +595,7 @@ namespace ScriptKit.NET
                         if (resolvedMethod != null && resolvedMethod.IsExtensionMethod)
                         {
                             string inline = this.GetInline(resolvedMethod);
-                            if (string.IsNullOrWhiteSpace(inline))
+                            if (!string.IsNullOrWhiteSpace(inline))
                             {
                                 this.Write("");
                                 StringBuilder savedBuilder = this.Output;

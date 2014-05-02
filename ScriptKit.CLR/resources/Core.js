@@ -1,5 +1,9 @@
 ScriptKit = {
 	is : function (obj, type) {
+	  if (typeof type == "string") {
+	      type = ScriptKit.unroll(type);
+	  }
+
 	  if (obj == null) {
 		return false;
 	  }
@@ -113,5 +117,21 @@ ScriptKit = {
 
     isArray: function (obj) {
         return Object.prototype.toString.call(obj) === '[object Array]';
+    },
+
+    unroll: function (value) {
+        var d = value.split("."),
+            o = window[d[0]],
+            i;
+
+        for (var i = 1; i < d.length; i++) {
+            if (!o) {
+                return null;
+            }
+
+            o = o[d[i]];
+        }
+
+        return o;
     }
 };

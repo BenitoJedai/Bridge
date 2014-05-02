@@ -47,5 +47,10 @@ namespace System
         { 
             return false; 
         }
+
+        [ScriptKit.CLR.Inline("$callfn({0}, {1})")]
+        public void CallFn(string name, params object[] args)
+        {
+        }
     }
 }

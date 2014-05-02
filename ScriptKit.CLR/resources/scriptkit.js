@@ -7,7 +7,8 @@
  */
 
 
-ScriptKit={is:function(obj,type){if(obj==null){return false;}
+ScriptKit={is:function(obj,type){if(typeof type=="string"){type=ScriptKit.unroll(type);}
+if(obj==null){return false;}
 if(obj.constructor==type){return true;}
 if(ScriptKit.isArray(obj)&&type==ScriptKit.IEnumerable){return true;}
 if(!type.$$inheritors){return false;}
@@ -21,7 +22,9 @@ throw Error('Cannot create enumerator');},getPropertyNames:function(obj,includeF
 return names;},isDefined:function(value){return typeof value!=='undefined';},toArray:function(ienumerable){var i,item,len
 result=[];if(ScriptKit.isArray(ienumerable)){for(i=0,len=ienumerable.length;i<len;++i){result.push(ienumerable[i]);}}
 else{i=ScriptKit.getEnumerator(ienumerable);while(i.hasNext()){item=i.next();result.push(item);}}
-return result;},isArray:function(obj){return Object.prototype.toString.call(obj)==='[object Array]';}};
+return result;},isArray:function(obj){return Object.prototype.toString.call(obj)==='[object Array]';},unroll:function(value){var d=value.split("."),o=window[d[0]],i;for(var i=1;i<d.length;i++){if(!o){return null;}
+o=o[d[i]];}
+return o;}};
 
 (function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;ScriptKit.Class=function(){};ScriptKit.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=="function"&&typeof base[name]=="function"&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
 prototype.$$name=className;function Class(){if(!initializing&&this.$init)

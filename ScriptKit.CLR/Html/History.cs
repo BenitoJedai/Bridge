@@ -5,6 +5,7 @@
 namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("History")]
     public class History
     {
         private History()

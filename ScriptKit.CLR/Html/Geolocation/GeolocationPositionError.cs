@@ -7,6 +7,7 @@ namespace ScriptKit.CLR.Html
     /// The PositionError interface represents the reason of an error occuring when using the geolocating device.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Object")]
     public class GeolocationPositionError
     {
         private GeolocationPositionError()

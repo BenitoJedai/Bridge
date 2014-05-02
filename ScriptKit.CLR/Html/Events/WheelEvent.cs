@@ -4,6 +4,7 @@
     /// The DOM WheelEvent represents events that occur due to the user moving a mouse wheel or similar input device.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("WheelEvent")]
     public class WheelEvent : Event
     {
         private WheelEvent()

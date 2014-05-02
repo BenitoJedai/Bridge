@@ -8,6 +8,7 @@ namespace ScriptKit.CLR.Html
     /// A Navigator object can be retrieved using the read-only Window.navigator property.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Navigator")]
     public class Navigator
     {
         private Navigator()

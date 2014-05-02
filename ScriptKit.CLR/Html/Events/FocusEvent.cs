@@ -4,7 +4,8 @@
     /// The FocusEvent interface represents focus-related events like focus, blur, focusin, or focusout.
     /// </summary>
     [ScriptKit.CLR.Ignore]
-    public class FocusEvent : Event
+    [ScriptKit.CLR.Name("FocusEvent")]
+    public class FocusEvent : UIEvent
     {
         private FocusEvent()
         {

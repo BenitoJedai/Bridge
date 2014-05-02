@@ -1186,6 +1186,19 @@ namespace ScriptKit.NET
             return null;
         }
 
+        protected virtual IAttribute GetAttribute(IEnumerable<IAttribute> attributes, string name)
+        {
+            foreach (var attr in attributes)
+            {
+                if (attr.AttributeType.FullName == name)
+                {
+                    return attr;
+                }
+            }
+
+            return null;
+        }
+
         protected virtual bool HasDelegateAttribute(MethodDeclaration method)
         {
             return this.GetAttribute(method.Attributes, "Delegate") != null;
@@ -1691,6 +1704,23 @@ namespace ScriptKit.NET
         protected virtual bool IsMemberConst(IMember member)
         {
             return (member is DefaultResolvedField) && (((DefaultResolvedField)member).IsConst && member.DeclaringType.Kind != TypeKind.Enum);
+        }
+
+        protected virtual bool IsInlineConst(IMember member)
+        {            
+            bool isConst = (member is DefaultResolvedField) && (((DefaultResolvedField)member).IsConst && member.DeclaringType.Kind != TypeKind.Enum);
+
+            if (isConst)
+            {
+                var attr = this.GetAttribute(member.Attributes, Translator.CLR_ASSEMBLY + ".InlineConstAttribute");
+
+                if (attr != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

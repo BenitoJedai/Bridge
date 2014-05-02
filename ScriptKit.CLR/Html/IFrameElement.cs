@@ -4,6 +4,7 @@
 namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("HTMLIFrameElement")]
     public class IFrameElement: Element
     {
         private IFrameElement()

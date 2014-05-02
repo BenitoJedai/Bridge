@@ -7,6 +7,7 @@
     }
 
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("HTMLDocument")]
     public class DocumentInstance
     {
     }

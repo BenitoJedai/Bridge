@@ -4,6 +4,7 @@
 namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Location")]
     public class Location
     {
         private Location()

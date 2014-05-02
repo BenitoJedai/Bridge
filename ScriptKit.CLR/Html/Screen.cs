@@ -6,6 +6,8 @@ namespace ScriptKit.CLR.Html
     /// <summary>
     /// The screen object is a special object for inspecting properties of the screen on which the current window is being rendered.
     /// </summary>
+    [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Screen")]
     public class Screen
     {
         private Screen()

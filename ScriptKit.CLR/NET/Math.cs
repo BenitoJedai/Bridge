@@ -1,4 +1,5 @@
 ﻿[ScriptKit.CLR.Ignore]
+[ScriptKit.CLR.Name("Object")]
 public static class Math 
 {
     public const double E = 0;

@@ -34,5 +34,11 @@ namespace ScriptKit.CLR
         public static void Delete(object value)
         {
         }
+
+        [ScriptKit.CLR.Inline("ScriptKit.is({0})")]
+        public static bool Is(object type, string typeName)
+        {
+            return false;
+        }
     }
 }

@@ -14,6 +14,10 @@ namespace ScriptKit.CLR
     public enum EnumEmit
     {
         Name = 1,
-        Value = 2
+        Value = 2,
+        StringName = 3,
+        StringNamePreserveCase = 4,
+        StringNameLowerCase = 5,
+        StringNameUpperCase = 6
     }
 }

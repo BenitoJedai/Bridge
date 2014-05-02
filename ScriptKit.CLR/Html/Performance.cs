@@ -3,6 +3,7 @@
 namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Performance")]
     public class Performance
     {
         private Performance()
@@ -34,6 +35,7 @@ namespace ScriptKit.CLR.Html
     /// An object of this type can be obtained by calling the Performance.timing read-only attribute.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("PerformanceTiming")]
     public class PerformanceTiming
     {
         private PerformanceTiming()
@@ -151,6 +153,7 @@ namespace ScriptKit.CLR.Html
     /// An object of this type can be obtained by calling the Performance.navigation read-only attribute.
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("PerformanceNavigation")]
     public class PerformanceNavigation
     {
         private PerformanceNavigation()

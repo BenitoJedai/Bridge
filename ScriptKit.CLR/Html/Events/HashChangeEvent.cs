@@ -4,6 +4,7 @@
     /// 
     /// </summary>
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("HashChangeEvent")]
     public class HashChangeEvent : Event
     {
         private HashChangeEvent()

@@ -1,6 +1,7 @@
 ﻿namespace ScriptKit.CLR.Html
 {
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Storage")]
     public class Storage
     {
         private Storage()

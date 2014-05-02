@@ -1,6 +1,7 @@
 ﻿// Window WebAPI by Mozilla Contributors is licensed under CC-BY-SA 2.5.
 // https://developer.mozilla.org/en-US/docs/Web/API/Window
 
+using System;
 namespace ScriptKit.CLR.Html
 {
     /// <summary>
@@ -10,6 +11,8 @@ namespace ScriptKit.CLR.Html
     [ScriptKit.CLR.Name("window")]
     public static class Window
     {
+        #region Properties
+
         [ScriptKit.CLR.Name("arguments")]
         public static object[] Arguments;
 
@@ -184,6 +187,86 @@ namespace ScriptKit.CLR.Html
         /// Returns a reference to the topmost window in the window hierarchy. This property is read only.
         /// </summary>
         public static readonly WindowInstance Top;
+        
+        #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(string type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(EventType type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(string type, Action<Event> listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(EventType type, Action<Event> listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(string type, Action listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(EventType type, Action listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(string type, Action<Event> listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(EventType type, Action<Event> listener, bool useCapture)
+        {
+        }
 
         [ScriptKit.CLR.Inline("debugger")]
         public static void Debugger()
@@ -200,9 +283,12 @@ namespace ScriptKit.CLR.Html
         {
             return false;
         }
+
+        #endregion Methods
     }
 
     [ScriptKit.CLR.Ignore]
+    [ScriptKit.CLR.Name("Window")]
     public class WindowInstance
     {
     }
