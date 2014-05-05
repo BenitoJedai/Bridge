@@ -268,6 +268,235 @@ namespace ScriptKit.CLR.Html
         {
         }
 
+        /// <summary>
+        /// The Window.alert() method displays an alert dialog with the optional specified content and an OK button.
+        /// </summary>
+        /// <param name="message">message is an optional string of text you want to display in the alert dialog, or, alternatively, an object that is converted into a string and displayed.</param>
+        public static void Alert(string message)
+        {
+        }
+
+        /// <summary>
+        /// The Window.atob()decodes a string of data which has been encoded using base-64 encoding. You can use the window.btoa() method to encode and transmit data which may otherwise cause communication problems, then transmit it and use the window.atob() method to decode the data again. For example, you can encode, transmit, and decode control characters such as ASCII values 0 through 31.
+        /// </summary>
+        /// <param name="encodedData">encoded string</param>
+        /// <returns></returns>
+        public static string Atob(string encodedData)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the window to the previous item in the history.
+        /// </summary>
+        public static void Back()
+        {
+        }
+
+        /// <summary>
+        /// Shifts focus away from the window.
+        /// </summary>
+        public static void Blur()
+        {
+        }
+
+        /// <summary>
+        /// Creates a base-64 encoded ASCII string from a "string" of binary data.
+        /// You can use this method to encode data which may otherwise cause communication problems, transmit it, then use the window.atob method to decode the data again. For example, you can encode control characters such as ASCII values 0 through 31.
+        /// </summary>
+        /// <param name="stringToEncode">String to encode</param>
+        /// <returns></returns>
+        public static string Btoa(string stringToEncode)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Cancels an animation frame request previously scheduled through a call to window.requestAnimationFrame().
+        /// </summary>
+        /// <param name="requestID">The ID value returned by the call to window.requestAnimationFrame() that requested the callback.</param>
+        public static void CancelAnimationFrame(int requestID)
+        {
+        }
+
+        /// <summary>
+        /// Cancels repeated action which was set up using setInterval.
+        /// </summary>
+        /// <param name="intervalID">intervalID is the identifier of the repeated action you want to cancel. This ID is returned from setInterval().</param>
+        public static void ClearInterval(int intervalID)
+        {
+        }
+
+        /// <summary>
+        /// Clears the delay set by window.setTimeout().
+        /// </summary>
+        /// <param name="timeoutID">timeoutID is the ID of the timeout you wish to clear, as returned by window.setTimeout().</param>
+        public static void ClearTimeout(int timeoutID)
+        {
+        }
+
+        /// <summary>
+        /// Closes the current window, or a referenced window.
+        /// This method is only allowed to be called for windows that were opened by a script using the window.open method. If the window was not opened by a script, the following error appears in the JavaScript Console: Scripts may not close windows that were not opened by script.
+        /// </summary>
+        public static void Close()
+        {
+        }
+
+        /// <summary>
+        /// The Window.confirm() method displays a modal dialog with an optional message and two buttons, OK and Cancel.
+        /// </summary>
+        /// <param name="message">message is the optional string to be displayed in the dialog.</param>
+        /// <returns>result is a boolean value indicating whether OK or Cancel was selected (true means OK).</returns>
+        public static bool Confirm(string message)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The Window.confirm() method displays a modal dialog with an optional message and two buttons, OK and Cancel.
+        /// </summary>
+        /// <returns>result is a boolean value indicating whether OK or Cancel was selected (true means OK).</returns>
+        public static bool Confirm()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Dispatches the specified event to the current element.
+        /// To create an event object use the createEvent method in Firefox, Opera, Google Chrome, Safari and Internet Explorer from version 9. After the new event is created, initialize it first (for details, see the page for the createEvent method). When the event is initialized, it is ready for dispatching.
+        /// </summary>
+        /// <param name="event">Required. Reference to an event object to be dispatched.</param>
+        /// <returns>Boolean that indicates whether the default action of the event was not canceled.</returns>
+        public static bool DispatchEvent(Event @event)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Prints messages to the (native) console.
+        /// </summary>
+        /// <param name="message">message is the string message to log.</param>
+        public static void Dump(string message)
+        {
+        }
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+        public static bool Find(string str) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <param name="caseSensitive">Boolean value. If true, specifies a case-sensitive search.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+		public static bool Find(string str, bool caseSensitive) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <param name="caseSensitive">Boolean value. If true, specifies a case-sensitive search.</param>
+        /// <param name="backwards">Boolean. If true, specifies a backward search.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+		public static bool Find(string str, bool caseSensitive, bool backwards) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <param name="caseSensitive">Boolean value. If true, specifies a case-sensitive search.</param>
+        /// <param name="backwards">Boolean. If true, specifies a backward search.</param>
+        /// <param name="wrapAround">Boolean. If true, specifies a wrap around search.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+		public static bool Find(string str, bool caseSensitive, bool backwards, bool wrapAround) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <param name="caseSensitive">The text string for which to search.</param>
+        /// <param name="backwards">Boolean. If true, specifies a backward search.</param>
+        /// <param name="wrapAround">Boolean. If true, specifies a wrap around search.</param>
+        /// <param name="wholeWord">Boolean. If true, specifies a whole word search. </param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+		public static bool Find(string str, bool caseSensitive, bool backwards, bool wrapAround, bool wholeWord) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <param name="caseSensitive">Boolean value. If true, specifies a case-sensitive search.</param>
+        /// <param name="backwards">Boolean. If true, specifies a backward search.</param>
+        /// <param name="wrapAround">Boolean. If true, specifies a wrap around search.</param>
+        /// <param name="wholeWord">Boolean. If true, specifies a whole word search. </param>
+        /// <param name="searchInFrames">Boolean. If true, specifies a search in frames.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+		public static bool Find(string str, bool caseSensitive, bool backwards, bool wrapAround, bool wholeWord, bool searchInFrames) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Finds a string in a window.
+        /// </summary>
+        /// <param name="str">The text string for which to search.</param>
+        /// <param name="caseSensitive">Boolean value. If true, specifies a case-sensitive search.</param>
+        /// <param name="backwards">Boolean. If true, specifies a backward search.</param>
+        /// <param name="wrapAround">Boolean. If true, specifies a wrap around search.</param>
+        /// <param name="wholeWord">Boolean. If true, specifies a whole word search. </param>
+        /// <param name="searchInFrames">Boolean. If true, specifies a search in frames.</param>
+        /// <param name="showDialog">Boolean. If true, specifies a show Dialog.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
+		public static bool Find(string str, bool caseSensitive, bool backwards, bool wrapAround, bool wholeWord, bool searchInFrames, bool showDialog) 
+        {
+			return false;
+		}
+
+        /// <summary>
+        /// Makes a request to bring the window to the front. It may fail due to user settings and the window isn't guaranteed to be frontmost before this method returns.
+        /// </summary>
+        public static void Focus()
+        {
+        }
+
+        /// <summary>
+        /// Moves the window one document forward in the history.
+        /// </summary>
+        public static void Forward()
+        {
+        }
+
+        public static CSSStyleDeclaration GetComputedStyle(Element elt)
+        {
+            return null;
+        }
+
+        public static CSSStyleDeclaration GetComputedStyle(Element elt, string pseudoElt)
+        {
+            return null;
+        }
+
+
         [ScriptKit.CLR.Inline("debugger")]
         public static void Debugger()
         {

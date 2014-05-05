@@ -8,7 +8,7 @@ ScriptKit = {
 		return false;
 	  }
 
-	  if (obj.constructor == type) {
+	  if ((obj.constructor == type) || (obj instanceof type)) {
 		return true;
 	  }
 
