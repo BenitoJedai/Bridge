@@ -486,12 +486,44 @@ namespace ScriptKit.CLR.Html
         {
         }
 
-        public static CSSStyleDeclaration GetComputedStyle(Element elt)
+        /// <summary>
+        /// The Window.getComputedStyle() method gives the values of all the CSS properties of an element after applying the active stylesheets and resolving any basic computation those values may contain
+        /// </summary>
+        /// <param name="el">The Element for which to get the computed style.</param>
+        /// <returns>The returned style is a CSSStyleDeclaration object.</returns>
+        public static CSSStyleDeclaration GetComputedStyle(Element el)
         {
             return null;
         }
 
-        public static CSSStyleDeclaration GetComputedStyle(Element elt, string pseudoElt)
+        /// <summary>
+        /// The Window.getComputedStyle() method gives the values of all the CSS properties of an element after applying the active stylesheets and resolving any basic computation those values may contain
+        /// </summary>
+        /// <param name="el">The Element for which to get the computed style.</param>
+        /// <param name="pseudoElt">A string specifying the pseudo-element to match. Must be omitted (or null) for regular elements.</param>
+        /// <returns>The returned style is a CSSStyleDeclaration object.</returns>
+        public static CSSStyleDeclaration GetComputedStyle(Element el, string pseudoElt)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// getDefaultComputedStyle() gives the default computed values of all the CSS properties of an element, ignoring author styling.  That is, only user-agent and user styles are taken into account.
+        /// </summary>
+        /// <param name="el">The Element for which to get the computed style.</param>
+        /// <returns>The returned style is a CSSStyleDeclaration object.</returns>
+        public static CSSStyleDeclaration GetDefaultComputedStyle(Element el)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// getDefaultComputedStyle() gives the default computed values of all the CSS properties of an element, ignoring author styling.  That is, only user-agent and user styles are taken into account.
+        /// </summary>
+        /// <param name="el">The Element for which to get the computed style.</param>
+        /// <param name="pseudoElt">A string specifying the pseudo-element to match. Must be null (or not specified) for regular elements.</param>
+        /// <returns>The returned style is a CSSStyleDeclaration object.</returns>
+        public static CSSStyleDeclaration GetDefaultComputedStyle(Element el, string pseudoElt)
         {
             return null;
         }

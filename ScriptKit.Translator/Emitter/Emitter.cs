@@ -1361,12 +1361,13 @@ namespace ScriptKit.NET
             return name;
         }
 
-        protected virtual string GetEntityName(EntityDeclaration method, bool cancelChangeCase = false)
+        protected virtual string GetEntityName(EntityDeclaration entity, bool cancelChangeCase = false)
         {
             bool changeCase = this.ChangeCase; 
-            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Name");
-            bool isReserved = method.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(method.Name);
-            string name = method.Name;
+            var attr = this.GetAttribute(entity.Attributes, Translator.CLR_ASSEMBLY + ".Name");
+            string name = entity is FieldDeclaration ? this.GetFieldName((FieldDeclaration)entity) : entity.Name;
+            bool isReserved = entity.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(name);
+            
 
             if (attr != null)
             {
@@ -1392,7 +1393,22 @@ namespace ScriptKit.NET
             }
 
             return name;
-        }        
+        }
+
+        protected virtual string GetFieldName(FieldDeclaration field)
+        {
+            if (!string.IsNullOrEmpty(field.Name))
+            {
+                return field.Name;
+            }
+
+            if (field.Variables.Count > 0)
+            {
+                return field.Variables.First().Name;
+            }
+
+            return null;
+        }
 
         protected virtual string GetInline(ICustomAttributeProvider provider)
         {

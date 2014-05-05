@@ -6,13 +6,14 @@ using System.Collections.Generic;
 
 namespace TestProject
 {
-
-
-    public static class App
+    public class App
     {
+        public static string Name = "Geoff";
+        public string Field = "Geoff";
+
         public static void Start()
         {
-            Window.AddEventListener(EventType.DOMContentLoaded, delegate(Event e) { Console.Log(ScriptKit.CLR.Core.Is(e, "MouseEvent")); });
+            App.Name = "Test";
         }
     }   
 }

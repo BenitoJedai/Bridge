@@ -1,10 +1,15 @@
 ScriptKit.Class.extend('TestProject.App', {
     $statics: {
+        $init: function () {
+            this.$name = "Geoff";
+        },
         start: function () {
-            window.addEventListener("DOMContentLoaded", function (e) {
-                console.log(ScriptKit.is(e, "MouseEvent"));
-            });
+            TestProject.App.$name = "Test";
+            new TestProject.App().field = "";
         }
+    },
+    $init: function () {
+        this.field = "Geoff";
     }
 });
 
