@@ -229,5 +229,16 @@
         { 
             return null; 
         }
+
+        public static bool operator ==(string s1, string s2)
+        {
+            return false;
+        }
+
+        public static bool operator !=(string s1, string s2)
+        {
+            return false;
+        }
+
     }
 }

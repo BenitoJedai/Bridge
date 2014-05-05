@@ -4,15 +4,11 @@ ScriptKit.Class.extend('TestProject.App', {
             this.$name = "Geoff";
         },
         start: function () {
-            var list = new ScriptKit.Dictionary();
-            list.add("geoff", ScriptKit.apply(new TestProject.Person(), { setFirstName: "Geoff"} ));
-            list.add("daniil", ScriptKit.apply(new TestProject.Person(), { setFirstName: "Daniil"} ));
-            list.add("vladimir", ScriptKit.apply(new TestProject.Person(), { setFirstName: "Vladimir"} ));
-            var $i = ScriptKit.getEnumerator(list);
-            while ($i.hasNext()) {
-                var pair = $i.next();
-                console.log(pair.key, pair.value.getFullName());
+            if (typeof arguments != "undefined") {
             }
+            window.addEventListener("click", function () {
+                console.log("Click", arguments);
+            });
         }
     },
     $init: function () {

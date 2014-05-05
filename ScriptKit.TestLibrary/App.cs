@@ -30,16 +30,11 @@ namespace TestProject
 
         public static void Start()
         {
-            var list = new Dictionary<string, Person>();
-
-            list.Add("geoff", new Person { FirstName = "Geoff" });
-            list.Add("daniil", new Person { FirstName = "Daniil" });
-            list.Add("vladimir", new Person { FirstName = "Vladimir" });
-
-            foreach (KeyValuePair<string, Person> pair in list)
+            if (Window.TypeOf(Window.Arguments) != "undefined")
             {
-                Console.Log(pair.Key, pair.Value.FullName);
+
             }
+            Window.AddEventListener(EventType.Click, delegate() { Console.Log("Click", Window.Arguments); });
         }
     }   
 }

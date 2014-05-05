@@ -13,7 +13,7 @@ namespace ScriptKit.CLR.Html
     {
         #region Properties
 
-        [ScriptKit.CLR.Name("arguments")]
+        [ScriptKit.CLR.Inline("arguments")]
         public static object[] Arguments;
 
         /// <summary>
@@ -532,6 +532,12 @@ namespace ScriptKit.CLR.Html
         [ScriptKit.CLR.Inline("debugger")]
         public static void Debugger()
         {
+        }
+
+        [ScriptKit.CLR.Inline("typeof {0}")]
+        public static string TypeOf(object obj)
+        {
+            return null;
         }
 
         [ScriptKit.CLR.Inline("delete {0}")]

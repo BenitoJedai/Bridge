@@ -556,6 +556,7 @@ namespace ScriptKit.NET
         protected virtual void EmitExpressionList(IEnumerable<Expression> expressions)
         {
             bool needComma = false;
+            int count = this.Writers.Count;
 
             foreach (var expr in expressions)
             {
@@ -566,6 +567,11 @@ namespace ScriptKit.NET
 
                 needComma = true;
                 expr.AcceptVisitor(this);
+
+                if (this.Writers.Count != count)
+                {
+                    this.PopWriter();
+                }
             }
         }
 
@@ -1427,21 +1433,16 @@ namespace ScriptKit.NET
         protected virtual string GetInline(IEntity entity)
         {
             string attrName = Translator.CLR_ASSEMBLY + ".InlineAttribute";
-            IMethod method = null;
 
-            if (entity.EntityType == EntityType.Method)
-            {
-                method = (IMethod)entity;                
-            }
-            else if (entity.EntityType == EntityType.Property) 
+            if (entity.EntityType == EntityType.Property) 
             {
                 var prop = (IProperty)entity;
-                method = this.IsAssignment ? prop.Setter : prop.Getter;
+                entity = this.IsAssignment ? prop.Setter : prop.Getter;
             }
 
-            if (method != null)
-            {                 
-                var attr = method.Attributes.FirstOrDefault(a =>
+            if (entity != null)
+            {
+                var attr = entity.Attributes.FirstOrDefault(a =>
                 {
                     
                     return a.AttributeType.FullName == attrName;
