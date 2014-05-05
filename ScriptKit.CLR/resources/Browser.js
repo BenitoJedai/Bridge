@@ -1,14 +1,14 @@
 ﻿(function () {
 
     var check = function (regex) {
-                return regex.test(Ext.userAgent);
+                return regex.test(navigator.userAgent);
         },
 
         isStrict = document.compatMode == "CSS1Compat",
 
         version = function (is, regex) {
             var m;
-            return (is && (m = regex.exec(Ext.userAgent))) ? parseFloat(m[1]) : 0;
+            return (is && (m = regex.exec(navigator.userAgent))) ? parseFloat(m[1]) : 0;
         },
 
         docMode = document.documentMode,

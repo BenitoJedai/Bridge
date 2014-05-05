@@ -4,7 +4,7 @@ ScriptKit.Class.extend('ScriptKit.IEnumerator', {});
 ScriptKit.Class.extend('ScriptKit.Dictionary', {
     $extend: [ScriptKit.IEnumerable],
 
-    init: function (obj) {
+    $init: function (obj) {
         if (Object.prototype.toString.call(obj) === '[object Object]') {
             this.entries = obj;
             this.count = ScriptKit.getPropertyNames(this.entries).length;
@@ -93,7 +93,7 @@ ScriptKit.Class.extend('ScriptKit.ICollection', {
 
 ScriptKit.Class.extend('ScriptKit.List', {
     $extend: [ScriptKit.ICollection],
-    init: function (obj) {
+    $init: function (obj) {
         if (Object.prototype.toString.call(obj) === '[object Array]') {
             this.items = obj;
         }
@@ -274,7 +274,7 @@ ScriptKit.Class.extend('ScriptKit.List', {
 
 
 ScriptKit.Class.extend("ScriptKit.ArrayEnumerator", {
-    init: function (array) {
+    $init: function (array) {
         this.array = array;
         this.index = 0;
     },
@@ -289,7 +289,7 @@ ScriptKit.Class.extend("ScriptKit.ArrayEnumerator", {
 });
 
 ScriptKit.Class.extend("ScriptKit.DictionaryEnumerator", {
-    init: function (entries) {
+    $init: function (entries) {
         this.entries = entries;
         this.keys = ScriptKit.getPropertyNames(this.entries, false);
         this.index = 0;
