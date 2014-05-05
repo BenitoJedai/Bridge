@@ -159,7 +159,7 @@ namespace ScriptKit.NET
             
             this.Write(Emitter.ROOT + ".Class.extend");
             this.WriteOpenParentheses();
-            this.Write("'" + this.TypeInfo.FullName, "', ");
+            this.Write("'" + this.ShortenTypeName(this.TypeInfo.FullName), "', ");
             this.BeginBlock();
 
             string extend = this.GetTypeHierarchy();

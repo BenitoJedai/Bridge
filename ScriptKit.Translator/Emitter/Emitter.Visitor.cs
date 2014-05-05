@@ -291,7 +291,7 @@ namespace ScriptKit.NET
 
                 if (isStatic)
                 {
-                    this.Write(Helpers.GetScriptFullName(member.DeclaringType));
+                    this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
                 }
                 else
                 {
@@ -340,7 +340,7 @@ namespace ScriptKit.NET
             {
                 if (memberResult.Member.IsStatic)
                 {
-                    this.Write(Helpers.ReplaceSpecialChars(memberResult.Member.DeclaringType.FullName));
+                    this.Write(this.ShortenTypeName(Helpers.ReplaceSpecialChars(memberResult.Member.DeclaringType.FullName)));
                 }
                 else
                 {
@@ -669,11 +669,11 @@ namespace ScriptKit.NET
                     if (resolveResult != null && !resolveResult.IsError && resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.Write(Helpers.GetScriptFullName(baseType), ".", this.GetEntityName(invocationResult.Member));
+                        this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".", this.GetEntityName(invocationResult.Member));
                     }
                     else
                     {
-                        this.Write(Helpers.GetScriptFullName(baseType), ".", this.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
+                        this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".", this.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
                     }                    
 
                     this.WriteDot();

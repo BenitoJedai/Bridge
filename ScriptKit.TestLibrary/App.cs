@@ -8,16 +8,28 @@ namespace TestProject
 {
     public class App
     {
-        public const string VERSION = "1.0.0-beta";
-        public string VERSION1 = "1.0.0-beta";
-
         public static void Start()
         {
-            Console.Log(VERSION);
-            Console.Log(App.VERSION);
-
-            var app = new App();
-            Console.Log(app.VERSION1);
+            var date = new DateTime();
         }
     }   
+}
+
+namespace Js
+{
+    [Name("DateTime")]
+    public static class DateTime
+    {
+        public const string VERSION = "1.0.0-beta";
+
+        public static string GetVersion()
+        {
+            return VERSION;
+        }
+
+        public static string GetName()
+        {
+            return "DateTimeJS";
+        }
+    }
 }

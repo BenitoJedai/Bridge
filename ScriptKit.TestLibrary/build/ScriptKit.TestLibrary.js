@@ -1,17 +1,22 @@
-ScriptKit.Class.extend('TestProject.App', {
+ScriptKit.Class.extend('DateTime', {
     $statics: {
         $init: function () {
             this.VERSION = "1.0.0-beta";
         },
-        start: function () {
-            console.log(TestProject.App.VERSION);
-            console.log(TestProject.App.VERSION);
-            var app = new TestProject.App();
-            console.log(app.vERSION1);
+        getName: function () {
+            return "DateTimeJS";
+        },
+        getVersion: function () {
+            return DateTime.VERSION;
         }
-    },
-    $init: function () {
-        this.vERSION1 = "1.0.0-beta";
+    }
+});
+
+ScriptKit.Class.extend('TestProject.App', {
+    $statics: {
+        start: function () {
+            var date = new DateTime();
+        }
     }
 });
 
