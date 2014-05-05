@@ -1,34 +1,17 @@
 ScriptKit.Class.extend('TestProject.App', {
     $statics: {
         $init: function () {
-            this.$name = "Geoff";
+            this.VERSION = "1.0.0-beta";
         },
         start: function () {
-            if (typeof arguments != "undefined") {
-            }
-            window.addEventListener("click", function () {
-                console.log("Click", arguments);
-            });
+            console.log(TestProject.App.VERSION);
+            console.log(TestProject.App.VERSION);
+            var app = new TestProject.App();
+            console.log(app.vERSION1);
         }
     },
     $init: function () {
-        this.field = "Geoff";
+        this.vERSION1 = "1.0.0-beta";
     }
-});
-
-ScriptKit.Class.extend('TestProject.Person', {
-    $init: function () {
-        this.firstName = null;
-    },
-    getFirstName: function () {
-        return this.firstName;
-    },
-    setFirstName: function (value) {
-        this.firstName = value;
-    },
-    getFullName: function () {
-        return this.getFirstName();
-    }
-
 });
 

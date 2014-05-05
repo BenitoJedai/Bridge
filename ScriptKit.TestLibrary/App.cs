@@ -6,35 +6,18 @@ using System.Collections.Generic;
 
 namespace TestProject
 {
-    public class Person
-    {
-        public string FirstName
-        {
-            get;
-            set;
-        }
-
-        public string FullName
-        {
-            get
-            {
-                return this.FirstName;
-            }
-        }
-    }
-
     public class App
     {
-        public static string Name = "Geoff";
-        public string Field = "Geoff";
+        public const string VERSION = "1.0.0-beta";
+        public string VERSION1 = "1.0.0-beta";
 
         public static void Start()
         {
-            if (Window.TypeOf(Window.Arguments) != "undefined")
-            {
+            Console.Log(VERSION);
+            Console.Log(App.VERSION);
 
-            }
-            Window.AddEventListener(EventType.Click, delegate() { Console.Log("Click", Window.Arguments); });
+            var app = new App();
+            Console.Log(app.VERSION1);
         }
     }   
 }

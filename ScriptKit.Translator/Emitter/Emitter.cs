@@ -367,7 +367,7 @@ namespace ScriptKit.NET
 
                     if (this.TypeInfo.FieldsDeclarations.ContainsKey(fieldName))
                     {
-                        name = this.GetEntityName(this.TypeInfo.FieldsDeclarations[fieldName]);
+                        name = this.GetEntityName(this.TypeInfo.FieldsDeclarations[fieldName], !isField);
                     }
                     else
                     {
