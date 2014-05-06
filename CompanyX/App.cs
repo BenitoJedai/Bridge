@@ -13,9 +13,6 @@ namespace CompanyX
             var person = new Person { Name = Name };
 
             Person.DoSomething(person);
-            var date = DateTime.Now;
-
-            Console.Log(date);
         }
     }
 }
