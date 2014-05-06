@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Bridge.CLR.dll">
+      <HintPath>$(MSBuildThisFileDirectory)Bridge.CLR.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

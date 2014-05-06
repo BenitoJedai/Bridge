@@ -45,5 +45,5 @@
   <Target Name="AfterBuild">
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\assemblies\ScriptKit.targets" />
+  <Import Project="..\assemblies\Bridge.targets" />
 </Project>

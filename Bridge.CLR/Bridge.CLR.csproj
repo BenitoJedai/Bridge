@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE78B8B7-C0F5-415B-A70B-02194433F450}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bridge.CLR</RootNamespace>
+    <AssemblyName>Bridge.CLR</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <AdditionalExplicitAssemblyReferences />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\EnumEmitAttribute.cs" />
+    <Compile Include="Attributes\AllowAttribute.cs" />
+    <Compile Include="Attributes\ConstructorAttribute.cs" />
+    <Compile Include="Attributes\InlineConstAttribute.cs" />
+    <Compile Include="Attributes\NameAttribute.cs" />
+    <Compile Include="Attributes\IgnoreAttribute.cs" />
+    <Compile Include="Attributes\ScriptAttribute.cs" />
+    <Compile Include="Attributes\InlineAttribute.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Html\Console.cs" />
+    <Compile Include="Html\CSS\BackgroundAttachment.cs" />
+    <Compile Include="Html\CSS\Clear.cs" />
+    <Compile Include="Html\CSS\CaptionSide.cs" />
+    <Compile Include="Html\CSS\BoxSizing.cs" />
+    <Compile Include="Html\CSS\BorderWidth.cs" />
+    <Compile Include="Html\CSS\BorderStyle.cs" />
+    <Compile Include="Html\CSS\BackgroundRepeat.cs" />
+    <Compile Include="Html\CSS\CSSRule.cs" />
+    <Compile Include="Html\CSS\CSSRuleType.cs" />
+    <Compile Include="Html\CSS\CSSStyleSheet.cs" />
+    <Compile Include="Html\CSS\CSSValue.cs" />
+    <Compile Include="Html\CSS\HTMLColor.cs" />
+    <Compile Include="Html\CSS\BackgroundClip.cs" />
+    <Compile Include="Html\CSS\BackgroundBlendMode.cs" />
+    <Compile Include="Html\CSS\BorderCollapse.cs" />
+    <Compile Include="Html\CSS\BorderImageRepeat.cs" />
+    <Compile Include="Html\CSS\BoxDecorationBreak.cs" />
+    <Compile Include="Html\CSS\ColumnFill.cs" />
+    <Compile Include="Html\CSS\ColumnSpan.cs" />
+    <Compile Include="Html\CSS\Cursor.cs" />
+    <Compile Include="Html\CSS\Float.cs" />
+    <Compile Include="Html\CSS\Direction.cs" />
+    <Compile Include="Html\CSS\Display.cs" />
+    <Compile Include="Html\CSS\DominantBaseline.cs" />
+    <Compile Include="Html\CSS\EmptyCells.cs" />
+    <Compile Include="Html\CSS\FlexDirection.cs" />
+    <Compile Include="Html\CSS\FlexWrap.cs" />
+    <Compile Include="Html\CSS\FontKerning.cs" />
+    <Compile Include="Html\CSS\FontStretch.cs" />
+    <Compile Include="Html\CSS\FontStyle.cs" />
+    <Compile Include="Html\CSS\FontSynthesis.cs" />
+    <Compile Include="Html\CSS\FontVariant.cs" />
+    <Compile Include="Html\CSS\FontVariantCaps.cs" />
+    <Compile Include="Html\CSS\FontVariantLigatures.cs" />
+    <Compile Include="Html\CSS\FontVariantPosition.cs" />
+    <Compile Include="Html\CSS\GridAutoFlow.cs" />
+    <Compile Include="Html\CSS\Hyphens.cs" />
+    <Compile Include="Html\CSS\ImageRendering.cs" />
+    <Compile Include="Html\CSS\ImeMode.cs" />
+    <Compile Include="Html\CSS\JustifyContent.cs" />
+    <Compile Include="Html\CSS\ListStylePosition.cs" />
+    <Compile Include="Html\CSS\ListStyleType.cs" />
+    <Compile Include="Html\CSS\MaskType.cs" />
+    <Compile Include="Html\CSS\ObjectFit.cs" />
+    <Compile Include="Html\CSS\Overflow.cs" />
+    <Compile Include="Html\CSS\OverflowWrap.cs" />
+    <Compile Include="Html\CSS\PageBreakInside.cs" />
+    <Compile Include="Html\CSS\PageBreak.cs" />
+    <Compile Include="Html\CSS\PointerEvents.cs" />
+    <Compile Include="Html\CSS\Position.cs" />
+    <Compile Include="Html\CSS\Resize.cs" />
+    <Compile Include="Html\CSS\StyleSheet.cs" />
+    <Compile Include="Html\CSS\TableLayout.cs" />
+    <Compile Include="Html\CSS\TextAlign.cs" />
+    <Compile Include="Html\CSS\TextDecoration.cs" />
+    <Compile Include="Html\CSS\TextDecorationLine.cs" />
+    <Compile Include="Html\CSS\TextDecorationStyle.cs" />
+    <Compile Include="Html\CSS\TextOverflow.cs" />
+    <Compile Include="Html\CSS\TextRendering.cs" />
+    <Compile Include="Html\CSS\TextTransform.cs" />
+    <Compile Include="Html\CSS\TextUnderlinePosition.cs" />
+    <Compile Include="Html\CSS\TouchAction.cs" />
+    <Compile Include="Html\CSS\TransformStyle.cs" />
+    <Compile Include="Html\CSS\UnicodeBidi.cs" />
+    <Compile Include="Html\CSS\VerticalAlign.cs" />
+    <Compile Include="Html\CSS\BackfaceVisibility.cs" />
+    <Compile Include="Html\CSS\WritingMode.cs" />
+    <Compile Include="Html\CSS\WordWrap.cs" />
+    <Compile Include="Html\CSS\WordBreak.cs" />
+    <Compile Include="Html\CSS\WhiteSpace.cs" />
+    <Compile Include="Html\CSS\Visibility.cs" />
+    <Compile Include="Html\CSS\TimingFunction.cs" />
+    <Compile Include="Html\CSS\AnimationPlayState.cs" />
+    <Compile Include="Html\CSS\AnimationFillMode.cs" />
+    <Compile Include="Html\CSS\AnimationDirection.cs" />
+    <Compile Include="Html\CSS\All.cs" />
+    <Compile Include="Html\CSS\AlignItems.cs" />
+    <Compile Include="Html\CSS\AlignContent.cs" />
+    <Compile Include="Html\Document.cs" />
+    <Compile Include="Html\CSS\CSSStyleDeclaration.cs" />
+    <Compile Include="Html\Element.cs" />
+    <Compile Include="Html\Events\CustomEvent.cs" />
+    <Compile Include="Html\Events\KeyboardEvent.cs" />
+    <Compile Include="Html\Events\MouseEvent.cs" />
+    <Compile Include="Html\Events\UIEvent.cs" />
+    <Compile Include="Html\Events\EventType.cs" />
+    <Compile Include="Html\Events\CompositionEvent.cs" />
+    <Compile Include="Html\Events\WheelEvent.cs" />
+    <Compile Include="Html\Events\ProgressEvent.cs" />
+    <Compile Include="Html\Events\HashChangeEvent.cs" />
+    <Compile Include="Html\Events\FocusEvent.cs" />
+    <Compile Include="Html\Events\AnimationEvent.cs" />
+    <Compile Include="Html\Events\Event.cs" />
+    <Compile Include="Html\Geolocation\GeolocationCoordinates.cs" />
+    <Compile Include="Html\Geolocation\GeolocationPositionError.cs" />
+    <Compile Include="Html\Geolocation\GeolocationPosition.cs" />
+    <Compile Include="Html\Geolocation\GeolocationPositionOptions.cs" />
+    <Compile Include="Html\Geolocation\Geolocation.cs" />
+    <Compile Include="Html\History.cs" />
+    <Compile Include="Html\IFrameElement.cs" />
+    <Compile Include="Html\Navigator.cs" />
+    <Compile Include="Html\Performance.cs" />
+    <Compile Include="Html\Screen.cs" />
+    <Compile Include="Html\Storage.cs" />
+    <Compile Include="Html\Location.cs" />
+    <Compile Include="Html\BarProp.cs" />
+    <Compile Include="Html\Window.cs" />
+    <Compile Include="NET\Action.cs" />
+    <Compile Include="NET\Array.cs" />
+    <Compile Include="NET\Boolean.cs" />
+    <Compile Include="NET\Collections\Generic\Dictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NET\Collections\Generic\ICollection.cs" />
+    <Compile Include="NET\Collections\Generic\IEnumerable.cs" />
+    <Compile Include="NET\Collections\Generic\IEnumerator.cs" />
+    <Compile Include="NET\Collections\Generic\IEqualityComparer.cs" />
+    <Compile Include="NET\Collections\Generic\KeyValuePair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NET\Collections\Generic\List.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NET\Collections\IEnumerable.cs" />
+    <Compile Include="NET\Collections\IEnumerator.cs" />
+    <Compile Include="NET\Collections\IEqualityComparer.cs" />
+    <Compile Include="NET\DateTime.cs" />
+    <Compile Include="NET\Func.cs" />
+    <Compile Include="NET\Date.cs" />
+    <Compile Include="NET\Error.cs" />
+    <Compile Include="NET\Delegate.cs" />
+    <Compile Include="NET\Math.cs" />
+    <Compile Include="NET\Number.cs" />
+    <Compile Include="NET\Object.cs" />
+    <Compile Include="NET\RegExp.cs" />
+    <Compile Include="NET\Runtime.cs" />
+    <Compile Include="NET\String.cs" />
+    <Compile Include="NET\Stubs.cs" />
+    <Compile Include="NET\TimeSpan.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\Browser.js" />
+    <Content Include="resources\Class.js" />
+    <Content Include="resources\Collections.js" />
+    <Content Include="resources\Core.js" />
+    <EmbeddedResource Include="resources\bridge-debug.js" />
+    <EmbeddedResource Include="resources\bridge.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)*.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

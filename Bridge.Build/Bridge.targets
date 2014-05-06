@@ -1,0 +1,22 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="GenerateScript" AssemblyFile="$(MSBuildThisFileDirectory)Bridge.Build.dll" />
+
+  <PropertyGroup>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Bridge.CLR.dll">
+      <HintPath>$(MSBuildThisFileDirectory)Bridge.CLR.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="AfterBuild">
+    <GenerateScript
+      OutputPath="$(OutputPath)"
+      Assembly="@(IntermediateAssembly)"
+	  AssemliesPath="$(MSBuildThisFileDirectory)"
+      ProjectPath="$(MSBuildProjectFullPath)">
+    </GenerateScript>
+  </Target>
+</Project>

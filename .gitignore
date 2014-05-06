@@ -6,10 +6,10 @@
 .DS_Store
 
 
-/assemblies/ScriptKit.Build.dll
-/assemblies/ScriptKit.Builder.exe
-/assemblies/ScriptKit.CLR.dll
-/assemblies/ScriptKit.Translator.dll
+/assemblies/Bridge.Build.dll
+/assemblies/Bridge.Builder.exe
+/assemblies/Bridge.CLR.dll
+/assemblies/Bridge.Translator.dll
 
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)

@@ -1,4 +1,4 @@
-﻿using ScriptKit.CLR.Html;
+﻿using Bridge.CLR.Html;
 using System;
 
 namespace CompanyX
@@ -27,7 +27,7 @@ namespace CompanyX
         }
     }
 
-    [ScriptKit.CLR.Name("App.direct")]
+    [Bridge.CLR.Name("App.direct")]
     public static class MyAppMethods
     {
         public static void Method1()

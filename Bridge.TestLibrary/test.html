@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Bridge.NET</title>
+    <script type="text/javascript" src="bridge-debug.js"></script>
+    <script type="text/javascript" src="Bridge.TestLibrary.js?v=1"></script>
+
+    <script type="text/javascript">
+        Bridge.Class.extend('Bridge.IEnumerable', {});
+        Bridge.Class.extend('Bridge.IEnumerator', {});
+
+        Bridge.Class.extend('Bridge.Dictionary', {
+            extend: "Bridge.IEnumerable",
+            init: function (obj) {
+                if (Object.prototype.toString.call(obj) === '[object Object]') {
+                    this.entries = obj;
+                    this.count = Bridge.getPropertyNames(this.entries).length;
+                }
+                else if (Bridge.is(obj, Bridge.Dictionary)) {
+                    this.entries = {};
+                    this.count = 0;
+                    for (var key in obj) {
+                        this.entries[key] = obj[key];
+                        this.count++;
+                    }
+                }
+                else {
+                    this.entries = {};
+                    this.count = 0;
+                }
+            },
+
+            getKeys: function () {
+                return Bridge.getPropertyNames(this.entries, false);
+            },
+
+            getValues: function () {
+                var keys = this.getKeys(),
+                    result = [];
+
+                for (var i = 0; i < keys.length; i++) {
+                    result.push(this.entries[keys[i]]);
+                }
+
+                return result;
+            },
+
+            clear: function () {
+                this.entries = {};
+                this.count = 0;
+            },
+
+            containsKey: function (key) {
+                return Bridge.isDefined(this.entries[key]);
+            },
+
+            containsValue: function (value) {
+                var keys = this.getKeys();
+                for (var i = 0; i < keys.length; i++) {
+                    if (value === this.entries[keys[i]]) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            get: function (key) {
+                if (!this.containsKey(key)) {
+                    throw new Error("Key not found: " + key);
+                }
+                return this.entries[key];
+            },
+
+            add: function (key, value) {
+                if (!this.containsKey(key)) {
+                    this.count++;
+                }
+                this.entries[key] = value;
+            },
+
+            remove: function (key) {
+                if (this.containsKey(key)) {
+                    this.count--;
+                }
+                delete this.entries[key];
+            },
+
+            getCount: function () {
+                return this.count;
+            }
+        });
+
+        TestProject.App.start();
+    </script>
+</head>
+<body>
+    <p>Open console to see results (reload the page to clear cache)</p>
+</body>
+</html>

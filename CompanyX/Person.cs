@@ -1,4 +1,4 @@
-﻿using ScriptKit.CLR.Html;
+﻿using Bridge.CLR.Html;
 using System;
 
 namespace CompanyX
