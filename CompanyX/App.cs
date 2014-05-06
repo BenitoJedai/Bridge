@@ -1,4 +1,5 @@
 ﻿using Bridge.CLR.Html;
+using Bridge.CLR;
 using System;
 
 namespace CompanyX
@@ -9,33 +10,12 @@ namespace CompanyX
 
         public static void Start()
         {
-            int val = "sas".Length + 100;
+            var person = new Person { Name = Name };
 
-            Console.Log("Length", val);
+            Person.DoSomething(person);
+            var date = DateTime.Now;
 
-            Console.Log("Name", App.Name);
-
-            var customer = new Customer {
-                Name = "Vladimir",
-                CompanyName = "Object.NET"
-            };
-
-            Console.Log("Company", customer.CompanyName);
-
-            // Window
-            // Document
-        }
-    }
-
-    [Bridge.CLR.Name("App.direct")]
-    public static class MyAppMethods
-    {
-        public static void Method1()
-        {
-        }
-
-        public static void Method2()
-        {
+            Console.Log(date);
         }
     }
 }
