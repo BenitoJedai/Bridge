@@ -10,6 +10,29 @@ namespace Bridge.Builder
 {
     class Program
     {
+        static void LogMessage(string level, string message)
+        {
+            level = level ?? "message";
+            switch (level.ToLowerInvariant())
+            {
+                case "message":
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("Message: {0}", message);
+                    Console.ResetColor();
+                    break;
+                case "warning":
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("Warning: {0}", message);
+                    Console.ResetColor();
+                    break;
+                case "error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error: {0}", message);
+                    Console.ResetColor();
+                    break;
+            }
+        }
+
         static void Main(string[] args)
         {
             string projectLocation = null;
@@ -86,6 +109,7 @@ namespace Bridge.Builder
                 translator.CLRLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Bridge.CLR.dll");
                 translator.Rebuild = rebuild;
                 translator.ChangeCase = changeCase;
+                translator.Log = LogMessage;
                 string code = translator.Translate();
                 File.WriteAllText(outputLocation, code);
 

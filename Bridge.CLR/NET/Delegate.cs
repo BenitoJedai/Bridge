@@ -25,6 +25,17 @@
         { 
             return null; 
         }
+
+        public static Delegate Combine(Delegate a, Delegate b)
+        {
+            return null;
+        }
+
+        public static Delegate Remove(Delegate source, Delegate value)
+        {
+            return null;
+        }
+ 
     }
 
     [Bridge.CLR.Ignore]

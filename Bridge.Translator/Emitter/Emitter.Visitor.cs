@@ -184,8 +184,43 @@ namespace Bridge.NET
             }
         }
 
+        protected virtual bool ResolveOperator(BinaryOperatorExpression binaryOperatorExpression)
+        {            
+            var resolveOperator = MemberResolver.Resolve(binaryOperatorExpression.Left, binaryOperatorExpression.OperatorToken.EndLocation);
+
+            if (resolveOperator != null && !resolveOperator.IsError && resolveOperator is OperatorResolveResult)
+            {
+                var orr = (OperatorResolveResult)resolveOperator;
+
+                if (orr.UserDefinedOperatorMethod != null)
+                {
+                    var inline = this.GetInline(orr.UserDefinedOperatorMethod);
+
+                    if (!string.IsNullOrWhiteSpace(inline))
+                    {
+                        this.PushWriter(inline);
+                        this.EmitExpressionList(new[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right });
+                        this.PopWriter();
+
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                this.LogWarning(string.Format("Operator resolving is failed {0}: {1}", binaryOperatorExpression.StartLocation, binaryOperatorExpression.GetText()));
+            }
+
+            return false;
+        }
+
         public override void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
         {
+            if (this.ResolveOperator(binaryOperatorExpression))
+            {
+                return;
+            }
+            
             binaryOperatorExpression.Left.AcceptVisitor(this);
             this.WriteSpace();
 
@@ -373,11 +408,11 @@ namespace Bridge.NET
 
             if (resolveResult == null || resolveResult.IsError)
             {
-                //throw new Exception("MemberReferenceExpression resolving is failed: " + memberReferenceExpression.ToString());
+                this.LogWarning(string.Format("MemberReferenceExpression resolving is failed {0}: {1}", memberReferenceExpression.StartLocation, memberReferenceExpression.GetText()));
+
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
                 string name = Helpers.GetScriptName(memberReferenceExpression, false);
-                //this.Write(this.ChangeCase ? name.ToLowerCamelCase() : name);
                 this.Write(name.ToLowerCamelCase());
                 return;
             }
@@ -699,8 +734,9 @@ namespace Bridge.NET
             }
             else
             {
+                int count = this.Writers.Count;
                 invocationExpression.Target.AcceptVisitor(this);
-                if (this.Writers.Count > 0)
+                if (this.Writers.Count > count)
                 {
                     this.EmitExpressionList(invocationExpression.Arguments);                    
                     this.PopWriter();
@@ -782,14 +818,16 @@ namespace Bridge.NET
                     throw this.CreateException(assignmentExpression, "Unsupported assignment operator: " + assignmentExpression.Operator.ToString());
             }
 
-            if (this.Writers.Count == 0)
+            int count = this.Writers.Count;
+
+            if (count == 0)
             {
                 this.Write("= ");
-            }
+            }            
 
             assignmentExpression.Right.AcceptVisitor(this);
 
-            if (this.Writers.Count > 0)
+            if (this.Writers.Count > count)
             {
                 this.PopWriter();
             }
@@ -1363,6 +1401,11 @@ namespace Bridge.NET
         public override void VisitDefaultValueExpression(DefaultValueExpression defaultValueExpression)
         {
             this.Write("null");
+        }
+
+        public override void VisitEventDeclaration(EventDeclaration eventDeclaration)
+        {
+            var vars = eventDeclaration.Variables;
         }
     }
 }

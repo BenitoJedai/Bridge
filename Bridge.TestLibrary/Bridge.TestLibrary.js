@@ -1,28 +1,16 @@
 Bridge.Class.extend('TestProject.App', {
     $statics: {
-        start: function () {
-        }
-    }
-});
-
-Bridge.Class.extend('TestProject.Class1', {
-    $statics: {
-        $init: function () {
+        getDate: function () {
+            return new Date();
         },
-        methodTakingThose: function (inputs) {
+        start: function () {
+            var d1 = new Date();
+            var d2 = new Date();
+            /* if (d1 == d2) */
+            if (Bridge.equals(TestProject.App.getDate(), d2)) {
+                console.log("Equals");
+            }
         }
-    }
-});
-
-Bridge.Class.extend('TestProject.StructureA', {
-    $init: function () {
-        this.prop = 0;
-    },
-    getProp: function () {
-        return this.prop;
-    },
-    setProp: function (value) {
-        this.prop = value;
     }
 });
 

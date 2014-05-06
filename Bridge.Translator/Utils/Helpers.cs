@@ -6,6 +6,75 @@ namespace Bridge.NET
 {
     public static class Helpers 
     {
+        public static string GetOperatorMethodName(BinaryOperatorType op)
+        {
+            string name = "";
+            switch (op)
+            {
+                case BinaryOperatorType.Add:
+                    name = "Addition";
+                    break;
+                case BinaryOperatorType.BitwiseAnd:
+                    name = "BitwiseAnd";
+                    break;
+                case BinaryOperatorType.BitwiseOr:
+                    name = "BitwiseOr";
+                    break;
+                case BinaryOperatorType.ConditionalAnd:
+                    name = "LogicalAnd";
+                    break;
+                case BinaryOperatorType.NullCoalescing:
+                case BinaryOperatorType.ConditionalOr:
+                    name = "LogicalOr";
+                    break;
+                case BinaryOperatorType.Divide:
+                    name = "Division";
+                    break;
+                case BinaryOperatorType.Equality:
+                    name = "Equality";
+                    break;
+                case BinaryOperatorType.ExclusiveOr:
+                    name = "ExclusiveOr";
+                    break;
+                case BinaryOperatorType.GreaterThan:
+                    name = "GreaterThan";
+                    break;
+                case BinaryOperatorType.GreaterThanOrEqual:
+                    name = "GreaterThanOrEqual";
+                    break;
+                case BinaryOperatorType.InEquality:
+                    name = "Inequality";
+                    break;
+                case BinaryOperatorType.LessThan:
+                    name = "LessThan";
+                    break;
+                case BinaryOperatorType.LessThanOrEqual:
+                    name = "LessThanOrEqual";
+                    break;
+                case BinaryOperatorType.Modulus:
+                    name = "Modulus";
+                    break;
+                case BinaryOperatorType.Multiply:
+                    name = "Multiply";
+                    break;
+                case BinaryOperatorType.ShiftLeft:
+                    name = "LeftShift";
+                    break;
+                case BinaryOperatorType.ShiftRight:
+                    name = "RightShift";
+                    break;
+                case BinaryOperatorType.Subtract:
+                    name = "Subtraction";
+                    break;
+                default:
+                    name = "";
+                    break;
+            }
+
+            return "op_" + name;
+        }
+        
+        
         public static void AcceptChildren(this AstNode node, IAstVisitor visitor)
         {
             foreach (AstNode child in node.Children)

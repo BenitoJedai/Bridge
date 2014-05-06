@@ -55,6 +55,23 @@ namespace Bridge.Build
             set;
         }
 
+        protected virtual void LogMessage(string level, string message)
+        {
+            level = level ?? "message";
+            switch(level.ToLowerInvariant())
+            {
+                case "message":
+                    this.Log.LogMessage(message);
+                    break;
+                case "warning":
+                    this.Log.LogWarning(message);
+                    break;
+                case "error":
+                    this.Log.LogError(message);
+                    break;
+            }
+        }
+
         public override bool Execute()
         {
             var success = true;
@@ -64,6 +81,7 @@ namespace Bridge.Build
                 translator.CLRLocation = Path.Combine(this.AssemliesPath, "Bridge.CLR.dll");                
                 translator.Rebuild = false;
                 translator.ChangeCase = this.ChangeCase;
+                translator.Log = this.LogMessage;
                 string code = translator.Translate();
                 File.WriteAllText(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js"), code);
 
@@ -74,7 +92,7 @@ namespace Bridge.Build
             }
             catch (Exception e)
             {
-                Log.LogError("Error: {0}", e.Message);
+                this.Log.LogError("Error: {0}", e.Message);
                 success = false;
             }
 

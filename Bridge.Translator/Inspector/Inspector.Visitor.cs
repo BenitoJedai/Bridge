@@ -215,5 +215,11 @@ namespace Bridge.NET
 
             this.CurrentType.StaticFields.Add(enumMemberDeclaration.Name.ToLowerCamelCase(), initializer);
         }
+
+        public override void VisitEventDeclaration(EventDeclaration eventDeclaration)
+        {
+            string s = "";
+            //this.CurrentType.Events.Add(eventDeclaration.Name, eventDeclaration);
+        }
     }
 }

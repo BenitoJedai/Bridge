@@ -42,7 +42,7 @@ namespace Bridge.NET
 
             if (type.HasEvents)
             {
-                Exception.Throw("Events are not supported: {0}", type);
+                //Exception.Throw("Events are not supported: {0}", type);
             }
 
             if (type.IsValueType && !type.IsEnum)

@@ -79,7 +79,8 @@ Bridge = {
 	        return obj.getEnumerator();
 	    }
 
-	    if (Object.prototype.toString.call(obj) === '[object Array]') {
+	    if ((Object.prototype.toString.call(obj) === '[object Array]') ||
+            (obj && Bridge.isDefined(obj.length))) {
 	        return new Bridge.ArrayEnumerator(obj);
 	    }
 	    
@@ -127,6 +128,18 @@ Bridge = {
         return Object.prototype.toString.call(obj) === '[object Array]';
     },
 
+    isFunction: function (obj) {
+        return typeof (obj) === 'function';
+    },
+
+    isDate: function (obj) {
+        return Object.prototype.toString.call(obj) === '[object Date]';
+    },
+
+    isNull: function (value) {
+        return (value === null) || (value === undefined);
+    },
+
     unroll: function (value) {
         var d = value.split("."),
             o = window[d[0]],
@@ -141,6 +154,20 @@ Bridge = {
         }
 
         return o;
+    },
+
+    equals: function (a, b) {
+        if (a && Bridge.isFunction(a.equals)) {
+            return a.equals(b);
+        }
+        else if (Bridge.isDate(a) && Bridge.isDate(b)) {
+            return a.valueOf() === b.valueOf();
+        }        
+        else if (Bridge.isNull(a) && Bridge.isNull(b)) {
+            return true;
+        }
+        
+        return a === b;
     }
 };
 

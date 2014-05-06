@@ -119,27 +119,47 @@
             return false;
         }
 
+        [Bridge.CLR.Inline("Bridge.equals({0})")]
         public static bool operator ==(Date d1, object d2)
         {
             return false;
         }
 
+        [Bridge.CLR.Inline("Bridge.equals({0})")]
         public static bool operator ==(Date d1, Date d2)
         {
             return false;
         }
 
+        [Bridge.CLR.Inline("!Bridge.equals({0})")]
         public static bool operator !=(Date d1, object d2)
         {
             return false;
         }
 
+        [Bridge.CLR.Inline("!Bridge.equals({0})")]
         public static bool operator !=(Date d1, Date d2)
         {
             return false;
         }
 
         public Date()
+        {
+        }
+
+        /// <summary>
+        /// Double value representing the number of milliseconds since 1 January 1970 00:00:00 UTC (Unix Epoch).
+        /// </summary>
+        /// <param name="value">The numberof milliseconds since 1 January 1970 00:00:00 UTC (Unix Epoch)</param>
+        public Date(double value)
+        {
+        }
+
+        /// <summary>
+        /// String value representing a date. The string should be in a format recognized by the Date.parse() method (IETF-compliant RFC 2822 timestamps and also a version of ISO8601).
+        /// </summary>
+        /// <param name="dateString"></param>
+        public Date(string dateString)
         {
         }
 

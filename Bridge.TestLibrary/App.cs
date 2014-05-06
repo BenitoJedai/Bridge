@@ -8,36 +8,25 @@ namespace TestProject
 {
     public class App
     {
-        public static void Method(string s = "test", int i = 5)
-        {
+        public event Action<string> ActionEvent;
 
+        public void Fire()
+        {
+            this.ActionEvent += App_ActionEvent;
+            if (this.ActionEvent != null)
+            {
+                this.ActionEvent("test");
+            }            
         }
-        
+
+        public void App_ActionEvent(string arg)
+        {
+            throw new NotImplementedException();
+        }
+
         public static void Start()
         {
-            Method();
-            Method("t");
+            
         }
     }   
-}
-
-namespace Js
-{
-    [Name("DateTime")]
-    public class DateTime
-    {
-        public const string VERSION = "2.0.0-beta";
-
-        public static string GetVersion()
-        {
-            return DateTime.VERSION;
-        }
-
-        public Date Date;
-
-        public Date ToDate()
-        {
-            return this.Date;
-        }
-    }
 }

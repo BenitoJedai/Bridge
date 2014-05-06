@@ -1739,5 +1739,28 @@ namespace Bridge.NET
 
             return false;
         }
+
+        protected virtual void LogWarning(string message)
+        {
+            this.LogMessage("warning", message);
+        }
+
+        protected virtual void LogError(string message)
+        {
+            this.LogMessage("error", message);
+        }
+
+        protected virtual void LogMessage(string message)
+        {
+            this.LogMessage("message", message);
+        }
+
+        protected virtual void LogMessage(string level, string message)
+        {
+            if (this.Log != null)
+            {
+                this.Log(level, message);
+            }
+        }
     }
 }

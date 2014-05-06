@@ -22,6 +22,12 @@ namespace Bridge.NET
 
         private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };
 
+        public Action<string, string> Log
+        {
+            get;
+            set;
+        }
+
         public Validator Validator
         {
             get;

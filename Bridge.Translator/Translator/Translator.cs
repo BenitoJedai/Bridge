@@ -29,6 +29,7 @@ namespace Bridge.NET
             emitter.ChangeCase = this.ChangeCase;
             emitter.References = references;
             emitter.SourceFiles = this.SourceFiles;
+            emitter.Log = this.Log;
             emitter.Emit();
 
             return emitter.Output.ToString();

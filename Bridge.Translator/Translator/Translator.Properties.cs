@@ -1,10 +1,17 @@
 ﻿using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 
 namespace Bridge.NET
 {
     public partial class Translator
     {
+        public Action<string, string> Log
+        {
+            get;
+            set;
+        }
+
         public Validator Validator
         {
             get;
