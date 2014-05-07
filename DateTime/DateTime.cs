@@ -2,9 +2,8 @@
 using Bridge.CLR.Html;
 using System;
 
-namespace Js
+namespace Bridge
 {
-    [Name("DateTime")]
     public class DateTime
     {
         //public DateTime()
@@ -216,6 +215,29 @@ namespace Js
             temp.SetDate(1);
 
             return temp.GetTimezoneOffset() != this.DateData.GetTimezoneOffset();
+        }
+
+        /// <summary>
+        /// Gets the day of the week represented by this instance.
+        /// </summary>
+        public DayOfWeek DayOfWeek
+        {
+            get
+            {
+                return (DayOfWeek)this.DateData.GetDay();
+            }
+        }
+
+        /// <summary>
+        /// The day of the year, expressed as a value between 1 and 366.
+        /// </summary>
+        public double DayOfYear
+        {
+            get
+            {
+                var diff = DateTime.Today.DateData - new Date(new Date().GetFullYear(), 0, 0, 0, 0, 0, 0);
+                return Math.Floor(diff   / 864e5);
+            }
         }
 
 
