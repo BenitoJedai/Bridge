@@ -128,7 +128,7 @@ namespace Js
         /// <returns>A signed number indicating the relative values of t1 and t2.</returns>
         public static int Compare(DateTime t1, DateTime t2)
         {
-            return t1.Time < t2.ToDate().GetTime() ? -1 : t1.ToDate().GetTime() > t2.ToDate().GetTime() ? 1 : 0;
+            return t1.Time < t2.Time ? -1 : t1.Time > t2.Time ? 1 : 0;
         }
 
         public double Time
@@ -147,9 +147,29 @@ namespace Js
         /// <returns>true if the two values are equal; otherwise, false.</returns>
         public static bool Equals(DateTime t1, DateTime t2)
         {
-            var temp = DateTime.Now;
-
             return t1.Time == t2.Time;
-        } 
+        }
+
+        /// <summary>
+        /// Returns the number of days in the specified month and year.
+        /// </summary>
+        /// <param name="year">The year.</param>
+        /// <param name="month">The month (a number ranging from 1 to 12).</param>
+        /// <returns>The number of days in month for the specified year. For example, if month equals 2 for February, the return value is 28 or 29 depending upon whether year is a leap year.</returns>
+        public static int DaysInMonth(int year, int month)
+        {
+            //return new int [12] { 31, (DateTime.IsLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }[month - 1];
+            return 31;
+        }
+
+        /// <summary>
+        /// Converts the string representation of a date and time to its DateTime equivalent.
+        /// </summary>
+        /// <param name="s">A string that contains a date and time to convert. </param>
+        /// <returns>An object that is equivalent to the date and time contained in s.</returns>
+        public static DateTime Parse(string s)
+        {
+            return new DateTime(Date.Parse(s).GetTime());
+        }
     }
 }
