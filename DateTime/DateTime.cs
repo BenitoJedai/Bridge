@@ -195,6 +195,16 @@ namespace Bridge
         }
 
         /// <summary>
+        /// Compares the value of this instance to a specified DateTime value and returns an integer that indicates whether this instance is earlier than, the same as, or later than the specified DateTime value.
+        /// </summary>
+        /// <param name="value">The object to compare to the current instance. </param>
+        /// <returns>A signed number indicating the relative values of this instance and the value parameter.</returns>
+        public int CompareTo(DateTime value)
+        {
+            return DateTime.Compare(this, value);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether the value of this instance is equal to the value of the specified DateTime instance.
         /// </summary>
         /// <param name="value">The object to compare to this instance. </param>
@@ -235,8 +245,7 @@ namespace Bridge
         {
             get
             {
-                var diff = DateTime.Today.DateData - new Date(new Date().GetFullYear(), 0, 0, 0, 0, 0, 0);
-                return Math.Floor(diff   / 864e5);
+                return Math.Floor((this.Date.DateData - new Date(new Date().GetFullYear(), 0, 0, 0, 0, 0, 0)) / 864e5);
             }
         }
 
