@@ -16,16 +16,7 @@ namespace Bridge
             this.DateData = new Date(time);
         }
 
-        public Date DateData;
-
-        /// <summary>
-        /// Returns the backing Date object as a Plain Old Date Object.
-        /// </summary>
-        /// <returns>The Date object</returns>
-        public Date ToDate()
-        {
-            return this.DateData;
-        }
+        private Date DateData;
 
         /// <summary>
         /// Gets the year component of the date represented by this instance.
@@ -104,16 +95,22 @@ namespace Bridge
             }
         }
 
+        /// <summary>
+        /// Gets the date component of this instance.
+        /// </summary>
+        /// <remarks>A new object with the same date as this instance, and the time value set to 12:00:00 midnight (00:00:00).</remarks>
         public DateTime Date
         {
             get
             {
-                this.DateData.SetHours(0);
-                this.DateData.SetMinutes(0);
-                this.DateData.SetSeconds(0);
-                this.DateData.SetMilliseconds(0);
+                var clone = new DateTime(this.DateData.GetTime());
 
-                return this;
+                clone.DateData.SetHours(0);
+                clone.DateData.SetMinutes(0);
+                clone.DateData.SetSeconds(0);
+                clone.DateData.SetMilliseconds(0);
+
+                return clone;
             }
         }
 
@@ -315,7 +312,7 @@ namespace Bridge
         {
             get
             {
-                return this.ToDate().GetTime();
+                return this.DateData.GetTime();
             }
         }
 
