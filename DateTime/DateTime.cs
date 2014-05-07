@@ -14,10 +14,10 @@ namespace Js
 
         public DateTime(double time)
         {
-            this.Date = new Date(time);
+            this.DateData = new Date(time);
         }
 
-        public Date Date;
+        public Date DateData;
 
         /// <summary>
         /// Returns the backing Date object as a Plain Old Date Object.
@@ -25,50 +25,199 @@ namespace Js
         /// <returns>The Date object</returns>
         public Date ToDate()
         {
-            return this.Date;
+            return this.DateData;
         }
 
         /// <summary>
-        /// Returns a new DateTime object that is an exact date and time copy of the original instance.
+        /// Gets the year component of the date represented by this instance.
         /// </summary>
-        /// <returns>A new DateTime instance</returns>
-        public DateTime Clone()
+        public int Year
         {
-            return new DateTime(this.Date.GetTime());
+            get
+            {
+                return this.DateData.GetFullYear();
+            }
         }
 
         /// <summary>
-        /// Resets the time of this DateTime object to 12:00 AM (00:00), which is the start of the day.
+        /// Gets the month component of the date represented by this instance.
         /// </summary>
-        /// <returns>this</returns>
-        public DateTime ClearTime()
+        public int Month
         {
-            //* @param {Boolean} .clone() this DateTime instance before clearing Time
-            //return this.hours(0).minutes(0).seconds(0).milliseconds(0);
-            this.Date.SetHours(0);
-            this.Date.SetMinutes(0);
-            this.Date.SetSeconds(0);
-            this.Date.SetMilliseconds(0);
+            get
+            {
+                return this.DateData.GetMonth() + 1;
+            }
+        }
 
+        /// <summary>
+        /// Gets the day of the month represented by this instance.
+        /// </summary>
+        public int Day
+        {
+            get
+            {
+                return this.DateData.GetDate();
+            }
+        }
+
+        /// <summary>
+        /// Gets the hour component of the date represented by this instance.
+        /// </summary>
+        public int Hour
+        {
+            get
+            {
+                return this.DateData.GetHours();
+            }
+        }
+
+        /// <summary>
+        /// Gets the minute component of the date represented by this instance.
+        /// </summary>
+        public int Minute
+        {
+            get
+            {
+                return this.DateData.GetMinutes();
+            }
+        }
+
+        /// <summary>
+        /// Gets the seconds component of the date represented by this instance.
+        /// </summary>
+        public int Second
+        {
+            get
+            {
+                return this.DateData.GetSeconds();
+            }
+        }
+
+        /// <summary>
+        /// Gets the milliseconds component of the date represented by this instance.
+        /// </summary>
+        public int Millisecond
+        {
+            get
+            {
+                return this.DateData.GetMilliseconds();
+            }
+        }
+
+        public DateTime Date
+        {
+            get
+            {
+                this.DateData.SetHours(0);
+                this.DateData.SetMinutes(0);
+                this.DateData.SetSeconds(0);
+                this.DateData.SetMilliseconds(0);
+
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public DateTime AddYears(int value)
+        {
+            this.DateData.SetFullYear(this.DateData.GetFullYear() + value);
             return this;
         }
 
         /// <summary>
-        /// Resets the time of this DateTime object to the current time ('now').
+        /// 
         /// </summary>
-        /// <returns>this</returns>
-        public DateTime ResetTime()
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public DateTime AddMonths(int value)
         {
-            var n = new Date();
-
-            this.Date.SetHours(n.GetHours());
-            this.Date.SetMinutes(n.GetMinutes());
-            this.Date.SetSeconds(n.GetSeconds());
-            this.Date.SetMilliseconds(n.GetMilliseconds());
-
-            // return this.hours(n.getHours()).minutes(n.getMinutes()).seconds(n.getSeconds()).milliseconds(n.getMilliseconds());
+            this.DateData.SetMonth(this.DateData.GetMonth() + value);
             return this;
         }
+
+        /// <summary>
+        /// Returns a new DateTime that adds the specified number of days to the value of this instance.
+        /// </summary>
+        /// <param name="value">A number of whole and fractional days. The value parameter can be negative or positive. </param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of days represented by value.</returns>
+        public DateTime AddDays(int value)
+        {
+            this.DateData.SetDate(this.DateData.GetDate() + value);
+            return this;
+        }
+        
+        /// <summary>
+        /// Returns a new DateTime that adds the specified number of hours to the value of this instance.
+        /// </summary>
+        /// <param name="value">A number of whole and fractional hours. The value parameter can be negative or positive. </param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of hours represented by value.</returns>
+        public DateTime AddHours(int value)
+        {
+            this.DateData.SetHours(this.DateData.GetHours() + value);
+            return this;
+        }
+
+        /// <summary>
+        /// Returns a new DateTime that adds the specified number of minutes to the value of this instance.
+        /// </summary>
+        /// <param name="value">A number of whole and fractional minutes. The value parameter can be negative or positive. </param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of minutes represented by value.</returns>
+        public DateTime AddMinutes(int value)
+        {
+            this.DateData.SetMinutes(this.DateData.GetMinutes() + value);
+            return this;
+        }
+
+        /// <summary>
+        /// Returns a new DateTime that adds the specified number of seconds to the value of this instance.
+        /// </summary>
+        /// <param name="value">A number of whole and fractional seconds. The value parameter can be negative or positive. </param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of seconds represented by value.</returns>
+        public DateTime AddSeconds(int value)
+        {
+            this.DateData.SetSeconds(this.DateData.GetSeconds() + value);
+            return this;
+        }
+
+        /// <summary>
+        /// 	Returns a new DateTime that adds the specified number of milliseconds to the value of this instance.
+        /// </summary>
+        /// <param name="value">A number of whole and fractional milliseconds. The value parameter can be negative or positive. Note that this value is rounded to the nearest integer.</param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of milliseconds represented by value.</returns>
+        public DateTime AddMilliseconds(int value)
+        {
+            this.DateData.SetMilliseconds(this.DateData.GetMilliseconds() + value);
+            return this;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the value of this instance is equal to the value of the specified DateTime instance.
+        /// </summary>
+        /// <param name="value">The object to compare to this instance. </param>
+        /// <returns>true if the value parameter equals the value of this instance; otherwise, false.</returns>
+        public bool Equals(DateTime value)
+        {
+            return DateTime.Equals(this, value);
+        }
+
+        /// <summary>
+        /// Indicates whether this instance of DateTime is within the daylight saving time range for the current time zone.
+        /// </summary>
+        /// <returns>true if the value of the Kind property is Local or Unspecified and the value of this instance of DateTime is within the daylight saving time range for the local time zone; false if Kind is Utc.</returns>
+        public bool IsDaylightSavingTime()
+        {
+            var temp = DateTime.Today.DateData;
+            temp.SetMonth(0);
+            temp.SetDate(1);
+
+            return temp.GetTimezoneOffset() != this.DateData.GetTimezoneOffset();
+        }
+
 
         /******************
          *     Statics    *
@@ -95,7 +244,7 @@ namespace Js
         {
             get
             {
-                return new DateTime(new Date().GetTime()).ClearTime();
+                return new DateTime(new Date().GetTime()).Date;
             }
         }
 
@@ -169,7 +318,7 @@ namespace Js
         /// <returns>An object that is equivalent to the date and time contained in s.</returns>
         public static DateTime Parse(string s)
         {
-            return new DateTime(Date.Parse(s).GetTime());
+            return new DateTime(System.Date.Parse(s).GetTime());
         }
     }
 }
