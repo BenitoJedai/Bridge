@@ -1,18 +1,30 @@
 Bridge.Class.extend('TestProject.App', {
     $statics: {
         start: function () {
+            var person = Bridge.apply(new TestProject.Person(), { setName: "Geoff"} );
+            var d1 = new Date();
+            var d2 = new Date();
+            var arr = [ ];
+            if (Bridge.equals(d1, d2)) {
+            }
+            if (Bridge.equals(new Date(1), d2)) {
+            }
+            if (Bridge.equals(d1, new Date(person.getName()))) {
+            }
+            person.setName(person.getName());
         }
-    },
+    }
+});
+
+Bridge.Class.extend('TestProject.Person', {
     $init: function () {
+        this.name = null;
     },
-    app_ActionEvent: function (arg) {
-        throw new System.NotImplementedException();
+    getName: function () {
+        return this.name;
     },
-    fire: function () {
-        this.ActionEvent += this.app_ActionEvent;
-        if (this.ActionEvent != ) {
-            this.ActionEvent("test");
-        }
+    setName: function (value) {
+        this.name = value;
     }
 });
 

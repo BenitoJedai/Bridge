@@ -250,28 +250,7 @@ namespace Bridge.NET
 
             if (this.TypeInfo.InstanceFields.Count > 0)
             {
-                var names = new List<string>(this.TypeInfo.InstanceFields.Keys);
-                names.Sort();
-
-                foreach (var name in names)
-                {
-                    string fieldName = name;
-                    
-                    if (this.TypeInfo.FieldsDeclarations.ContainsKey(name))
-                    {
-                        fieldName = this.GetEntityName(this.TypeInfo.FieldsDeclarations[name]);
-                    }
-                    else
-                    {
-                        fieldName = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
-                    }
-
-                    this.Write("this.", fieldName, " = ");
-                    this.TypeInfo.InstanceFields[name].AcceptVisitor(this);
-                    this.WriteSemiColon();
-                    this.WriteNewLine();
-                }
-
+                this.EmitInstanceFields(changeCase);
                 requireNewLine = true;
             }            
 
@@ -281,29 +260,17 @@ namespace Bridge.NET
                 {
                     this.WriteNewLine();
                 }
+                this.EmitBaseConstructor(ctor);
+                requireNewLine = true;
+            }
 
-                var initializer = ctor.Initializer ?? new ConstructorInitializer()
+            if (this.TypeInfo.Events.Count > 0)
+            {
+                if (requireNewLine)
                 {
-                    ConstructorInitializerType = ConstructorInitializerType.Base
-                };
-
-                if (initializer.ConstructorInitializerType == ConstructorInitializerType.This)
-                {
-                    throw CreateException(ctor, "Multiple constructors are not supported");
+                    this.WriteNewLine();
                 }
-                
-                this.Write("this.base");
-                this.WriteOpenParentheses();
-
-                foreach (var p in initializer.Arguments)
-                {
-                    this.WriteComma();
-                    p.AcceptVisitor(this);
-                }
-
-                this.WriteCloseParentheses();
-                this.WriteSemiColon();
-                this.WriteNewLine();
+                this.EmitEvents(this.TypeInfo.Events);
                 requireNewLine = true;
             }
 
@@ -337,6 +304,69 @@ namespace Bridge.NET
 
             this.EndBlock();
             this.Comma = true;
+        }
+
+        protected virtual void EmitEvents(IEnumerable<EventDeclaration> events)
+        {
+            foreach (var evt in events)
+            {
+                string name = this.GetEntityName(evt);
+
+                this.Write("this.", name, " = new Bridge.Event()");                
+                this.WriteSemiColon();
+                this.WriteNewLine();
+            }
+        }
+
+        protected virtual void EmitBaseConstructor(ConstructorDeclaration ctor)
+        {
+            var initializer = ctor.Initializer ?? new ConstructorInitializer()
+            {
+                ConstructorInitializerType = ConstructorInitializerType.Base
+            };
+
+            if (initializer.ConstructorInitializerType == ConstructorInitializerType.This)
+            {
+                throw CreateException(ctor, "Multiple constructors are not supported");
+            }
+
+            this.Write("this.base");
+            this.WriteOpenParentheses();
+
+            foreach (var p in initializer.Arguments)
+            {
+                this.WriteComma();
+                p.AcceptVisitor(this);
+            }
+
+            this.WriteCloseParentheses();
+            this.WriteSemiColon();
+            this.WriteNewLine();
+        }
+
+        protected virtual void EmitInstanceFields(bool changeCase)
+        {
+            var names = new List<string>(this.TypeInfo.InstanceFields.Keys);
+            names.Sort();
+
+            foreach (var name in names)
+            {
+                string fieldName = name;
+
+                if (this.TypeInfo.FieldsDeclarations.ContainsKey(name))
+                {
+                    fieldName = this.GetEntityName(this.TypeInfo.FieldsDeclarations[name]);
+                }
+                else
+                {
+                    fieldName = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+                }
+
+                this.Write("this.", fieldName, " = ");
+                this.TypeInfo.InstanceFields[name].AcceptVisitor(this);
+                this.WriteSemiColon();
+                this.WriteNewLine();
+            }
         }
 
         protected virtual void EmitCtorForStaticClass()
@@ -1371,7 +1401,17 @@ namespace Bridge.NET
         {
             bool changeCase = this.ChangeCase; 
             var attr = this.GetAttribute(entity.Attributes, Translator.CLR_ASSEMBLY + ".Name");
-            string name = entity is FieldDeclaration ? this.GetFieldName((FieldDeclaration)entity) : entity.Name;
+            
+            string name = entity.Name;
+            if (entity is FieldDeclaration)
+            {
+                name = this.GetFieldName((FieldDeclaration)entity);
+            }
+            else if (entity is EventDeclaration)
+            {
+                name = this.GetEventName((EventDeclaration)entity);
+            }
+
             bool isReserved = entity.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(name);
             
 
@@ -1411,6 +1451,21 @@ namespace Bridge.NET
             if (field.Variables.Count > 0)
             {
                 return field.Variables.First().Name;
+            }
+
+            return null;
+        }
+
+        protected virtual string GetEventName(EventDeclaration evt)
+        {
+            if (!string.IsNullOrEmpty(evt.Name))
+            {
+                return evt.Name;
+            }
+
+            if (evt.Variables.Count > 0)
+            {
+                return evt.Variables.First().Name;
             }
 
             return null;

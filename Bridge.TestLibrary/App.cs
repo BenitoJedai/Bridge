@@ -6,27 +6,41 @@ using System.Collections.Generic;
 
 namespace TestProject
 {
+    public class Person
+    {
+        public string Name 
+        { 
+            get; 
+            set; 
+        }
+    }
+
     public class App
     {
-        public event Action<string> ActionEvent;
-
-        public void Fire()
-        {
-            this.ActionEvent += App_ActionEvent;
-            if (this.ActionEvent != null)
-            {
-                this.ActionEvent("test");
-            }            
-        }
-
-        public void App_ActionEvent(string arg)
-        {
-            throw new NotImplementedException();
-        }
-
         public static void Start()
         {
-            
+            var person = new Person
+            {
+                Name = "Geoff"
+            };
+
+            var d1 = new Date();
+            var d2 = new Date();
+            var arr = new int[]{};
+
+            if (d1 == d2)
+            {
+            }
+
+            if (new Date(1) == d2)
+            {
+            }
+
+            if (d1 == new Date(person.Name))
+            {
+            }
+
+            person.Name = person.Name;
         }
     }   
 }

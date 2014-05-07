@@ -16,6 +16,20 @@ namespace Bridge.NET
             this.StaticProperties = new Dictionary<string, PropertyDeclaration>();
             this.InstanceProperties = new Dictionary<string, PropertyDeclaration>();
             this.FieldsDeclarations = new Dictionary<string, FieldDeclaration>();
+            this.Events = new List<EventDeclaration>();
+            this.StaticEvents = new List<EventDeclaration>();
+        }
+
+        public List<EventDeclaration> StaticEvents
+        {
+            get;
+            set;
+        }
+
+        public List<EventDeclaration> Events
+        {
+            get;
+            set;
         }
 
         public bool IsStatic 
@@ -116,6 +130,7 @@ namespace Bridge.NET
                        || this.StaticMethods.Count > 0 
                        || this.StaticProperties.Count > 0
                        || this.Consts.Count > 0
+                       || this.StaticEvents.Count > 0
                        || this.StaticCtor != null;
             }
         }
@@ -127,6 +142,7 @@ namespace Bridge.NET
                 return this.InstanceFields.Count > 0 
                        || this.InstanceMethods.Count > 0
                        || this.InstanceProperties.Count > 0 
+                       || this.Events.Count > 0
                        || this.Ctor != null;
             }
         }

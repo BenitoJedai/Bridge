@@ -546,7 +546,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    this.Write(Helpers.GetScriptName(memberReferenceExpression, false));
+                    this.Write(this.GetEntityName(member.Member));
                 }                    
             }
         }
@@ -771,6 +771,7 @@ namespace Bridge.NET
 
         public override void VisitAssignmentExpression(AssignmentExpression assignmentExpression)
         {
+            var initCount = this.Writers.Count;
             this.IsAssignment = true;
             assignmentExpression.Left.AcceptVisitor(this);
             this.IsAssignment = false;
@@ -827,7 +828,7 @@ namespace Bridge.NET
 
             assignmentExpression.Right.AcceptVisitor(this);
 
-            if (this.Writers.Count > count)
+            if (this.Writers.Count > initCount)
             {
                 this.PopWriter();
             }
@@ -1406,6 +1407,11 @@ namespace Bridge.NET
         public override void VisitEventDeclaration(EventDeclaration eventDeclaration)
         {
             var vars = eventDeclaration.Variables;
+        }
+
+        public override void VisitNullReferenceExpression(NullReferenceExpression nullReferenceExpression)
+        {
+            this.Write("null");
         }
     }
 }

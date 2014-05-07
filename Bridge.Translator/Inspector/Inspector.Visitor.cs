@@ -218,8 +218,14 @@ namespace Bridge.NET
 
         public override void VisitEventDeclaration(EventDeclaration eventDeclaration)
         {
-            string s = "";
-            //this.CurrentType.Events.Add(eventDeclaration.Name, eventDeclaration);
+            if (eventDeclaration.HasModifier(Modifiers.Static))
+            {
+                this.CurrentType.StaticEvents.Add(eventDeclaration);
+            }
+            else
+            {
+                this.CurrentType.Events.Add(eventDeclaration);
+            }            
         }
     }
 }
