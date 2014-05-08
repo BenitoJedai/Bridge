@@ -40,6 +40,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bridge.DateTime\Bridge.DateTime.csproj">
+      <Project>{4107017f-22d4-4572-a19a-c530aa4f9294}</Project>
+      <Name>Bridge.DateTime</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">

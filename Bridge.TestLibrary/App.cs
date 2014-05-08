@@ -1,6 +1,5 @@
 ﻿using Bridge.CLR;
 using Bridge.CLR.Html;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -43,6 +42,8 @@ namespace TestProject
         {            
             var items = new int[6] { 1, 1, 2, 3, 5, 8 };
             Console.Log(items);
+
+            Console.Log(DateTime.Today.DayOfYear);
         }
     }   
 }
