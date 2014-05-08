@@ -36,15 +36,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Build\" />
-  </ItemGroup>  
+  </ItemGroup>
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\assemblies\Bridge.targets" />
+  <Import Project="..\assemblies\BridgeNoTask.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>$(ProjectDir)build.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>

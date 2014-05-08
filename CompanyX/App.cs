@@ -25,7 +25,7 @@ namespace CompanyX
 
             var company = new Company { Name = "Object.NET" };
 
-            company.DoSomething();
+            //company.DoSomething();
 
             // after compile, see body of doSomething function
             // The person.Name call should compile to person.getName()
@@ -38,6 +38,8 @@ namespace CompanyX
 
             Person.DoSomething(person);
 
+            var date = DateTime.Today.DayOfYear;
+            
             // Initalize int array fails
             var items = new int[6] { 1, 1, 2, 3, 5, 8 };
 

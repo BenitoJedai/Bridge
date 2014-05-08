@@ -10,7 +10,7 @@ namespace TestProject
     {
         public static void Start()
         {
-            Console.Log(DateTime.Today);
+            Console.Log(DateTime.Today.DayOfYear);
         }
 
         public static void Log(int obj)
