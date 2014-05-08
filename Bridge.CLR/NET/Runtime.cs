@@ -302,6 +302,27 @@ namespace System.Runtime.Versioning
 
 namespace System.Runtime.CompilerServices
 {
+    [Bridge.CLR.Ignore]
+    public static class RuntimeHelpers
+    {
+        public static void InitializeArray(Array array, RuntimeFieldHandle handle)
+        {
+        }
+
+        public static int OffsetToStringData 
+        { 
+            get 
+            { 
+                return 0; 
+            } 
+        }
+
+        public static int GetHashCode(object obj) 
+        { 
+            return 0; 
+        }
+    }
+    
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
     [Bridge.CLR.Ignore]
     public sealed class ExtensionAttribute : Attribute

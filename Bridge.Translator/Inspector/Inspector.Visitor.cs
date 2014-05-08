@@ -150,6 +150,8 @@ namespace Bridge.NET
                 return;
             }
 
+            this.FixMethodParameters(methodDeclaration);
+            
             bool isStatic = methodDeclaration.HasModifier(Modifiers.Static);
 
             IDictionary<string, MethodDeclaration> dict = isStatic

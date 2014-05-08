@@ -17,6 +17,7 @@ namespace Bridge.NET
         private static ReadOnlyDocument document;
         private static IList<string> sourceFiles;
         private static ICompilation compilation;
+        private static CSharpAstResolver resolver;
 
         private static IProjectContent project;
         public static void InitResolver(IList<string> sourceFiles, IEnumerable<IAssemblyReference> assemblies)
@@ -44,63 +45,31 @@ namespace Bridge.NET
             MemberResolver.compilation = MemberResolver.project.CreateCompilation();
         }
 
-        private static int InitDocument(TextLocation location, SyntaxTree syntaxTree)
+        private static void InitDocument(SyntaxTree syntaxTree)
         {
             if (MemberResolver.lastFileName != syntaxTree.FileName)
             {
                 MemberResolver.lastFileName = syntaxTree.FileName;
                 MemberResolver.editorText = System.IO.File.ReadAllText(MemberResolver.lastFileName);
-                MemberResolver.document = new ReadOnlyDocument(MemberResolver.editorText);                
+                MemberResolver.document = new ReadOnlyDocument(MemberResolver.editorText);
+                var unresolvedFile = syntaxTree.ToTypeSystem();
+                MemberResolver.resolver = new CSharpAstResolver(compilation, syntaxTree, unresolvedFile);
+            }
+        }
+
+        public static ResolveResult ResolveNode(AstNode node)
+        {
+            var syntaxTree = node.GetParent<SyntaxTree>();
+            MemberResolver.InitDocument(syntaxTree);
+            syntaxTree.Freeze();
+            var result = MemberResolver.resolver.Resolve(node);
+
+            if (result is MethodGroupResolveResult && node.Parent != null)
+            {
+                result = MemberResolver.ResolveNode(node.Parent);
             }
 
-            return MemberResolver.document.GetOffset(location);
-        }
-
-        public static ResolveResult Resolve(MemberReferenceExpression memberReferenceExpression)
-        {
-            return MemberResolver.Resolve(memberReferenceExpression, memberReferenceExpression.DotToken.EndLocation);
-        }
-
-        public static ResolveResult ResolveParent(MemberReferenceExpression memberReferenceExpression)
-        {
-            var syntaxTree = memberReferenceExpression.GetParent<SyntaxTree>();
-            var offset = MemberResolver.InitDocument(memberReferenceExpression.DotToken.EndLocation, syntaxTree);
-            var location = MemberResolver.document.GetLocation(offset - 2);
-            syntaxTree.Freeze();
-            var unresolvedFile = syntaxTree.ToTypeSystem();
-            return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, location);
-        }
-
-        public static ResolveResult ResolveExpression(Expression expression)
-        {
-            return MemberResolver.Resolve(expression, expression.StartLocation);
-        }
-
-        public static ResolveResult Resolve(Expression expression, TextLocation location)
-        {
-            var syntaxTree = expression.GetParent<SyntaxTree>();
-            return MemberResolver.ResolveLocation(syntaxTree, location);
-        }
-
-        public static ResolveResult Resolve(AstNode node)
-        {
-            var syntaxTree = node.GetParent<SyntaxTree>();
-            return MemberResolver.ResolveLocation(syntaxTree, node.StartLocation);
-        }
-
-        public static ResolveResult Resolve(AstNode node, TextLocation location)
-        {
-            var syntaxTree = node.GetParent<SyntaxTree>();
-            return MemberResolver.ResolveLocation(syntaxTree, location);
-        }
-
-        private static ResolveResult ResolveLocation(SyntaxTree syntaxTree, TextLocation location)
-        {
-            var offset = MemberResolver.InitDocument(location, syntaxTree);
-            var newLocation = MemberResolver.document.GetLocation(offset);
-            syntaxTree.Freeze();
-            var unresolvedFile = syntaxTree.ToTypeSystem();
-            return ResolveAtLocation.Resolve(compilation, unresolvedFile, syntaxTree, newLocation);
+            return result;
         }
     }
 }

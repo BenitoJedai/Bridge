@@ -3,6 +3,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
+using ICSharpCode.NRefactory;
 
 namespace Bridge.NET 
 {
@@ -103,6 +104,23 @@ namespace Bridge.NET
             {
                 return false;
             }
-        }        
+        }
+
+        protected virtual void FixMethodParameters(MethodDeclaration methodDeclaration)
+        {
+            if (methodDeclaration.Parameters.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var p in methodDeclaration.Parameters)
+            {
+                string newName = Emitter.FIX_ARGUMENT_NAME + p.Name;
+                string oldName = p.Name;
+                p.Name = newName;
+                VariableDeclarationStatement varState = new VariableDeclarationStatement(new SimpleType(p.Type.ToString()), oldName, new CastExpression(new SimpleType(p.Type.ToString()), new IdentifierExpression(newName)));
+                methodDeclaration.Body.InsertChildBefore(methodDeclaration.Body.FirstChild, varState, new Role<VariableDeclarationStatement>("Statement"));
+            }
+        }
     }
 }

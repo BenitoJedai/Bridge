@@ -577,7 +577,7 @@ namespace Bridge.NET
                 }
 
                 needComma = true;
-                this.Write(p.Name);
+                this.Write(p.Name.Replace(Emitter.FIX_ARGUMENT_NAME, ""));
             }
 
             this.WriteCloseParentheses();
@@ -1193,15 +1193,10 @@ namespace Bridge.NET
                         return j;
                     }
 
-                    var resolveResult = MemberResolver.Resolve(j);
-                    if (resolveResult != null && !resolveResult.IsError)
+                    var resolveResult = MemberResolver.ResolveNode(j);
+                    if (resolveResult != null && !resolveResult.IsError && resolveResult.Type.FullName == fullName)
                     {
-                        var typeResult = resolveResult as TypeResolveResult;
-
-                        if (typeResult != null && typeResult.Type.FullName == fullName)
-                        {
-                            return j;
-                        }
+                        return j;
                     }
                 }
             }

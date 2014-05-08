@@ -18,6 +18,7 @@ namespace Bridge.NET
         const string HAS_NEXT = "hasNext";
         const string NEXT = "next";
         const string APPLY_OBJECT = "apply";
+        public const string FIX_ARGUMENT_NAME = "__autofix__";
 
 
         private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };
