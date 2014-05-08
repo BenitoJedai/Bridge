@@ -197,7 +197,7 @@ namespace Bridge.NET
 
         protected virtual bool ResolveOperator(BinaryOperatorExpression binaryOperatorExpression)
         {            
-            var resolveOperator = MemberResolver.ResolveNode(binaryOperatorExpression);
+            var resolveOperator = MemberResolver.ResolveNode(binaryOperatorExpression, this);
             
             if (resolveOperator != null && !resolveOperator.IsError && resolveOperator is OperatorResolveResult)
             {
@@ -216,10 +216,6 @@ namespace Bridge.NET
                         return true;
                     }
                 }
-            }
-            else
-            {
-                this.LogWarning(string.Format("Operator resolving is failed {0}: {1}", binaryOperatorExpression.StartLocation, binaryOperatorExpression.GetText()));
             }
 
             return false;
@@ -305,7 +301,7 @@ namespace Bridge.NET
             var id = identifierExpression.Identifier;
             this.CheckIdentifier(id, identifierExpression);
 
-            var resolveResult = MemberResolver.ResolveNode(identifierExpression);
+            var resolveResult = MemberResolver.ResolveNode(identifierExpression, this);
             var isResolved = resolveResult != null && !resolveResult.IsError;
             var memberResult = resolveResult as MemberResolveResult;
 
@@ -415,12 +411,10 @@ namespace Bridge.NET
 
         public override void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
         {            
-            var resolveResult = Bridge.NET.MemberResolver.ResolveNode(memberReferenceExpression);
+            var resolveResult = Bridge.NET.MemberResolver.ResolveNode(memberReferenceExpression, this);
 
             if (resolveResult == null || resolveResult.IsError)
             {
-                this.LogWarning(string.Format("MemberReferenceExpression resolving is failed {0}: {1}", memberReferenceExpression.StartLocation, memberReferenceExpression.GetText()));
-
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
                 string name = Helpers.GetScriptName(memberReferenceExpression, false);
@@ -435,7 +429,7 @@ namespace Bridge.NET
 
             if (resolveResult is MethodGroupResolveResult)
             {
-                resolveResult = MemberResolver.ResolveNode(memberReferenceExpression.Parent);
+                resolveResult = MemberResolver.ResolveNode(memberReferenceExpression.Parent, this);
             }
 
             MemberResolveResult member = resolveResult as MemberResolveResult;           
@@ -518,7 +512,7 @@ namespace Bridge.NET
                 {
                     this.PushWriter(inline);
                 }
-                else if (member.Member.EntityType == EntityType.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous)
+                else if (member.Member.EntityType == EntityType.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous && !this.Validator.IsObjectLiteral(member.Member.DeclaringTypeDefinition))
                 {
                     if (!this.IsAssignment)
                     {
@@ -606,14 +600,14 @@ namespace Bridge.NET
             MemberReferenceExpression targetMember = invocationExpression.Target as MemberReferenceExpression;
             if (targetMember != null)
             {
-                var member = MemberResolver.ResolveNode(targetMember.Target);
+                var member = MemberResolver.ResolveNode(targetMember.Target, this);
 
                 if (member != null && member.Type.Kind == TypeKind.Delegate)
                 {
                     throw this.CreateException(invocationExpression, "Delegate's methods are not supported. Please use direct delegate invoke.");
                 }
 
-                var targetResolve = MemberResolver.ResolveNode(targetMember);
+                var targetResolve = MemberResolver.ResolveNode(targetMember, this);
 
                 if (targetResolve != null && !targetResolve.IsError)
                 {
@@ -711,7 +705,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    var resolveResult = MemberResolver.ResolveNode(targetMember);
+                    var resolveResult = MemberResolver.ResolveNode(targetMember, this);
                     if (resolveResult != null && !resolveResult.IsError && resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
@@ -908,7 +902,7 @@ namespace Bridge.NET
 
                 if (hasInitializer)
                 {
-                    this.WriteObjectInitializer(objectCreateExpression.Initializer.Elements);
+                    this.WriteObjectInitializer(objectCreateExpression.Initializer.Elements, this.ChangeCase);
 
                     this.WriteSpace();
                     this.WriteCloseBrace();
@@ -963,7 +957,7 @@ namespace Bridge.NET
                         if (item is NamedExpression)
                         {
                             var namedExpression = (NamedExpression)item;
-                            var resolveResult = MemberResolver.ResolveNode(item);
+                            var resolveResult = MemberResolver.ResolveNode(item, this);
                             var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedExpression.Name);
 
                             if (resolveResult != null && !resolveResult.IsError && resolveResult is MemberResolveResult)
@@ -981,7 +975,7 @@ namespace Bridge.NET
                         else if (item is NamedArgumentExpression)
                         {
                             var namedArgumentExpression = (NamedArgumentExpression)item;
-                            var resolveResult = MemberResolver.ResolveNode(item);
+                            var resolveResult = MemberResolver.ResolveNode(item, this);
                             var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedArgumentExpression.Name);
 
                             if (resolveResult != null && !resolveResult.IsError && resolveResult is MemberResolveResult)
@@ -1393,7 +1387,7 @@ namespace Bridge.NET
 
             if (anonymousTypeCreateExpression.Initializers.Count > 0)
             {
-                this.WriteObjectInitializer(anonymousTypeCreateExpression.Initializers);
+                this.WriteObjectInitializer(anonymousTypeCreateExpression.Initializers, false);
 
                 this.WriteSpace();
                 this.WriteCloseBrace();

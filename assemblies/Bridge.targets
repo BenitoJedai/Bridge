@@ -3,6 +3,8 @@
 
   <PropertyGroup>
     <NoStdLib>True</NoStdLib>
+	<AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <AdditionalExplicitAssemblyReferences />
   </PropertyGroup>
 
   <ItemGroup>

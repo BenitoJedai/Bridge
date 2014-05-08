@@ -58,13 +58,17 @@ namespace Bridge.NET
         public virtual bool IsIgnoreType(ICustomAttributeProvider type) 
         {
             string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
-            return type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
+            string objectLiteralAttr = Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute";
+
+            return this.HasAttribute(type.CustomAttributes, ignoreAttr) || this.HasAttribute(type.CustomAttributes, objectLiteralAttr);
         }
 
-        internal bool IsIgnoreType(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition typeDefinition)
+        protected internal virtual bool IsIgnoreType(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition typeDefinition)
         {
             string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
-            return typeDefinition.Attributes.Any(attr => attr.Constructor.DeclaringType.FullName == ignoreAttr);
+            string objectLiteralAttr = Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute";
+
+            return typeDefinition.Attributes.Any(attr => (attr.Constructor.DeclaringType.FullName == ignoreAttr) || (attr.Constructor.DeclaringType.FullName == objectLiteralAttr));
         }
 
         public virtual int EnumEmitMode(DefaultResolvedTypeDefinition type)
@@ -99,10 +103,33 @@ namespace Bridge.NET
             return this.EnumEmitMode(type) == 3;
         }
 
-        public virtual string GetAttributeValue(IEnumerable<CustomAttribute> attributes, string name)
+        public virtual bool HasAttribute(IEnumerable<CustomAttribute> attributes, string name)
+        {
+            return this.GetAttribute(attributes, name) != null;
+        }
+
+        public virtual bool HasAttribute(IEnumerable<ICSharpCode.NRefactory.TypeSystem.IAttribute> attributes, string name)
+        {
+            return this.GetAttribute(attributes, name) != null;
+        }
+
+        public virtual CustomAttribute GetAttribute(IEnumerable<CustomAttribute> attributes, string name)
         {
             CustomAttribute a = attributes
                 .FirstOrDefault(attr => attr.AttributeType.FullName == name);
+            return a;
+        }
+
+        public virtual ICSharpCode.NRefactory.TypeSystem.IAttribute GetAttribute(IEnumerable<ICSharpCode.NRefactory.TypeSystem.IAttribute> attributes, string name)
+        {
+            ICSharpCode.NRefactory.TypeSystem.IAttribute a = attributes
+                .FirstOrDefault(attr => attr.AttributeType.FullName == name);
+            return a;
+        }
+
+        public virtual string GetAttributeValue(IEnumerable<CustomAttribute> attributes, string name)
+        {
+            CustomAttribute a = this.GetAttribute(attributes, name);
 
             if (a != null)
             {
@@ -122,14 +149,53 @@ namespace Bridge.NET
             return this.GetAttributeValue(property.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
         }
 
+        public virtual bool IsObjectLiteral(TypeDefinition type)
+        {
+            return this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute");
+        }
+
+        public virtual bool IsObjectLiteral(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition type)
+        {
+            return this.HasAttribute(type.Attributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute");
+        }
+
         public virtual string GetCustomTypeName(TypeDefinition type) 
         {
-            return this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NameAttribute");
+            var name = this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NameAttribute");
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                return name;
+            }
+
+            if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".IgnoreNamespaceAttribute"))
+            {
+                return type.Name;
+            }
+
+            if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute"))
+            {
+                return "Object";
+            }
+
+            return null;
         }
 
         public virtual string GetCustomConstructor(TypeDefinition type) 
         {
-            return this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ConstructorAttribute");
+            string ctor = this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ConstructorAttribute");
+
+            if (!string.IsNullOrEmpty(ctor))
+            {
+                return ctor;
+            }
+
+            if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute"))
+            {
+                return "{ }";
+            }
+
+            return null;
         }
 
         public virtual void CheckConstructors(TypeDefinition type) 

@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\ILog.cs" />
     <Compile Include="Utils\MemberResolver.cs" />
     <Compile Include="Emitter\Emitter.Visitor.cs" />
     <Compile Include="Emitter\Emitter.Properties.cs" />

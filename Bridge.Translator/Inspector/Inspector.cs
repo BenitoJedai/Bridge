@@ -7,7 +7,7 @@ using ICSharpCode.NRefactory;
 
 namespace Bridge.NET 
 {
-    public partial class Inspector : Visitor 
+    public partial class Inspector : Visitor
     {
         public Inspector() 
         {
@@ -26,6 +26,12 @@ namespace Bridge.NET
                     {
                         return true;
                     }
+
+                    /*var resolveResult = MemberResolver.ResolveNode(j, null);
+                    if (resolveResult != null && !resolveResult.IsError && resolveResult.Type.FullName == (name + "Attribute"))
+                    {
+                        return true;
+                    }*/
                 }
             }
 
@@ -35,7 +41,8 @@ namespace Bridge.NET
         protected virtual bool HasIgnore(EntityDeclaration declaration) 
         {
 
-            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Ignore");
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Ignore") ||
+                   this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".ObjectLiteral");
         }
 
         protected virtual bool HasInline(EntityDeclaration declaration) 

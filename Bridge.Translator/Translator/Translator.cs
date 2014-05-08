@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using ICSharpCode.NRefactory.TypeSystem;
+using Mono.Cecil;
 using System.IO;
 
 namespace Bridge.NET
@@ -22,8 +23,9 @@ namespace Bridge.NET
                 this.BuildAssembly();
             }
 
+            var extnetAssembly = AssemblyDefinition.ReadAssembly(this.AssemblyLocation);            
             var references = this.InspectReferences();
-            references.Add(AssemblyDefinition.ReadAssembly(this.AssemblyLocation));
+            references.Add(extnetAssembly);
 
             var emitter = this.CreateEmitter();
             emitter.ChangeCase = this.ChangeCase;

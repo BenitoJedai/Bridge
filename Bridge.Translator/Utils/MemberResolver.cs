@@ -57,7 +57,7 @@ namespace Bridge.NET
             }
         }
 
-        public static ResolveResult ResolveNode(AstNode node)
+        public static ResolveResult ResolveNode(AstNode node, ILog log)
         {
             var syntaxTree = node.GetParent<SyntaxTree>();
             MemberResolver.InitDocument(syntaxTree);
@@ -66,7 +66,12 @@ namespace Bridge.NET
 
             if (result is MethodGroupResolveResult && node.Parent != null)
             {
-                result = MemberResolver.ResolveNode(node.Parent);
+                result = MemberResolver.ResolveNode(node.Parent, log);
+            }
+
+            if ((result == null || result.IsError) && log != null)
+            {
+                log.LogWarning(string.Format("Node resolving is failed {0}: {1}", node.StartLocation, node.GetText()));
             }
 
             return result;

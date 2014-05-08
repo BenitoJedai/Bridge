@@ -15,7 +15,7 @@ using ICSharpCode.NRefactory.Semantics;
 
 namespace Bridge.NET
 {
-    public partial class Emitter : Visitor
+    public partial class Emitter : Visitor, ILog
     {
         public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<TypeInfo> types, Validator validator)
         {
@@ -894,7 +894,7 @@ namespace Bridge.NET
             this.Write("function ");
         }
 
-        protected virtual void WriteObjectInitializer(IEnumerable<Expression> expressions)
+        protected virtual void WriteObjectInitializer(IEnumerable<Expression> expressions, bool changeCase)
         {
             bool needComma = false;
 
@@ -910,6 +910,10 @@ namespace Bridge.NET
 
                 needComma = true;
                 string name = namedExression != null ? namedExression.Name : namedArgumentExpression.Name;
+                if (changeCase)
+                {
+                    name = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name);
+                }
                 Expression expression = namedExression != null ? namedExression.Expression : namedArgumentExpression.Expression;
 
                 this.Write(name, ": ");
@@ -1193,7 +1197,7 @@ namespace Bridge.NET
                         return j;
                     }
 
-                    var resolveResult = MemberResolver.ResolveNode(j);
+                    var resolveResult = MemberResolver.ResolveNode(j, this);
                     if (resolveResult != null && !resolveResult.IsError && resolveResult.Type.FullName == fullName)
                     {
                         return j;
@@ -1790,22 +1794,22 @@ namespace Bridge.NET
             return false;
         }
 
-        protected virtual void LogWarning(string message)
+        public virtual void LogWarning(string message)
         {
             this.LogMessage("warning", message);
         }
 
-        protected virtual void LogError(string message)
+        public virtual void LogError(string message)
         {
             this.LogMessage("error", message);
         }
 
-        protected virtual void LogMessage(string message)
+        public virtual void LogMessage(string message)
         {
             this.LogMessage("message", message);
         }
 
-        protected virtual void LogMessage(string level, string message)
+        public virtual void LogMessage(string level, string message)
         {
             if (this.Log != null)
             {
