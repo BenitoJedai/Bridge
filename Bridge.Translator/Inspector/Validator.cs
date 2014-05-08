@@ -47,7 +47,7 @@ namespace Bridge.NET
 
             if (type.IsValueType && !type.IsEnum)
             {
-                Exception.Throw("Struct types not supported, use classes instead: {0}", type);
+                //Exception.Throw("Struct types not supported, use classes instead: {0}", type);
             }
 
             this.CheckConstructors(type);

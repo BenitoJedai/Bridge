@@ -19,7 +19,7 @@ namespace TestProject
         
         public static void Start()
         {
-            Console.Log(Bridge.DateTime.Today.DayOfYear);            
+            //Console.Log(Bridge.DateTime.Today.DayOfYear);            
         }
     }   
 }

@@ -1,6 +1,5 @@
 ﻿using Bridge.CLR.Html;
 using Bridge.CLR;
-using System;
 
 namespace CompanyX
 {
@@ -12,7 +11,24 @@ namespace CompanyX
         {
             var person = new Person { Name = Name };
 
+            // after compile, see body of doSomething function
+            // The person.Name call should compile to person.getName()
+
+            // doSomething: function (person) {
+            //     console.log(person.name);
+            //     // should be...
+            //     // console.log(person.getName());
+            // }
+
             Person.DoSomething(person);
+
+
+            // Initalize int array fails
+            var items = new int[6] { 1, 1, 2, 3, 5, 8 };
+
+            Console.Log(items[5]);
+
+            Console.Log(DateTime.Today.DayOfYear);
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Bridge.CLR;
-using Bridge.CLR.Html;
-using System;
 
-namespace Bridge
+namespace System
 {
-    public class DateTime
+    [Name("Bridge.DateTime")]
+    public struct DateTime
     {
         //public DateTime()
         //{

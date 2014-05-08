@@ -2,8 +2,9 @@
 using Bridge.CLR.Html;
 using System;
 
-namespace Bridge
+namespace System
 {
+    [Name("Bridge.DayOfWeek")]
     public enum DayOfWeek
     {
         /// <summary>

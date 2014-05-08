@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyX", "CompanyX\Compan
 		{DE78B8B7-C0F5-415B-A70B-02194433F450} = {DE78B8B7-C0F5-415B-A70B-02194433F450}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateTime", "DateTime\DateTime.csproj", "{4107017F-22D4-4572-A19A-C530AA4F9294}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.DateTime", "Bridge.DateTime\Bridge.DateTime.csproj", "{4107017F-22D4-4572-A19A-C530AA4F9294}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

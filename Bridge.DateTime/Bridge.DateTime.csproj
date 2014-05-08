@@ -7,8 +7,8 @@
     <ProjectGuid>{4107017F-22D4-4572-A19A-C530AA4F9294}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DateTime</RootNamespace>
-    <AssemblyName>DateTime</AssemblyName>
+    <RootNamespace>Bridge.DateTime</RootNamespace>
+    <AssemblyName>Bridge.DateTime</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,6 +45,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\assemblies\Bridge.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)Build\DateTime.js" "$(SolutionDir)CompanyX\Build\DateTime.js" /y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -471,7 +471,7 @@ namespace Bridge.NET
                 list.Add(Helpers.GetScriptFullName(i));
             }
 
-            if (list.Count == 1 && baseType.FullName == "System.Object")
+            if (list.Count == 1 && (baseType.FullName == "System.Object" || baseType.FullName == "System.ValueType"))
             {
                 return "";
             }
