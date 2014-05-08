@@ -10,63 +10,72 @@ using ICSharpCode.NRefactory;
 
 namespace Bridge.NET
 {
-    public static class MemberResolver
+    public class MemberResolver
     {
-        private static string lastFileName;
-        private static string editorText;
-        private static ReadOnlyDocument document;
-        private static IList<string> sourceFiles;
-        private static ICompilation compilation;
-        private static CSharpAstResolver resolver;
+        private string lastFileName;
+        private IList<string> sourceFiles;
+        private ICompilation compilation;
+        private CSharpAstResolver resolver;
+        private IProjectContent project;
 
-        private static IProjectContent project;
-        public static void InitResolver(IList<string> sourceFiles, IEnumerable<IAssemblyReference> assemblies)
-        {            
-            MemberResolver.project = null;
-            MemberResolver.lastFileName = null;
-            MemberResolver.sourceFiles = sourceFiles;
-
-            MemberResolver.project = new CSharpProjectContent();
-            MemberResolver.project = MemberResolver.project.AddAssemblyReferences(assemblies);
-            MemberResolver.AddOrUpdateFiles();
+        public bool CanFreeze
+        {
+            get;
+            set;
         }
 
-        private static void AddOrUpdateFiles()
+
+        public MemberResolver(IList<string> sourceFiles, IEnumerable<IAssemblyReference> assemblies)
+        {            
+            this.project = null;
+            this.lastFileName = null;
+            this.sourceFiles = sourceFiles;
+
+            this.project = new CSharpProjectContent();
+            this.project = this.project.AddAssemblyReferences(assemblies);
+            this.AddOrUpdateFiles();
+        }
+
+        private void AddOrUpdateFiles()
         {
-            var unresolvedFiles = new IUnresolvedFile[MemberResolver.sourceFiles.Count];
+            var unresolvedFiles = new IUnresolvedFile[this.sourceFiles.Count];
             Parallel.For(0, unresolvedFiles.Length, i =>
             {
-                var file = sourceFiles[i];
+                var file = this.sourceFiles[i];
                 var syntaxTree = new CSharpParser().Parse(System.IO.File.ReadAllText(file), file);
-                syntaxTree.Freeze();
+                if (this.CanFreeze)
+                {
+                    syntaxTree.Freeze();
+                }
                 unresolvedFiles[i] = syntaxTree.ToTypeSystem();
             });
-            MemberResolver.project = MemberResolver.project.AddOrUpdateFiles(unresolvedFiles);
-            MemberResolver.compilation = MemberResolver.project.CreateCompilation();
+            this.project = this.project.AddOrUpdateFiles(unresolvedFiles);
+            this.compilation = this.project.CreateCompilation();
         }
 
-        private static void InitDocument(SyntaxTree syntaxTree)
+        private void InitResolver(SyntaxTree syntaxTree)
         {
-            if (MemberResolver.lastFileName != syntaxTree.FileName)
+            if (this.lastFileName != syntaxTree.FileName)
             {
-                MemberResolver.lastFileName = syntaxTree.FileName;
-                MemberResolver.editorText = System.IO.File.ReadAllText(MemberResolver.lastFileName);
-                MemberResolver.document = new ReadOnlyDocument(MemberResolver.editorText);
+                this.lastFileName = syntaxTree.FileName;                
                 var unresolvedFile = syntaxTree.ToTypeSystem();
-                MemberResolver.resolver = new CSharpAstResolver(compilation, syntaxTree, unresolvedFile);
+                this.resolver = new CSharpAstResolver(compilation, syntaxTree, unresolvedFile);
             }
         }
 
-        public static ResolveResult ResolveNode(AstNode node, ILog log)
+        public ResolveResult ResolveNode(AstNode node, ILog log)
         {
             var syntaxTree = node.GetParent<SyntaxTree>();
-            MemberResolver.InitDocument(syntaxTree);
-            syntaxTree.Freeze();
-            var result = MemberResolver.resolver.Resolve(node);
+            this.InitResolver(syntaxTree);
+            if (this.CanFreeze)
+            {
+                syntaxTree.Freeze();
+            }
+            var result = this.resolver.Resolve(node);
 
             if (result is MethodGroupResolveResult && node.Parent != null)
             {
-                result = MemberResolver.ResolveNode(node.Parent, log);
+                return this.ResolveNode(node.Parent, log);
             }
 
             if ((result == null || result.IsError) && log != null)

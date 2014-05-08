@@ -133,6 +133,8 @@ namespace Bridge.NET
                 throw this.CreateException(constructorDeclaration, "The only one static constructor is allowed");
             }
 
+            this.FixMethodParameters(constructorDeclaration.Parameters, constructorDeclaration.Body);
+
             if (isStatic)
             {
                 this.CurrentType.StaticCtor = constructorDeclaration;
@@ -150,7 +152,7 @@ namespace Bridge.NET
                 return;
             }
 
-            this.FixMethodParameters(methodDeclaration);
+            this.FixMethodParameters(methodDeclaration.Parameters, methodDeclaration.Body);
             
             bool isStatic = methodDeclaration.HasModifier(Modifiers.Static);
 

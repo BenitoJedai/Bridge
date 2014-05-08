@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Bridge.NET
@@ -23,11 +24,16 @@ namespace Bridge.NET
                 this.BuildAssembly();
             }
 
-            var extnetAssembly = AssemblyDefinition.ReadAssembly(this.AssemblyLocation);            
-            var references = this.InspectReferences();
-            references.Add(extnetAssembly);
+            var references = this.InspectReferences();            
 
+            var resolver = new MemberResolver(this.SourceFiles, Emitter.ToAssemblyReferences(references));
+
+            this.InspectTypes(resolver);
+            
+
+            resolver.CanFreeze = true;
             var emitter = this.CreateEmitter();
+            emitter.Resolver = resolver;
             emitter.ChangeCase = this.ChangeCase;
             emitter.References = references;
             emitter.SourceFiles = this.SourceFiles;

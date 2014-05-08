@@ -197,9 +197,9 @@ namespace Bridge.NET
 
         protected virtual bool ResolveOperator(BinaryOperatorExpression binaryOperatorExpression)
         {            
-            var resolveOperator = MemberResolver.ResolveNode(binaryOperatorExpression, this);
+            var resolveOperator = this.Resolver.ResolveNode(binaryOperatorExpression, this);
             
-            if (resolveOperator != null && !resolveOperator.IsError && resolveOperator is OperatorResolveResult)
+            if (resolveOperator != null && resolveOperator is OperatorResolveResult)
             {
                 var orr = (OperatorResolveResult)resolveOperator;
 
@@ -301,7 +301,7 @@ namespace Bridge.NET
             var id = identifierExpression.Identifier;
             this.CheckIdentifier(id, identifierExpression);
 
-            var resolveResult = MemberResolver.ResolveNode(identifierExpression, this);
+            var resolveResult = this.Resolver.ResolveNode(identifierExpression, this);
             var isResolved = resolveResult != null && !resolveResult.IsError;
             var memberResult = resolveResult as MemberResolveResult;
 
@@ -410,10 +410,10 @@ namespace Bridge.NET
         }        
 
         public override void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
-        {            
-            var resolveResult = Bridge.NET.MemberResolver.ResolveNode(memberReferenceExpression, this);
+        {
+            var resolveResult = this.Resolver.ResolveNode(memberReferenceExpression, this);
 
-            if (resolveResult == null || resolveResult.IsError)
+            if (resolveResult == null && !(resolveResult is ErrorResolveResult))
             {
                 memberReferenceExpression.Target.AcceptVisitor(this);
                 this.WriteDot();
@@ -429,7 +429,7 @@ namespace Bridge.NET
 
             if (resolveResult is MethodGroupResolveResult)
             {
-                resolveResult = MemberResolver.ResolveNode(memberReferenceExpression.Parent, this);
+                resolveResult = this.Resolver.ResolveNode(memberReferenceExpression.Parent, this);
             }
 
             MemberResolveResult member = resolveResult as MemberResolveResult;           
@@ -600,16 +600,16 @@ namespace Bridge.NET
             MemberReferenceExpression targetMember = invocationExpression.Target as MemberReferenceExpression;
             if (targetMember != null)
             {
-                var member = MemberResolver.ResolveNode(targetMember.Target, this);
+                var member = this.Resolver.ResolveNode(targetMember.Target, this);
 
                 if (member != null && member.Type.Kind == TypeKind.Delegate)
                 {
                     throw this.CreateException(invocationExpression, "Delegate's methods are not supported. Please use direct delegate invoke.");
                 }
 
-                var targetResolve = MemberResolver.ResolveNode(targetMember, this);
+                var targetResolve = this.Resolver.ResolveNode(targetMember, this);
 
-                if (targetResolve != null && !targetResolve.IsError)
+                if (targetResolve != null)
                 {
                     var csharpInvocation = targetResolve as CSharpInvocationResolveResult;
                     InvocationResolveResult invocationResult;
@@ -705,8 +705,8 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    var resolveResult = MemberResolver.ResolveNode(targetMember, this);
-                    if (resolveResult != null && !resolveResult.IsError && resolveResult is InvocationResolveResult)
+                    var resolveResult = this.Resolver.ResolveNode(targetMember, this);
+                    if (resolveResult != null && resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
                         this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".", this.GetEntityName(invocationResult.Member));
@@ -957,10 +957,10 @@ namespace Bridge.NET
                         if (item is NamedExpression)
                         {
                             var namedExpression = (NamedExpression)item;
-                            var resolveResult = MemberResolver.ResolveNode(item, this);
+                            var resolveResult = this.Resolver.ResolveNode(item, this);
                             var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedExpression.Name);
 
-                            if (resolveResult != null && !resolveResult.IsError && resolveResult is MemberResolveResult)
+                            if (resolveResult != null && resolveResult is MemberResolveResult)
                             {
                                 var isMember = ((MemberResolveResult)resolveResult).Member.EntityType == EntityType.Property;
                                 this.Write((isMember ? "set" : "") + (isMember ? namedExpression.Name : lowerCaseName));
@@ -975,10 +975,10 @@ namespace Bridge.NET
                         else if (item is NamedArgumentExpression)
                         {
                             var namedArgumentExpression = (NamedArgumentExpression)item;
-                            var resolveResult = MemberResolver.ResolveNode(item, this);
+                            var resolveResult = this.Resolver.ResolveNode(item, this);
                             var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedArgumentExpression.Name);
 
-                            if (resolveResult != null && !resolveResult.IsError && resolveResult is MemberResolveResult)
+                            if (resolveResult != null && resolveResult is MemberResolveResult)
                             {
                                 var isMember = ((MemberResolveResult)resolveResult).Member.EntityType == EntityType.Property;
                                 this.Write((isMember ? "set" : "") + (isMember ? namedArgumentExpression.Name : lowerCaseName));

@@ -168,22 +168,35 @@ namespace Bridge.NET
                     return this.list;
                 }
                 
-                this.list = new List<IAssemblyReference>();
-
-                if (this.References == null)
-                {
-                    return this.list;
-                }
-
-                foreach (var reference in this.References)
-                {
-                    var loader = new CecilLoader();
-                    loader.IncludeInternalMembers = true;
-                    this.list.Add(loader.LoadAssembly(reference));
-                }
+                this.list = Emitter.ToAssemblyReferences(this.References);
 
                 return this.list;
             }
+        }
+
+        internal static List<IAssemblyReference> ToAssemblyReferences(IEnumerable<AssemblyDefinition> references)
+        {
+            var list = new List<IAssemblyReference>();
+
+            if (references == null)
+            {
+                return list;
+            }
+
+            foreach (var reference in references)
+            {
+                var loader = new CecilLoader();
+                loader.IncludeInternalMembers = true;
+                list.Add(loader.LoadAssembly(reference));
+            }
+
+            return list;
+        }
+
+        public MemberResolver Resolver
+        {
+            get;
+            set;
         }
     }
 }

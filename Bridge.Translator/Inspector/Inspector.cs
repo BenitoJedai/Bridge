@@ -27,11 +27,11 @@ namespace Bridge.NET
                         return true;
                     }
 
-                    /*var resolveResult = MemberResolver.ResolveNode(j, null);
-                    if (resolveResult != null && !resolveResult.IsError && resolveResult.Type.FullName == (name + "Attribute"))
+                    var resolveResult = this.Resolver.ResolveNode(j, null);
+                    if (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (name + "Attribute"))
                     {
                         return true;
-                    }*/
+                    }
                 }
             }
 
@@ -113,20 +113,25 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void FixMethodParameters(MethodDeclaration methodDeclaration)
+        protected virtual void FixMethodParameters(AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
         {
-            if (methodDeclaration.Parameters.Count == 0)
+            if (parameters.Count == 0)
             {
                 return;
             }
 
-            foreach (var p in methodDeclaration.Parameters)
+            foreach (var p in parameters)
             {
                 string newName = Emitter.FIX_ARGUMENT_NAME + p.Name;
                 string oldName = p.Name;
+
+
+                VariableDeclarationStatement varState = new VariableDeclarationStatement(p.Type.Clone(), oldName, new CastExpression(p.Type.Clone(), new IdentifierExpression(newName)));
+
                 p.Name = newName;
-                VariableDeclarationStatement varState = new VariableDeclarationStatement(new SimpleType(p.Type.ToString()), oldName, new CastExpression(new SimpleType(p.Type.ToString()), new IdentifierExpression(newName)));
-                methodDeclaration.Body.InsertChildBefore(methodDeclaration.Body.FirstChild, varState, new Role<VariableDeclarationStatement>("Statement"));
+                
+                body.InsertChildBefore(body.FirstChild, varState, new Role<VariableDeclarationStatement>("Statement"));
+                
             }
         }
     }

@@ -36,8 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Build\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  </ItemGroup>  
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">

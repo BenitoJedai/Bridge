@@ -129,7 +129,6 @@ namespace Bridge.NET
         public virtual void Emit()
         {
             this.Writers = new Stack<Tuple<string, StringBuilder, bool>>();
-            Bridge.NET.MemberResolver.InitResolver(this.SourceFiles, this.AssemblyReferences);
             
             foreach (var type in this.Types)
             {
@@ -945,6 +944,11 @@ namespace Bridge.NET
                 return true;
             }
 
+            if (parent is Accessor && parent.Parent is PropertyDeclaration)
+            {
+                return true;
+            }
+
             var loop = parent as DoWhileStatement;
 
             if (loop != null)
@@ -1197,8 +1201,8 @@ namespace Bridge.NET
                         return j;
                     }
 
-                    var resolveResult = MemberResolver.ResolveNode(j, this);
-                    if (resolveResult != null && !resolveResult.IsError && resolveResult.Type.FullName == fullName)
+                    var resolveResult = this.Resolver.ResolveNode(j, this);
+                    if (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == fullName)
                     {
                         return j;
                     }
@@ -1616,7 +1620,7 @@ namespace Bridge.NET
                     this.EndBlock();
                 }
 
-                this.Comma = true;
+                this.Comma = true;                
             }
         }
 

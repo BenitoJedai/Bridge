@@ -31,5 +31,11 @@ namespace Bridge.NET
             get; 
             protected set; 
         }
+
+        public MemberResolver Resolver
+        {
+            get;
+            set;
+        }
     }
 }

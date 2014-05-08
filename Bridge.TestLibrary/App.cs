@@ -5,21 +5,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace TestProject
-{
-    [Bridge.CLR.ObjectLiteral]
-    public class Person
-    {
-        public string Name { get; set; }
-        public string Field;
-    }
-
-
+{ 
     public class App
     {
-        
         public static void Start()
         {
-            //Console.Log(Bridge.DateTime.Today.DayOfYear);            
+            //Log(System.DateTime.Today.Day);
+        }
+
+        public static void Log(int obj)
+        {
+
         }
     }   
 }

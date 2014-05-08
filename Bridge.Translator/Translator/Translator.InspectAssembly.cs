@@ -2,12 +2,13 @@
 using System.IO;
 using Mono.Cecil;
 using ICSharpCode.NRefactory.CSharp;
+using System.Linq;
 
 namespace Bridge.NET
 {
     public partial class Translator
-    {     
-        protected virtual AssemblyDefinition LoadAssembly(string location, HashSet<AssemblyDefinition> references)
+    {
+        protected virtual AssemblyDefinition LoadAssembly(string location, List<AssemblyDefinition> references)
         {
             var assemblyDefinition = AssemblyDefinition.ReadAssembly(location);
             string name;
@@ -25,8 +26,8 @@ namespace Bridge.NET
 
                 path = Path.Combine(Path.GetDirectoryName(location), name) + ".dll";
                 reference = this.LoadAssembly(path, references);
-
-                if (!references.Contains(reference))
+                
+                if (!references.Any(a => a.Name.Name == reference.Name.Name))
                 {
                     references.Add(reference);
                 }
@@ -49,9 +50,9 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual HashSet<AssemblyDefinition> InspectReferences()
+        protected virtual List<AssemblyDefinition> InspectReferences()
         {
-            var references = new HashSet<AssemblyDefinition>();
+            var references = new List<AssemblyDefinition>();            
             var assembly = this.LoadAssembly(this.AssemblyLocation, references);
             this.TypeDefinitions = new Dictionary<string, TypeDefinition>();
 
@@ -67,18 +68,28 @@ namespace Bridge.NET
 
             this.Validator.CheckDuplicateNames(this.TypeDefinitions);
 
-            Inspector inspector = this.CreateInspector();
             var prefix = Path.GetDirectoryName(this.Location);
 
             for (int i = 0; i < this.SourceFiles.Count; i++)
             {
                 this.SourceFiles[i] = Path.Combine(prefix, this.SourceFiles[i]);
+            }
+
+            return references;
+        }
+
+        protected virtual void InspectTypes(MemberResolver resolver)
+        {
+            
+            Inspector inspector = this.CreateInspector();
+            inspector.Resolver = resolver;
+
+            for (int i = 0; i < this.SourceFiles.Count; i++)
+            {
                 inspector.VisitSyntaxTree(this.GetSyntaxTree(this.SourceFiles[i]));
             }
 
             this.Types = inspector.Types;
-
-            return references;
         }
 
         protected virtual Inspector CreateInspector()

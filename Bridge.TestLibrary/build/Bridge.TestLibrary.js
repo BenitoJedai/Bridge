@@ -1,7 +1,9 @@
 Bridge.Class.extend('TestProject.App', {
     $statics: {
+        log: function (obj) {
+        },
         start: function () {
-            /* Console.Log(Bridge.DateTime.Today.DayOfYear);             */
+            TestProject.App.log(Bridge.DateTime.getToday().getDay());
         }
     }
 });
