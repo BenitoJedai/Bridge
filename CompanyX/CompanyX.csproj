@@ -52,4 +52,7 @@
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\assemblies\Bridge.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(SolutionDir)Bridge.DateTime\Build\Bridge.DateTime.js" "$(ProjectDir)Build\DateTime.js" /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
