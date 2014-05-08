@@ -115,10 +115,10 @@ namespace Bridge
         }
 
         /// <summary>
-        /// 
+        /// Returns a new DateTime that adds the specified number of years to the value of this instance.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">A number of years. The value parameter can be negative or positive. </param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of years represented by value.</returns>
         public DateTime AddYears(int value)
         {
             this.DateData.SetFullYear(this.DateData.GetFullYear() + value);
@@ -126,10 +126,10 @@ namespace Bridge
         }
 
         /// <summary>
-        /// 
+        /// Returns a new DateTime that adds the specified number of months to the value of this instance.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">A number of months. The months parameter can be negative or positive. </param>
+        /// <returns>An object whose value is the sum of the date and time represented by this instance and months.</returns>
         public DateTime AddMonths(int value)
         {
             this.DateData.SetMonth(this.DateData.GetMonth() + value);
@@ -238,11 +238,11 @@ namespace Bridge
         /// <summary>
         /// The day of the year, expressed as a value between 1 and 366.
         /// </summary>
-        public double DayOfYear
+        public int DayOfYear
         {
             get
             {
-                return Math.Floor((this.Date.DateData - new Date(new Date().GetFullYear(), 0, 0, 0, 0, 0, 0)) / 864e5);
+                return (int)Math.Floor((this.Date.DateData - new Date(new Date().GetFullYear(), 0, 0, 0, 0, 0, 0)) / 864e5);
             }
         }
 
@@ -335,8 +335,7 @@ namespace Bridge
         /// <returns>The number of days in month for the specified year. For example, if month equals 2 for February, the return value is 28 or 29 depending upon whether year is a leap year.</returns>
         public static int DaysInMonth(int year, int month)
         {
-            //return new int [12] { 31, (DateTime.IsLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }[month - 1];
-            return 31;
+            return new int[12] { 31, (DateTime.IsLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }[month - 1];
         }
 
         /// <summary>
