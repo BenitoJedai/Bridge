@@ -1,7 +1,7 @@
 ﻿namespace System
 {
     [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("DateTime")]
+    [Bridge.CLR.Name("Bridge.DateTime")]
     public struct DateTime
     {
         public static readonly DateTime MaxValue;
