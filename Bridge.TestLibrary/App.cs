@@ -5,17 +5,26 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace TestProject
-{ 
-    public class App
+{
+    [Namespace(false)]
+    public class Person
     {
+    }
+
+    [Namespace("Sales")]
+    public class Customer
+    {
+    }
+
+    public class App
+    {       
         public static void Start()
         {
-            var d1 = DateTime.Now;
+            var p = new Person();
+            Console.Log((Person)p);
 
-            var d2 = DateTime.Now.ClearTime();
-
-            Console.Log("DateTime", d1.Millisecond);
-            Console.Log("ClearTime", d2.Millisecond);
+            var c = new Customer();
+            Console.Log((Customer)c);
         }
     }   
 }

@@ -73,7 +73,7 @@ namespace Bridge.Builder
                     case "-case":
                     case "-c":
                         changeCase = false;
-                        break;
+                        break;                   
                     case "-nocore":
                         extractCore = false;
                         break;

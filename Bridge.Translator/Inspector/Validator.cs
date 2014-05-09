@@ -168,9 +168,22 @@ namespace Bridge.NET
                 return name;
             }
 
-            if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".IgnoreNamespaceAttribute"))
+            var nsAtrr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NamespaceAttribute");
+            if (nsAtrr != null && nsAtrr.ConstructorArguments.Count > 0)
             {
-                return type.Name;
+                var arg = nsAtrr.ConstructorArguments[0];
+
+                if (arg.Value is bool && !((bool)arg.Value))
+                {
+                    return type.Name;
+                }
+                
+                if (arg.Value is string) 
+                {
+                    string ns = arg.Value.ToString();
+
+                    return (!string.IsNullOrWhiteSpace(ns) ? (ns + ".") : "") + type.Name;
+                }
             }
 
             if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute"))

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.NET", "Bridge.Translator\Bridge.NET.csproj", "{44124331-C60A-4071-B387-4B8E71324B10}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DE78B8B7-C0F5-415B-A70B-02194433F450} = {DE78B8B7-C0F5-415B-A70B-02194433F450}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.CLR", "Bridge.CLR\Bridge.CLR.csproj", "{DE78B8B7-C0F5-415B-A70B-02194433F450}"
 EndProject

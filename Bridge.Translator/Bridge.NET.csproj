@@ -100,7 +100,17 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)*.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetDir)AjaxMin.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Ext.Net.Utilities.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)ICSharpCode.NRefactory.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)ICSharpCode.NRefactory.CSharp.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)ICSharpCode.NRefactory.Xml.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Mono.Cecil.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Mono.Cecil.Mdb.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Mono.Cecil.Pdb.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Mono.Cecil.Rocks.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Bridge.Translator.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

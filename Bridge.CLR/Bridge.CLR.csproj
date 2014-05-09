@@ -45,7 +45,7 @@
     <Compile Include="Attributes\ConstructorAttribute.cs" />
     <Compile Include="Attributes\ObjectLiteralAttribute.cs" />
     <Compile Include="Attributes\InlineConstAttribute.cs" />
-    <Compile Include="Attributes\IgnoreNamespaceAttribute.cs" />
+    <Compile Include="Attributes\NamespaceAttribute.cs" />
     <Compile Include="Attributes\NameAttribute.cs" />
     <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="Attributes\ScriptAttribute.cs" />
@@ -207,7 +207,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)*.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)assemblies"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
