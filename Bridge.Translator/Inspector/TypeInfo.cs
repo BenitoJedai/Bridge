@@ -20,6 +20,12 @@ namespace Bridge.NET
             this.StaticEvents = new List<EventDeclaration>();
         }
 
+        public bool IsObjectLiteral
+        {
+            get;
+            set;
+        }
+
         public List<EventDeclaration> StaticEvents
         {
             get;

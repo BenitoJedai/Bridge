@@ -17,17 +17,29 @@ namespace Bridge.NET
 {
     public partial class Emitter : Visitor, ILog
     {
-        public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<TypeInfo> types, Validator validator)
+        public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<TypeInfo> types, List<TypeInfo> objectLiteralTypes, Validator validator)
         {
             this.TypeDefinitions = typeDefinitions;
             this.Types = types;
+            this.ObjectLiteralTypes = objectLiteralTypes;
             this.Types.Sort(this.CompareTypeInfos);
+            this.InitEmitter();
+            this.Validator = validator;
+        }
 
+        private void InitEmitter()
+        {
             this.Output = new StringBuilder();
+            this.Locals = null;
+            this.LocalsStack = null;
+            this.IteratorCount = 0;
+            this.ThisRefCounter = 0;
+            this.Writers = new Stack<Tuple<string, StringBuilder, bool>>();
+            this.IsAssignment = false;
             this.Level = 0;
             this.IsNewLine = true;
             this.EnableSemicolon = true;
-            this.Validator = validator;
+            this.Comma = false;
         }
         
         protected virtual void EnsureComma()
@@ -129,6 +141,27 @@ namespace Bridge.NET
         public virtual void Emit()
         {
             this.Writers = new Stack<Tuple<string, StringBuilder, bool>>();
+
+            if (this.ObjectLiteralTypes != null && this.ObjectLiteralTypes.Count > 0)
+            {
+                this.ObjectLiteralDefinitions = new Dictionary<string, string>();
+
+                foreach (var type in this.ObjectLiteralTypes)
+                {
+                    this.InitEmitter();
+                    
+                    this.TypeInfo = type;
+                    this.TypeInfo.IsObjectLiteral = true;
+                    this.BeginBlock();
+                    this.EmitInstantiableBlock();
+                    this.WriteNewLine();
+                    this.EndBlock();
+
+                    this.ObjectLiteralDefinitions.Add(this.TypeInfo.FullName, this.Output.ToString());
+                }
+            }
+                        
+            this.InitEmitter();
             
             foreach (var type in this.Types)
             {
@@ -195,7 +228,11 @@ namespace Bridge.NET
             if (this.TypeInfo.HasInstantiable)
             {
                 this.EnsureComma();
-                this.EmitCtorForInstantiableClass();
+                if (!this.TypeInfo.IsObjectLiteral)
+                {
+                    this.EmitCtorForInstantiableClass();
+                }
+                
                 this.EmitMethods(this.TypeInfo.InstanceMethods, this.TypeInfo.InstanceProperties);
             }
             else
@@ -1819,6 +1856,19 @@ namespace Bridge.NET
             {
                 this.Log(level, message);
             }
+        }
+
+        protected virtual string WriteIndentToString(string value)
+        {
+            StringBuilder output = new StringBuilder();
+            for (var i = 0; i < this.Level; i++)
+            {
+                output.Append("    ");
+            }
+
+            string indent = output.ToString();
+
+            return value.Replace("\n", "\n" + indent);
         }
     }
 }

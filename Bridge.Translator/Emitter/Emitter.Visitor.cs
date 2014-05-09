@@ -61,8 +61,11 @@ namespace Bridge.NET
 
         public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
         {
-            this.EmitPropertyMethod(propertyDeclaration, propertyDeclaration.Getter, false);
-            this.EmitPropertyMethod(propertyDeclaration, propertyDeclaration.Setter, true);
+            if (!this.TypeInfo.IsObjectLiteral)
+            {
+                this.EmitPropertyMethod(propertyDeclaration, propertyDeclaration.Getter, false);
+                this.EmitPropertyMethod(propertyDeclaration, propertyDeclaration.Setter, true);
+            }
         }
 
         public override void VisitBlockStatement(BlockStatement blockStatement)
@@ -894,8 +897,13 @@ namespace Bridge.NET
 
             var customCtor = this.Validator.GetCustomConstructor(type) ?? "";
             var hasInitializer = !objectCreateExpression.Initializer.IsNull && objectCreateExpression.Initializer.Elements.Count > 0;
+            var isObjectLiteral = this.Validator.IsObjectLiteral(type);
 
-            if (Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
+            if (isObjectLiteral && !hasInitializer)
+            {
+                this.Write(this.WriteIndentToString(this.ObjectLiteralDefinitions[type.FullName]));
+            }
+            else if (!isObjectLiteral && Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
             {
                 this.WriteOpenBrace();
                 this.WriteSpace();
@@ -922,7 +930,12 @@ namespace Bridge.NET
                     this.WriteOpenParentheses();
                 }
 
-                if (String.IsNullOrEmpty(customCtor))
+
+                if (isObjectLiteral)
+                {
+                    this.Write(this.WriteIndentToString(this.ObjectLiteralDefinitions[type.FullName]));
+                }
+                else if (String.IsNullOrEmpty(customCtor))
                 {
                     this.WriteNew();
                     objectCreateExpression.Type.AcceptVisitor(this);
@@ -932,9 +945,12 @@ namespace Bridge.NET
                     this.Write(customCtor);
                 }
 
-                this.WriteOpenParentheses();
-                this.EmitExpressionList(objectCreateExpression.Arguments);
-                this.WriteCloseParentheses();
+                if (!isObjectLiteral)
+                {
+                    this.WriteOpenParentheses();
+                    this.EmitExpressionList(objectCreateExpression.Arguments);
+                    this.WriteCloseParentheses();
+                }
 
                 if (hasInitializer)
                 {
@@ -957,40 +973,13 @@ namespace Bridge.NET
                         if (item is NamedExpression)
                         {
                             var namedExpression = (NamedExpression)item;
-                            var resolveResult = this.Resolver.ResolveNode(item, this);
-                            var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedExpression.Name);
-
-                            if (resolveResult != null && resolveResult is MemberResolveResult)
-                            {
-                                var isMember = ((MemberResolveResult)resolveResult).Member.EntityType == EntityType.Property;
-                                this.Write((isMember ? "set" : "") + (isMember ? namedExpression.Name : lowerCaseName));
-                            }
-                            else
-                            {
-                                this.Write(lowerCaseName);
-                            }
-                            this.WriteColon();
-                            namedExpression.Expression.AcceptVisitor(this);
+                            this.EmitNameExpression(isObjectLiteral, namedExpression.Name, namedExpression, namedExpression.Expression);
                         }
                         else if (item is NamedArgumentExpression)
                         {
                             var namedArgumentExpression = (NamedArgumentExpression)item;
-                            var resolveResult = this.Resolver.ResolveNode(item, this);
-                            var lowerCaseName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(namedArgumentExpression.Name);
-
-                            if (resolveResult != null && resolveResult is MemberResolveResult)
-                            {
-                                var isMember = ((MemberResolveResult)resolveResult).Member.EntityType == EntityType.Property;
-                                this.Write((isMember ? "set" : "") + (isMember ? namedArgumentExpression.Name : lowerCaseName));
-                            }
-                            else
-                            {
-                                this.Write(lowerCaseName);
-                            }
-                            this.WriteColon();
-                            namedArgumentExpression.Expression.AcceptVisitor(this);
-                        }                       
-                        
+                            this.EmitNameExpression(isObjectLiteral, namedArgumentExpression.Name, namedArgumentExpression, namedArgumentExpression.Expression);
+                        }                        
                     }
 
                     this.WriteCloseBrace();
@@ -998,6 +987,34 @@ namespace Bridge.NET
                     this.WriteCloseParentheses();
                 }
             }
+        }
+
+        protected virtual void EmitNameExpression(bool isObjectLiteral, string name, Expression namedExpression, Expression expression)
+        {
+            var resolveResult = this.Resolver.ResolveNode(namedExpression, this);
+            var lowerCaseName = this.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+
+            if (resolveResult != null && resolveResult is MemberResolveResult)
+            {
+                var member = ((MemberResolveResult)resolveResult).Member;
+                lowerCaseName = this.GetEntityName(member);
+
+                var isProperty = member.EntityType == EntityType.Property;
+                if (isObjectLiteral || !isProperty)
+                {
+                    this.Write(lowerCaseName);
+                }
+                else
+                {
+                    this.Write((isProperty ? "set" : "") + (isProperty ? name : lowerCaseName));
+                }
+            }
+            else
+            {
+                this.Write(lowerCaseName);
+            }
+            this.WriteColon();
+            expression.AcceptVisitor(this);
         }
 
 

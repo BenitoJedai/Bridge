@@ -53,7 +53,9 @@ namespace Bridge.NET
                 throw this.CreateException(typeDeclaration, "Partial classes are not supported");
             }
 
-            if (this.HasIgnore(typeDeclaration))
+            var isObjectLiteral = this.IsObjectLiteral(typeDeclaration);
+
+            if (this.HasIgnore(typeDeclaration) && !isObjectLiteral)
             {
                 return;
             }            
@@ -75,7 +77,14 @@ namespace Bridge.NET
                 typeDeclaration.AcceptChildren(this);
             }
 
-            this.Types.Add(this.CurrentType);
+            if (isObjectLiteral)
+            {
+                this.ObjectLiteralTypes.Add(this.CurrentType);
+            }
+            else
+            {
+                this.Types.Add(this.CurrentType);
+            }
             this.CurrentType = null;
         }
 

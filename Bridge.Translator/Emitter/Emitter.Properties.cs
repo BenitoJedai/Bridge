@@ -40,6 +40,18 @@ namespace Bridge.NET
             get; 
             set; 
         }
+
+        protected List<TypeInfo> ObjectLiteralTypes
+        {
+            get;
+            set;
+        }
+
+        protected Dictionary<string, string> ObjectLiteralDefinitions
+        {
+            get;
+            set;
+        }
         
         protected bool IsAssignment
         {

@@ -13,6 +13,7 @@ namespace Bridge.NET
         {
             this.Usings = new HashSet<string>();
             this.Types = new List<TypeInfo>();
+            this.ObjectLiteralTypes = new List<TypeInfo>();
         }
         
         protected virtual bool HasAttribute(EntityDeclaration type, string name)
@@ -38,11 +39,14 @@ namespace Bridge.NET
             return false;
         }
 
+        protected virtual bool IsObjectLiteral(EntityDeclaration declaration)
+        {
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".ObjectLiteral");
+        }
+
         protected virtual bool HasIgnore(EntityDeclaration declaration) 
         {
-
-            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Ignore") ||
-                   this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".ObjectLiteral");
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Ignore") || this.IsObjectLiteral(declaration);
         }
 
         protected virtual bool HasInline(EntityDeclaration declaration) 

@@ -6,25 +6,25 @@ using System.Collections.Generic;
 
 namespace TestProject
 {
-    [Namespace(false)]
-    public class Person
+    [ObjectLiteral]
+    public class Company
     {
-    }
+        public string Name { get; set; }
 
-    [Namespace("Sales")]
-    public class Customer
-    {
+        public void DoSomething()
+        {
+            Console.Log("DoSomething called");
+        }
     }
 
     public class App
     {       
         public static void Start()
         {
-            var p = new Person();
-            Console.Log((Person)p);
-
-            var c = new Customer();
-            Console.Log((Customer)c);
+            var obj = new { Test = "" };
+            var c = new Company { Name = "Test" };
+            c.DoSomething();
+            Console.Log(c.Name);
         }
     }   
 }
