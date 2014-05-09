@@ -653,8 +653,8 @@ namespace Bridge.NET
                             }
                             else
                             {
-                                string name = resolvedMethod.DeclaringType.FullName + "." + this.GetEntityName(resolvedMethod);
-
+                                string name = this.ShortenTypeName(Helpers.ReplaceSpecialChars(resolvedMethod.DeclaringType.FullName)) + "." + this.GetEntityName(resolvedMethod);
+                                
                                 this.Write(name);
                                 this.WriteOpenParentheses();
 

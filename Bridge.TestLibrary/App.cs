@@ -10,12 +10,12 @@ namespace TestProject
     {
         public static void Start()
         {
-            Console.Log(DateTime.Today.DayOfYear);
-        }
+            var d1 = DateTime.Now;
 
-        public static void Log(int obj)
-        {
+            var d2 = DateTime.Now.ClearTime();
 
+            Console.Log("DateTime", d1.Millisecond);
+            Console.Log("ClearTime", d2.Millisecond);
         }
     }   
 }
