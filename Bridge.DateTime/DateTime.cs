@@ -2,7 +2,7 @@
 
 namespace System
 {
-    [Name("Bridge.DateTime")]
+    [Name("Bridge.UX")]
     public static class Extensions
     {
         public static DateTime ClearTime(this DateTime instance)
