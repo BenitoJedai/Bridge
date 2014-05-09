@@ -27,15 +27,6 @@ namespace CompanyX
 
             //company.DoSomething();
 
-            // after compile, see body of doSomething function
-            // The person.Name call should compile to person.getName()
-
-            // doSomething: function (person) {
-            //     console.log(person.name);
-            //     // should be...
-            //     // console.log(person.getName());
-            // }
-
             Person.DoSomething(person);
 
             var date = DateTime.Today.DayOfYear;
@@ -46,6 +37,11 @@ namespace CompanyX
             Console.Log(items[5]);
 
             Console.Log(DateTime.Today.DayOfYear);
+
+            var d1 = DateTime.Now;
+
+            Console.Log("DateTime", d1.Millisecond);
+            Console.Log("ClearTime", d1.ClearTime().Millisecond);
         }
     }
 }

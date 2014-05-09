@@ -3,6 +3,20 @@
 namespace System
 {
     [Name("Bridge.DateTime")]
+    public static class Extensions
+    {
+        public static DateTime ClearTime(this DateTime instance)
+        {
+            instance.DateData.SetHours(0);
+            instance.DateData.SetMinutes(0);
+            instance.DateData.SetSeconds(0);
+            instance.DateData.SetMilliseconds(0);
+
+            return instance;
+        }
+    }
+
+    [Name("Bridge.DateTime")]
     public struct DateTime
     {
         //public DateTime()
@@ -15,7 +29,7 @@ namespace System
             this.DateData = new Date(time);
         }
 
-        private Date DateData;
+        internal Date DateData;
 
         /// <summary>
         /// Gets the year component of the date represented by this instance.
