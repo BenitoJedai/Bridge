@@ -32,12 +32,6 @@ namespace Bridge.NET
             protected set; 
         }
 
-        public List<TypeInfo> ObjectLiteralTypes
-        {
-            get;
-            protected set;
-        }
-
         public MemberResolver Resolver
         {
             get;

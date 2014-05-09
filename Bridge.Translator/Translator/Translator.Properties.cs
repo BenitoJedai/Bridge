@@ -94,11 +94,5 @@ namespace Bridge.NET
             get; 
             protected set; 
         }
-
-        public List<TypeInfo> ObjectLiteralTypes
-        {
-            get;
-            protected set;
-        }
     }
 }

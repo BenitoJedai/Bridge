@@ -53,9 +53,7 @@ namespace Bridge.NET
                 throw this.CreateException(typeDeclaration, "Partial classes are not supported");
             }
 
-            var isObjectLiteral = this.IsObjectLiteral(typeDeclaration);
-
-            if (this.HasIgnore(typeDeclaration) && !isObjectLiteral)
+            if (this.HasIgnore(typeDeclaration))
             {
                 return;
             }            
@@ -67,24 +65,17 @@ namespace Bridge.NET
                 ClassType = typeDeclaration.ClassType,
                 Namespace = this.Namespace,
                 Usings = new HashSet<string>(Usings),
-                IsEnum = typeDeclaration.ClassType == ClassType.Enum
+                IsEnum = typeDeclaration.ClassType == ClassType.Enum,
+                IsStatic = typeDeclaration.ClassType == ClassType.Enum || typeDeclaration.HasModifier(Modifiers.Static)
             };
-
-            CurrentType.IsStatic = typeDeclaration.ClassType == ClassType.Enum || typeDeclaration.HasModifier(Modifiers.Static);
 
             if (typeDeclaration.ClassType != ClassType.Interface)
             {
                 typeDeclaration.AcceptChildren(this);
             }
 
-            if (isObjectLiteral)
-            {
-                this.ObjectLiteralTypes.Add(this.CurrentType);
-            }
-            else
-            {
-                this.Types.Add(this.CurrentType);
-            }
+            this.Types.Add(this.CurrentType);
+
             this.CurrentType = null;
         }
 

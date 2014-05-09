@@ -13,7 +13,6 @@ namespace Bridge.NET
         {
             this.Usings = new HashSet<string>();
             this.Types = new List<TypeInfo>();
-            this.ObjectLiteralTypes = new List<TypeInfo>();
         }
         
         protected virtual bool HasAttribute(EntityDeclaration type, string name)

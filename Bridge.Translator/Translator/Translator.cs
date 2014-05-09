@@ -45,7 +45,7 @@ namespace Bridge.NET
 
         protected virtual Emitter CreateEmitter()
         {
-            return new Emitter(this.TypeDefinitions, this.Types, this.ObjectLiteralTypes, this.Validator);
+            return new Emitter(this.TypeDefinitions, this.Types, this.Validator);
         }
 
         protected virtual Validator CreateValidator()

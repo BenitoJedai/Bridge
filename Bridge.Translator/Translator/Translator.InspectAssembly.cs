@@ -90,7 +90,6 @@ namespace Bridge.NET
             }
 
             this.Types = inspector.Types;
-            this.ObjectLiteralTypes = inspector.ObjectLiteralTypes;
         }
 
         protected virtual Inspector CreateInspector()

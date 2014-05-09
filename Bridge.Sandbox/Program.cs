@@ -43,6 +43,7 @@ namespace Bridge.Sandbox
             //var root = @"C:\Users\geoffreymcgill\Dropbox\Ext.NET\Projects\Bridge.NET\";
 
             var projectLocation = root + @"Bridge.TestLibrary\Bridge.TestLibrary.csproj ";
+            //var projectLocation = root + @"CompanyX\CompanyX.csproj ";
             var clrLocation = root + @"Bridge.CLR\bin\Debug\Bridge.CLR.dll";
             var outputLocation = Path.ChangeExtension(projectLocation, "js");
             

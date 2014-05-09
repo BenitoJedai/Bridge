@@ -17,11 +17,10 @@ namespace Bridge.NET
 {
     public partial class Emitter : Visitor, ILog
     {
-        public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<TypeInfo> types, List<TypeInfo> objectLiteralTypes, Validator validator)
+        public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<TypeInfo> types, Validator validator)
         {
             this.TypeDefinitions = typeDefinitions;
             this.Types = types;
-            this.ObjectLiteralTypes = objectLiteralTypes;
             this.Types.Sort(this.CompareTypeInfos);
             this.InitEmitter();
             this.Validator = validator;
@@ -142,27 +141,6 @@ namespace Bridge.NET
         {
             this.Writers = new Stack<Tuple<string, StringBuilder, bool>>();
 
-            if (this.ObjectLiteralTypes != null && this.ObjectLiteralTypes.Count > 0)
-            {
-                this.ObjectLiteralDefinitions = new Dictionary<string, string>();
-
-                foreach (var type in this.ObjectLiteralTypes)
-                {
-                    this.InitEmitter();
-                    
-                    this.TypeInfo = type;
-                    this.TypeInfo.IsObjectLiteral = true;
-                    this.BeginBlock();
-                    this.EmitInstantiableBlock();
-                    this.WriteNewLine();
-                    this.EndBlock();
-
-                    this.ObjectLiteralDefinitions.Add(this.TypeInfo.FullName, this.Output.ToString());
-                }
-            }
-                        
-            this.InitEmitter();
-            
             foreach (var type in this.Types)
             {
                 this.TypeInfo = type;
@@ -228,11 +206,7 @@ namespace Bridge.NET
             if (this.TypeInfo.HasInstantiable)
             {
                 this.EnsureComma();
-                if (!this.TypeInfo.IsObjectLiteral)
-                {
-                    this.EmitCtorForInstantiableClass();
-                }
-                
+                this.EmitCtorForInstantiableClass();                
                 this.EmitMethods(this.TypeInfo.InstanceMethods, this.TypeInfo.InstanceProperties);
             }
             else
