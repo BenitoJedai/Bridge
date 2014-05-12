@@ -1,9 +1,7 @@
-﻿using ICSharpCode.NRefactory.CSharp;
-using ICSharpCode.NRefactory.TypeSystem;
+﻿using Ext.Net.Utilities;
+using ICSharpCode.NRefactory.CSharp;
 using System;
 using System.Collections.Generic;
-using Ext.Net.Utilities;
-using System.Linq;
 
 namespace Bridge.NET
 {
@@ -212,6 +210,7 @@ namespace Bridge.NET
         public override void VisitEnumMemberDeclaration(EnumMemberDeclaration enumMemberDeclaration)
         {
             Expression initializer = enumMemberDeclaration.Initializer;
+
             if (enumMemberDeclaration.Initializer.IsNull)
             {
                 initializer = new PrimitiveExpression(this.CurrentType.LastEnumValue);

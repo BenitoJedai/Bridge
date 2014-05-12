@@ -1,17 +1,14 @@
-﻿using System;
+﻿using Ext.Net.Utilities;
+using ICSharpCode.NRefactory.CSharp;
+using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Mono.Cecil;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
-using System.Text.RegularExpressions;
-using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
-using Newtonsoft.Json;
-using Ext.Net.Utilities;
-using ICSharpCode.NRefactory.TypeSystem;
-using System.Globalization;
-using ICSharpCode.NRefactory.TypeSystem.Implementation;
-using ICSharpCode.NRefactory.Semantics;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -270,6 +267,7 @@ namespace Bridge.NET
                 {
                     this.WriteNewLine();
                 }
+
                 this.EmitBaseConstructor(ctor);
                 requireNewLine = true;
             }
@@ -280,6 +278,7 @@ namespace Bridge.NET
                 {
                     this.WriteNewLine();
                 }
+
                 this.EmitEvents(this.TypeInfo.Events);
                 requireNewLine = true;
             }
@@ -384,6 +383,7 @@ namespace Bridge.NET
             if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0)
             {
                 var sortedNames = this.TypeInfo.StaticFields.Count > 0 ? new List<string>(this.TypeInfo.StaticFields.Keys) : new List<string>();
+                
                 if (this.TypeInfo.Consts.Count > 0)
                 {
                     sortedNames.AddRange(this.TypeInfo.Consts.Keys);
@@ -412,6 +412,7 @@ namespace Bridge.NET
                     else
                     {
                         name = (changeCase && isField) ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
+                        
                         if (Emitter.IsReservedStaticName(name))
                         {
                             name = "$" + name;
@@ -920,6 +921,7 @@ namespace Bridge.NET
 
                 needComma = true;
                 string name = namedExression != null ? namedExression.Name : namedArgumentExpression.Name;
+               
                 if (changeCase)
                 {
                     name = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name);
@@ -1203,6 +1205,7 @@ namespace Bridge.NET
         protected virtual ICSharpCode.NRefactory.CSharp.Attribute GetAttribute(AstNodeCollection<AttributeSection> attributes, string name)
         {
             string fullName = name + "Attribute";
+
             foreach (var i in attributes)
             {
                 foreach (var j in i.Attributes)
@@ -1213,6 +1216,7 @@ namespace Bridge.NET
                     }
 
                     var resolveResult = this.Resolver.ResolveNode(j, this);
+
                     if (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == fullName)
                     {
                         return j;
@@ -1370,6 +1374,7 @@ namespace Bridge.NET
             }
             
             name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            
             if (isReserved)
             {
                 name = "$" + name;
@@ -1388,13 +1393,16 @@ namespace Bridge.NET
             if (attr != null) 
             {
                 var value = attr.PositionalArguments.First().ConstantValue;
+
                 if (value is string)
                 {
                     name = value.ToString();
+
                     if (isReserved)
                     {
                         name = "$" + name;
                     }
+                    
                     return name;
                 }
 
@@ -1417,6 +1425,7 @@ namespace Bridge.NET
             var attr = this.GetAttribute(entity.Attributes, Translator.CLR_ASSEMBLY + ".Name");
             
             string name = entity.Name;
+            
             if (entity is FieldDeclaration)
             {
                 name = this.GetFieldName((FieldDeclaration)entity);
@@ -1432,13 +1441,16 @@ namespace Bridge.NET
             if (attr != null)
             {
                 var expr = (PrimitiveExpression)attr.Arguments.First();
+
                 if (expr.Value is string)
                 {
                     name = expr.Value.ToString();
+                
                     if (isReserved)
                     {
                         name = "$" + name;
                     }
+                    
                     return name;
                 }
 
@@ -1774,6 +1786,7 @@ namespace Bridge.NET
             this.Output = tuple.Item2;
             result = tuple.Item1 != null ? string.Format(tuple.Item1, result) : result;
             this.IsNewLine = tuple.Item3;
+
             if (!preventWrite)
             {                
                 this.Write(result);
@@ -1835,6 +1848,7 @@ namespace Bridge.NET
         protected virtual string WriteIndentToString(string value)
         {
             StringBuilder output = new StringBuilder();
+
             for (var i = 0; i < this.Level; i++)
             {
                 output.Append("    ");

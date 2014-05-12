@@ -1,6 +1,5 @@
 ﻿namespace System 
 {
-
     [Bridge.CLR.Ignore]
     [Bridge.CLR.Name("Function")]
     public class Delegate 
@@ -35,7 +34,6 @@
         {
             return null;
         }
- 
     }
 
     [Bridge.CLR.Ignore]

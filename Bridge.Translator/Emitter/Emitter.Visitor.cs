@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
-using System.Text.RegularExpressions;
+﻿using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.CSharp;
-using System.Linq;
-using Newtonsoft.Json;
-using Ext.Net.Utilities;
-using ICSharpCode.NRefactory.Completion;
-using ICSharpCode.NRefactory.Editor;
-using ICSharpCode.NRefactory.CSharp.Completion;
-using ICSharpCode.NRefactory.TypeSystem;
-using ICSharpCode.NRefactory.CSharp.Refactoring;
 using ICSharpCode.NRefactory.CSharp.Resolver;
-using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Semantics;
+using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Mono.Cecil;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Bridge.NET
 {
@@ -350,6 +343,7 @@ namespace Bridge.NET
                 else
                 {
                     bool isConst = this.IsMemberConst(memberResult.Member);
+
                     if (isConst && this.IsInlineConst(memberResult.Member))
                     {
                         this.WriteScript(memberResult.ConstantValue);
@@ -435,6 +429,7 @@ namespace Bridge.NET
             MemberResolveResult member = resolveResult as MemberResolveResult;           
             
             string inline = member != null ? this.GetInline(member.Member) : null;
+
             if (!string.IsNullOrEmpty(inline) && member.Member.IsStatic)
             {
                 this.PushWriter(inline);                
@@ -482,7 +477,6 @@ namespace Bridge.NET
                                 }
                             }
                             
-
                             this.WriteScript(enumStringName);
                             return;
                         }
@@ -529,6 +523,7 @@ namespace Bridge.NET
                 else if (member.Member.EntityType == EntityType.Field)
                 {                    
                     bool isConst = this.IsMemberConst(member.Member);
+
                     if (isConst && this.IsInlineConst(member.Member))
                     {
                         this.WriteScript(member.ConstantValue);
@@ -630,6 +625,7 @@ namespace Bridge.NET
                         if (resolvedMethod != null && resolvedMethod.IsExtensionMethod)
                         {
                             string inline = this.GetInline(resolvedMethod);
+
                             if (!string.IsNullOrWhiteSpace(inline))
                             {
                                 this.Write("");
@@ -706,6 +702,7 @@ namespace Bridge.NET
                 else
                 {
                     var resolveResult = this.Resolver.ResolveNode(targetMember, this);
+
                     if (resolveResult != null && resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
@@ -741,6 +738,7 @@ namespace Bridge.NET
             {
                 int count = this.Writers.Count;
                 invocationExpression.Target.AcceptVisitor(this);
+
                 if (this.Writers.Count > count)
                 {
                     this.EmitExpressionList(invocationExpression.Arguments);                    
@@ -761,6 +759,7 @@ namespace Bridge.NET
             {
                 var first = invocationExpression.Target.Children.ElementAt(0);
                 var expression = first as Expression;
+
                 if (expression != null)
                 {
                     expression.AcceptVisitor(this);
@@ -886,6 +885,7 @@ namespace Bridge.NET
         public override void VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression)
         {
             var type = this.GetTypeDefinition(objectCreateExpression.Type);
+
             if (type.BaseType != null && type.BaseType.FullName == "System.MulticastDelegate")
             {
                 objectCreateExpression.Arguments.First().AcceptVisitor(this);
@@ -984,6 +984,7 @@ namespace Bridge.NET
                 lowerCaseName = this.GetEntityName(member);
 
                 var isProperty = member.EntityType == EntityType.Property;
+
                 if (!isProperty)
                 {
                     this.Write(lowerCaseName);
@@ -997,6 +998,7 @@ namespace Bridge.NET
             {
                 this.Write(lowerCaseName);
             }
+
             this.WriteColon();
             expression.AcceptVisitor(this);
         }

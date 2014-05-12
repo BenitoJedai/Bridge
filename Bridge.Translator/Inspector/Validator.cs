@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using Mono.Cecil;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace Bridge.NET
 {
@@ -169,6 +169,7 @@ namespace Bridge.NET
             }
 
             var nsAtrr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NamespaceAttribute");
+            
             if (nsAtrr != null && nsAtrr.ConstructorArguments.Count > 0)
             {
                 var arg = nsAtrr.ConstructorArguments[0];
@@ -219,6 +220,7 @@ namespace Bridge.NET
             if (type.HasMethods) 
             {
                 var ctors = type.Methods.Where(method => method.IsConstructor);
+                
                 foreach (MethodDefinition ctor in ctors) 
                 {
                     if (foundStatic && ctor.IsStatic)
@@ -303,9 +305,9 @@ namespace Bridge.NET
         {
             var result = new HashSet<string>();
 
-            foreach(var type in allTypes.Values) 
+            foreach (var type in allTypes.Values) 
             {
-                if(type.BaseType != null) 
+                if (type.BaseType != null) 
                 {
                     string parentName = type.BaseType.FullName;
 
@@ -377,6 +379,7 @@ namespace Bridge.NET
                         {
                             Bridge.NET.Exception.Throw("All static methods within an hierarchy must have unique names: {0} and {1}", method, staticMethods[key]);
                         }
+
                         staticMethods.Add(key, method);
                     } 
                     else 

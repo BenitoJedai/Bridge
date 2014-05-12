@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
-using ICSharpCode.NRefactory.CSharp;
+﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
+using Mono.Cecil;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -19,7 +19,6 @@ namespace Bridge.NET
         const string NEXT = "next";
         const string APPLY_OBJECT = "apply";
         public const string FIX_ARGUMENT_NAME = "__autofix__";
-
 
         private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };
 

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using ICSharpCode.NRefactory.CSharp;
 using Mono.Cecil;
-using ICSharpCode.NRefactory.CSharp;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Bridge.NET

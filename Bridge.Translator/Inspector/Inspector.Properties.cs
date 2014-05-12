@@ -1,8 +1,4 @@
-﻿using ICSharpCode.NRefactory.CSharp;
-using ICSharpCode.NRefactory.TypeSystem;
-using System;
-using System.Collections.Generic;
-using Ext.Net.Utilities;
+﻿using System.Collections.Generic;
 
 namespace Bridge.NET 
 {

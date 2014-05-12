@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bridge.Builder
 {
@@ -13,6 +9,7 @@ namespace Bridge.Builder
         static void LogMessage(string level, string message)
         {
             level = level ?? "message";
+
             switch (level.ToLowerInvariant())
             {
                 case "message":
@@ -54,6 +51,7 @@ namespace Bridge.Builder
             }
 
             int i = 0;
+
             while (i < args.Length)
             {
                 switch (args[i])
@@ -128,7 +126,6 @@ namespace Bridge.Builder
                 Console.ResetColor();
                 Console.ReadLine();
             }
-
         }
     }
 }

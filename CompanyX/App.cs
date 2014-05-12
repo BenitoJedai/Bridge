@@ -8,7 +8,7 @@ namespace CompanyX
     public class Company
     {
         public string Name { get; set; }
-
+          
         public void DoSomething()
         {
             Console.Log("DoSomething called");
@@ -25,7 +25,7 @@ namespace CompanyX
 
             var company = new Company { Name = "Object.NET" };
 
-            company.DoSomething();
+            //company.DoSomething();
 
             Person.DoSomething(person);
 

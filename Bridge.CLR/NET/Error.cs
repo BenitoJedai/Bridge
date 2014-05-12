@@ -1,6 +1,5 @@
 ﻿namespace System 
 {
-
     [Bridge.CLR.Ignore]
     [Bridge.CLR.Name("Error")]
     [Bridge.CLR.Constructor("Error")]

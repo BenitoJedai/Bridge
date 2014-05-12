@@ -1,9 +1,7 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using ICSharpCode.NRefactory;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
-using System;
 using System.Collections.Generic;
-using Ext.Net.Utilities;
-using ICSharpCode.NRefactory;
 
 namespace Bridge.NET 
 {
@@ -28,6 +26,7 @@ namespace Bridge.NET
                     }
 
                     var resolveResult = this.Resolver.ResolveNode(j, null);
+
                     if (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (name + "Attribute"))
                     {
                         return true;
@@ -128,13 +127,11 @@ namespace Bridge.NET
                 string newName = Emitter.FIX_ARGUMENT_NAME + p.Name;
                 string oldName = p.Name;
 
-
                 VariableDeclarationStatement varState = new VariableDeclarationStatement(p.Type.Clone(), oldName, new CastExpression(p.Type.Clone(), new IdentifierExpression(newName)));
 
                 p.Name = newName;
                 
                 body.InsertChildBefore(body.FirstChild, varState, new Role<VariableDeclarationStatement>("Statement"));
-                
             }
         }
     }
