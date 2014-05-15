@@ -458,7 +458,12 @@ namespace Bridge.NET
 
             foreach (var name in names)
             {
-                this.VisitMethodDeclaration(methods[name]);
+                var method = methods[name];
+                if (!method.Body.IsNull)
+                {
+                    this.VisitMethodDeclaration(method);
+                }
+                
             }
         }
 
@@ -971,6 +976,12 @@ namespace Bridge.NET
 
         protected virtual void WriteSemiColon(bool newLine)
         {
+            if (this.SkipSemiColon) 
+            {
+                this.SkipSemiColon = false;
+                return;
+            }
+            
             this.Write(";");
 
             if (newLine)
@@ -2090,6 +2101,16 @@ namespace Bridge.NET
             string indent = output.ToString();
 
             return value.Replace("\n", "\n" + indent);
+        }
+
+        protected virtual bool IsEmptyPartialInvoking(InvocationResolveResult invocationResult)
+        {
+            if (invocationResult == null)
+            {
+                return false;
+            }
+            var resolvedMethod = invocationResult.Member as DefaultResolvedMethod;
+            return resolvedMethod != null && resolvedMethod.IsPartial && !resolvedMethod.HasBody;
         }
     }
 }

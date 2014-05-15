@@ -222,5 +222,11 @@ namespace Bridge.NET
             get;
             set;
         }
+
+        public bool SkipSemiColon
+        {
+            get;
+            set;
+        }
     }
 }

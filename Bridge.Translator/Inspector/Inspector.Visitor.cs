@@ -49,33 +49,43 @@ namespace Bridge.NET
                 throw this.CreateException(typeDeclaration, "Nested types are not supported");
             }
 
-            if (typeDeclaration.HasModifier(Modifiers.Partial))
-            {
-                throw this.CreateException(typeDeclaration, "Partial classes are not supported");
-            }
-
             if (this.HasIgnore(typeDeclaration))
             {
                 return;
-            }            
+            }
 
-            this.CurrentType = new TypeInfo()
+            var fullName = this.Namespace + "." + Helpers.GetScriptName(typeDeclaration, false);
+            var partialType = this.Types.FirstOrDefault(t => t.FullName == fullName);
+            var add = true;
+
+            if (partialType == null)
             {
-                Name = Helpers.GetScriptName(typeDeclaration, false),
-                GenericName = Helpers.GetScriptName(typeDeclaration, true),
-                ClassType = typeDeclaration.ClassType,
-                Namespace = this.Namespace,
-                Usings = new HashSet<string>(Usings),
-                IsEnum = typeDeclaration.ClassType == ClassType.Enum,
-                IsStatic = typeDeclaration.ClassType == ClassType.Enum || typeDeclaration.HasModifier(Modifiers.Static)
-            };
+                this.CurrentType = new TypeInfo()
+                {
+                    Name = Helpers.GetScriptName(typeDeclaration, false),
+                    GenericName = Helpers.GetScriptName(typeDeclaration, true),
+                    ClassType = typeDeclaration.ClassType,
+                    Namespace = this.Namespace,
+                    Usings = new HashSet<string>(Usings),
+                    IsEnum = typeDeclaration.ClassType == ClassType.Enum,
+                    IsStatic = typeDeclaration.ClassType == ClassType.Enum || typeDeclaration.HasModifier(Modifiers.Static)
+                };
+            }
+            else
+            {
+                this.CurrentType = partialType;
+                add = false;
+            }            
 
             if (typeDeclaration.ClassType != ClassType.Interface)
             {
                 typeDeclaration.AcceptChildren(this);
             }
 
-            this.Types.Add(this.CurrentType);
+            if (add)
+            {
+                this.Types.Add(this.CurrentType);
+            }
 
             this.CurrentType = null;
         }

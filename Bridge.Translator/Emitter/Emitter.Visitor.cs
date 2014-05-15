@@ -135,7 +135,7 @@ namespace Bridge.NET
             }
 
             expressionStatement.Expression.AcceptVisitor(this);
-
+            
             if (this.EnableSemicolon)
             {
                 this.WriteSemiColon(true);
@@ -295,8 +295,8 @@ namespace Bridge.NET
             this.CheckIdentifier(id, identifierExpression);
 
             var resolveResult = this.Resolver.ResolveNode(identifierExpression, this);
-            var isResolved = resolveResult != null && !resolveResult.IsError;
-            var memberResult = resolveResult as MemberResolveResult;
+            var isResolved = resolveResult != null && !(resolveResult is ErrorResolveResult);
+            var memberResult = resolveResult as MemberResolveResult;         
 
             if (this.Locals.ContainsKey(id))
             {
@@ -612,10 +612,22 @@ namespace Bridge.NET
                     if (csharpInvocation != null)
                     {
                         invocationResult = csharpInvocation.IsExtensionMethodInvocation ? csharpInvocation : null;
+
+                        if (this.IsEmptyPartialInvoking(csharpInvocation))
+                        {
+                            this.SkipSemiColon = true;
+                            return;
+                        }
                     }
                     else
                     {
                         invocationResult = targetResolve as InvocationResolveResult;
+
+                        if (this.IsEmptyPartialInvoking(invocationResult)) 
+                        {
+                            this.SkipSemiColon = true;
+                            return;
+                        }
                     }                    
 
                     if (invocationResult != null)
@@ -736,6 +748,12 @@ namespace Bridge.NET
             }
             else
             {
+                if (this.IsEmptyPartialInvoking(this.Resolver.ResolveNode(invocationExpression.Target, this) as InvocationResolveResult))
+                {
+                    this.SkipSemiColon = true;
+                    return;
+                }                  
+                
                 int count = this.Writers.Count;
                 invocationExpression.Target.AcceptVisitor(this);
 
