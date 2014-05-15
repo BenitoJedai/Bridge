@@ -1,6 +1,5 @@
 ﻿namespace System 
 {
-
     [Bridge.CLR.Ignore] 
     [Bridge.CLR.Name("Number")]
     [Bridge.CLR.Constructor("~~")]

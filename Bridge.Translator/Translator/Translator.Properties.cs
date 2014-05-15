@@ -43,6 +43,7 @@ namespace Bridge.NET
         }
 
         private bool changeCase = true;
+
         public bool ChangeCase
         {
             get

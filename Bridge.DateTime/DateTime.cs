@@ -251,11 +251,6 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of years represented by value.</returns>
         public DateTime AddYears(int value)
         {
-            if (Window.TypeOf(value) == "undefined")
-            {
-                Console.Log("YEAR UNDEFINED");
-            }
-
             if (Window.IsDefined(value))
             {
                 this.DateData.SetFullYear(this.DateData.GetFullYear() + value);
@@ -420,7 +415,15 @@ namespace System
         /// Represents the largest possible value of DateTime. This field is read-only.
         /// </summary>
         [Name("MaxValue")]
-        public static readonly DateTime MaxValue = new DateTime(1234567890123);
+        public static readonly DateTime MaxValue = new DateTime(1).Set(new DateTimeConfig{
+            Year = 9999,
+            Month = 12,
+            Day = 31,
+            Hour = 23,
+            Minute = 59,
+            Second = 59, 
+            Millisecond = 9999
+        });
 
         /// <summary>
         /// Represents the smallest possible value of DateTime. This field is read-only.

@@ -173,6 +173,7 @@ namespace Bridge.NET
         }
 
         private int enumValue = 0;
+
         public virtual int LastEnumValue
         {
             get

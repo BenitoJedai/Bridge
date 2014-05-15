@@ -1,6 +1,6 @@
-﻿using System.Text;
+﻿using ICSharpCode.NRefactory.CSharp;
 using Mono.Cecil;
-using ICSharpCode.NRefactory.CSharp;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -9,6 +9,7 @@ namespace Bridge.NET
         public static string GetOperatorMethodName(BinaryOperatorType op)
         {
             string name = "";
+
             switch (op)
             {
                 case BinaryOperatorType.Add:
@@ -200,10 +201,14 @@ namespace Bridge.NET
             if (thisTypeDefinition.BaseType != null)
             {
                 TypeDefinition baseTypeDefinition = null;
+
                 try { baseTypeDefinition = thisTypeDefinition.BaseType.Resolve(); }
                 catch { }
+
                 if (baseTypeDefinition != null)
+                {
                     return (baseTypeDefinition == typeDefinition || IsSubclassOf(baseTypeDefinition, typeDefinition));
+                }
             }
             return false;
         }
@@ -213,12 +218,19 @@ namespace Bridge.NET
             foreach (TypeReference interfaceReference in thisTypeDefinition.Interfaces)
             {
                 if (interfaceReference == interfaceTypeDefinition)
+                {
                     return true;
+                }
+
                 TypeDefinition interfaceDefinition = null;
+                
                 try { interfaceDefinition = interfaceReference.Resolve(); }
                 catch { }
+
                 if (interfaceDefinition != null && IsImplementationOf(interfaceDefinition, interfaceTypeDefinition))
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -228,6 +240,5 @@ namespace Bridge.NET
             return (thisTypeDefinition == typeDefinition || (typeDefinition.IsClass && !typeDefinition.IsValueType && IsSubclassOf(typeDefinition, thisTypeDefinition))
                 || (typeDefinition.IsInterface && IsImplementationOf(typeDefinition, thisTypeDefinition)));
         }
-
     }
 }

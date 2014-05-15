@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.CSharp.Resolver;
-using ICSharpCode.NRefactory.Editor;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
-using ICSharpCode.NRefactory;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Bridge.NET
 {
@@ -24,7 +21,6 @@ namespace Bridge.NET
             set;
         }
 
-
         public MemberResolver(IList<string> sourceFiles, IEnumerable<IAssemblyReference> assemblies)
         {            
             this.project = null;
@@ -39,16 +35,20 @@ namespace Bridge.NET
         private void AddOrUpdateFiles()
         {
             var unresolvedFiles = new IUnresolvedFile[this.sourceFiles.Count];
+            
             Parallel.For(0, unresolvedFiles.Length, i =>
             {
                 var file = this.sourceFiles[i];
                 var syntaxTree = new CSharpParser().Parse(System.IO.File.ReadAllText(file), file);
+                
                 if (this.CanFreeze)
                 {
                     syntaxTree.Freeze();
                 }
+                
                 unresolvedFiles[i] = syntaxTree.ToTypeSystem();
             });
+
             this.project = this.project.AddOrUpdateFiles(unresolvedFiles);
             this.compilation = this.project.CreateCompilation();
         }
@@ -67,10 +67,12 @@ namespace Bridge.NET
         {
             var syntaxTree = node.GetParent<SyntaxTree>();
             this.InitResolver(syntaxTree);
+
             if (this.CanFreeze)
             {
                 syntaxTree.Freeze();
             }
+            
             var result = this.resolver.Resolve(node);
 
             if (result is MethodGroupResolveResult && node.Parent != null)
@@ -80,7 +82,7 @@ namespace Bridge.NET
 
             if ((result == null || result.IsError) && log != null)
             {
-                log.LogWarning(string.Format("Node resolving is failed {0}: {1}", node.StartLocation, node.GetText()));
+                log.LogWarning(string.Format("Node resolving has failed {0}: {1}", node.StartLocation, node.GetText()));
             }
 
             return result;
