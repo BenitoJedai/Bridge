@@ -12,6 +12,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System.Globalization;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using ICSharpCode.NRefactory.Semantics;
+using System.IO;
 
 namespace Bridge.NET
 {
@@ -23,7 +24,7 @@ namespace Bridge.NET
             this.Types = types;
             this.Types.Sort(this.CompareTypeInfos);
             this.InitEmitter();
-            this.Validator = validator;
+            this.Validator = validator;            
         }
 
         private void InitEmitter()
@@ -39,6 +40,7 @@ namespace Bridge.NET
             this.IsNewLine = true;
             this.EnableSemicolon = true;
             this.Comma = false;
+            this.CurrentDependencies = new List<ModuleDependency>();
         }
         
         protected virtual void EnsureComma()
@@ -137,20 +139,228 @@ namespace Bridge.NET
             return Comparer.Default.Compare(x.FullName, y.FullName);
         }
 
-        public virtual void Emit()
+        protected virtual StringBuilder GetOutputForType(TypeInfo typeInfo)
+        {
+            string module = null;
+            if (typeInfo.Module != null)
+            {
+                module = typeInfo.Module;
+            }
+            else if (this.AssemblyInfo.Module != null)
+            {
+                module = this.AssemblyInfo.Module;
+            }
+
+            var fileName = typeInfo.FileName;
+
+            if (fileName.IsEmpty() && this.AssemblyInfo.FilesHierrarchy != TypesSplit.None)
+            {
+                switch (this.AssemblyInfo.FilesHierrarchy)
+                {
+                    case TypesSplit.ByFullName:
+                        fileName = typeInfo.FullName;
+                        break;
+                    case TypesSplit.ByName:
+                        fileName = typeInfo.Name;
+                        break;
+                    case TypesSplit.ByModule:
+                        fileName = module;
+                        break;
+                    case TypesSplit.ByNamespace:
+                        fileName = typeInfo.Namespace;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (fileName.IsEmpty() && this.AssemblyInfo.FileName != null)
+            {
+                fileName = this.AssemblyInfo.FileName;
+            }
+
+            if (fileName.IsNotEmpty())
+            {
+                fileName = fileName.Replace('.', System.IO.Path.DirectorySeparatorChar);
+                if (this.AssemblyInfo.StartIndexInName > 0)
+                {
+                    fileName = fileName.Substring(this.AssemblyInfo.StartIndexInName);
+                }
+            }
+            else            
+            {
+                fileName = AssemblyInfo.DEFAULT_FILENAME;
+            }
+
+            EmitterOutput output = null;
+
+            if (this.Outputs.ContainsKey(fileName))
+            {
+                output = this.Outputs[fileName];
+            }
+            else
+            {
+                output = new EmitterOutput(fileName);
+                this.Outputs.Add(fileName, output);
+            }
+
+            if (module == null)
+            {
+                return output.NonModuletOutput;
+            }
+
+            if (module == "")
+            {
+                module = AssemblyInfo.DEFAULT_FILENAME;
+            }
+
+            if (output.ModuleOutput.ContainsKey(module))
+            {
+                this.CurrentDependencies = output.ModuleDependencies[module];
+                return output.ModuleOutput[module];
+            }
+
+            StringBuilder moduleOutput = new StringBuilder();
+            output.ModuleOutput.Add(module, moduleOutput);
+            var dependencies = new List<ModuleDependency>();
+            output.ModuleDependencies.Add(module, dependencies);
+
+            if (typeInfo.Dependencies.Count > 0)
+            {
+                dependencies.AddRange(typeInfo.Dependencies);
+            }
+
+            this.CurrentDependencies = dependencies;
+            return moduleOutput;
+        }
+
+        public virtual Dictionary<string, string> Emit()
         {
             this.Writers = new Stack<Tuple<string, StringBuilder, bool>>();
+            this.Outputs = new EmitterOutputs();
 
             foreach (var type in this.Types)
             {
+                this.InitEmitter();
+
+                TypeInfo typeInfo;
+                if (this.TypeInfoDefinitions.ContainsKey(type.GenericFullName))
+                {
+                    typeInfo =  this.TypeInfoDefinitions[type.GenericFullName];
+
+                    type.Module = typeInfo.Module;
+                    type.FileName = typeInfo.FileName;
+                    type.Dependencies = type.Dependencies;
+                    typeInfo = type;
+                }
+                else 
+                {
+                    typeInfo = type;
+                }
+                
+                this.Output = this.GetOutputForType(typeInfo);
                 this.TypeInfo = type;
+
+                if (this.TypeInfo.Module != null)
+                {
+                    this.Indent();
+                }                
 
                 this.EmitClassHeader();
                 this.EmitStaticBlock();
                 this.EmitInstantiableBlock();
                 this.EmitClassEnd();
-                this.Comma = false;
-            }            
+            }
+
+            return this.TransformOutputs();
+        }
+
+        protected virtual Dictionary<string, string> TransformOutputs()
+        {
+            this.WrapToModules();
+            return this.CombineOutputs();
+        }
+
+        protected virtual Dictionary<string, string> CombineOutputs()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            foreach (var outputPair in this.Outputs)
+            {
+                var fileName = outputPair.Key;
+                var output = outputPair.Value;
+
+                foreach (var moduleOutput in output.ModuleOutput)
+                {
+                    output.NonModuletOutput.AppendLine(moduleOutput.Value.ToString());
+                }
+
+                if (this.AssemblyInfo.OutputDir.IsNotEmpty())
+                {
+                    fileName = Path.Combine(this.AssemblyInfo.OutputDir, fileName);
+                }
+
+                result.Add(fileName, output.NonModuletOutput.ToString());
+            }
+
+            return result;
+        }
+
+        protected virtual void WrapToModules()
+        {
+            foreach (var outputPair in this.Outputs)
+            {
+                var output = outputPair.Value;
+
+                foreach (var moduleOutputPair in output.ModuleOutput)
+                {
+                    var moduleName = moduleOutputPair.Key;
+                    var moduleOutput = moduleOutputPair.Value;
+                    var str = moduleOutput.ToString();
+                    moduleOutput.Length = 0;
+
+                    moduleOutput.Append("define(");
+
+                    if (moduleName != AssemblyInfo.DEFAULT_FILENAME) 
+                    {
+                        moduleOutput.Append(this.ToJavaScript(moduleName));
+                        moduleOutput.Append(", ");
+                    }
+
+                    
+                    moduleOutput.Append("[\"bridge\",");
+                    if (output.ModuleDependencies.ContainsKey(moduleName) && output.ModuleDependencies[moduleName].Count > 0)
+                    {
+                        output.ModuleDependencies[moduleName].Each(md =>
+                        {
+                            moduleOutput.Append(this.ToJavaScript(md.DependencyName));
+                            moduleOutput.Append(",");
+                        });
+                    }
+                    moduleOutput.Remove(moduleOutput.Length - 1, 1); // remove trailing coma
+                    moduleOutput.Append("], ");
+                    
+
+                    moduleOutput.Append("function (_, ");
+
+                    if (output.ModuleDependencies.ContainsKey(moduleName) && output.ModuleDependencies[moduleName].Count > 0)
+                    {
+                        output.ModuleDependencies[moduleName].Each(md =>
+                        {
+                            moduleOutput.Append(md.VariableName.IsNotEmpty() ? md.VariableName : md.DependencyName);
+                            moduleOutput.Append(",");
+                        });
+                    }
+                    moduleOutput.Remove(moduleOutput.Length - 1, 1); // remove trailing coma
+                    moduleOutput.AppendLine(") {");
+
+                    moduleOutput.Append("    ");
+                    moduleOutput.AppendLine("var exports = {};");
+                    moduleOutput.Append(str);
+                    moduleOutput.Append("    ");
+                    moduleOutput.AppendLine("return exports;");
+                    moduleOutput.AppendLine("});");
+                }
+            }
         }
 
         protected virtual void EmitClassEnd()
@@ -169,7 +379,16 @@ namespace Bridge.NET
             
             this.Write(Emitter.ROOT + ".Class.extend");
             this.WriteOpenParentheses();
-            this.Write("'" + this.ShortenTypeName(this.TypeInfo.FullName), "', ");
+
+            var typeDef = this.TypeDefinitions[this.TypeInfo.GenericFullName];
+            string name = this.Validator.GetCustomTypeName(typeDef);
+
+            if (name.IsEmpty())
+            {
+                name = this.TypeInfo.FullName;
+            }
+
+            this.Write("'" + name, "', ");
             this.BeginBlock();
 
             string extend = this.GetTypeHierarchy();
@@ -179,6 +398,15 @@ namespace Bridge.NET
                 this.Write("$extend");
                 this.WriteColon();
                 this.Write(extend);
+                this.Comma = true;
+            }
+
+            if (this.TypeInfo.Module != null)
+            {
+                this.EnsureComma();
+                this.Write("$scope");
+                this.WriteColon();
+                this.Write("exports");
                 this.Comma = true;
             }
         }
@@ -1195,9 +1423,28 @@ namespace Bridge.NET
         protected virtual string ShortenTypeName(string name)
         {
             var type = this.TypeDefinitions[name];
+            string module = null;
+
+            if (this.TypeInfo.FullName != name && this.TypeInfoDefinitions.ContainsKey(name))
+            {
+                var typeInfo = this.TypeInfoDefinitions[name];
+                module = typeInfo.Module;
+                if (typeInfo.Module != null && this.TypeInfo.Module != typeInfo.Module && !this.CurrentDependencies.Any(d => d.DependencyName == typeInfo.Module)) 
+                {
+                    this.CurrentDependencies.Add(new ModuleDependency { DependencyName = typeInfo.Module });
+                }
+            }            
+
             var customName = this.Validator.GetCustomTypeName(type);
 
-            return !String.IsNullOrEmpty(customName) ? customName : name;
+            name = !String.IsNullOrEmpty(customName) ? customName : name;
+
+            if (module.IsNotEmpty() && this.TypeInfo.GenericFullName != name && this.TypeInfo.Module != module)
+            {
+                name = module + "." + name;
+            }
+
+            return name;
         }
 
         protected virtual ICSharpCode.NRefactory.CSharp.Attribute GetAttribute(AstNodeCollection<AttributeSection> attributes, string name)

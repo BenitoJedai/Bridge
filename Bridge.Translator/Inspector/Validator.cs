@@ -28,9 +28,9 @@ namespace Bridge.NET
             return false;
         }
 
-        public virtual void CheckType(TypeDefinition type) 
+        public virtual void CheckType(TypeDefinition type, Translator translator) 
         {
-            if (this.CanIgnoreType(type))
+            if (this.CanIgnoreType(type) && !this.IsObjectLiteral(type))
             {
                 return;
             }
@@ -40,19 +40,13 @@ namespace Bridge.NET
                 Exception.Throw("Nested types are not supported: {0}", type);
             }
 
-            if (type.HasEvents)
-            {
-                //Exception.Throw("Events are not supported: {0}", type);
-            }
-
-            if (type.IsValueType && !type.IsEnum)
-            {
-                //Exception.Throw("Struct types not supported, use classes instead: {0}", type);
-            }
-
-            this.CheckConstructors(type);
-            this.CheckFields(type);
-            this.CheckMethods(type);
+            this.CheckConstructors(type, translator);
+            this.CheckFields(type, translator);
+            this.CheckMethods(type, translator);
+            this.CheckProperties(type, translator);
+            this.CheckFileName(type, translator);
+            this.CheckModule(type, translator);
+            this.CheckModuleDependenies(type, translator);
         }
 
         public virtual bool IsIgnoreType(ICustomAttributeProvider type) 
@@ -211,7 +205,7 @@ namespace Bridge.NET
             return null;
         }
 
-        public virtual void CheckConstructors(TypeDefinition type) 
+        public virtual void CheckConstructors(TypeDefinition type, Translator translator) 
         {
             bool foundInstance = false;
             bool foundStatic = false;
@@ -245,26 +239,60 @@ namespace Bridge.NET
             }            
         }
 
-        public virtual void CheckFields(TypeDefinition type) 
+        public virtual void CheckFields(TypeDefinition type, Translator translator) 
         {
-            //no rules yet
+            if (this.IsObjectLiteral(type) && type.HasFields)
+            {
+                foreach (FieldDefinition field in type.Fields)
+                {
+                    if (field.IsStatic)
+                    {
+                        Exception.Throw("ObjectLiteral type doesn't support static members: {0}", type);
+                    }
+                }                
+            }
         }
 
-        public virtual void CheckMethods(TypeDefinition type) 
+        public virtual void CheckProperties(TypeDefinition type, Translator translator)
         {
+            if (this.IsObjectLiteral(type) && type.HasProperties)
+            {
+                foreach (PropertyDefinition prop in type.Properties)
+                {
+                    if ((prop.GetMethod != null && prop.GetMethod.IsStatic) || (prop.SetMethod != null && prop.SetMethod.IsStatic))
+                    {
+                        Exception.Throw("ObjectLiteral type doesn't support static members: {0}", type);
+                    }
+                }
+            }
+        }
+
+        public virtual void CheckMethods(TypeDefinition type, Translator translator) 
+        {
+            var methodsCount = 0;
             foreach(MethodDefinition method in type.Methods) 
             {
                 if (method.HasCustomAttributes && method.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute"))
                 {
                     continue;
                 }
-
+                
                 if (!method.IsConstructor && method.Name.Contains("."))
                 {
                     Bridge.NET.Exception.Throw("Explicit interface implementations are not supported: {0}", method);
                 }
 
-                this.CheckMethodArguments(method);                
+                this.CheckMethodArguments(method);
+
+                if (!method.IsConstructor && !method.IsGetter && !method.IsSetter)
+                {
+                    methodsCount++;
+                }
+            }
+
+            if (this.IsObjectLiteral(type) && methodsCount > 0)
+            {
+                Bridge.NET.Exception.Throw("ObjectLiteral doesn't support methods: {0}", type);
             }
         }
 
@@ -420,6 +448,99 @@ namespace Bridge.NET
             }
             
             return String.Join("$", list.ToArray());
+        }
+
+        public virtual void CheckFileName(TypeDefinition type, Translator translator)
+        {
+            if (type.HasCustomAttributes)
+            {
+                var attr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".FileNameAttribute");
+
+                if (attr != null)
+                {
+                    TypeInfo typeInfo = this.EnsureTypeInfo(type, translator);
+                    
+                    var obj = this.GetAttributeArgumentValue(attr, 0);
+
+                    if (obj is string)
+                    {
+                        typeInfo.FileName = obj.ToString();
+                    }
+                }
+            }
         }        
+
+        public virtual void CheckModule(TypeDefinition type, Translator translator)
+        {
+            if (type.HasCustomAttributes)
+            {
+                var attr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ModuleAttribute");
+
+                if (attr != null)
+                {
+                    TypeInfo typeInfo = this.EnsureTypeInfo(type, translator);
+
+                    if (attr.ConstructorArguments.Count > 0)
+                    {
+                        var obj = this.GetAttributeArgumentValue(attr, 0);
+                        typeInfo.Module = obj is string ? obj.ToString() : "";
+                    }
+                    else
+                    {
+                        typeInfo.Module = "";
+                    }
+                }
+            }
+        }
+
+        public virtual void CheckModuleDependenies(TypeDefinition type, Translator translator)
+        {
+            if (type.HasCustomAttributes)
+            {
+                var attr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ModuleDependencyAttribute");
+
+                if (attr != null)
+                {
+                    TypeInfo typeInfo = this.EnsureTypeInfo(type, translator);
+
+                    if (attr.ConstructorArguments.Count > 0)
+                    {
+                        ModuleDependency dependency = new ModuleDependency();
+                        var obj = this.GetAttributeArgumentValue(attr, 0);                        
+                        dependency.DependencyName = obj is string ? obj.ToString() : "";
+
+                        if (attr.ConstructorArguments.Count > 1)
+                        {
+                            obj = this.GetAttributeArgumentValue(attr, 1);
+                            dependency.VariableName = obj is string ? obj.ToString() : "";
+                        }                        
+
+                        typeInfo.Dependencies.Add(dependency);
+                    }
+                }
+            }
+        }
+
+        protected virtual object GetAttributeArgumentValue(CustomAttribute attr, int index)
+        {
+            return attr.ConstructorArguments.Skip(0).Take(1).First().Value;
+        }
+
+        protected virtual TypeInfo EnsureTypeInfo(TypeDefinition type, Translator translator)
+        {
+            string key = Helpers.GetTypeMapKey(type);
+            TypeInfo typeInfo = null;
+
+            if (translator.TypeInfoDefinitions.ContainsKey(key))
+            {
+                typeInfo = translator.TypeInfoDefinitions[key];
+            }
+            else
+            {
+                typeInfo = new TypeInfo();
+                translator.TypeInfoDefinitions[key] = typeInfo;
+            }
+            return typeInfo;
+        }
     }
 }

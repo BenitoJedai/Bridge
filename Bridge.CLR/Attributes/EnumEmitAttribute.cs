@@ -11,6 +11,7 @@ namespace Bridge.CLR
         }
     }
 
+    [Bridge.CLR.Ignore]
     public enum EnumEmit
     {
         Name = 1,

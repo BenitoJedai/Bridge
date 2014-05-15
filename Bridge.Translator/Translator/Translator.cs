@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -15,7 +16,7 @@ namespace Bridge.NET
             this.Validator = this.CreateValidator();
         }
 
-        public string Translate()
+        public Dictionary<string, string> Translate()
         {
             this.ReadProjectFile();
 
@@ -33,14 +34,64 @@ namespace Bridge.NET
 
             resolver.CanFreeze = true;
             var emitter = this.CreateEmitter();
+            emitter.TypeInfoDefinitions = this.TypeInfoDefinitions;
+            emitter.AssemblyInfo = this.AssemblyInfo;
             emitter.Resolver = resolver;
             emitter.ChangeCase = this.ChangeCase;
             emitter.References = references;
             emitter.SourceFiles = this.SourceFiles;
             emitter.Log = this.Log;
-            emitter.Emit();
+            this.Outputs = emitter.Emit();
 
-            return emitter.Output.ToString();
+            return this.Outputs;
+        }
+
+        public virtual string GetCode()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var item in this.Outputs)
+            {
+                string code = item.Value;
+                builder.AppendLine(code);
+            }
+
+            return builder.ToString();
+        }
+
+        public virtual void SaveToFile(string path)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var item in this.Outputs)
+            {
+                string code = item.Value;
+                builder.AppendLine(code);
+            }
+
+            var file = new System.IO.FileInfo(path);
+            file.Directory.Create();
+            File.WriteAllText(file.FullName, builder.ToString());
+        }
+
+        public virtual void SaveTo(string dir)
+        {
+            foreach (var item in this.Outputs)
+            {
+                string fileName = item.Key;
+                string code = item.Value;
+
+                if (!Path.HasExtension(fileName))
+                {
+                    fileName = Path.ChangeExtension(fileName, "js");
+                }
+
+                string filePath = Path.Combine(dir, fileName);
+
+                var file = new System.IO.FileInfo(filePath);
+                file.Directory.Create();
+                File.WriteAllText(file.FullName, code);
+            }            
         }
 
         protected virtual Emitter CreateEmitter()

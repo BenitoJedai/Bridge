@@ -43,7 +43,7 @@ namespace Bridge.Sandbox
             //var root = @"C:\Users\geoffreymcgill\Dropbox\Ext.NET\Projects\Bridge.NET\";
 
             var projectLocation = root + @"Bridge.TestLibrary\Bridge.TestLibrary.csproj ";
-            //var projectLocation = root + @"CompanyX\CompanyX.csproj ";
+            //var projectLocation = root + @"Bridge.DateTime\Bridge.DateTime.csproj ";
             var clrLocation = root + @"Bridge.CLR\bin\Debug\Bridge.CLR.dll";
             var outputLocation = Path.ChangeExtension(projectLocation, "js");
             
@@ -53,9 +53,20 @@ namespace Bridge.Sandbox
                 translator.CLRLocation = clrLocation;
                 translator.Rebuild = false;
                 translator.Log = LogMessage;
-                string code = translator.Translate();
-                File.WriteAllText(outputLocation, code);
-                Console.WriteLine(code);
+                translator.Translate();
+
+                string path = string.IsNullOrWhiteSpace(Path.GetFileName(outputLocation)) ? outputLocation : Path.GetDirectoryName(outputLocation);
+                if (translator.Outputs.Count == 1)
+                {
+                    translator.SaveToFile(outputLocation);
+                }
+                else
+                {
+                    translator.SaveTo(path);
+                    
+                }
+
+                Console.WriteLine(translator.GetCode());
                 Console.ReadLine();
             }
             catch (Exception e)

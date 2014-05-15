@@ -12,7 +12,13 @@ namespace Bridge.NET
         { 
             get; 
             set; 
-        }        
+        }
+
+        public AssemblyInfo AssemblyInfo
+        {
+            get;
+            set;
+        }
 
         protected TypeInfo CurrentType 
         { 

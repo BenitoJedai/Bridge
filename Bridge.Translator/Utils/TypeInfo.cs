@@ -18,6 +18,7 @@ namespace Bridge.NET
             this.FieldsDeclarations = new Dictionary<string, FieldDeclaration>();
             this.Events = new List<EventDeclaration>();
             this.StaticEvents = new List<EventDeclaration>();
+            this.Dependencies = new List<ModuleDependency>();
         }
 
         public List<EventDeclaration> StaticEvents
@@ -159,6 +160,18 @@ namespace Bridge.NET
             }
         }
 
+        public string GenericFullName
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this.Namespace))
+                {
+                    return this.GenericName;
+                }
+                return this.Namespace + "." + this.GenericName;
+            }
+        }
+
         private int enumValue = 0;
         public virtual int LastEnumValue
         {
@@ -174,6 +187,27 @@ namespace Bridge.NET
             set; 
         }
 
-        public string GenericName { get; set; }
+        public string GenericName 
+        { 
+            get; set; 
+        }
+
+        public string FileName
+        {
+            get;
+            set;
+        }
+
+        public string Module
+        {
+            get;
+            set;
+        }
+
+        public List<ModuleDependency> Dependencies
+        {
+            get;
+            set;
+        }
     }
 }

@@ -45,13 +45,15 @@ namespace Bridge.NET
                     continue;
                 }
 
-                this.Validator.CheckType(type);
+                this.Validator.CheckType(type, this);
                 this.TypeDefinitions.Add(Helpers.GetTypeMapKey(type), type);
             }
         }
 
         protected virtual List<AssemblyDefinition> InspectReferences()
         {
+            this.TypeInfoDefinitions = new Dictionary<string, TypeInfo>();
+
             var references = new List<AssemblyDefinition>();            
             var assembly = this.LoadAssembly(this.AssemblyLocation, references);
             this.TypeDefinitions = new Dictionary<string, TypeDefinition>();
@@ -89,6 +91,7 @@ namespace Bridge.NET
                 inspector.VisitSyntaxTree(this.GetSyntaxTree(this.SourceFiles[i]));
             }
 
+            this.AssemblyInfo = inspector.AssemblyInfo;
             this.Types = inspector.Types;
         }
 

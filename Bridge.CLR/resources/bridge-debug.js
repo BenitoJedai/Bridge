@@ -186,7 +186,7 @@ Bridge = {
 			base = extend ? extend[0].prototype : this.prototype,
 			prototype,
 			nameParts,
-			scope,
+			scope = prop.$scope || window,
 			i,
 			name;
 
@@ -247,7 +247,7 @@ Bridge = {
         }
 
         nameParts = className.split('.');
-        scope = window;
+        
         for (i = 0; i < (nameParts.length - 1) ; i++) {
             if (typeof scope[nameParts[i]] == 'undefined') {
                 scope[nameParts[i]] = {};

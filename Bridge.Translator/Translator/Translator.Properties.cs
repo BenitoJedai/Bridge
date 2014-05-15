@@ -6,6 +6,12 @@ namespace Bridge.NET
 {
     public partial class Translator
     {
+        protected AssemblyInfo AssemblyInfo
+        {
+            get;
+            set;
+        }
+
         public Action<string, string> Log
         {
             get;
@@ -89,10 +95,22 @@ namespace Bridge.NET
             set;
         }
 
+        public Dictionary<string, TypeInfo> TypeInfoDefinitions
+        {
+            get;
+            set;
+        }
+
         public List<TypeInfo> Types 
         { 
             get; 
             protected set; 
+        }
+
+        public Dictionary<string, string> Outputs
+        {
+            get;
+            protected set;
         }
     }
 }

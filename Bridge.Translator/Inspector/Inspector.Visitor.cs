@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
 using System.Linq;
+using ICSharpCode.NRefactory.Semantics;
 
 namespace Bridge.NET
 {
@@ -57,7 +58,7 @@ namespace Bridge.NET
             {
                 return;
             }            
-            
+
             this.CurrentType = new TypeInfo()
             {
                 Name = Helpers.GetScriptName(typeDeclaration, false),
@@ -146,7 +147,7 @@ namespace Bridge.NET
         }
 
         public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
-        {
+        {           
             if (methodDeclaration.HasModifier(Modifiers.Abstract) || this.HasInline(methodDeclaration))
             {
                 return;
@@ -230,6 +231,172 @@ namespace Bridge.NET
             {
                 this.CurrentType.Events.Add(eventDeclaration);
             }            
+        }
+
+        public override void VisitAttributeSection(AttributeSection attributeSection)
+        {
+            if (attributeSection.AttributeTarget != "assembly")
+            {
+                return;
+            }
+            
+            foreach (var attr in attributeSection.Attributes)
+            {
+                var name = attr.Type.ToString();
+                var resolveResult = this.Resolver.ResolveNode(attr, null);
+
+                var handled = this.ReadModuleInfo(attr, name, resolveResult) ||
+                              this.ReadFileNameInfo(attr, name, resolveResult) ||
+                              this.ReadOutputDirInfo(attr, name, resolveResult) ||
+                              this.ReadFileHierarchyInfo(attr, name, resolveResult) ||
+                              this.ReadModuleDependency(attr, name, resolveResult);
+            }
+        }
+
+        protected virtual bool ReadModuleInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
+        {
+            if ((name == (Translator.CLR_ASSEMBLY + ".Module")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".ModuleAttribute")))
+            {
+                if (attr.Arguments.Count > 0)
+                {
+                    object nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 0);
+                    this.AssemblyInfo.Module = nameObj != null ? nameObj.ToString() : "";
+                }
+                else
+                {
+                    this.AssemblyInfo.Module = "";
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected virtual bool ReadFileNameInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
+        {
+            if ((name == (Translator.CLR_ASSEMBLY + ".FileName")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".FileNameAttribute")))
+            {
+                if (attr.Arguments.Count > 0)
+                {
+                    object nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 0);
+
+                    if (nameObj is string)
+                    {
+                        this.AssemblyInfo.FileName = nameObj.ToString();
+                    }                        
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected virtual bool ReadOutputDirInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
+        {
+            if ((name == (Translator.CLR_ASSEMBLY + ".OutputDir")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".OutputDirAttribute")))
+            {
+                if (attr.Arguments.Count > 0)
+                {
+                    object nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 0);
+
+                    if (nameObj is string)
+                    {
+                        this.AssemblyInfo.OutputDir = nameObj.ToString();
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected virtual bool ReadFileHierarchyInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
+        {
+            if ((name == (Translator.CLR_ASSEMBLY + ".FilesHierrarchy")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".FilesHierrarchyAttribute")))
+            {
+                if (attr.Arguments.Count > 0)
+                {
+                    object nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 0);
+
+                    if (nameObj != null)
+                    {
+                        this.AssemblyInfo.FilesHierrarchy = (TypesSplit)Enum.ToObject(typeof(TypesSplit), nameObj);
+                    }
+
+                    if (attr.Arguments.Count > 1)
+                    {
+                        nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 1);
+
+                        if (nameObj is int)
+                        {
+                            this.AssemblyInfo.StartIndexInName = (int)nameObj;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected virtual bool ReadModuleDependency(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
+        {
+            if ((name == (Translator.CLR_ASSEMBLY + ".ModuleDependency")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".ModuleDependencyAttribute")))
+            {
+                if (attr.Arguments.Count > 0)
+                {
+                    ModuleDependency dependency = new ModuleDependency();
+                    object nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 0);
+
+                    if (nameObj is string)
+                    {
+                        dependency.DependencyName = nameObj.ToString();
+                    }
+
+                    nameObj = this.GetAttributeArgumentValue(attr, resolveResult, 1);
+
+                    if (nameObj is string)
+                    {
+                        dependency.VariableName = nameObj.ToString();
+                    }
+
+                    this.AssemblyInfo.Dependencies.Add(dependency);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected virtual object GetAttributeArgumentValue(ICSharpCode.NRefactory.CSharp.Attribute attr, ResolveResult resolveResult, int index)
+        {
+            object nameObj = null;
+
+            if (!(resolveResult is ErrorResolveResult) && (resolveResult is InvocationResolveResult))
+            {
+                nameObj = ((InvocationResolveResult)resolveResult).Arguments.Skip(index).Take(1).First().ConstantValue;
+            }
+            else
+            {
+                var arg = attr.Arguments.Skip(index).Take(1).First();
+
+                if (arg is PrimitiveExpression)
+                {
+                    var primitive = (PrimitiveExpression)arg;
+                    nameObj = primitive.Value;
+                }
+            }
+            return nameObj;
         }
     }
 }

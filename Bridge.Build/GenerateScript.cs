@@ -82,8 +82,16 @@ namespace Bridge.Build
                 translator.Rebuild = false;
                 translator.ChangeCase = this.ChangeCase;
                 translator.Log = this.LogMessage;
-                string code = translator.Translate();
-                File.WriteAllText(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js"), code);
+                translator.Translate();
+
+                if (translator.Outputs.Count == 1)
+                {
+                    translator.SaveToFile(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js"));
+                }
+                else
+                {
+                    translator.SaveTo(this.OutputPath);
+                }
 
                 if (!this.NoCore)
                 {

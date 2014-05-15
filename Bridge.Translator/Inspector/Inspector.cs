@@ -13,6 +13,7 @@ namespace Bridge.NET
         {
             this.Usings = new HashSet<string>();
             this.Types = new List<TypeInfo>();
+            this.AssemblyInfo = new AssemblyInfo();
         }
         
         protected virtual bool HasAttribute(EntityDeclaration type, string name)

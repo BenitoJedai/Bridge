@@ -110,13 +110,22 @@ namespace Bridge.Builder
                 translator.Rebuild = rebuild;
                 translator.ChangeCase = changeCase;
                 translator.Log = LogMessage;
-                string code = translator.Translate();
-                File.WriteAllText(outputLocation, code);
+                translator.Translate();
+
+                string path = string.IsNullOrWhiteSpace(Path.GetFileName(outputLocation)) ? outputLocation : Path.GetDirectoryName(outputLocation);
+                if (translator.Outputs.Count == 1)
+                {
+                    translator.SaveToFile(outputLocation);
+                }
+                else
+                {
+                    translator.SaveTo(path);                    
+                }
 
                 if (extractCore)
                 {
                     Console.WriteLine("Extracting core scripts...");
-                    Bridge.NET.Translator.ExtractCore(translator.CLRLocation, Path.GetDirectoryName(outputLocation));
+                    Bridge.NET.Translator.ExtractCore(translator.CLRLocation, path);
                 }
 
                 Console.WriteLine("Done.");

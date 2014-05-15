@@ -198,5 +198,29 @@ namespace Bridge.NET
             get;
             set;
         }
+
+        public AssemblyInfo AssemblyInfo
+        {
+            get;
+            set;
+        }
+
+        public Dictionary<string, TypeInfo> TypeInfoDefinitions
+        {
+            get;
+            set;
+        }
+
+        public List<ModuleDependency> CurrentDependencies
+        {
+            get;
+            set;
+        }
+
+        public EmitterOutputs Outputs
+        {
+            get;
+            set;
+        }
     }
 }
