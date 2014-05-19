@@ -3,8 +3,10 @@ using System;
 
 namespace CompanyX
 {
-    public class Customer : Person
+    public partial class Customer : Person
     {
         public string CompanyName { get; set; }
+
+        public string City { get; set; }
     }
 }

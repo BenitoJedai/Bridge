@@ -8,11 +8,11 @@ namespace CompanyX
     public class Company
     {
         public string Name { get; set; }
-          
-        public void DoSomething()
-        {
-            Console.Log("DoSomething called");
-        }
+        
+        //public void DoSomething()
+        //{
+        //    Console.Log("DoSomething called");
+        //}
     }
 
     public static class App
@@ -24,6 +24,10 @@ namespace CompanyX
             var person = new Person { Name = Name };
 
             var company = new Company { Name = "Object.NET" };
+
+            var customer = new Customer { IsGood = true };
+
+            Console.Log("IsGood", customer.IsGood);
 
             //company.DoSomething();
 
