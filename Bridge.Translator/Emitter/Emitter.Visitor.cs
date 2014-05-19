@@ -24,7 +24,10 @@ namespace Bridge.NET
             if (this.MethodsGroup != null)
             {
                 MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration, this.MethodsGroup);
-                this.Write(this.GetOverloadName(methodDeclaration));
+                string name = this.GetOverloadName(methodDef);
+                this.EmitMethodDetector(methodDef, name);
+
+                this.Write(name);
             }
             else
             {
@@ -70,6 +73,31 @@ namespace Bridge.NET
         {
             this.PushLocals();
             this.BeginBlock();
+
+            if (this.InjectMethodDetectors)
+            {
+                this.InjectMethodDetectors = false;
+
+                string detectors = null;
+                bool noChildren = blockStatement.Children.ToList().Count == 0;
+                if (noChildren)
+                {
+                    detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(this.MethodsGroupBuilder.ToString(), Environment.NewLine, "");
+                }
+                else
+                {
+                    detectors = this.MethodsGroupBuilder.ToString();
+                }
+                
+                detectors = this.WriteIndentToString(detectors);
+
+                this.Write(detectors);
+
+                if (noChildren)
+                {
+                    this.WriteNewLine();
+                }
+            }
 
             blockStatement.Children.ToList().ForEach(child => child.AcceptVisitor(this));
             this.EndBlock();
@@ -345,8 +373,15 @@ namespace Bridge.NET
 
                 if (method != null)
                 {
-                    this.Write(this.GetMethodName(method));
-
+                    if (resolveResult is InvocationResolveResult)
+                    {
+                        InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
+                        this.EmitInvocationResolveResult(invocationResult);
+                    }
+                    else
+                    {
+                        this.Write(this.GetMethodName(method));
+                    }                    
                 }
                 else
                 {
@@ -545,14 +580,14 @@ namespace Bridge.NET
                 else if (resolveResult is InvocationResolveResult)
                 {                    
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                    this.Write(this.GetEntityName(invocationResult.Member));
+                    this.EmitInvocationResolveResult(invocationResult);    
                 }
                 else
                 {
                     this.Write(this.GetEntityName(member.Member));
                 }                    
             }
-        }
+        }        
 
         public override void VisitThisReferenceExpression(ThisReferenceExpression thisReferenceExpression)
         {

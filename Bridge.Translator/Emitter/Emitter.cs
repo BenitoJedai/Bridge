@@ -448,7 +448,7 @@ namespace Bridge.NET
         protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, PropertyDeclaration> properties)
         {
             var names = new List<string>(properties.Keys);
-            names.Sort();
+            //names.Sort();
 
             foreach (var name in names)
             {
@@ -456,7 +456,7 @@ namespace Bridge.NET
             }
 
             names = new List<string>(methods.Keys);
-            names.Sort();
+            //names.Sort();
 
             foreach (var name in names)
             {
@@ -480,6 +480,7 @@ namespace Bridge.NET
                 var methodsDef = typeDef.Methods.Where(m => m.Name == name);
                 MethodDeclaration noArgsMethod = null;
                 this.MethodsGroup = methodsDef;
+                this.MethodsGroupBuilder = new StringBuilder();
 
                 foreach (var method in group)
                 {
@@ -495,13 +496,20 @@ namespace Bridge.NET
                         }
                     }
                 }
+                
+                this.MethodsGroup = null;
 
-                if (noArgsMethod != null) 
+                if (noArgsMethod == null) 
                 {
-
+                    noArgsMethod = new MethodDeclaration();
+                    noArgsMethod.Name = name;
+                    noArgsMethod.Body = new BlockStatement();                    
                 }
 
-                this.MethodsGroup = null;
+                this.InjectMethodDetectors = true;
+                this.VisitMethodDeclaration(noArgsMethod);
+                
+                this.MethodsGroupBuilder = null;
             }            
         }
 
@@ -1707,21 +1715,89 @@ namespace Bridge.NET
             return name;
         }
 
+        protected virtual void EmitMethodDetector(MethodDefinition method, string name)
+        {
+            var sb = this.MethodsGroupBuilder;
+
+            sb.Append("if (arguments.length == ");
+            sb.Append(method.Parameters.Count);
+
+            for (int i = 0; i < method.Parameters.Count; i++)
+            {
+                sb.Append(" && ");
+
+                sb.Append("Bridge.is(arguments[");
+                sb.Append(i);
+                sb.Append("], ");
+                sb.Append(this.ShortenTypeName(this.ResolveType(method.Parameters[i].ParameterType.FullName)));
+                sb.Append(")");
+            }
+
+            sb.AppendLine(") {");
+            sb.Append("    return this.").Append(name).AppendLine(".apply(this, arguments);");
+            sb.AppendLine("}");
+        }
+        
         protected virtual MethodDefinition FindMethodDefinitionInGroup(MethodDeclaration methodDeclaration, IEnumerable<MethodDefinition> group)
         {
+            var args = new List<ParameterDeclaration>(methodDeclaration.Parameters);
             foreach (var method in group)
             {
-                //if (method.)
+                if (methodDeclaration.Parameters.Count == method.Parameters.Count)
+                {
+                    bool match = true;
+                    for (int i = 0; i < method.Parameters.Count; i++)
+                    {
+                        var type = args[i].Type;
+                        var resolveResult = this.Resolver.ResolveNode(type, this);
+
+                        if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
+                        {
+                            if (((TypeResolveResult)resolveResult).Type.FullName != method.Parameters[i].ParameterType.FullName)
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            var name = this.ResolveType(type.ToString());
+                            var typeDef = this.TypeDefinitions[name];
+
+                            if (typeDef.FullName != method.Parameters[i].ParameterType.FullName) 
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (match) 
+                    {
+                        return method;
+                    }
+                }
             }
 
             return null;
         }
 
-        protected virtual string GetOverloadName(MethodDeclaration method)
+        protected virtual string GetOverloadName(MethodDefinition methodDef)
         {
-            var name = this.GetEntityName(method);
-            //var args = method.
-            
+            var name = this.GetMethodName(methodDef);
+            var attr = this.GetAttribute(methodDef.CustomAttributes, Translator.CLR_ASSEMBLY + ".Name");
+
+            if (attr == null && methodDef.Parameters.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder(name);                
+
+                foreach (var p in methodDef.Parameters)
+                {
+                    sb.Append("$").Append(p.ParameterType.Name);
+                }
+
+                name = sb.ToString();
+            }
 
             return name;
         }
@@ -2168,6 +2244,30 @@ namespace Bridge.NET
             }
             var resolvedMethod = invocationResult.Member as DefaultResolvedMethod;
             return resolvedMethod != null && resolvedMethod.IsPartial && !resolvedMethod.HasBody;
-        }        
+        }
+
+        protected virtual void EmitInvocationResolveResult(InvocationResolveResult invocationResult)
+        {
+            var typeDef = invocationResult.Member.DeclaringType as DefaultResolvedTypeDefinition;
+
+            if (!this.Validator.IsIgnoreType(typeDef) && invocationResult.Member.DeclaringTypeDefinition.Methods.Count(m => m.Name == invocationResult.Member.Name) > 1)
+            {
+                var args = invocationResult.Member.Parameters;
+                string name = this.GetEntityName(invocationResult.Member);
+                StringBuilder sb = new StringBuilder(name);
+
+                foreach (var p in args)
+                {
+                    sb.Append("$").Append(p.Type.Name);
+                }
+
+                name = sb.ToString();
+                this.Write(name);
+            }
+            else
+            {
+                this.Write(this.GetEntityName(invocationResult.Member));
+            }
+        }
     }
 }

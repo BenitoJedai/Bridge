@@ -234,5 +234,17 @@ namespace Bridge.NET
             get; 
             set; 
         }
+
+        public StringBuilder MethodsGroupBuilder
+        {
+            get;
+            set;
+        }
+
+        public bool InjectMethodDetectors
+        {
+            get;
+            set;
+        }
     }
 }

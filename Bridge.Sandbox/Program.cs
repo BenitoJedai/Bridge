@@ -42,8 +42,8 @@ namespace Bridge.Sandbox
             var root = @"c:\projects\ext.net\git\ScriptKit\";
             //var root = @"C:\Users\geoffreymcgill\Dropbox\Ext.NET\Projects\Bridge.NET\";
 
-            //var projectLocation = root + @"Bridge.TestLibrary\Bridge.TestLibrary.csproj ";
-            var projectLocation = root + @"Bridge.DateTime\Bridge.DateTime.csproj ";
+            var projectLocation = root + @"Bridge.TestLibrary\Bridge.TestLibrary.csproj ";
+            //var projectLocation = root + @"Bridge.DateTime\Bridge.DateTime.csproj ";
             var clrLocation = root + @"Bridge.CLR\bin\Debug\Bridge.CLR.dll";
             var outputLocation = Path.ChangeExtension(projectLocation, "js");
             
@@ -62,7 +62,7 @@ namespace Bridge.Sandbox
                 }
                 else
                 {
-                    translator.SaveTo(path);
+                    translator.SaveTo(path, outputLocation);
                     
                 }
 
