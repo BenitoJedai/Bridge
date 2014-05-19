@@ -11,8 +11,8 @@ namespace Bridge.NET
             this.StaticFields = new Dictionary<string, Expression>();
             this.Consts = new Dictionary<string, Expression>();
             this.InstanceFields = new Dictionary<string, Expression>();
-            this.StaticMethods = new Dictionary<string, MethodDeclaration>();
-            this.InstanceMethods = new Dictionary<string, MethodDeclaration>();
+            this.StaticMethods = new Dictionary<string, List<MethodDeclaration>>();
+            this.InstanceMethods = new Dictionary<string, List<MethodDeclaration>>();
             this.StaticProperties = new Dictionary<string, PropertyDeclaration>();
             this.InstanceProperties = new Dictionary<string, PropertyDeclaration>();
             this.FieldsDeclarations = new Dictionary<string, FieldDeclaration>();
@@ -99,13 +99,13 @@ namespace Bridge.NET
             protected set; 
         }
 
-        public Dictionary<string, MethodDeclaration> StaticMethods 
+        public Dictionary<string, List<MethodDeclaration>> StaticMethods 
         { 
             get; 
             protected set; 
         }
 
-        public Dictionary<string, MethodDeclaration> InstanceMethods 
+        public Dictionary<string, List<MethodDeclaration>> InstanceMethods 
         { 
             get; 
             protected set; 

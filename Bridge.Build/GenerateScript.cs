@@ -84,13 +84,14 @@ namespace Bridge.Build
                 translator.Log = this.LogMessage;
                 translator.Translate();
 
+                string fileName = Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js");
                 if (translator.Outputs.Count == 1)
                 {
-                    translator.SaveToFile(Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js"));
+                    translator.SaveToFile(fileName);
                 }
                 else
                 {
-                    translator.SaveTo(this.OutputPath);
+                    translator.SaveTo(this.OutputPath, fileName);
                 }
 
                 if (!this.NoCore)

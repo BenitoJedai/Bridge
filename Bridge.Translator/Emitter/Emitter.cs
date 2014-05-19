@@ -172,6 +172,15 @@ namespace Bridge.NET
                     default:
                         break;
                 }
+
+                if (fileName.IsNotEmpty())
+                {
+                    fileName = fileName.Replace('.', System.IO.Path.DirectorySeparatorChar);
+                    if (this.AssemblyInfo.StartIndexInName > 0)
+                    {
+                        fileName = fileName.Substring(this.AssemblyInfo.StartIndexInName);
+                    }
+                }
             }
 
             if (fileName.IsEmpty() && this.AssemblyInfo.FileName != null)
@@ -179,15 +188,8 @@ namespace Bridge.NET
                 fileName = this.AssemblyInfo.FileName;
             }
 
-            if (fileName.IsNotEmpty())
-            {
-                fileName = fileName.Replace('.', System.IO.Path.DirectorySeparatorChar);
-                if (this.AssemblyInfo.StartIndexInName > 0)
-                {
-                    fileName = fileName.Substring(this.AssemblyInfo.StartIndexInName);
-                }
-            }
-            else            
+
+            if (fileName.IsEmpty())            
             {
                 fileName = AssemblyInfo.DEFAULT_FILENAME;
             }
@@ -443,7 +445,7 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void EmitMethods(Dictionary<string, MethodDeclaration> methods, Dictionary<string, PropertyDeclaration> properties)
+        protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, PropertyDeclaration> properties)
         {
             var names = new List<string>(properties.Keys);
             names.Sort();
@@ -458,13 +460,49 @@ namespace Bridge.NET
 
             foreach (var name in names)
             {
-                var method = methods[name];
-                if (!method.Body.IsNull)
-                {
-                    this.VisitMethodDeclaration(method);
-                }
-                
+                this.EmitMethodsGroup(methods[name]);                                
             }
+        }
+
+        protected virtual void EmitMethodsGroup(List<MethodDeclaration> group)
+        {
+            if (group.Count == 1)
+            {
+                if (!group[0].Body.IsNull)
+                {
+                    this.VisitMethodDeclaration(group[0]);
+                }
+            }
+            else
+            {
+                var typeDef = this.GetTypeDefinition();
+                var name = group[0].Name;
+                var methodsDef = typeDef.Methods.Where(m => m.Name == name);
+                MethodDeclaration noArgsMethod = null;
+                this.MethodsGroup = methodsDef;
+
+                foreach (var method in group)
+                {
+                    if (method.Parameters.Count == 0)
+                    {
+                        noArgsMethod = method;
+                    }
+                    else
+                    {
+                        if (!method.Body.IsNull)
+                        {
+                            this.VisitMethodDeclaration(method);
+                        }
+                    }
+                }
+
+                if (noArgsMethod != null) 
+                {
+
+                }
+
+                this.MethodsGroup = null;
+            }            
         }
 
         protected virtual void EmitCtorForInstantiableClass()
@@ -1268,7 +1306,7 @@ namespace Bridge.NET
                     {
                         continue;
                     }
-
+                    
                     if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
                     {
                         return method;
@@ -1665,6 +1703,25 @@ namespace Bridge.NET
             {
                 name = "$" + name;
             }
+
+            return name;
+        }
+
+        protected virtual MethodDefinition FindMethodDefinitionInGroup(MethodDeclaration methodDeclaration, IEnumerable<MethodDefinition> group)
+        {
+            foreach (var method in group)
+            {
+                //if (method.)
+            }
+
+            return null;
+        }
+
+        protected virtual string GetOverloadName(MethodDeclaration method)
+        {
+            var name = this.GetEntityName(method);
+            //var args = method.
+            
 
             return name;
         }
@@ -2111,6 +2168,6 @@ namespace Bridge.NET
             }
             var resolvedMethod = invocationResult.Member as DefaultResolvedMethod;
             return resolvedMethod != null && resolvedMethod.IsPartial && !resolvedMethod.HasBody;
-        }
+        }        
     }
 }

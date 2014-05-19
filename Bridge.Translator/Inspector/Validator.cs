@@ -418,7 +418,7 @@ namespace Bridge.NET
                         {
                             if (!method.IsVirtual || signatureTable[key] != this.GetMethodSignatureKey(method))
                             {
-                                Bridge.NET.Exception.Throw("Methods with same name must have same signature and be virtual: {0} and {1}", method, instanceMethods[key]);
+                                //Bridge.NET.Exception.Throw("Methods with same name must have same signature and be virtual: {0} and {1}", method, instanceMethods[key]);
                             }
                         } 
                         else 

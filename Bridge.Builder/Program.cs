@@ -119,7 +119,7 @@ namespace Bridge.Builder
                 }
                 else
                 {
-                    translator.SaveTo(path);                    
+                    translator.SaveTo(path, outputLocation);                    
                 }
 
                 if (extractCore)

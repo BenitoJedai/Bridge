@@ -167,18 +167,20 @@ namespace Bridge.NET
             
             bool isStatic = methodDeclaration.HasModifier(Modifiers.Static);
 
-            IDictionary<string, MethodDeclaration> dict = isStatic
+            Dictionary<string, List<MethodDeclaration>> dict = isStatic
                 ? CurrentType.StaticMethods
                 : CurrentType.InstanceMethods;
 
             var key = Helpers.GetScriptName(methodDeclaration, false);
 
             if (dict.ContainsKey(key))
-            {
-                throw this.CreateException(methodDeclaration, "Overloads are not allowed");
+            {                
+                dict[key].Add(methodDeclaration);
             }
-
-            dict.Add(key, methodDeclaration);
+            else 
+            {
+                dict.Add(key, new List<MethodDeclaration>(new []{methodDeclaration}));
+            }
         }
 
         public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)

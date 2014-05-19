@@ -228,5 +228,11 @@ namespace Bridge.NET
             get;
             set;
         }
+
+        public IEnumerable<MethodDefinition> MethodsGroup 
+        { 
+            get; 
+            set; 
+        }
     }
 }

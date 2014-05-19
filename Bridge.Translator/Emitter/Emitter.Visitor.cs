@@ -21,7 +21,15 @@ namespace Bridge.NET
             this.ResetLocals();
             this.AddLocals(methodDeclaration.Parameters);
 
-            this.Write(this.GetEntityName(methodDeclaration));
+            if (this.MethodsGroup != null)
+            {
+                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration, this.MethodsGroup);
+                this.Write(this.GetOverloadName(methodDeclaration));
+            }
+            else
+            {
+                this.Write(this.GetEntityName(methodDeclaration));
+            }
 
             this.WriteColon();
             this.WriteFunction();
@@ -50,7 +58,7 @@ namespace Bridge.NET
             }
 
             this.Comma = true;
-        }        
+        }                
 
         public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
         {

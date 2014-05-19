@@ -6,32 +6,27 @@ using System.Collections.Generic;
 
 namespace TestProject
 {
-    public interface I1
+    public partial class Class1
     {
-    }
-
-    public interface I2
-    {
-    }
-    
-    public partial class Class1: I1
-    {
-        [Name("f2")]
-        public int Field2;
-
         public void Method1()
         {
-            Field = 1;
-            Method2();
-            Method3();
+            Console.Log("[no arguments]");
         }
 
-        public string Prop1
+        
+        public void Method1(object value)
         {
-            get;
-            set;
+            Console.Log("object");
         }
 
-        partial void Method3();
+        public void Method1(string value)
+        {
+            Console.Log("string");
+        }
+
+        public void Method1(int value)
+        {
+            Console.Log("int");
+        }
     }
 }

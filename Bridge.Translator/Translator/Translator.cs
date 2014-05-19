@@ -74,12 +74,17 @@ namespace Bridge.NET
             File.WriteAllText(file.FullName, builder.ToString());
         }
 
-        public virtual void SaveTo(string dir)
+        public virtual void SaveTo(string dir, string defaultFileName)
         {
             foreach (var item in this.Outputs)
             {
                 string fileName = item.Key;
                 string code = item.Value;
+
+                if (fileName == AssemblyInfo.DEFAULT_FILENAME)
+                {
+                    fileName = defaultFileName;
+                }
 
                 if (!Path.HasExtension(fileName))
                 {
