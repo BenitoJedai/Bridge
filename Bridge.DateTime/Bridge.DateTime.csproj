@@ -30,6 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DateTime.UX.cs" />
+    <Compile Include="DateTimeConfig.cs" />
     <Compile Include="DateTime.cs" />
     <Compile Include="DayOfWeek.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
