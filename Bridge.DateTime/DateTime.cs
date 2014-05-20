@@ -3,6 +3,7 @@ using Bridge.CLR.Html;
 
 namespace System
 {
+    [FileName("DateTime.js")]
     [Name("Bridge.DateTime")]
     public struct DateTime
     {

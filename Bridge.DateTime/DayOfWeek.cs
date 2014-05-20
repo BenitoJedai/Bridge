@@ -2,6 +2,7 @@
 
 namespace System
 {
+    [FileName("DateTime.DayOfWeek.js")]
     [Name("Bridge.DayOfWeek")]
     public enum DayOfWeek
     {
