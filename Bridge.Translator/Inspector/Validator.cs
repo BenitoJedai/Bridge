@@ -207,34 +207,12 @@ namespace Bridge.NET
 
         public virtual void CheckConstructors(TypeDefinition type, Translator translator) 
         {
-            bool foundInstance = false;
-            bool foundStatic = false;
-
             if (type.HasMethods) 
             {
                 var ctors = type.Methods.Where(method => method.IsConstructor);
                 foreach (MethodDefinition ctor in ctors) 
                 {
-                    if (foundStatic && ctor.IsStatic)
-                    {
-                        Bridge.NET.Exception.Throw("Type {0} must have the only one static constructor", type);
-                    }
-
-                    if (foundInstance && !ctor.IsStatic)
-                    {
-                        Bridge.NET.Exception.Throw("Type {0} must have the only one instance constructor", type);
-                    }
-
                     this.CheckMethodArguments(ctor);
-
-                    if (ctor.IsStatic)
-                    {
-                        foundStatic = true;
-                    }
-                    else
-                    {
-                        foundInstance = true;
-                    }
                 }
             }            
         }
@@ -399,32 +377,17 @@ namespace Bridge.NET
 
                     string key = Helpers.GetScriptName(method, false);
 
-                    if(method.IsStatic) 
-                    {                        
-                        if (staticMethods.ContainsKey(key))
-                        {
-                            Bridge.NET.Exception.Throw("All static methods within an hierarchy must have unique names: {0} and {1}", method, staticMethods[key]);
-                        }
-                        staticMethods.Add(key, method);
-                    } 
-                    else 
+                    if(!method.IsStatic)                     
                     {
                         if (instanceFields.ContainsKey(key))
                         {
                             Bridge.NET.Exception.Throw("A field and a method cannot have the same name: {0} and {1}", instanceFields[key], method);
                         }
-
-                        if(instanceMethods.ContainsKey(key)) 
-                        {
-                            if (!method.IsVirtual || signatureTable[key] != this.GetMethodSignatureKey(method))
-                            {
-                                //Bridge.NET.Exception.Throw("Methods with same name must have same signature and be virtual: {0} and {1}", method, instanceMethods[key]);
-                            }
-                        } 
-                        else 
+                       
+                        if(!instanceMethods.ContainsKey(key)) 
                         {
                             instanceMethods.Add(key, method);
-                            signatureTable.Add(key, GetMethodSignatureKey(method));
+                            signatureTable.Add(key, this.GetMethodSignatureKey(method));
                         }
                     }
                 }

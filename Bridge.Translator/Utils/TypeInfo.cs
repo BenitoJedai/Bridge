@@ -19,6 +19,7 @@ namespace Bridge.NET
             this.Events = new List<EventDeclaration>();
             this.StaticEvents = new List<EventDeclaration>();
             this.Dependencies = new List<ModuleDependency>();
+            this.Ctors = new List<ConstructorDeclaration>();
         }
 
         public List<EventDeclaration> StaticEvents
@@ -63,7 +64,7 @@ namespace Bridge.NET
             set; 
         }
         
-        public ConstructorDeclaration Ctor 
+        public List<ConstructorDeclaration> Ctors
         { 
             get; 
             set; 
@@ -144,7 +145,7 @@ namespace Bridge.NET
                        || this.InstanceMethods.Count > 0
                        || this.InstanceProperties.Count > 0 
                        || this.Events.Count > 0
-                       || this.Ctor != null;
+                       || this.Ctors.Count > 0;
             }
         }
 

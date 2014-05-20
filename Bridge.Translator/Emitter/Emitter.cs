@@ -515,84 +515,123 @@ namespace Bridge.NET
 
         protected virtual void EmitCtorForInstantiableClass()
         {
-            var ctor = this.TypeInfo.Ctor ?? new ConstructorDeclaration
+            if (this.TypeInfo.Ctors.Count == 0) 
             {
-                Modifiers = Modifiers.Public,
-                Body = new BlockStatement()
-            };
+                this.TypeInfo.Ctors.Add(new ConstructorDeclaration {
+                    Modifiers = Modifiers.Public,
+                    Body = new BlockStatement()
+                });
+            }
 
-            var baseType = this.GetBaseTypeDefinition();
-            this.ResetLocals();
-            this.AddLocals(ctor.Parameters);
-
-            this.Write("$init");
-            this.WriteColon();
-            this.WriteFunction();
-
-            this.EmitMethodParameters(ctor.Parameters, ctor);
+            if (this.TypeInfo.Ctors.Count > 1)
+            {
+                this.Write("$multipleCtors");
+                this.WriteColon();
+                this.WriteScript(true);
+                this.Comma = true;
+            }
             
-            this.WriteSpace();
-            this.BeginBlock();
-
-            var requireNewLine = false;
-            var changeCase = this.ChangeCase;
-
-            if (this.TypeInfo.InstanceFields.Count > 0)
+            foreach (var ctor in this.TypeInfo.Ctors)
             {
-                this.EmitInstanceFields(changeCase);
-                requireNewLine = true;
-            }            
+                this.EnsureComma();
+                var baseType = this.GetBaseTypeDefinition();
+                this.ResetLocals();
+                this.AddLocals(ctor.Parameters);
+                
+                var ctorName = "$init";                
 
-            if (baseType != null && !this.Validator.IsIgnoreType(baseType))
-            {
-                if (requireNewLine)
+                if (this.TypeInfo.Ctors.Count > 1) 
                 {
-                    this.WriteNewLine();
-                }
-                this.EmitBaseConstructor(ctor);
-                requireNewLine = true;
-            }
+                    StringBuilder sb = new StringBuilder();
 
-            if (this.TypeInfo.Events.Count > 0)
-            {
-                if (requireNewLine)
+                    foreach (var p in ctor.Parameters)
+                    {
+                        var resolveResult = this.Resolver.ResolveNode(p.Type, this);
+
+                        if (resolveResult is TypeResolveResult)
+                        {
+                            sb.Append("$").Append(((TypeResolveResult)resolveResult).Type.Name);    
+                        }
+                        else
+                        {
+                            sb.Append("$").Append(p.Type.ToString());
+                        }
+                    }
+
+                    ctorName += sb.ToString();
+                }
+
+                this.Write(ctorName);
+
+                this.WriteColon();
+                this.WriteFunction();
+
+                this.EmitMethodParameters(ctor.Parameters, ctor);
+
+                this.WriteSpace();
+                this.BeginBlock();
+
+                var requireNewLine = false;
+                var changeCase = this.ChangeCase;
+
+                if (this.TypeInfo.InstanceFields.Count > 0)
                 {
-                    this.WriteNewLine();
+                    this.EmitInstanceFields(changeCase);
+                    requireNewLine = true;
                 }
-                this.EmitEvents(this.TypeInfo.Events);
-                requireNewLine = true;
-            }
 
-            var script = this.GetScript(ctor);
+                if (baseType != null && !this.Validator.IsIgnoreType(baseType) || 
+                    (ctor.Initializer != null && ctor.Initializer.ConstructorInitializerType == ConstructorInitializerType.This))
+                {
+                    if (requireNewLine)
+                    {
+                        this.WriteNewLine();
+                    }
+                    this.EmitBaseConstructor(ctor, ctorName);
+                    requireNewLine = true;                    
+                }               
 
-            if (script == null)
-            {
-                if (ctor.Body.HasChildren)
+                if (this.TypeInfo.Events.Count > 0)
+                {
+                    if (requireNewLine)
+                    {
+                        this.WriteNewLine();
+                    }
+                    this.EmitEvents(this.TypeInfo.Events);
+                    requireNewLine = true;
+                }
+
+                var script = this.GetScript(ctor);
+
+                if (script == null)
+                {
+                    if (ctor.Body.HasChildren)
+                    {
+                        if (requireNewLine)
+                        {
+                            this.WriteNewLine();
+                        }
+
+                        ctor.Body.AcceptChildren(this);
+                    }
+                }
+                else
                 {
                     if (requireNewLine)
                     {
                         this.WriteNewLine();
                     }
 
-                    ctor.Body.AcceptChildren(this);
-                }
-            }
-            else
-            {
-                if (requireNewLine)
-                {
-                    this.WriteNewLine();
+                    foreach (var line in script)
+                    {
+                        this.Write(line);
+                        this.WriteNewLine();
+                    }
                 }
 
-                foreach (var line in script)
-                {
-                    this.Write(line);
-                    this.WriteNewLine();
-                }
-            }
-
-            this.EndBlock();
-            this.Comma = true;
+                this.EndBlock();
+                this.Comma = true;
+            }            
         }
 
         protected virtual void EmitEvents(IEnumerable<EventDeclaration> events)
@@ -607,25 +646,59 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void EmitBaseConstructor(ConstructorDeclaration ctor)
-        {
+        protected virtual void EmitBaseConstructor(ConstructorDeclaration ctor, string ctorName)
+        {            
             var initializer = ctor.Initializer ?? new ConstructorInitializer()
             {
                 ConstructorInitializerType = ConstructorInitializerType.Base
-            };
+            };      
 
-            if (initializer.ConstructorInitializerType == ConstructorInitializerType.This)
+            bool appendScope = false;
+
+            if (initializer.ConstructorInitializerType == ConstructorInitializerType.Base)
             {
-                throw CreateException(ctor, "Multiple constructors are not supported");
-            }
+                var baseType = this.GetBaseTypeDefinition();
+                var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.GetOverloadNameInvocationResolveResult(this.Resolver.ResolveNode(ctor.Initializer, this) as InvocationResolveResult) : "$init";
 
-            this.Write("this.base");
+                if (baseName == ctorName) 
+                {
+                    this.Write("this.base");
+                }
+                else 
+                {
+                    this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.");
+                    this.Write(baseName);
+                    this.Write(".call");
+                    appendScope = true;
+                }
+            }
+            else 
+            {
+                this.WriteThis();
+                this.WriteDot();
+                this.Write(this.GetOverloadNameInvocationResolveResult(this.Resolver.ResolveNode(ctor.Initializer, this) as InvocationResolveResult));
+            }      
+            
             this.WriteOpenParentheses();
 
-            foreach (var p in initializer.Arguments)
+            if (appendScope)
             {
-                this.WriteComma();
-                p.AcceptVisitor(this);
+                this.WriteThis();
+
+                if (initializer.Arguments.Count > 0)
+                {
+                    this.WriteComma();
+                }
+            }
+            
+            var args = new List<Expression>(initializer.Arguments);
+            for (int i = 0; i < args.Count; i++)
+            {
+                args[i].AcceptVisitor(this);
+                if (i != (args.Count - 1))
+                {
+                    this.WriteComma();
+                }                
             }
 
             this.WriteCloseParentheses();
@@ -2246,7 +2319,7 @@ namespace Bridge.NET
             return resolvedMethod != null && resolvedMethod.IsPartial && !resolvedMethod.HasBody;
         }
 
-        protected virtual void EmitInvocationResolveResult(InvocationResolveResult invocationResult)
+        protected virtual string GetOverloadNameInvocationResolveResult(InvocationResolveResult invocationResult)
         {
             var typeDef = invocationResult.Member.DeclaringType as DefaultResolvedTypeDefinition;
 
@@ -2254,6 +2327,12 @@ namespace Bridge.NET
             {
                 var args = invocationResult.Member.Parameters;
                 string name = this.GetEntityName(invocationResult.Member);
+
+                if (name.StartsWith(".ctor")) 
+                {
+                    name = "$init";
+                }
+
                 StringBuilder sb = new StringBuilder(name);
 
                 foreach (var p in args)
@@ -2262,11 +2341,17 @@ namespace Bridge.NET
                 }
 
                 name = sb.ToString();
-                this.Write(name);
+                return name;
             }
             else
             {
-                this.Write(this.GetEntityName(invocationResult.Member));
+                string name = this.GetEntityName(invocationResult.Member);
+                if (name.StartsWith(".ctor"))
+                {
+                    name = "$init";
+                }
+
+                return name;
             }
         }
     }

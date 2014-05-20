@@ -376,7 +376,7 @@ namespace Bridge.NET
                     if (resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.EmitInvocationResolveResult(invocationResult);
+                        this.Write(this.GetOverloadNameInvocationResolveResult(invocationResult));    
                     }
                     else
                     {
@@ -580,7 +580,7 @@ namespace Bridge.NET
                 else if (resolveResult is InvocationResolveResult)
                 {                    
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                    this.EmitInvocationResolveResult(invocationResult);    
+                    this.Write(this.GetOverloadNameInvocationResolveResult(invocationResult));    
                 }
                 else
                 {
@@ -761,11 +761,11 @@ namespace Bridge.NET
                     if (resolveResult != null && resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".", this.GetEntityName(invocationResult.Member));
+                        this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.GetEntityName(invocationResult.Member));
                     }
                     else
                     {
-                        this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".", this.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
+                        this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
                     }                    
 
                     this.WriteDot();
@@ -991,9 +991,20 @@ namespace Bridge.NET
                 else
                 {
                     this.Write(customCtor);
-                }
+                }               
 
                 this.WriteOpenParentheses();
+
+                if (type.Methods.Count(m => m.IsConstructor) > 1)
+                {
+                    this.WriteScript(this.GetOverloadNameInvocationResolveResult(this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult));
+
+                    if (objectCreateExpression.Arguments.Count > 0)
+                    {
+                        this.WriteComma();
+                    }
+                }
+
                 this.EmitExpressionList(objectCreateExpression.Arguments);
                 this.WriteCloseParentheses();
 
