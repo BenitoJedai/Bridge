@@ -2,8 +2,18 @@
 using Bridge.CLR;
 using System;
 
+[assembly:FilesHierrarchy(TypesSplit.ByModule)]
+
 namespace CompanyX
 {
+    // [FileName(filename)]
+    // [Namespace] // exclude namespace from JavaScript filename
+    // [Module] // define a class as an AMD
+    // [assembly: OutputDir] // define output directory for .js files
+
+    // partial classes supported
+    // remove unimplemented partial Methods from .js. Same functionality as C# CLR
+
     [ObjectLiteral]
     public class Company
     {
@@ -23,6 +33,10 @@ namespace CompanyX
         {
             var person = new Person { Name = Name };
 
+            person.DoSomething(person);
+            person.DoSomething("Hello Person");
+            person.DoSomething("Person.Name", person);
+
             var company = new Company { Name = "Object.NET" };
 
             var customer = new Customer { IsGood = true };
@@ -31,7 +45,9 @@ namespace CompanyX
 
             //company.DoSomething();
 
-            Person.DoSomething(person);
+
+
+            //Person.DoSomething(person);
 
             // Initalize int array fails
             var items = new int[6] { 1, 1, 2, 3, 5, 8 };

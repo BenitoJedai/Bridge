@@ -9,9 +9,9 @@ namespace TestProject
     [ObjectLiteral]
     public class Obj
     {
-        public Action MyFunc = delegate() {
-            Console.Log("");
-        };
+        //public Action MyFunc = delegate() {
+        //    Console.Log("");
+        //};
     }
     
     public partial class Class1
