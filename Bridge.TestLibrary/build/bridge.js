@@ -30,8 +30,8 @@ else if(Bridge.isNull(a)&&Bridge.isNull(b)){return true;}
 return a===b;}};
 
 (function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=="function"&&typeof base[name]=="function"&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
-prototype.$$name=className;function Class(){if(!initializing&&this.$init)
-this.$init.apply(this,arguments);}
+prototype.$$name=className;function Class(){if(!initializing){if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=="string"){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}
+else if(this.$init){this.$init.apply(this,arguments);}}}
 Class.prototype=prototype;Class.prototype.constructor=Class;Class.$$name=className;if(statics){for(name in statics){Class[name]=statics[name];}}
 nameParts=className.split('.');for(i=0;i<(nameParts.length-1);i++){if(typeof scope[nameParts[i]]=='undefined'){scope[nameParts[i]]={};}
 scope=scope[nameParts[i]];}

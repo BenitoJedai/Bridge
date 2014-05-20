@@ -5,49 +5,36 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace TestProject
-{
-    [ObjectLiteral]
-    public class Obj
-    {
-        public Action MyFunc = delegate() {
-            Console.Log("");
-        };
-    }
-    
+{    
     public partial class Class1
     {
-        public void Method1()
+        public Class1()
         {
-            Console.Log("[no arguments]");
-        }
-        
-        public void Method1(object value)
-        {
-            Console.Log("object");
+            Console.Log("Class1");
         }
 
-        public void Method1(string value)
+        public Class1(string value)
         {
-            Console.Log("string");
+            Console.Log("Class1 string:" + value);
         }
 
-        public void Method1(int value)
+        public static void Start(string s)
         {
-            Console.Log("int");
+            var c1 = new Class1(s);
+            var c2 = new Class2("c2");
+        }
+    }
+
+    public partial class Class2: Class1
+    {
+        public Class2() : base("c2")
+        {            
+            Console.Log("Class2");
         }
 
-        public void Method()
+        public Class2(string value)
         {
-            this.Method1();
-            this.Method1(new object());
-            this.Method1(32);
-            this.Method1("");
-
-
-            Method1();
-            Method1(new object());
-            Method1(32);
-            Method1("");
+            Console.Log("Class2 string: " + value);
         }
     }
 }

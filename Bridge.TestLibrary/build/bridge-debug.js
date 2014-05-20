@@ -228,8 +228,14 @@ Bridge = {
         // The dummy class constructor
         function Class() {
             // All construction is actually done in the init method
-            if (!initializing && this.$init)
-                this.$init.apply(this, arguments);
+            if (!initializing) {
+                if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string") {
+                    this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+                }
+                else if (this.$init) {
+                    this.$init.apply(this, arguments);
+                }
+            }
         }
 
         // Populate our constructed prototype object

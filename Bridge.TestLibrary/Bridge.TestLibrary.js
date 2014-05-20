@@ -1,36 +1,26 @@
 Bridge.Class.extend('TestProject.Class1', {
+    $statics: {
+        method1: function (s) {
+            var c1 = new TestProject.Class1("$init");
+            var c2 = new TestProject.Class1("$init$Int32", 1);
+            var c3 = new TestProject.Class1("$init$String", s);
+        }
+    },
+    $multipleCtors: true,
     $init: function () {
-    },
-    method1$Object: function (value) {
-        console.log("object");
-    },
-    method1$String: function (value) {
-        console.log("string");
-    },
-    method1$Int32: function (value) {
-        console.log("int");
-    },
-    method1: function () {
-        if (arguments.length == 1 && Bridge.is(arguments[0], Object)) {
-            return this.method1$Object.apply(this, arguments);
-        }
-        if (arguments.length == 1 && Bridge.is(arguments[0], String)) {
-            return this.method1$String.apply(this, arguments);
-        }
-        if (arguments.length == 1 && Bridge.is(arguments[0], Number)) {
-            return this.method1$Int32.apply(this, arguments);
-        }
         console.log("[no arguments]");
     },
-    method: function () {
-        this.method1();
-        this.method1$Object({ });
-        this.method1$Int32(32);
-        this.method1$String("");
-        this.method1();
-        this.method1$Object({ });
-        this.method1$Int32(32);
-        this.method1$String("");
+    $init$Int32: function (value) {
+        console.log("int");
+    },
+    $init$Double: function (value) {
+        console.log("double");
+    },
+    $init$Object: function (value) {
+        console.log("object");
+    },
+    $init$String: function (value) {
+        console.log("string");
     }
 });
 
