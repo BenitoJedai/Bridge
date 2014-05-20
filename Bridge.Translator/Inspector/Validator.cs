@@ -62,7 +62,7 @@ namespace Bridge.NET
             string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
             string objectLiteralAttr = Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute";
 
-            return typeDefinition.Attributes.Any(attr => (attr.Constructor.DeclaringType.FullName == ignoreAttr) || (attr.Constructor.DeclaringType.FullName == objectLiteralAttr));
+            return typeDefinition.Attributes.Any(attr => attr.Constructor!= null && ((attr.Constructor.DeclaringType.FullName == ignoreAttr) || (attr.Constructor.DeclaringType.FullName == objectLiteralAttr)));
         }
 
         public virtual int EnumEmitMode(DefaultResolvedTypeDefinition type)
@@ -70,7 +70,7 @@ namespace Bridge.NET
             string enumAttr = Translator.CLR_ASSEMBLY + ".EnumEmitAttribute";
             int result = -1;
             type.Attributes.Any(attr => {
-                if (attr.Constructor.DeclaringType.FullName == enumAttr && attr.PositionalArguments.Count > 0)
+                if (attr.Constructor != null && attr.Constructor.DeclaringType.FullName == enumAttr && attr.PositionalArguments.Count > 0)
                 {
                     result = (int)attr.PositionalArguments.First().ConstantValue;                    
                     return true;
