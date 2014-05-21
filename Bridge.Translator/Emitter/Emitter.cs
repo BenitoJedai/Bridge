@@ -533,6 +533,11 @@ namespace Bridge.NET
                 this.WriteScript(true);
                 this.Comma = true;
             }
+
+            if (this.TypeInfo.Ctors.Count > 1)
+            {
+                this.EmitCtorDetector(this.TypeInfo.Ctors);                
+            }
             
             foreach (var ctor in this.TypeInfo.Ctors)
             {
@@ -634,6 +639,39 @@ namespace Bridge.NET
                 this.EndBlock();
                 this.Comma = true;
             }            
+        }
+
+        protected virtual void EmitCtorDetector(List<ConstructorDeclaration> ctors)
+        {
+            var methodsDef = this.GetTypeDefinition().Methods.Where(m => m.IsConstructor);
+            StringBuilder sb = new StringBuilder();
+            this.EnsureComma();
+
+            this.Write("$ctorDetector: function () ");
+            this.BeginBlock();
+
+            foreach (var ctor in ctors)
+            {
+                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(ctor.Parameters, methodsDef);
+                if (methodDef != null)
+                {
+                    string name = this.GetOverloadName(methodDef);
+                    this.EmitMethodDetector(sb, methodDef, name);
+                }
+                else
+                {
+                    sb.AppendLine("if (arguments.length == 0) {");
+                    sb.AppendLine("    this.$init();");
+                    sb.AppendLine("}");
+                }
+            }
+
+            string detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(sb.ToString(), Environment.NewLine, "");
+
+            this.Write(this.WriteIndentToString(detectors));
+            this.WriteNewLine();
+            this.EndBlock();
+            this.Comma = true;
         }
 
         protected virtual void EmitEvents(IEnumerable<EventDeclaration> events)
@@ -1790,10 +1828,8 @@ namespace Bridge.NET
             return name;
         }
 
-        protected virtual void EmitMethodDetector(MethodDefinition method, string name)
+        protected virtual void EmitMethodDetector(StringBuilder sb, MethodDefinition method, string name)
         {
-            var sb = this.MethodsGroupBuilder;
-
             sb.Append("if (arguments.length == ");
             sb.Append(method.Parameters.Count);
 
@@ -1813,12 +1849,12 @@ namespace Bridge.NET
             sb.AppendLine("}");
         }
         
-        protected virtual MethodDefinition FindMethodDefinitionInGroup(MethodDeclaration methodDeclaration, IEnumerable<MethodDefinition> group)
+        protected virtual MethodDefinition FindMethodDefinitionInGroup(IEnumerable<ParameterDeclaration> parameters, IEnumerable<MethodDefinition> group)
         {
-            var args = new List<ParameterDeclaration>(methodDeclaration.Parameters);
+            var args = new List<ParameterDeclaration>(parameters);
             foreach (var method in group)
             {
-                if (methodDeclaration.Parameters.Count == method.Parameters.Count)
+                if (args.Count == method.Parameters.Count)
                 {
                     bool match = true;
                     for (int i = 0; i < method.Parameters.Count; i++)
@@ -1861,6 +1897,11 @@ namespace Bridge.NET
         {
             var name = this.GetMethodName(methodDef);
             var attr = this.GetAttribute(methodDef.CustomAttributes, Translator.CLR_ASSEMBLY + ".Name");
+
+            if (methodDef.IsConstructor) 
+            {
+                name = "$init";
+            }
 
             if (attr == null && methodDef.Parameters.Count > 0)
             {

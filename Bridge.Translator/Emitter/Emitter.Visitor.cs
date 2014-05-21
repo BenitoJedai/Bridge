@@ -23,9 +23,9 @@ namespace Bridge.NET
 
             if (this.MethodsGroup != null)
             {
-                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration, this.MethodsGroup);
+                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration.Parameters, this.MethodsGroup);
                 string name = this.GetOverloadName(methodDef);
-                this.EmitMethodDetector(methodDef, name);
+                this.EmitMethodDetector(this.MethodsGroupBuilder, methodDef, name);
 
                 this.Write(name);
             }
@@ -71,6 +71,7 @@ namespace Bridge.NET
 
         public override void VisitBlockStatement(BlockStatement blockStatement)
         {
+            var addEndBlock = false;
             this.PushLocals();
             this.BeginBlock();
 
@@ -97,10 +98,23 @@ namespace Bridge.NET
                 {
                     this.WriteNewLine();
                 }
+                else
+                {
+                    this.Write("if (arguments.length == 0)");
+                    this.WriteSpace();
+                    this.BeginBlock();
+                    addEndBlock = true;
+                }
             }
 
             blockStatement.Children.ToList().ForEach(child => child.AcceptVisitor(this));
             this.EndBlock();
+
+            if (addEndBlock)
+            {
+                this.WriteNewLine();
+                this.EndBlock();                
+            }
 
             if (!this.KeepLineAfterBlock(blockStatement))
             {
@@ -603,7 +617,7 @@ namespace Bridge.NET
         {
             Tuple<bool, string> inlineCode = this.GetInlineCode(invocationExpression);
 
-            if (inlineCode != null && !String.IsNullOrEmpty(inlineCode.Item2) && invocationExpression.Target is IdentifierExpression/* && inlineCode.Item1*/)
+            if (inlineCode != null && !String.IsNullOrEmpty(inlineCode.Item2) && invocationExpression.Target is IdentifierExpression)
             {
                 bool isStatic = inlineCode.Item1;
                 this.Write("");

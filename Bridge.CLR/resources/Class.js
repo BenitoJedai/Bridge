@@ -60,8 +60,11 @@
         function Class() {
             // All construction is actually done in the init method
             if (!initializing) {
-                if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string") {
+                if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string" && Bridge.isFunction(this[arguments[0]])) {
                     this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+                }
+                else if (this.$ctorDetector) {
+                    this.$ctorDetector.apply(this, arguments);
                 }
                 else if (this.$init) {
                     this.$init.apply(this, arguments);
