@@ -8,33 +8,13 @@ namespace TestProject
 {    
     public partial class Class1
     {
-        public Class1()
+        public static void Start()
         {
-            Console.Log("Class1");
-        }
+            var date1 = new DateTime();
+            var date2 = new DateTime(2000, 11, 05);
 
-        public Class1(string value)
-        {
-            Console.Log("Class1 string:" + value);
-        }
-
-        public static void Start(string s)
-        {
-            var c1 = new Class1(s);
-            var c2 = new Class2("c2");
-        }
-    }
-
-    public partial class Class2: Class1
-    {
-        public Class2() : base("c2")
-        {            
-            Console.Log("Class2");
-        }
-
-        public Class2(string value)
-        {
-            Console.Log("Class2 string: " + value);
+            Console.Log("date1", date1.DateData);
+            Console.Log("date2", date2.DateData);
         }
     }
 }

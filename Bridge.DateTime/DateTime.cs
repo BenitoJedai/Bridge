@@ -17,6 +17,11 @@ namespace System
             this.DateData = new Date(time);
         }
 
+        public DateTime(int year, int month, int day)
+        {
+            this.DateData = new Date(year, month, day);
+        }
+
         public Date DateData;
 
         /// <summary>
