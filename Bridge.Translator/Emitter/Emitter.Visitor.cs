@@ -995,7 +995,7 @@ namespace Bridge.NET
 
                 this.WriteOpenParentheses();
 
-                if (type.Methods.Count(m => m.IsConstructor) > 1)
+                if (!this.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor) > 1)
                 {
                     this.WriteScript(this.GetOverloadNameInvocationResolveResult(this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult));
 

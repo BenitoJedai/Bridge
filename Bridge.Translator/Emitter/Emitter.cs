@@ -515,7 +515,10 @@ namespace Bridge.NET
 
         protected virtual void EmitCtorForInstantiableClass()
         {
-            if (this.TypeInfo.Ctors.Count == 0) 
+            var baseType = this.GetBaseTypeDefinition();
+            var typeDef = this.GetTypeDefinition();
+
+            if (this.TypeInfo.Ctors.Count == 0 || typeDef.IsValueType) 
             {
                 this.TypeInfo.Ctors.Add(new ConstructorDeclaration {
                     Modifiers = Modifiers.Public,
@@ -533,8 +536,7 @@ namespace Bridge.NET
             
             foreach (var ctor in this.TypeInfo.Ctors)
             {
-                this.EnsureComma();
-                var baseType = this.GetBaseTypeDefinition();
+                this.EnsureComma();                
                 this.ResetLocals();
                 this.AddLocals(ctor.Parameters);
                 
