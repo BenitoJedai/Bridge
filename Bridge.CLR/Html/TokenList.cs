@@ -31,7 +31,8 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public string Item(int index)
+        [Bridge.CLR.Name("item")]
+        public string GetItem(int index)
         {
             return null;
         }

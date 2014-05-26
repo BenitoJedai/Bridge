@@ -429,142 +429,131 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// Returns the Element immediately prior to this ChildNode in its parent's children list, or null if there is no Element in the list prior to this ChildNode.
         /// </summary>
-        public readonly Element PreviousElementSibling;
+        public static readonly Element PreviousElementSibling;
 
         /// <summary>
         /// Returns the Element immediately following this ChildNode in its parent's children list, or null if there is no Element in the list following this ChildNode.
         /// </summary>
-        public readonly Element NextElementSibling;
+        public static readonly Element NextElementSibling;
 
         /// <summary>
         /// Collection of all attribute nodes registered to the specified node.
         /// </summary>
-        public readonly NamedNodeMap Attributes;
+        public static readonly NamedNodeMap Attributes;
 
         /// <summary>
         /// The number of child nodes that are elements.
         /// </summary>
-        public readonly int ChildElementCount;
+        public static readonly int ChildElementCount;
 
         /// <summary>
         /// All child elements of an element as a collection.
         /// </summary>
-        public readonly HTMLCollection Children;
+        public static readonly HTMLCollection Children;
 
         /// <summary>
         /// Token list of class attribute
         /// </summary>
-        public readonly TokenList ClassList;
+        public static readonly TokenList ClassList;
 
         /// <summary>
         /// gets and sets the value of the class attribute of the specified element.
         /// </summary>
-        public string ClassName;
+        public static string ClassName;
 
         /// <summary>
         /// The Element.clientHeight read-only property returns the inner height of an element in pixels, including padding but not the horizontal scrollbar height, border, or margin.
         /// </summary>
-        public readonly int ClientHeight;
+        public static readonly int ClientHeight;
 
         /// <summary>
         /// The width of the left border of an element in pixels. It includes the width of the vertical scrollbar if the text direction of the element is right–to–left and if there is an overflow causing a left vertical scrollbar to be rendered. clientLeft does not include the left margin or the left padding. clientLeft is read-only.
         /// </summary>
-        public readonly int ClientLeft;
+        public static readonly int ClientLeft;
 
         /// <summary>
         /// The width of the top border of an element in pixels. It does not include the top margin or padding. clientTop is read-only.
         /// </summary>
-        public readonly int ClientTop;
+        public static readonly int ClientTop;
 
         /// <summary>
         /// The Element.clientWidth property is the inner width of an element in pixels. It includes padding but not the vertical scrollbar (if present, if rendered), border or margin.
         /// </summary>
-        public readonly int ClientWidth;
+        public static readonly int ClientWidth;
 
         /// <summary>
         /// The ParentNode.firstElementChild read-only property returns the object's first child Element, or null if there are no child elements.
         /// </summary>
-        public readonly Element FirstElementChild;
+        public static readonly Element FirstElementChild;
 
         /// <summary>
         /// Gets or sets the element's identifier (attribute id).
         /// </summary>
-        public string Id;
+        public static string Id;
 
         /// <summary>
         /// The innerHTML sets or gets the HTML syntax describing the element's descendants.    
         /// </summary>
-        public string InnerHTML;
+        public static string InnerHTML;
 
         /// <summary>
         /// The ParentNode.lastElementChild read-only method returns the object's last child Element or null if there are no child elements.
         /// </summary>
-        public readonly Element LastElementChild;
+        public static readonly Element LastElementChild;
 
         /// <summary>
         /// The outerHTML attribute of the element DOM interface gets the serialized HTML fragment describing the element including its descendants. It can be set to replace the element with nodes parsed from the given string.
         /// </summary>
-        public readonly string OuterHTML;
+        public static readonly string OuterHTML;
 
         /// <summary>
         /// The Element.scrollHeight read-only attribute is a measurement of the height of an element's content including content not visible on the screen due to overflow. The scrollHeight value is equal to the minimum clientHeight the element would require in order to fit all the content in the viewpoint without using a vertical scrollbar. It includes the element padding but not its margin.
         /// </summary>
-        public readonly int ScrollHeight;
+        public static readonly int ScrollHeight;
 
         /// <summary>
         /// The Element.scrollLeft property gets or sets the number of pixels that an element's content is scrolled to the left.
         /// </summary>
-        public readonly int ScrollLeft;
+        public static readonly int ScrollLeft;
 
         /// <summary>
         /// The Element.scrollTop property gets or sets the number of pixels that the content of an element is scrolled upward. An element's scrollTop is a measurement of the distance of an element's top to its topmost visible content. When an element content does not generate a vertical scrollbar, then its scrollTop value defaults to 0.
         /// </summary>
-        public readonly int ScrollTop;
+        public static readonly int ScrollTop;
 
         /// <summary>
         /// The Element.scrollWidth read–only property returns either the width in pixels of the content of an element or the width of the element itself, whichever is greater. If the element is wider than its content area (for example, if there are scroll bars for scrolling through the content), the scrollWidth is larger than the clientWidth.
         /// </summary>
-        public readonly int ScrollWidth;
+        public static readonly int ScrollWidth;
 
         /// <summary>
         /// Returns the name of the element.
         /// </summary>
-        public readonly string TagName;
+        public static readonly string TagName;
 
         /// <summary>
         /// The oncopy property returns the onCopy event handler code on the current element.
         /// </summary>
         [Bridge.CLR.Name("oncopy")]
-        public Delegate OnCopy;
+        public static Delegate OnCopy;
 
         /// <summary>
         /// Returns the event handling code for the cut event.
         /// </summary>
         [Bridge.CLR.Name("oncut")]
-        public Delegate OnCut;
+        public static Delegate OnCut;
 
         /// <summary>
         /// Returns the event handling code for the paste event.
         /// </summary>
         [Bridge.CLR.Name("onpaste")]
-        public Delegate OnPaste;
+        public static Delegate OnPaste;
 
         /// <summary>
         /// Returns the event handling code for the wheel event.
         /// </summary>
         [Bridge.CLR.Name("onwheel")]
-        public Delegate OnWheel;
-
-        /// <summary>
-        /// Dispatches the specified event to the current element.
-        /// To create an event object use the createEvent method in Firefox, Opera, Google Chrome, Safari and Internet Explorer from version 9. After the new event is created, initialize it first (for details, see the page for the createEvent method). When the event is initialized, it is ready for dispatching.
-        /// </summary>
-        /// <param name="e">Required. Reference to an event object to be dispatched.</param>
-        /// <returns>Boolean that indicates whether the default action of the event was not canceled.</returns>
-        public bool DispatchEvent(Event e)
-        {
-            return false;
-        }
+        public static Delegate OnWheel;
 
         /// <summary>
         /// Returns the value of a specified attribute on the element. If the given attribute does not exist, the value returned will either be null or "" (the empty string)
@@ -572,7 +561,7 @@ namespace Bridge.CLR.Html
         /// <param name="attributeName">name of the attribute whose value you want to get.</param>
         /// <returns>string containing the value of attributeName.</returns>
         /// 
-        public string GetAttribute(string attributeName)
+        public static string GetAttribute(string attributeName)
         {
             return null;
         }
@@ -583,7 +572,7 @@ namespace Bridge.CLR.Html
         /// <param name="namespace">The namespace in which to look for the specified attribute.</param>
         /// <param name="attributeName"></param>
         /// <returns>The string value of the specified attribute. If the attribute doesn't exist, the result is null.</returns>
-        public string GetAttributeNS(string @namespace, string attributeName)
+        public static string GetAttributeNS(string @namespace, string attributeName)
         {
             return null;
         }
@@ -592,7 +581,7 @@ namespace Bridge.CLR.Html
         /// The Element.getBoundingClientRect() method returns a text rectangle object that encloses a group of text rectangles.
         /// </summary>
         /// <returns></returns>
-        public ClientRect GetBoundingClientRect()
+        public static ClientRect GetBoundingClientRect()
         {
             return null;
         }
@@ -601,7 +590,7 @@ namespace Bridge.CLR.Html
         /// The Element.getClientRects() method returns a collection of rectangles that indicate the bounding rectangles for each box in a client.
         /// </summary>
         /// <returns></returns>
-        public ClientRectList GetClientRects()
+        public static ClientRectList GetClientRects()
         {
             return null;
         }
@@ -611,7 +600,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public HTMLCollection GetElementsByClassName(string name)
+        public static HTMLCollection GetElementsByClassName(string name)
         {
             return null;
         }
@@ -621,7 +610,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        public HTMLCollection GetElementsByTagName(string tagName)
+        public static HTMLCollection GetElementsByTagName(string tagName)
         {
             return null;
         }
@@ -632,7 +621,7 @@ namespace Bridge.CLR.Html
         /// <param name="namespaceURI">namespace URI of elements to look for</param>
         /// <param name="localName">local name of elements to look for or the special value "*", which matches all elements </param>
         /// <returns></returns>
-        public HTMLCollection GetElementsByTagNameNS(string namespaceURI, string localName)
+        public static HTMLCollection GetElementsByTagNameNS(string namespaceURI, string localName)
         {
             return null;
         }
@@ -642,7 +631,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="attName">string representing the name of the attribute.</param>
         /// <returns>holds the return value true or false.</returns>
-        public bool HasAttribute(string attName)
+        public static bool HasAttribute(string attName)
         {
             return false;
         }
@@ -653,7 +642,7 @@ namespace Bridge.CLR.Html
         /// <param name="namespace">string specifying the namespace of the attribute.</param>
         /// <param name="localName">name of the attribute.</param>
         /// <returns></returns>
-        public bool HasAttributeNS(string @namespace, string localName)
+        public static bool HasAttributeNS(string @namespace, string localName)
         {
             return false;
         }
@@ -663,7 +652,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="selectors">selectors is a group of selectors to match on.</param>
         /// <returns></returns>
-        public Node QuerySelector(string selectors)
+        public static Node QuerySelector(string selectors)
         {
             return null;
         }
@@ -673,7 +662,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="selectors">selectors is a group of selectors to match on.</param>
         /// <returns></returns>
-        public NodeList QuerySelectorAll(string selectors)
+        public static NodeList QuerySelectorAll(string selectors)
         {
             return null;
         }
@@ -681,7 +670,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The ChildNode.remove method removes the object from the tree it belongs to.
         /// </summary>
-        public void Remove()
+        public static void Remove()
         {
         }
 
@@ -689,7 +678,7 @@ namespace Bridge.CLR.Html
         /// Removes an attribute from the specified element.
         /// </summary>
         /// <param name="attrName">String that names the attribute to be removed from element.</param>
-        public void RemoveAttribute(string attrName)
+        public static void RemoveAttribute(string attrName)
         {
         }
 
@@ -698,7 +687,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="namespaceURI">String that contains the namespace of the attribute.</param>
         /// <param name="attrName">String that names the attribute to be removed from the current node.</param>
-        public void RemoveAttributeNS(string namespaceURI, string attrName)
+        public static void RemoveAttributeNS(string namespaceURI, string attrName)
         {
         }
 
@@ -706,7 +695,7 @@ namespace Bridge.CLR.Html
         /// Scrolls the page until the element gets into the view.
         /// </summary>
         /// <param name="alignWithTop">If true, the scrolled element is aligned with the top of the scroll area. If false, it is aligned with the bottom.</param>
-        public void ScrollIntoView(bool alignWithTop)
+        public static void ScrollIntoView(bool alignWithTop)
         {
         }
 
@@ -715,7 +704,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="name">the name of the attribute as a string.</param>
         /// <param name="value">the desired new value of the attribute.</param>
-        public void SetAttribute(string name, string value)
+        public static void SetAttribute(string name, string value)
         {
         }
 
@@ -725,14 +714,14 @@ namespace Bridge.CLR.Html
         /// <param name="namespaceURI">String specifying the namespace of the attribute.</param>
         /// <param name="name">string identifying the attribute to be set.</param>
         /// <param name="value">the desired string value of the new attribute.</param>
-        public void SetAttributeNS(string namespaceURI, string name, string value)
+        public static void SetAttributeNS(string namespaceURI, string name, string value)
         {
         }
 
         /// <summary>
         /// Call this method during the handling of a mousedown event to retarget all mouse events to this element until the mouse button is released or document.releaseCapture() is called.
         /// </summary>
-        public void SetCapture()
+        public static void SetCapture()
         {
         }
 
@@ -740,7 +729,7 @@ namespace Bridge.CLR.Html
         /// Call this method during the handling of a mousedown event to retarget all mouse events to this element until the mouse button is released or document.releaseCapture() is called.
         /// </summary>
         /// <param name="retargetToElement">If true, all events are targeted directly to this element; if false, events can also fire at descendants of this element.</param>
-        public void SetCapture(bool retargetToElement)
+        public static void SetCapture(bool retargetToElement)
         {
         }
 
@@ -749,493 +738,493 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="position">The position relative to the element</param>
         /// <param name="text">String to be parsed as HTML or XML and inserted into the tree.</param>
-        public void InsertAdjacentHTML(InsertPosition position, string text)
+        public static void InsertAdjacentHTML(InsertPosition position, string text)
         {
         }
 
         /// <summary>
         /// The access key assigned to the element.
         /// </summary>
-        public readonly string AccessKey;
+        public static readonly string AccessKey;
 
         /// <summary>
         /// A string that represents the element's assigned access key.
         /// </summary>
-        public readonly string AccessKeyLabel;
+        public static readonly string AccessKeyLabel;
 
         /// <summary>
         /// Gets/sets whether or not the element is editable.
         /// </summary>
-        public ContentEditable ContentEditable;
+        public static ContentEditable ContentEditable;
 
         /// <summary>
         /// Indicates whether or not the content of the element can be edited.
         /// </summary>
-        public readonly bool IsContentEditable;
+        public static readonly bool IsContentEditable;
 
         /// <summary>
         /// Allows access to read and write custom data attributes (data-*) of the element.
         /// </summary>
-        public readonly DOMStringMap Dataset;
+        public static readonly DOMStringMap Dataset;
 
         /// <summary>
         /// The HTMLElement.dir attribute gets or sets the text writing directionality of the content of the current element.
         /// </summary>
-        public TextDirection Dir;
+        public static TextDirection Dir;
 
         /// <summary>
         /// Gets/sets the language of an element's attributes, text, and element contents.
         /// </summary>
-        public string Lang;
+        public static string Lang;
 
         /// <summary>
         /// The height of an element, relative to the layout.
         /// </summary>
-        public readonly int OffsetHeight;
+        public static readonly int OffsetHeight;
 
         /// <summary>
         /// The distance from this element's left border to its offsetParent's left border.
         /// </summary>
-        public readonly int OffsetLeft;
+        public static readonly int OffsetLeft;
 
         /// <summary>
         /// The element from which all offset calculations are currently computed.
         /// </summary>
-        public readonly Element OffsetParent;
+        public static readonly Element OffsetParent;
 
         /// <summary>
         /// The distance from this element's top border to its offsetParent's top border.
         /// </summary>
-        public readonly int OffsetTop;
+        public static readonly int OffsetTop;
 
         /// <summary>
         /// The width of an element, relative to the layout.
         /// </summary>
-        public readonly int OffsetWidth;
+        public static readonly int OffsetWidth;
 
         /// <summary>
         /// An object representing the declarations of an element's style attributes.
         /// </summary>
-        public readonly CSSStyleDeclaration Style;
+        public static readonly CSSStyleDeclaration Style;
 
         /// <summary>
         /// Gets/sets the position of the element in the tabbing order.
         /// </summary>
-        public int TabIndex;
+        public static int TabIndex;
 
         /// <summary>
         /// A string that appears in a popup box when mouse is over the element.
         /// </summary>
-        public string Title;
+        public static string Title;
 
         /// <summary>
         ///  EventHandler representing the code to be called when the abort event is raised.
         /// </summary>
         [Bridge.CLR.Name("onabort")]
-        public Action<Event> OnAbort;
+        public static Action<Event> OnAbort;
 
         /// <summary>
         /// EventHandler representing the code to be called when the blur event is raised.
         /// </summary>
         [Bridge.CLR.Name("onblur")]
-        public Action<Event> OnBlur;
+        public static Action<Event> OnBlur;
 
         /// <summary>
         /// OnErrorEventHandler representing the code to be called when the error event is raised.
         /// </summary>
         [Bridge.CLR.Name("onerror")]
-        public ErrorEventHandler OnError;
+        public static ErrorEventHandler OnError;
 
         /// <summary>
         /// EventHandler representing the code to be called when the focus event is raised.
         /// </summary>
         [Bridge.CLR.Name("onfocus")]
-        public Action<Event> OnFocus;
+        public static Action<Event> OnFocus;
 
         /// <summary>
         /// EventHandler representing the code to be called when the cancel event is raised.
         /// </summary>
         [Bridge.CLR.Name("oncancel")]
-        public Action<Event> OnCancel;
+        public static Action<Event> OnCancel;
 
         /// <summary>
         /// EventHandler representing the code to be called when the canplay event is raised
         /// </summary>
         [Bridge.CLR.Name("oncanplay")]
-        public Action<Event> OnCanPlay;
+        public static Action<Event> OnCanPlay;
 
         /// <summary>
         /// EventHandler representing the code to be called when the canplaythrough event is raised.
         /// </summary>
         [Bridge.CLR.Name("oncanplaythrough")]
-        public Action<Event> OnCanPlayThrough;
+        public static Action<Event> OnCanPlayThrough;
 
         /// <summary>
         /// EventHandler representing the code to be called when the change event is raised.
         /// </summary>
         [Bridge.CLR.Name("onchange")]
-        public Action<Event> OnChange;
+        public static Action<Event> OnChange;
 
         /// <summary>
         /// EventHandler representing the code to be called when the click event is raised.
         /// </summary>
         [Bridge.CLR.Name("onclick")]
-        public Action<Event> OnClick;
+        public static Action<Event> OnClick;
 
         /// <summary>
         /// EventHandler representing the code to be called when the close event is raised.
         /// </summary>
         [Bridge.CLR.Name("onclose")]
-        public Action<Event> OnClose;
+        public static Action<Event> OnClose;
 
         /// <summary>
         /// EventHandler representing the code to be called when the contextmenu event is raised.
         /// </summary>
         [Bridge.CLR.Name("oncontextmenu")]
-        public Action<Event> OnContextMenu;
+        public static Action<Event> OnContextMenu;
 
         /// <summary>
         /// EventHandler representing the code to be called when the cuechange event is raised.
         /// </summary>
         [Bridge.CLR.Name("oncuechange")]
-        public Action<Event> OnCueChange;
+        public static Action<Event> OnCueChange;
 
         /// <summary>
         /// EventHandler representing the code to be called when the dblclick event is raised.
         /// </summary>
         [Bridge.CLR.Name("ondblclick")]
-        public Action<Event> OnDblClick;
+        public static Action<Event> OnDblClick;
 
         /// <summary>
         /// EventHandler representing the code to be called when the drag event is raised.
         /// </summary>
         [Bridge.CLR.Name("ondrag")]
-        public Action<Event> OnDrag;
+        public static Action<Event> OnDrag;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragend event is raised
         /// </summary>
         [Bridge.CLR.Name("ondragend")]
-        public Action<Event> OnDragEnd;
+        public static Action<Event> OnDragEnd;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragenter event is raised
         /// </summary>
         [Bridge.CLR.Name("ondragenter")]
-        public Action<Event> OnDragEnter;
+        public static Action<Event> OnDragEnter;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragexit event is raised
         /// </summary>
         [Bridge.CLR.Name("ondragexit")]
-        public Action<Event> OnDragExit;
+        public static Action<Event> OnDragExit;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragleave event is raised
         /// </summary>
         [Bridge.CLR.Name("ondragleave")]
-        public Action<Event> OnDragLeave;
+        public static Action<Event> OnDragLeave;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragover event is raised
         /// </summary>
         [Bridge.CLR.Name("ondragover")]
-        public Action<Event> OnDragOver;
+        public static Action<Event> OnDragOver;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragstart event is raised
         /// </summary>
         [Bridge.CLR.Name("ondragstart")]
-        public Action<Event> OnDragStart;
+        public static Action<Event> OnDragStart;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the drop event is raised
         /// </summary>
         [Bridge.CLR.Name("ondrop")]
-        public Action<Event> OnDrop;
+        public static Action<Event> OnDrop;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the durationchange event is raised
         /// </summary>
         [Bridge.CLR.Name("ondurationchange")]
-        public Action<Event> OnDurationChange;
+        public static Action<Event> OnDurationChange;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the emptied event is raised
         /// </summary>
         [Bridge.CLR.Name("onemptied")]
-        public Action<Event> OnEmptied;
+        public static Action<Event> OnEmptied;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the ended event is raised
         /// </summary>
         [Bridge.CLR.Name("onended")]
-        public Action<Event> OnEnded;
+        public static Action<Event> OnEnded;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the input event is raised
         /// </summary>
         [Bridge.CLR.Name("oninput")]
-        public Action<Event> OnInput;
+        public static Action<Event> OnInput;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the invalid event is raised
         /// </summary>
         [Bridge.CLR.Name("oninvalid")]
-        public Action<Event> OnInvalid;
+        public static Action<Event> OnInvalid;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the keydown event is raised
         /// </summary>
         [Bridge.CLR.Name("onkeydown")]
-        public Action<Event> OnKeyDown;
+        public static Action<Event> OnKeyDown;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the keypress event is raised
         /// </summary>
         [Bridge.CLR.Name("onkeypress")]
-        public Action<Event> OnKeyPress;
+        public static Action<Event> OnKeyPress;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the keyup event is raised
         /// </summary>
         [Bridge.CLR.Name("onkeyup")]
-        public Action<Event> OnKeyUp;
+        public static Action<Event> OnKeyUp;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the load event is raised
         /// </summary>
         [Bridge.CLR.Name("onload")]
-        public Action<Event> OnLoad;
+        public static Action<Event> OnLoad;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the loadeddata event is raised
         /// </summary>
         [Bridge.CLR.Name("onloadeddata")]
-        public Action<Event> OnLoadedData;
+        public static Action<Event> OnLoadedData;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the loadedmetadata event is raised
         /// </summary>
         [Bridge.CLR.Name("onloadedmetadata")]
-        public Action<Event> OnLoadedMetaData;
+        public static Action<Event> OnLoadedMetaData;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the loadstart event is raised
         /// </summary>
         [Bridge.CLR.Name("onloadstart")]
-        public Action<Event> OnLoadStart;
+        public static Action<Event> OnLoadStart;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mousedown event is raised
         /// </summary>
         [Bridge.CLR.Name("onmousedown")]
-        public Action<Event> OnMouseDown;
+        public static Action<Event> OnMouseDown;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseenter event is raised
         /// </summary>
         [Bridge.CLR.Name("onmouseenter")]
-        public Action<Event> OnMouseEnter;
+        public static Action<Event> OnMouseEnter;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseleave event is raised
         /// </summary>
         [Bridge.CLR.Name("onmouseleave")]
-        public Action<Event> OnMouseLeave;
+        public static Action<Event> OnMouseLeave;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mousemove event is raised
         /// </summary>
         [Bridge.CLR.Name("onmousemove")]
-        public Action<Event> OnMouseMove;
+        public static Action<Event> OnMouseMove;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseout event is raised
         /// </summary>
         [Bridge.CLR.Name("onmouseout")]
-        public Action<Event> OnMouseOut;
+        public static Action<Event> OnMouseOut;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseover event is raised
         /// </summary>
         [Bridge.CLR.Name("onmouseover")]
-        public Action<Event> OnMouseOver;
+        public static Action<Event> OnMouseOver;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseup event is raised
         /// </summary>
         [Bridge.CLR.Name("onmouseup")]
-        public Action<Event> OnMouseUp;
+        public static Action<Event> OnMouseUp;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mousewheel event is raised
         /// </summary>
         [Bridge.CLR.Name("onmousewheel")]
-        public Action<Event> OnMouseWheel;
+        public static Action<Event> OnMouseWheel;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the pause event is raised
         /// </summary>
         [Bridge.CLR.Name("onpause")]
-        public Action<Event> OnPause;
+        public static Action<Event> OnPause;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the play event is raised
         /// </summary>
         [Bridge.CLR.Name("onplay")]
-        public Action<Event> OnPlay;
+        public static Action<Event> OnPlay;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the playing event is raised
         /// </summary>
         [Bridge.CLR.Name("onplaying")]
-        public Action<Event> OnPlaying;
+        public static Action<Event> OnPlaying;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the progress event is raised
         /// </summary>
         [Bridge.CLR.Name("onprogress")]
-        public Action<Event> OnProgress;
+        public static Action<Event> OnProgress;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the ratechange event is raised
         /// </summary>
         [Bridge.CLR.Name("onratechange")]
-        public Action<Event> OnRateChange;
+        public static Action<Event> OnRateChange;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the reset event is raised
         /// </summary>
         [Bridge.CLR.Name("onreset")]
-        public Action<Event> OnReset;
+        public static Action<Event> OnReset;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the scroll event is raised
         /// </summary>
         [Bridge.CLR.Name("onscroll")]
-        public Action<Event> OnScroll;
+        public static Action<Event> OnScroll;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the seeked event is raised
         /// </summary>
         [Bridge.CLR.Name("onseeked")]
-        public Action<Event> OnSeeked;
+        public static Action<Event> OnSeeked;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the seeking event is raised
         /// </summary>
         [Bridge.CLR.Name("onseeking")]
-        public Action<Event> OnSeeking;
+        public static Action<Event> OnSeeking;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the select event is raised
         /// </summary>
         [Bridge.CLR.Name("onselect")]
-        public Action<Event> OnSelect;
+        public static Action<Event> OnSelect;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the show event is raised
         /// </summary>
         [Bridge.CLR.Name("onshow")]
-        public Action<Event> OnShow;
+        public static Action<Event> OnShow;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the sort event is raised
         /// </summary>
         [Bridge.CLR.Name("onsort")]
-        public Action<Event> OnSort;
+        public static Action<Event> OnSort;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the stalled event is raised
         /// </summary>
         [Bridge.CLR.Name("onstalled")]
-        public Action<Event> OnStalled;
+        public static Action<Event> OnStalled;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the submit event is raised
         /// </summary>
         [Bridge.CLR.Name("onsubmit")]
-        public Action<Event> OnSubmit;
+        public static Action<Event> OnSubmit;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the suspend event is raised
         /// </summary>
         [Bridge.CLR.Name("onsuspend")]
-        public Action<Event> OnSuspend;
+        public static Action<Event> OnSuspend;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the timeupdate event is raised
         /// </summary>
         [Bridge.CLR.Name("ontimeupdate")]
-        public Action<Event> OnTimeUpdate;
+        public static Action<Event> OnTimeUpdate;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the volumechange event is raised
         /// </summary>
         [Bridge.CLR.Name("onvolumechange")]
-        public Action<Event> OnVolumeChange;
+        public static Action<Event> OnVolumeChange;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the waiting event is raised
         /// </summary>
         [Bridge.CLR.Name("onwaiting")]
-        public Action<Event> OnWaiting;
+        public static Action<Event> OnWaiting;
 
         /// <summary>
         /// Returns the event handling code for the touchstart event.
         /// </summary>
         [Bridge.CLR.Name("onTouchStart")]
-        public Action<Event> OnTouchStart;
+        public static Action<Event> OnTouchStart;
 
         /// <summary>
         /// Returns the event handling code for the touchend event.
         /// </summary>
         [Bridge.CLR.Name("onTouchEnd")]
-        public Action<Event> OnTouchEnd;
+        public static Action<Event> OnTouchEnd;
 
         /// <summary>
         /// Returns the event handling code for the touchmove event.
         /// </summary>
         [Bridge.CLR.Name("onTouchMove")]
-        public Action<Event> OnTouchMove;
+        public static Action<Event> OnTouchMove;
 
         /// <summary>
         /// Returns the event handling code for the touchenter event.
         /// </summary>
         [Bridge.CLR.Name("onTouchEnter")]
-        public Action<Event> OnTouchEnter;
+        public static Action<Event> OnTouchEnter;
 
         /// <summary>
         /// Returns the event handling code for the touchleave event.
         /// </summary>
         [Bridge.CLR.Name("onTouchLeave")]
-        public Action<Event> OnTouchLeave;
+        public static Action<Event> OnTouchLeave;
 
         /// <summary>
         /// Returns the event handling code for the touchcancel event.
         /// </summary>
         [Bridge.CLR.Name("onTouchCancel")]
-        public Action<Event> OnTouchCancel;
+        public static Action<Event> OnTouchCancel;
 
         /// <summary>
         /// Removes keyboard focus from the currently focused element.
         /// </summary>
-        public void Blur()
+        public static void Blur()
         {
         }
 
         /// <summary>
         /// Sends a mouse click event to the element.
         /// </summary>
-        public void Click()
+        public static void Click()
         {
         }
 
         /// <summary>
         /// Makes the element the current keyboard focus.
         /// </summary>
-        public void Focus()
+        public static void Focus()
         {
         }
     }
