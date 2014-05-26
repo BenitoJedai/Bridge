@@ -8,6 +8,14 @@ Bridge = {
 		return false;
 	  }
 
+	  if (Bridge.isFunction(type)) {
+	      return type(obj);
+	  }
+
+	  if (Bridge.isFunction(type.instanceOf)) {
+	      return type.instanceOf(obj);
+	  }
+
 	  if ((obj.constructor == type) || (obj instanceof type)) {
 		return true;
 	  }

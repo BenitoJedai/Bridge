@@ -82,6 +82,11 @@ namespace Bridge.NET
 
             if ((result == null || result.IsError) && log != null)
             {
+                if (result is CSharpInvocationResolveResult && ((CSharpInvocationResolveResult)result).OverloadResolutionErrors != OverloadResolutionErrors.None)
+                {
+                    return result;
+                }
+                
                 log.LogWarning(string.Format("Node resolving has failed {0}: {1}", node.StartLocation, node.GetText()));
             }
 

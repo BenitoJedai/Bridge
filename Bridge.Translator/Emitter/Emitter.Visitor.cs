@@ -1159,28 +1159,67 @@ namespace Bridge.NET
 
         public override void VisitIndexerExpression(IndexerExpression indexerExpression)
         {
-            if (indexerExpression.Arguments.Count != 1)
+            IAttribute inlineAttr = null;
+            var resolveResult = this.Resolver.ResolveNode(indexerExpression, this);
+
+            if (resolveResult is InvocationResolveResult)
             {
-                throw this.CreateException(indexerExpression, "Only one index is supported");
+                var member = ((InvocationResolveResult)resolveResult).Member;
+                if (member is SpecializedProperty)
+                {
+                    var specProp = (SpecializedProperty)member;
+                    var method = this.IsAssignment ? specProp.Setter : specProp.Getter;
+                    inlineAttr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+                }
             }
 
             indexerExpression.Target.AcceptVisitor(this);
 
-            var index = indexerExpression.Arguments.First();
-
-            var primitive = index as PrimitiveExpression;
-
-            if (primitive != null && primitive.Value != null && Regex.Match(primitive.Value.ToString(), "^[_$a-z][_$a-z0-9]*$", RegexOptions.IgnoreCase).Success)
+            if (inlineAttr != null)
             {
-                this.WriteDot();
-                this.Write(primitive.Value);
+                var inlineCode = inlineAttr.PositionalArguments[0];
+                if (inlineCode.ConstantValue != null)
+                {
+                    string code = inlineCode.ConstantValue.ToString();
+
+                    this.WriteDot();
+                    this.PushWriter(code);
+                    this.EmitExpressionList(indexerExpression.Arguments);
+                    
+
+                    if (!this.IsAssignment)
+                    {
+                        this.PopWriter();
+                    }
+                    else
+                    {
+                        this.WriteComma();
+                    }
+                }
             }
             else
             {
-                this.WriteOpenBracket();
-                index.AcceptVisitor(this);
-                this.WriteCloseBracket();
-            }
+                if (indexerExpression.Arguments.Count != 1)
+                {
+                    throw this.CreateException(indexerExpression, "Only one index is supported");
+                }                
+
+                var index = indexerExpression.Arguments.First();
+
+                var primitive = index as PrimitiveExpression;
+
+                if (primitive != null && primitive.Value != null && Regex.Match(primitive.Value.ToString(), "^[_$a-z][_$a-z0-9]*$", RegexOptions.IgnoreCase).Success)
+                {
+                    this.WriteDot();
+                    this.Write(primitive.Value);
+                }
+                else
+                {
+                    this.WriteOpenBracket();
+                    index.AcceptVisitor(this);
+                    this.WriteCloseBracket();
+                }
+            }            
         }
 
         public override void VisitCastExpression(CastExpression castExpression)

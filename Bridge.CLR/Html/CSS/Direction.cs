@@ -5,7 +5,7 @@
     /// </summary>
     [Bridge.CLR.Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Bridge.CLR.Name("String")]
     public enum Direction
     {
         /// <summary>

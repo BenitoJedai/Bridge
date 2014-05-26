@@ -64,11 +64,21 @@ Bridge.Class.extend('Bridge.Dictionary', {
         return this.entries[key];
     },
 
-    add: function (key, value) {
+    set: function (key, value) {
         if (!this.containsKey(key)) {
             this.count++;
         }
         this.entries[key] = value;
+    },
+
+    add: function (key, value) {
+        if (!this.containsKey(key)) {
+            this.count++;
+            this.entries[key] = value;
+        }
+        else {
+            throw new Error("Key already exists: " + key);
+        }        
     },
 
     remove: function (key) {

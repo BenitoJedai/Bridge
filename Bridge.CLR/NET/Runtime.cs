@@ -46,6 +46,11 @@ namespace System
 
         public bool AllowMultiple { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Enum, AllowMultiple = false)]
+    public class FlagsAttribute : Attribute
+    {
+    }
 }
 
 namespace System.Runtime.InteropServices

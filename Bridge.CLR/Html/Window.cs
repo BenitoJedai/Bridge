@@ -269,6 +269,44 @@ namespace Bridge.CLR.Html
         }
 
         /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(string type, IEventListener listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(EventType type, IEventListener listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(string type, IEventListener listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(EventType type, IEventListener listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
         /// The Window.alert() method displays an alert dialog with the optional specified content and an OK button.
         /// </summary>
         /// <param name="message">message is an optional string of text you want to display in the alert dialog, or, alternatively, an object that is converted into a string and displayed.</param>
@@ -366,9 +404,9 @@ namespace Bridge.CLR.Html
         /// Dispatches the specified event to the current element.
         /// To create an event object use the createEvent method in Firefox, Opera, Google Chrome, Safari and Internet Explorer from version 9. After the new event is created, initialize it first (for details, see the page for the createEvent method). When the event is initialized, it is ready for dispatching.
         /// </summary>
-        /// <param name="event">Required. Reference to an event object to be dispatched.</param>
+        /// <param name="e">Required. Reference to an event object to be dispatched.</param>
         /// <returns>Boolean that indicates whether the default action of the event was not canceled.</returns>
-        public static bool DispatchEvent(Event @event)
+        public static bool DispatchEvent(Event e)
         {
             return false;
         }
@@ -528,6 +566,21 @@ namespace Bridge.CLR.Html
             return null;
         }
 
+        /// <summary>
+        /// Returns a selection object representing the range of text selected by the user.
+        /// </summary>
+        /// <returns>selection is a Selection object. When cast to string, either by adding empty quotes "" or using .toString, this object is the text selected.</returns>
+        public static Selection GetSelection()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the window to the home page.
+        /// </summary>
+        public static void Home()
+        {
+        }
 
         [Bridge.CLR.Inline("debugger")]
         public static void Debugger()

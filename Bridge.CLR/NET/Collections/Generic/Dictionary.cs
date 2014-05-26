@@ -35,19 +35,23 @@ namespace System.Collections.Generic
                 return null;
             }
         }
-        
-        //public TValue this[TKey key] 
-        //{
-        //    [Bridge.CLR.Inline("get({0})")]
-        //    get 
-        //    {
-        //        return default(TValue);
-        //    }
-        //    [Bridge.CLR.Inline("add({0},{1})")]
-        //    set 
-        //    {
-        //    }
-        //}
+
+        public TValue this[TKey key]
+        {
+            [Bridge.CLR.Inline("get({0})")]
+            get
+            {
+                return default(TValue);
+            }
+            [Bridge.CLR.Inline("set({0})")]
+            set
+            {
+            }
+        }
+
+        public void Set(TKey key, TValue value)
+        {
+        }
 
         public void Add(TKey key, TValue value) 
         {

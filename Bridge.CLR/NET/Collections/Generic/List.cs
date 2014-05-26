@@ -12,6 +12,19 @@ namespace System.Collections.Generic
         {
         }
 
+        public T this[int index]
+        {
+            [Bridge.CLR.Inline("get({0})")]
+            get
+            {
+                return default(T);
+            }
+            [Bridge.CLR.Inline("set({0})")]
+            set
+            {
+            }
+        }
+
         public int Count 
         {
             get 
