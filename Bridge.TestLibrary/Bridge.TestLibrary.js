@@ -1,26 +1,13 @@
 Bridge.Class.extend('TestProject.Class1', {
     $statics: {
-        method1: function (s) {
-            var c1 = new TestProject.Class1("$init");
-            var c2 = new TestProject.Class1("$init$Int32", 1);
-            var c3 = new TestProject.Class1("$init$String", s);
+        start: function () {
+            var dict = new Bridge.Dictionary();
+            dict.add("test", dict.get("new"));
+            var date1 = new Bridge.DateTime("$init");
+            var date2 = new Bridge.DateTime("$init$Int32$Int32$Int32", 2000, 11, 5);
+            console.log(Bridge.DateTime.getToday().getDayOfYear());
+            console.log("date2", date2.dateData);
         }
-    },
-    $multipleCtors: true,
-    $init: function () {
-        console.log("[no arguments]");
-    },
-    $init$Int32: function (value) {
-        console.log("int");
-    },
-    $init$Double: function (value) {
-        console.log("double");
-    },
-    $init$Object: function (value) {
-        console.log("object");
-    },
-    $init$String: function (value) {
-        console.log("string");
     }
 });
 
