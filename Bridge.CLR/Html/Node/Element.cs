@@ -37,7 +37,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// Token list of class attribute
         /// </summary>
-        public readonly TokenList ClassList;
+        public readonly DOMTokenList ClassList;
 
         /// <summary>
         /// gets and sets the value of the class attribute of the specified element.

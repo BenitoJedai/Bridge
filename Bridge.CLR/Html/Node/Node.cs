@@ -259,7 +259,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// Returns a live NodeList containing all the children of this node. NodeList being live means that if the children of the Node change, the NodeList object is automatically updated.
         /// </summary>
-        public readonly ClientRectList ChildNodes;
+        public readonly NodeList ChildNodes;
 
         /// <summary>
         /// Returns a Node representing the first direct child node of the node, or null if the node has no child.

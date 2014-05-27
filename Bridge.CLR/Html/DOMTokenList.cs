@@ -7,9 +7,9 @@ namespace Bridge.CLR.Html
     /// </summary>
     [Bridge.CLR.Ignore]
     [Bridge.CLR.Name("DOMTokenList")]
-	public class TokenList : IEnumerable<string>
+	public class DOMTokenList : IEnumerable<string>
     {
-        protected internal TokenList()
+        protected internal DOMTokenList()
         {
 		}
 

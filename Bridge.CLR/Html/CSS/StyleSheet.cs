@@ -24,12 +24,12 @@
         // <summary>
         // Returns a MediaList representing the intended destination medium for style information.
         // </summary>
-        //TODO: public readonly MediaList Media;
+        public readonly MediaList Media;
 
         // <summary>
         // Returns a Node associating this style sheet with the current document.
         // </summary>
-        //TODO: public readonly Node OwnerNode;
+        public readonly Node OwnerNode;
         
         /// <summary>
         /// Returns a StyleSheet including this one, if any; returns null if there aren't any.
