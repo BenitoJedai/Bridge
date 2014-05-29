@@ -53,10 +53,45 @@ Bridge = {
 	   return type.$name || '[native Object]';	  
 	},
 	
-	bind : function (obj, method) {
-	  return function () {
-		return method.apply(obj, arguments)
-	  }
+	bind: function (obj, method, args, appendArgs) {
+	    if (arguments.length === 2) {
+	        return function () {
+	            return method.apply(obj, arguments)
+	        }
+	    }
+
+	    return function () {
+	        var callArgs = args || arguments;
+
+	        if (appendArgs === true) {
+	            callArgs = Array.prototype.slice.call(arguments, 0);
+	            callArgs = callArgs.concat(args);
+	        }
+	        else if (typeof appendArgs == 'number') {
+	            callArgs = Array.prototype.slice.call(arguments, 0);
+	            
+	            if (appendArgs === 0) {
+	                callArgs.unshift.apply(callArgs, args);
+	            }
+	            else if (appendArgs < callArgs.length) {
+	                callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+	            }
+	            else {
+	                callArgs.push.apply(callArgs, args);
+	            }
+	        }
+
+	        return method.apply(obj, callArgs);
+	    };
+	},
+
+	bindScope: function (obj, method) {
+	    return function () {
+	        var callArgs = Array.prototype.slice.call(arguments, 0);
+	        callArgs.unshift.apply(callArgs, [obj]);
+
+	        return method.apply(obj, callArgs);
+	    };
 	},
 	
 	apply : function (obj, values) {

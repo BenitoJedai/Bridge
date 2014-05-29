@@ -13,9 +13,6 @@ namespace Bridge.CLR.Html
     {
         #region Properties
 
-        [Bridge.CLR.Inline("arguments")]
-        public static object[] Arguments;
-
         /// <summary>
         /// This read-only property indicates whether the referenced window is closed or not.
         /// </summary>
@@ -1360,6 +1357,154 @@ namespace Bridge.CLR.Html
         /// </summary>
         [Bridge.CLR.Name("onpagehide")]
         public static Action<Event> OnPageHide;
+
+        /// <summary>
+        /// The global Infinity property is a numeric value representing infinity.
+        /// </summary>
+        [Bridge.CLR.Inline("Infinity")]
+        public static readonly double Infinity;
+
+        /// <summary>
+        /// The global NaN property is a value representing Not-A-Number.
+        /// </summary>
+        [Bridge.CLR.Inline("NaN")]
+        public static readonly double NaN;
+
+        /// <summary>
+        /// The global undefined property represents the value undefined.
+        /// </summary>
+        [Bridge.CLR.Inline("undefined")]
+        public static readonly object Undefined;
+
+        /// <summary>
+        /// The eval() method evaluates JavaScript code represented as a string.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">A string representing a JavaScript expression, statement, or sequence of statements. The expression can include variables and properties of existing objects.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("eval({0})")]
+        public static T Eval<T>(string expression)
+        {
+            return default(T);
+        }
+                
+        /// <summary>
+        /// Inject javascript code
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("{0}")]
+        public static T Inline<T>(string code)
+        {
+            return default(T);
+        }
+
+        /// <summary>
+        /// The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.
+        /// </summary>
+        /// <param name="testValue">The value to be tested for finiteness.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("isFinite({0})")]
+        public static bool IsFinite(object testValue)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The parseFloat() function parses a string argument and returns a floating point number.
+        /// </summary>
+        /// <param name="value">A string that represents the value you want to parse.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("parseFloat({0})")]
+        public static double ParseFloat(string value)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// The parseInt() function parses a string argument and returns an integer of the specified radix or base.
+        /// </summary>
+        /// <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("parseInt({0})")]
+        public static int ParseInt(string value)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// The parseInt() function parses a string argument and returns an integer of the specified radix or base.
+        /// </summary>
+        /// <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
+        /// <param name="radix">An integer that represents the radix of the above mentioned string. Always specify this parameter to eliminate reader confusion and to guarantee predictable behavior. Different implementations produce different results when a radix is not specified.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("parseInt({0}, {1})")]
+        public static int ParseInt(string value, int radix)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// The isNaN() function determines whether a value is NaN or not. Be careful, this function is broken. You may be interested in Number.isNaN() as defined in ECMAScript 6 or you can use typeof to determine if the value is Not-A-Number.
+        /// </summary>
+        /// <param name="testValue">The value to be tested.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("isNaN({0})")]
+        public static bool IsNaN(object testValue)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The decodeURI() function decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.
+        /// </summary>
+        /// <param name="encodedURI">A complete, encoded Uniform Resource Identifier.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("decodeURI({0})")]
+        public static string DecodeURI(string encodedURI)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The decodeURIComponent() method decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.
+        /// </summary>
+        /// <param name="encodedURI">An encoded component of a Uniform Resource Identifier.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("decodeURIComponent({0})")]
+        public static string DecodeURIComponent(string encodedURI)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The encodeURI() method encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two "surrogate" characters).
+        /// </summary>
+        /// <param name="uri">A complete Uniform Resource Identifier.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("encodeURI({0})")]
+        public static string EncodeURI(string uri)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The encodeURIComponent() method encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two "surrogate" characters).
+        /// </summary>
+        /// <param name="component">A component of a URI.</param>
+        /// <returns></returns>
+        [Bridge.CLR.Inline("encodeURIComponent({0})")]
+        public static string EncodeURIComponent(string component)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// An Array-like object corresponding to the arguments passed to a function.
+        /// </summary>
+        [Bridge.CLR.Inline("arguments")]
+        public static readonly object[] Arguments;
 
         [Bridge.CLR.Inline("debugger")]
         public static void Debugger()

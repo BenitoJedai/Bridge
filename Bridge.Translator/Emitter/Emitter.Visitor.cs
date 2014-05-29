@@ -362,6 +362,7 @@ namespace Bridge.NET
                 MethodDefinition method = member as MethodDefinition;
                 FieldDefinition field = member as FieldDefinition;
                 bool isStatic = method != null && method.IsStatic || field != null && field.IsStatic;
+                string appendAdditionalCode = null;
                 
                 if (method != null)
                 {
@@ -371,6 +372,33 @@ namespace Bridge.NET
                     {
                         
                         return;
+                    }
+
+                    if (memberResult != null &&
+                         memberResult.Member is DefaultResolvedMethod &&
+                         !(
+                            identifierExpression.Parent is InvocationExpression &&
+                            identifierExpression.NextSibling != null &&
+                            identifierExpression.NextSibling.Role is TokenRole &&
+                            ((TokenRole)identifierExpression.NextSibling.Role).Token == "("
+                         )
+                    )
+                    {
+                        var resolvedMethod = (DefaultResolvedMethod)memberResult.Member;
+                        var isExtensionMethod = resolvedMethod.IsExtensionMethod;
+                        this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.BIND_SCOPE : Emitter.BIND) + "(");
+
+                        if (isStatic)
+                        {
+                            this.Write(this.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
+                        }
+                        else
+                        {
+                            this.WriteThis();
+                        }
+
+                        this.Write(", ");
+                        appendAdditionalCode = ")";
                     }
                 }
 
@@ -395,7 +423,12 @@ namespace Bridge.NET
                     else
                     {
                         this.Write(this.GetMethodName(method));
-                    }                    
+                    }
+
+                    if (appendAdditionalCode != null)
+                    {
+                        this.Write(appendAdditionalCode);
+                    }
                 }
                 else
                 {
@@ -486,6 +519,7 @@ namespace Bridge.NET
             MemberResolveResult member = resolveResult as MemberResolveResult;           
             
             string inline = member != null ? this.GetInline(member.Member) : null;
+            string appendAdditionalCode = null;
 
             if (!string.IsNullOrEmpty(inline) && member.Member.IsStatic)
             {
@@ -547,6 +581,35 @@ namespace Bridge.NET
                     this.Write(this.ShortenTypeName(typeResolveResult.Type.FullName));
                     return;
                 }
+                else if (member != null && 
+                         member.Member is DefaultResolvedMethod && 
+                         !(
+                            memberReferenceExpression.Parent is InvocationExpression && 
+                            memberReferenceExpression.NextSibling != null && 
+                            memberReferenceExpression.NextSibling.Role is TokenRole &&
+                            ((TokenRole)memberReferenceExpression.NextSibling.Role).Token == "("
+                         )
+                    )
+                {                    
+                    var resolvedMethod = (DefaultResolvedMethod)member.Member;
+
+                    var isExtensionMethod = resolvedMethod.IsExtensionMethod;
+
+                    this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.BIND_SCOPE : Emitter.BIND ) + "(");
+                    memberReferenceExpression.Target.AcceptVisitor(this);
+                    this.Write(", ");
+
+                    if (isExtensionMethod)
+                    {
+                        this.Write(this.ShortenTypeName(resolvedMethod.DeclaringType.FullName));
+                    }
+                    else
+                    {
+                        memberReferenceExpression.Target.AcceptVisitor(this);
+                    }
+
+                    appendAdditionalCode = ")";
+                }
                 else
                 {
                     memberReferenceExpression.Target.AcceptVisitor(this);
@@ -599,6 +662,11 @@ namespace Bridge.NET
                 else
                 {
                     this.Write(this.GetEntityName(member.Member));
+
+                    if (appendAdditionalCode != null)
+                    {
+                        this.Write(appendAdditionalCode);
+                    }
                 }                    
             }
         }        

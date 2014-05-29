@@ -4,6 +4,8 @@ using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace Bridge.NET
 {
@@ -77,7 +79,43 @@ namespace Bridge.NET
 
             if (result is MethodGroupResolveResult && node.Parent != null)
             {
-                return this.ResolveNode(node.Parent, log);
+                var methodGroupResolveResult = (MethodGroupResolveResult)result;
+                var parentResolveResult = this.ResolveNode(node.Parent, log);
+                var parentInvocation = parentResolveResult as InvocationResolveResult;
+                var method = methodGroupResolveResult.Methods.FirstOrDefault();
+
+                if (parentInvocation != null && method == null) 
+                {
+                    var typeDef = (DefaultResolvedTypeDefinition)methodGroupResolveResult.TargetType;
+                    var methods = typeDef.Methods.Where(m => m.Name == methodGroupResolveResult.MethodName);
+                    method = methods.FirstOrDefault();
+                }
+
+                if (method == null)
+                {
+                    var extMethods = methodGroupResolveResult.GetEligibleExtensionMethods(false);
+
+                    if (extMethods.Count() == 0)
+                    {
+                        extMethods = methodGroupResolveResult.GetExtensionMethods();
+                    }
+
+                    if (extMethods.Count() == 0 || extMethods.First().Count() == 0)
+                    {
+                        throw new Exception("Cannot find method defintion for " + node.GetText());
+                    }
+
+                    method = extMethods.First().First();
+                }
+                
+                if (parentInvocation == null || method.FullName != parentInvocation.Member.FullName)
+                {                   
+                    MemberResolveResult memberResolveResult = new MemberResolveResult(new TypeResolveResult(method.DeclaringType), method);
+
+                    return memberResolveResult;
+                }
+
+                return parentResolveResult;
             }
 
             if ((result == null || result.IsError) && log != null)
