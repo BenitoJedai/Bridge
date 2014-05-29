@@ -9,12 +9,19 @@
 
 Bridge={is:function(obj,type){if(typeof type=="string"){type=Bridge.unroll(type);}
 if(obj==null){return false;}
+if(Bridge.isFunction(type)){return type(obj);}
+if(Bridge.isFunction(type.instanceOf)){return type.instanceOf(obj);}
 if((obj.constructor==type)||(obj instanceof type)){return true;}
 if(Bridge.isArray(obj)&&type==Bridge.IEnumerable){return true;}
 if(!type.$$inheritors){return false;}
 var inheritors=type.$$inheritors;for(var i=0;i<inheritors.length;i++){if(Bridge.is(obj,inheritors[i])){return true;}}
 return false;},as:function(obj,type){return Bridge.is(obj,type)?obj:null;},cast:function(obj,type){var result=Bridge.as(obj,type);if(result==null){throw Error('Unable to cast type '+Bridge.getTypeName(obj.constructor)+' to type '+Bridge.getTypeName(type));}
-return result;},getTypeName:function(type){return type.$name||'[native Object]';},bind:function(obj,method){return function(){return method.apply(obj,arguments)}},apply:function(obj,values){var names=Bridge.getPropertyNames(values,false);for(var i=0;i<names.length;i++){var name=names[i];if(typeof obj[name]=="function"){obj[name](values[name]);}
+return result;},getTypeName:function(type){return type.$name||'[native Object]';},bind:function(obj,method,args,appendArgs){if(arguments.length===2){return function(){return method.apply(obj,arguments)}}
+return function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
+else if(typeof appendArgs=='number'){callArgs=Array.prototype.slice.call(arguments,0);if(appendArgs===0){callArgs.unshift.apply(callArgs,args);}
+else if(appendArgs<callArgs.length){callArgs.splice.apply(callArgs,[appendArgs,0].concat(args));}
+else{callArgs.push.apply(callArgs,args);}}
+return method.apply(obj,callArgs);};},bindScope:function(obj,method){return function(){var callArgs=Array.prototype.slice.call(arguments,0);callArgs.unshift.apply(callArgs,[obj]);return method.apply(obj,callArgs);};},apply:function(obj,values){var names=Bridge.getPropertyNames(values,false);for(var i=0;i<names.length;i++){var name=names[i];if(typeof obj[name]=="function"){obj[name](values[name]);}
 else{obj[name]=values[name];}}
 return obj;},getEnumerator:function(obj){if(obj&&obj.getEnumerator){return obj.getEnumerator();}
 if((Object.prototype.toString.call(obj)==='[object Array]')||(obj&&Bridge.isDefined(obj.length))){return new Bridge.ArrayEnumerator(obj);}
@@ -49,8 +56,9 @@ else if(Bridge.is(obj,Bridge.Dictionary)){this.entries={};this.count=0;for(var k
 else{this.entries={};this.count=0;}},getKeys:function(){return Bridge.getPropertyNames(this.entries,false);},getValues:function(){var keys=this.getKeys(),result=[];for(var i=0;i<keys.length;i++){result.push(this.entries[keys[i]]);}
 return result;},clear:function(){this.entries={};this.count=0;},containsKey:function(key){return Bridge.isDefined(this.entries[key]);},containsValue:function(value){var keys=this.getKeys();for(var i=0;i<keys.length;i++){if(value===this.entries[keys[i]]){return true;}}
 return false;},get:function(key){if(!this.containsKey(key)){throw new Error("Key not found: "+key);}
-return this.entries[key];},add:function(key,value){if(!this.containsKey(key)){this.count++;}
-this.entries[key]=value;},remove:function(key){if(this.containsKey(key)){this.count--;}
+return this.entries[key];},set:function(key,value){if(!this.containsKey(key)){this.count++;}
+this.entries[key]=value;},add:function(key,value){if(!this.containsKey(key)){this.count++;this.entries[key]=value;}
+else{throw new Error("Key already exists: "+key);}},remove:function(key){if(this.containsKey(key)){this.count--;}
 delete this.entries[key];},getCount:function(){return this.count;},getEnumerator:function(){return new Bridge.DictionaryEnumerator(this.entries);}});Bridge.Class.extend('Bridge.ICollection',{$extend:[Bridge.IEnumerable]});Bridge.Class.extend('Bridge.List',{$extend:[Bridge.ICollection],$init:function(obj){if(Object.prototype.toString.call(obj)==='[object Array]'){this.items=obj;}
 else if(Bridge.is(obj,Bridge.IEnumerable)){this.items=Bridge.toArray(obj);}
 else{this.items=[];}},checkIndex:function(index){if(index<0||index>(this.items.length-1)){throw new Error("Index out of range");}},getCount:function(){return this.items.length;},get:function(index){this.checkIndex(index);return this.items[index];},set:function(index,value){this.checkIndex(index);this.items[index]=value;},add:function(value){this.items.push(value);},addRange:function(items){var array=Bridge.toArray(items),i,len;for(i=0,len=array.length;i<len;++i){this.items.push(array[i]);}},clear:function(){this.items=[];},indexOf:function(item,startIndex){var i;if(!Bridge.isDefined(startIndex)){startIndex=0;}
