@@ -164,7 +164,7 @@ Bridge = {
     },
 
     isFunction: function (obj) {
-        return typeof (obj) === 'function';
+        return typeof (obj) === 'function' && obj.prototype && !obj.prototype.call && !obj.prototype.apply;
     },
 
     isDate: function (obj) {
