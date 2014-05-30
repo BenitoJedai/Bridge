@@ -172,7 +172,7 @@ Bridge = {
     },
 
     isFunction: function (obj) {
-        return typeof (obj) === 'function';
+        return typeof (obj) === 'function' && obj.prototype && !obj.prototype.call && !obj.prototype.apply;
     },
 
     isDate: function (obj) {
@@ -270,6 +270,18 @@ Bridge = {
 
         // The dummy class constructor
         function Class() {
+            if (!(this instanceof Class)) {
+                var args = Array.prototype.slice.call(arguments, 0),
+                    object = Object.create(Class.prototype),
+                    result = Class.apply(object, args);
+
+                if (typeof result === 'object') {
+                    return result;
+                } else {
+                    return object;
+                }
+            }
+
             // All construction is actually done in the init method
             if (!initializing) {
                 if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string" && Bridge.isFunction(this[arguments[0]])) {
