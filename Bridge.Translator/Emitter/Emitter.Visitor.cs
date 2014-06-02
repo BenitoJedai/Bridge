@@ -79,15 +79,12 @@ namespace Bridge.NET
             {
                 this.InjectMethodDetectors = false;
 
-                string detectors = null;
+                string detectors = this.GetMethodsDetector(this.MethodsGroupBuilder);
                 bool noChildren = blockStatement.Children.ToList().Count == 0;
+
                 if (noChildren)
                 {
-                    detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(this.MethodsGroupBuilder.ToString(), Environment.NewLine, "");
-                }
-                else
-                {
-                    detectors = this.MethodsGroupBuilder.ToString();
+                    detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(detectors, Environment.NewLine, "");
                 }
                 
                 detectors = this.WriteIndentToString(detectors);
@@ -100,7 +97,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    this.Write("if (arguments.length == 0)");
+                    this.Write("else if (arguments.length == 0)");
                     this.WriteSpace();
                     this.BeginBlock();
                     addEndBlock = true;
@@ -683,38 +680,60 @@ namespace Bridge.NET
 
         public override void VisitInvocationExpression(InvocationExpression invocationExpression)
         {
-            Tuple<bool, string> inlineCode = this.GetInlineCode(invocationExpression);
+                        
+            Tuple<bool, bool, string> inlineInfo = this.GetInlineCode(invocationExpression);
 
-            if (inlineCode != null && !String.IsNullOrEmpty(inlineCode.Item2) && invocationExpression.Target is IdentifierExpression)
+            if (inlineInfo != null)
             {
-                bool isStatic = inlineCode.Item1;
-                this.Write("");
-                StringBuilder savedBuilder = this.Output;
-                var args = new List<string>(invocationExpression.Arguments.Count);
+                bool isStaticMethod = inlineInfo.Item1;
+                bool isInlineMethod = inlineInfo.Item2;
+                string inlineScript = inlineInfo.Item3;
 
-                foreach (var arg in invocationExpression.Arguments)
+                if (isInlineMethod)
                 {
-                    this.Output = new StringBuilder();
-                    arg.AcceptVisitor(this);
-                    args.Add(this.Output.ToString());
-                }
-                
-                this.Output = savedBuilder;
+                    if (invocationExpression.Arguments.Count == 1)
+                    {
+                        var code = invocationExpression.Arguments.First();
+                        var inlineExpression = code as PrimitiveExpression;
+                        if (inlineExpression == null)
+                        {
+                            throw new Exception("Only primitive expression can be inlined: " + inlineExpression.GetText());
+                        }
 
-                if (!isStatic) 
+                        this.Write(inlineExpression.Value);
+                        return;
+                    }
+                }
+                else if (!String.IsNullOrEmpty(inlineScript) && invocationExpression.Target is IdentifierExpression)
                 {
-                    this.WriteThis();
-                    this.WriteDot();                    
-                }
+                    this.Write("");
+                    StringBuilder savedBuilder = this.Output;
+                    var args = new List<string>(invocationExpression.Arguments.Count);
 
-                this.Output.Append(String.Format(inlineCode.Item2, args.ToArray()));
+                    foreach (var arg in invocationExpression.Arguments)
+                    {
+                        this.Output = new StringBuilder();
+                        arg.AcceptVisitor(this);
+                        args.Add(this.Output.ToString());
+                    }
 
-                if (!isStatic)
-                {
-                    invocationExpression.Target.AcceptVisitor(this);
+                    this.Output = savedBuilder;
+
+                    if (!isStaticMethod)
+                    {
+                        this.WriteThis();
+                        this.WriteDot();
+                    }
+
+                    this.Output.Append(String.Format(inlineScript, args.ToArray()));
+
+                    if (!isStaticMethod)
+                    {
+                        invocationExpression.Target.AcceptVisitor(this);
+                    }
+
+                    return;
                 }
-                
-                return;                
             }
 
             MemberReferenceExpression targetMember = invocationExpression.Target as MemberReferenceExpression;
@@ -1565,15 +1584,21 @@ namespace Bridge.NET
             typeOfExpression.Type.AcceptVisitor(this);
         }
 
+        private static Regex injectComment = new Regex("@(.*)@", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        private static Regex removeStars = new Regex("(^\\s*)(\\* )", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         public override void VisitComment(Comment comment)
         {
-            if (comment.CommentType != CommentType.SingleLine
-                && comment.CommentType != CommentType.MultiLine)
+            Match injection = injectComment.Match(comment.Content);
+            if (comment.CommentType == CommentType.MultiLine && injection.Success)
             {
-                return;
+                string code = removeStars.Replace(injection.Groups[1].Value, "$1");
+                this.Write(code);
+                this.WriteNewLine();
             }
-
-            this.WriteComment(comment.Content);            
+            else if (comment.CommentType == CommentType.SingleLine || comment.CommentType == CommentType.MultiLine)
+            {
+                this.WriteComment(comment.Content);
+            }            
         }
 
         public override void VisitAnonymousTypeCreateExpression(AnonymousTypeCreateExpression anonymousTypeCreateExpression)

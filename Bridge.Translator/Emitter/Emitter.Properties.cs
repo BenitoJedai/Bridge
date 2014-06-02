@@ -236,7 +236,7 @@ namespace Bridge.NET
             set; 
         }
 
-        public StringBuilder MethodsGroupBuilder
+        public Dictionary<int, StringBuilder> MethodsGroupBuilder
         {
             get;
             set;

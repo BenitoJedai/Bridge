@@ -133,6 +133,13 @@ namespace Bridge.NET
             return null;
         }
 
+        public virtual bool IsInlineMethod(MethodDefinition method)
+        {
+            var attr = this.GetAttribute(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+
+            return attr != null && !attr.HasConstructorArguments;
+        }
+
         public virtual string GetInlineCode(MethodDefinition method) 
         {
             return this.GetAttributeValue(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");

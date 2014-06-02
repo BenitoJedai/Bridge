@@ -480,7 +480,7 @@ namespace Bridge.NET
                 var methodsDef = typeDef.Methods.Where(m => m.Name == name);
                 MethodDeclaration noArgsMethod = null;
                 this.MethodsGroup = methodsDef;
-                this.MethodsGroupBuilder = new StringBuilder();
+                this.MethodsGroupBuilder = new Dictionary<int, StringBuilder>();
 
                 foreach (var method in group)
                 {
@@ -644,7 +644,7 @@ namespace Bridge.NET
         protected virtual void EmitCtorDetector(List<ConstructorDeclaration> ctors)
         {
             var methodsDef = this.GetTypeDefinition().Methods.Where(m => m.IsConstructor);
-            StringBuilder sb = new StringBuilder();
+            Dictionary<int, StringBuilder> detectorBuilders = new Dictionary<int, StringBuilder>();
             this.EnsureComma();
 
             this.Write("$ctorDetector: function () ");
@@ -656,17 +656,28 @@ namespace Bridge.NET
                 if (methodDef != null)
                 {
                     string name = this.GetOverloadName(methodDef);
-                    this.EmitMethodDetector(sb, methodDef, name);
+                    this.EmitMethodDetector(detectorBuilders, methodDef, name);
                 }
                 else
                 {
+                    StringBuilder sb = null;
+                    if (!detectorBuilders.ContainsKey(0))
+                    {
+                        sb = new StringBuilder();
+                        detectorBuilders.Add(0, sb);
+                    }
+                    else
+                    {
+                        sb = detectorBuilders[0];
+                    }
+
                     sb.AppendLine("if (arguments.length == 0) {");
                     sb.AppendLine("    this.$init();");
                     sb.AppendLine("}");
                 }
             }
 
-            string detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(sb.ToString(), Environment.NewLine, "");
+            string detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(this.GetMethodsDetector(detectorBuilders), Environment.NewLine, "");
 
             this.Write(this.WriteIndentToString(detectors));
             this.WriteNewLine();
@@ -1671,7 +1682,7 @@ namespace Bridge.NET
             return this.GetAttribute(method.Attributes, "Delegate") != null;
         }
 
-        protected virtual Tuple<bool, string> GetInlineCode(InvocationExpression node)
+        protected virtual Tuple<bool, bool, string> GetInlineCode(InvocationExpression node)
         {
             var parts = new List<string>();
             Expression current = node.Target;
@@ -1748,8 +1759,10 @@ namespace Bridge.NET
                 if (method.Parameters.Count == node.Arguments.Count
                     && method.GenericParameters.Count == genericCount)
                 {
-                    return new Tuple<bool,string>(method.IsStatic, this.Validator.GetInlineCode(method));
-
+                    bool isInlineMethod = this.Validator.IsInlineMethod(method);
+                    string inlineCode = isInlineMethod ? null : this.Validator.GetInlineCode(method);
+                    
+                    return new Tuple<bool, bool, string>(method.IsStatic, isInlineMethod, inlineCode);
                 }
             }
 
@@ -1828,25 +1841,80 @@ namespace Bridge.NET
             return name;
         }
 
-        protected virtual void EmitMethodDetector(StringBuilder sb, MethodDefinition method, string name)
+        protected virtual string GetMethodsDetector(Dictionary<int, StringBuilder> detectorBuilders)
         {
-            sb.Append("if (arguments.length == ");
-            sb.Append(method.Parameters.Count);
-
-            for (int i = 0; i < method.Parameters.Count; i++)
+            StringBuilder sb = new StringBuilder();
+            foreach (var key in detectorBuilders.Keys)
             {
-                sb.Append(" && ");
+                if (sb.Length > 0)
+                {
+                    sb.Append("else ");
+                }
 
-                sb.Append("Bridge.is(arguments[");
-                sb.Append(i);
-                sb.Append("], ");
-                sb.Append(this.ShortenTypeName(this.ResolveType(method.Parameters[i].ParameterType.FullName)));
-                sb.Append(")");
+                sb.Append("if (arguments.length == ").Append(key).AppendLine(") {");
+                sb.AppendLine(detectorBuilders[key].ToString());
+                sb.AppendLine("}");
             }
 
-            sb.AppendLine(") {");
-            sb.Append("    return this.").Append(name).AppendLine(".apply(this, arguments);");
-            sb.AppendLine("}");
+            return sb.ToString();
+        }
+        
+        protected virtual void EmitMethodDetector(Dictionary<int, StringBuilder> detectorBuilders, MethodDefinition method, string name)
+        {
+            var argsCount = method.Parameters.Count;
+            if (!detectorBuilders.ContainsKey(argsCount)) 
+            {
+                detectorBuilders.Add(method.Parameters.Count, new StringBuilder());
+            }
+
+            StringBuilder sb = detectorBuilders[argsCount];
+
+            if (method.HasParameters)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                    sb.Append("    else if (");
+                }
+                else
+                {
+                    sb.Append("    if (");
+                }
+
+
+                for (int i = 0; i < method.Parameters.Count; i++)
+                {
+                    if (i != 0)
+                    {
+                        sb.Append(" && ");
+                    }
+
+                    sb.Append("Bridge.is(arguments[");
+                    sb.Append(i);
+                    sb.Append("], ");
+                    sb.Append(this.ShortenTypeName(this.ResolveType(method.Parameters[i].ParameterType.FullName)));
+                    sb.Append(")");
+                }
+
+                sb.AppendLine(") {");
+            }
+
+            sb.Append(method.HasParameters ? "        " : "    ");
+            if (method.ReturnType.MetadataType == MetadataType.Void)
+            {
+                sb.Append("this.");
+            }
+            else
+            {
+                sb.Append("return this.");
+            }
+            sb.Append(name).Append(".apply(this, arguments);");
+
+            if (method.HasParameters)
+            {
+                sb.AppendLine();
+                sb.Append("    }");
+            }
         }
         
         protected virtual MethodDefinition FindMethodDefinitionInGroup(IEnumerable<ParameterDeclaration> parameters, IEnumerable<MethodDefinition> group)

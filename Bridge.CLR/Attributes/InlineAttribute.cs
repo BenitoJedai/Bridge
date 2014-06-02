@@ -8,16 +8,12 @@ namespace Bridge.CLR
     [Bridge.CLR.Ignore, AttributeUsage(AttributeTargets.Method | AttributeTargets.Field)]
     public sealed class InlineAttribute : Attribute
     {
-        
-        public InlineAttribute(string format) 
+        internal InlineAttribute()
         {
-            this.Format = format;
         }
 
-        public string Format
+        public InlineAttribute(string format) 
         {
-            get;
-            private set;
         }
     }
 }

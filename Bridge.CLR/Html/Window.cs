@@ -1394,7 +1394,7 @@ namespace Bridge.CLR.Html
         /// <typeparam name="T"></typeparam>
         /// <param name="code"></param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("{0}")]
+        [Bridge.CLR.Inline]
         public static T Inline<T>(string code)
         {
             return default(T);
