@@ -135,3 +135,5 @@ UpgradeLog*.XML
 /Bridge.DateTime/Build/DateTime.DayOfWeek.js
 
 /Bridge.DateTime/Build/DateTime.UX.js
+
+/Bridge.TestLibrary/build/bridge-debug.js
