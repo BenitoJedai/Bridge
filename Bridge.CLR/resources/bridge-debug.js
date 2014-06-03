@@ -1,181 +1,184 @@
 /*
- * @version   : 1.0.0 - Bridge.NET License
- * @author    : Ext.NET, Inc. http://www.ext.net/
- * @date      : 2014-03-04
- * @copyright : Copyright (c) 2008-2014, Ext.NET, Inc. (http://www.ext.net/). All rights reserved.
- * @license   : See license.txt and http://www.ext.net/license/.
+ * @version   : 1.0.0 - Bridge.NET
+ * @author    : Object.NET, Inc. http://www.bridge.net/
+ * @date      : 2014-06-01
+ * @copyright : Copyright (c) 2008-2014, Object.NET, Inc. (http://www.object.net/). All rights reserved.
+ * @license   : See license.txt and http://www.bridge.net/license/.
  */
 
+
+// @source resources/Core.js
+
 Bridge = {
-  is : function (obj, type) {
-	  if (typeof type == "string") {
-	    type = Bridge.unroll(type);
-	  }
+  is: function (obj, type) {
+    if (typeof type == "string") {
+      type = Bridge.unroll(type);
+    }
 
-	  if (obj == null) {
+    if (obj == null) {
       return false;
-	  }
+    }
 
-	  if (Bridge.isFunction(type)) {
+    if (Bridge.isFunction(type)) {
       return type(obj);
-	  }
+    }
 
-	  if (Bridge.isFunction(type.instanceOf)) {
+    if (Bridge.isFunction(type.instanceOf)) {
       return type.instanceOf(obj);
-	  }
+    }
 
-	  if ((obj.constructor == type) || (obj instanceof type)) {
-		  return true;
-	  }
-
-	  if (Bridge.isArray(obj) && type == Bridge.IEnumerable) {
+    if ((obj.constructor == type) || (obj instanceof type)) {
       return true;
-	  }
+    }
 
-	  if (!type.$$inheritors) {
+    if (Bridge.isArray(obj) && type == Bridge.IEnumerable) {
+      return true;
+    }
+
+    if (!type.$$inheritors) {
       return false;
-	  }
+    }
 
-	  var inheritors = type.$$inheritors;
+    var inheritors = type.$$inheritors;
 
     for (var i = 0; i < inheritors.length; i++) {
       if (Bridge.is(obj, inheritors[i])) {
-		    return true;
-		  }
-	  }
+        return true;
+      }
+    }
 
-	  return false;
-	},
-	
-	as : function (obj, type) {
+    return false;
+  },
+
+  as: function (obj, type) {
     return Bridge.is(obj, type) ? obj : null;
-	},
-	
-	cast : function(obj, type) {
-	  var result = Bridge.as(obj, type);
+  },
 
-	  if (result == null) {
-	    throw Error('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
-	  }
+  cast: function (obj, type) {
+    var result = Bridge.as(obj, type);
 
-	  return result;
-	},
+    if (result == null) {
+      throw Error('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
+    }
 
-	getTypeName : function(type) {	  
-	   return type.$name || '[native Object]';	  
-	},
-	
-	bind: function (obj, method, args, appendArgs) {
+    return result;
+  },
+
+  getTypeName: function (type) {
+    return type.$name || '[native Object]';
+  },
+
+  bind: function (obj, method, args, appendArgs) {
     if (arguments.length === 2) {
-	    return function () {
-	      return method.apply(obj, arguments)
-	    }
+      return function () {
+        return method.apply(obj, arguments)
+      }
     }
 
     return function () {
-	    var callArgs = args || arguments;
+      var callArgs = args || arguments;
 
-	    if (appendArgs === true) {
-	      callArgs = Array.prototype.slice.call(arguments, 0);
-	      callArgs = callArgs.concat(args);
+      if (appendArgs === true) {
+        callArgs = Array.prototype.slice.call(arguments, 0);
+        callArgs = callArgs.concat(args);
       }
-	    else if (typeof appendArgs == 'number') {
-	      callArgs = Array.prototype.slice.call(arguments, 0);
-	            
-	      if (appendArgs === 0) {
-	        callArgs.unshift.apply(callArgs, args);
+      else if (typeof appendArgs == 'number') {
+        callArgs = Array.prototype.slice.call(arguments, 0);
+
+        if (appendArgs === 0) {
+          callArgs.unshift.apply(callArgs, args);
         }
-	      else if (appendArgs < callArgs.length) {
-	        callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+        else if (appendArgs < callArgs.length) {
+          callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
         }
-	      else {
-	        callArgs.push.apply(callArgs, args);
+        else {
+          callArgs.push.apply(callArgs, args);
         }
       }
 
-	    return method.apply(obj, callArgs);
+      return method.apply(obj, callArgs);
     };
-	},
+  },
 
-	bindScope: function (obj, method) {
+  bindScope: function (obj, method) {
     return function () {
       var callArgs = Array.prototype.slice.call(arguments, 0);
 
-	    callArgs.unshift.apply(callArgs, [obj]);
+      callArgs.unshift.apply(callArgs, [obj]);
 
-	    return method.apply(obj, callArgs);
+      return method.apply(obj, callArgs);
     };
-	},
-	
-	apply : function (obj, values) {
-	  var names = Bridge.getPropertyNames(values, false);
+  },
 
-	  for (var i = 0; i < names.length; i++) {
-	    var name = names[i];
+  apply: function (obj, values) {
+    var names = Bridge.getPropertyNames(values, false);
 
-	    if (typeof obj[name] == "function") {
-	      obj[name](values[name]);
-	    }
-	    else {
+    for (var i = 0; i < names.length; i++) {
+      var name = names[i];
+
+      if (typeof obj[name] == "function") {
+        obj[name](values[name]);
+      }
+      else {
         obj[name] = values[name];
-	    }
-	  }
+      }
+    }
 
-	  return obj;
-	},
+    return obj;
+  },
 
-	getEnumerator: function (obj) {
-	  if (obj && obj.getEnumerator) {
-	    return obj.getEnumerator();
-	  }
+  getEnumerator: function (obj) {
+    if (obj && obj.getEnumerator) {
+      return obj.getEnumerator();
+    }
 
-	  if ((Object.prototype.toString.call(obj) === '[object Array]') ||
+    if ((Object.prototype.toString.call(obj) === '[object Array]') ||
       (obj && Bridge.isDefined(obj.length))) {
-	    return new Bridge.ArrayEnumerator(obj);
-	  }
-	    
-	  throw Error('Cannot create enumerator');
-	},
+      return new Bridge.ArrayEnumerator(obj);
+    }
 
-	getPropertyNames : function(obj, includeFunctions) {
-	  var names = [],
+    throw Error('Cannot create enumerator');
+  },
+
+  getPropertyNames: function (obj, includeFunctions) {
+    var names = [],
 	      name;
 
-	  for (name in obj) {
-	    if (includeFunctions || typeof obj[name] !== 'function') {
+    for (name in obj) {
+      if (includeFunctions || typeof obj[name] !== 'function') {
         names.push(name);
-	    }
-	  }
+      }
+    }
 
-	  return names;
-	},
+    return names;
+  },
 
-	isDefined: function (value) {
+  isDefined: function (value) {
     return typeof value !== 'undefined';
-	},
+  },
 
-	toArray: function (ienumerable) {
-	  var i,
+  toArray: function (ienumerable) {
+    var i,
 	      item,
         len,
 	      result = [];
 
-	  if (Bridge.isArray(ienumerable)) {
-	    for (i = 0, len = ienumerable.length; i < len; ++i) {
-	      result.push(ienumerable[i]);
-	    }
-	  }
-	  else {
-	    i = Bridge.getEnumerator(ienumerable);
+    if (Bridge.isArray(ienumerable)) {
+      for (i = 0, len = ienumerable.length; i < len; ++i) {
+        result.push(ienumerable[i]);
+      }
+    }
+    else {
+      i = Bridge.getEnumerator(ienumerable);
 
-	    while (i.hasNext()) {
-	      item = i.next();
-	      result.push(item);
-	    }
-	  }	    
+      while (i.hasNext()) {
+        item = i.next();
+        result.push(item);
+      }
+    }
 
-	  return result;
-	},
+    return result;
+  },
 
   isArray: function (obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
@@ -215,14 +218,17 @@ Bridge = {
     }
     else if (Bridge.isDate(a) && Bridge.isDate(b)) {
       return a.valueOf() === b.valueOf();
-    }        
+    }
     else if (Bridge.isNull(a) && Bridge.isNull(b)) {
       return true;
     }
-        
+
     return a === b;
   }
 };
+
+// @source resources/Class.js
+
 
 // Inspired by base2 and Prototype
 (function () {
@@ -277,7 +283,7 @@ Bridge = {
         prop[name];
     }
 
-    prototype.$$name = className;        
+    prototype.$$name = className;
 
     // The dummy class constructor
     function Class() {
@@ -291,15 +297,15 @@ Bridge = {
 
       // All construction is actually done in the init method
       if (!initializing) {
-          if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string" && Bridge.isFunction(this[arguments[0]])) {
-            this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
-          }
-          else if (this.$ctorDetector) {
-            this.$ctorDetector.apply(this, arguments);
-          }
-          else if (this.$init) {
-            this.$init.apply(this, arguments);
-          }
+        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string" && Bridge.isFunction(this[arguments[0]])) {
+          this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+        }
+        else if (this.$ctorDetector) {
+          this.$ctorDetector.apply(this, arguments);
+        }
+        else if (this.$init) {
+          this.$init.apply(this, arguments);
+        }
       }
     }
 
@@ -318,7 +324,7 @@ Bridge = {
     }
 
     nameParts = className.split('.');
-        
+
     for (i = 0; i < (nameParts.length - 1) ; i++) {
       if (typeof scope[nameParts[i]] == 'undefined') {
         scope[nameParts[i]] = {};
@@ -352,6 +358,8 @@ Bridge = {
     return Class;
   };
 })();
+
+// @source resources/Browser.js
 
 (function () {
   var check = function (regex) {
@@ -472,9 +480,11 @@ Bridge = {
     isTablet: isTablet,
     isPhone: isPhone,
     iOS: isiPhone || isiPad || isiPod,
-    standalone:  !!window.navigator.standalone
+    standalone: !!window.navigator.standalone
   });
 })();
+
+// @source resources/Collections.js
 
 Bridge.Class.extend('Bridge.IEnumerable', {});
 Bridge.Class.extend('Bridge.IEnumerator', {});
@@ -561,7 +571,7 @@ Bridge.Class.extend('Bridge.Dictionary', {
     }
     else {
       throw new Error("Key already exists: " + key);
-    }        
+    }
   },
 
   remove: function (key) {
@@ -722,7 +732,7 @@ Bridge.Class.extend('Bridge.List', {
 
     for (var i = fromIndex; i >= 0; i--) {
       if (item === this.items[i]) {
-          return i;
+        return i;
       }
     }
 
@@ -778,11 +788,11 @@ Bridge.Class.extend("Bridge.ArrayEnumerator", {
     this.index = 0;
   },
 
-  hasNext : function () {
-	  return this.index < this.array.length;
+  hasNext: function () {
+    return this.index < this.array.length;
   },
 
-  next : function() {
+  next: function () {
     return this.array[this.index++];
   }
 });

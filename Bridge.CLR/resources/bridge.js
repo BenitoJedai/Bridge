@@ -1,9 +1,9 @@
 /*
- * @version   : 1.0.0 - Bridge.NET License
- * @author    : Ext.NET, Inc. http://www.ext.net/
- * @date      : 2014-03-04
- * @copyright : Copyright (c) 2008-2014, Ext.NET, Inc. (http://www.ext.net/). All rights reserved.
- * @license   : See license.txt and http://www.ext.net/license/.
+ * @version   : 1.0.0 - Bridge.NET
+ * @author    : Object.NET, Inc. http://www.bridge.net/
+ * @date      : 2014-06-01
+ * @copyright : Copyright (c) 2008-2014, Object.NET, Inc. (http://www.object.net/). All rights reserved.
+ * @license   : See license.txt and http://www.bridge.net/license/.
  */
 
 
@@ -26,8 +26,7 @@ else{obj[name]=values[name];}}
 return obj;},getEnumerator:function(obj){if(obj&&obj.getEnumerator){return obj.getEnumerator();}
 if((Object.prototype.toString.call(obj)==='[object Array]')||(obj&&Bridge.isDefined(obj.length))){return new Bridge.ArrayEnumerator(obj);}
 throw Error('Cannot create enumerator');},getPropertyNames:function(obj,includeFunctions){var names=[],name;for(name in obj){if(includeFunctions||typeof obj[name]!=='function'){names.push(name);}}
-return names;},isDefined:function(value){return typeof value!=='undefined';},toArray:function(ienumerable){var i,item,len
-result=[];if(Bridge.isArray(ienumerable)){for(i=0,len=ienumerable.length;i<len;++i){result.push(ienumerable[i]);}}
+return names;},isDefined:function(value){return typeof value!=='undefined';},toArray:function(ienumerable){var i,item,len,result=[];if(Bridge.isArray(ienumerable)){for(i=0,len=ienumerable.length;i<len;++i){result.push(ienumerable[i]);}}
 else{i=Bridge.getEnumerator(ienumerable);while(i.hasNext()){item=i.next();result.push(item);}}
 return result;},isArray:function(obj){return Object.prototype.toString.call(obj)==='[object Array]';},isFunction:function(obj){return typeof(obj)==='function'&&obj.prototype&&!obj.prototype.call&&!obj.prototype.apply;},isDate:function(obj){return Object.prototype.toString.call(obj)==='[object Date]';},isNull:function(value){return(value===null)||(value===undefined);},unroll:function(value){var d=value.split("."),o=window[d[0]],i;for(var i=1;i<d.length;i++){if(!o){return null;}
 o=o[d[i]];}
@@ -37,7 +36,7 @@ else if(Bridge.isNull(a)&&Bridge.isNull(b)){return true;}
 return a===b;}};
 
 (function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=="function"&&typeof base[name]=="function"&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
-prototype.$$name=className;function Class(){if(!(this instanceof Class)){var args=Array.prototype.slice.call(arguments,0),object=Object.create(Class.prototype),result=Class.apply(object,args);if(typeof result==='object'){return result;}else{return object;}}
+prototype.$$name=className;function Class(){if(!(this instanceof Class)){var args=Array.prototype.slice.call(arguments,0),object=Object.create(Class.prototype),result=Class.apply(object,args);return typeof result==='object'?result:object;}
 if(!initializing){if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=="string"&&Bridge.isFunction(this[arguments[0]])){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}
 else if(this.$ctorDetector){this.$ctorDetector.apply(this,arguments);}
 else if(this.$init){this.$init.apply(this,arguments);}}}
