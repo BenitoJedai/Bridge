@@ -65,7 +65,7 @@ Bridge.Class.extend('Bridge.Dictionary', {
 
   get: function (key) {
     if (!this.containsKey(key)) {
-      throw new Error("Key not found: " + key);
+      throw new Error('Key not found: ' + key);
     }
 
     return this.entries[key];
@@ -85,7 +85,7 @@ Bridge.Class.extend('Bridge.Dictionary', {
       this.entries[key] = value;
     }
     else {
-      throw new Error("Key already exists: " + key);
+      throw new Error('Key already exists: ' + key);
     }
   },
 
@@ -126,7 +126,7 @@ Bridge.Class.extend('Bridge.List', {
 
   checkIndex: function (index) {
     if (index < 0 || index > (this.items.length - 1)) {
-      throw new Error("Index out of range");
+      throw new Error('Index out of range');
     }
   },
 
@@ -297,7 +297,7 @@ Bridge.Class.extend('Bridge.List', {
 });
 
 
-Bridge.Class.extend("Bridge.ArrayEnumerator", {
+Bridge.Class.extend('Bridge.ArrayEnumerator', {
   $init: function (array) {
     this.array = array;
     this.index = 0;
@@ -312,7 +312,7 @@ Bridge.Class.extend("Bridge.ArrayEnumerator", {
   }
 });
 
-Bridge.Class.extend("Bridge.DictionaryEnumerator", {
+Bridge.Class.extend('Bridge.DictionaryEnumerator', {
   $init: function (entries) {
     this.entries = entries;
     this.keys = Bridge.getPropertyNames(this.entries, false);

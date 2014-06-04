@@ -313,8 +313,8 @@ Bridge = {
     // Copy the properties over onto the new prototype
     for (name in prop) {
       // Check if we're overwriting an existing function
-      prototype[name] = typeof prop[name] == "function" &&
-        typeof base[name] == "function" && fnTest.test(prop[name]) ?
+      prototype[name] = typeof prop[name] == 'function' &&
+        typeof base[name] == 'function' && fnTest.test(prop[name]) ?
         (function (name, fn) {
           return function () {
             var tmp = this.base;
@@ -349,7 +349,7 @@ Bridge = {
 
       // All construction is actually done in the init method
       if (!initializing) {
-        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string" && Bridge.isFunction(this[arguments[0]])) {
+        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
           this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
         }
         else if (this.$ctorDetector) {
@@ -418,7 +418,7 @@ Bridge = {
     return regex.test(navigator.userAgent);
   },
 
-  isStrict = document.compatMode == "CSS1Compat",
+  isStrict = document.compatMode == 'CSS1Compat',
 
   version = function (is, regex) {
     var m;
@@ -602,7 +602,7 @@ Bridge.Class.extend('Bridge.Dictionary', {
 
   get: function (key) {
     if (!this.containsKey(key)) {
-      throw new Error("Key not found: " + key);
+      throw new Error('Key not found: ' + key);
     }
 
     return this.entries[key];
@@ -622,7 +622,7 @@ Bridge.Class.extend('Bridge.Dictionary', {
       this.entries[key] = value;
     }
     else {
-      throw new Error("Key already exists: " + key);
+      throw new Error('Key already exists: ' + key);
     }
   },
 
@@ -663,7 +663,7 @@ Bridge.Class.extend('Bridge.List', {
 
   checkIndex: function (index) {
     if (index < 0 || index > (this.items.length - 1)) {
-      throw new Error("Index out of range");
+      throw new Error('Index out of range');
     }
   },
 
@@ -834,7 +834,7 @@ Bridge.Class.extend('Bridge.List', {
 });
 
 
-Bridge.Class.extend("Bridge.ArrayEnumerator", {
+Bridge.Class.extend('Bridge.ArrayEnumerator', {
   $init: function (array) {
     this.array = array;
     this.index = 0;
@@ -849,7 +849,7 @@ Bridge.Class.extend("Bridge.ArrayEnumerator", {
   }
 });
 
-Bridge.Class.extend("Bridge.DictionaryEnumerator", {
+Bridge.Class.extend('Bridge.DictionaryEnumerator', {
   $init: function (entries) {
     this.entries = entries;
     this.keys = Bridge.getPropertyNames(this.entries, false);

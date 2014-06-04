@@ -36,8 +36,8 @@
     // Copy the properties over onto the new prototype
     for (name in prop) {
       // Check if we're overwriting an existing function
-      prototype[name] = typeof prop[name] == "function" &&
-        typeof base[name] == "function" && fnTest.test(prop[name]) ?
+      prototype[name] = typeof prop[name] == 'function' &&
+        typeof base[name] == 'function' && fnTest.test(prop[name]) ?
         (function (name, fn) {
           return function () {
             var tmp = this.base;
@@ -72,7 +72,7 @@
 
       // All construction is actually done in the init method
       if (!initializing) {
-        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == "string" && Bridge.isFunction(this[arguments[0]])) {
+        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
           this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
         }
         else if (this.$ctorDetector) {
