@@ -46,10 +46,14 @@ namespace System
         public bool PropertyIsEnumerable(object v) 
         { 
             return false; 
-        }
+        }        
+    }
 
-        [Bridge.CLR.Inline("$callfn({0}, {1})")]
-        public void CallFn(string name, params object[] args)
+    [Ignore]
+    public static class ObjectExtensions
+    {
+        [Bridge.CLR.Inline("Bridge.fn.call({0})")]
+        public static void CallFn(this object obj, string name, params object[] args)
         {
         }
     }

@@ -165,6 +165,11 @@ Bridge = {
     },
 
     fn: {
+        call: function (obj, fnName){
+            var args = Array.prototype.slice.call(arguments, 2);
+            return obj[fnName].apply(obj, args);
+        },
+
         bind: function (obj, method, args, appendArgs) {
             if (arguments.length === 2) {
                 return function () {
