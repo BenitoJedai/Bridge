@@ -24,12 +24,14 @@
         { 
             return null; 
         }
-
+        
+        [Bridge.CLR.Inline("Bridge.fn.combine({0});")]
         public static Delegate Combine(Delegate a, Delegate b)
         {
             return null;
         }
 
+        [Bridge.CLR.Inline("Bridge.fn.remove({0});")]
         public static Delegate Remove(Delegate source, Delegate value)
         {
             return null;

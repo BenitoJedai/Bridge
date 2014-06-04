@@ -652,7 +652,7 @@ namespace Bridge.NET
 
             foreach (var ctor in ctors)
             {
-                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(ctor.Parameters, methodsDef);
+                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(ctor.Parameters, null, methodsDef);
                 if (methodDef != null)
                 {
                     string name = this.GetOverloadName(methodDef);
@@ -946,7 +946,7 @@ namespace Bridge.NET
 
             if (this.ThisRefCounter > savedThisCount)
             {
-                this.Output.Insert(savedPos, Emitter.ROOT + "." + Emitter.BIND + "(this, ");
+                this.Output.Insert(savedPos, Emitter.ROOT + "." + Emitter.DELEGATE_BIND + "(this, ");
                 this.WriteCloseParentheses();
             }
 
@@ -1916,13 +1916,14 @@ namespace Bridge.NET
                 sb.Append("    }");
             }
         }
-        
-        protected virtual MethodDefinition FindMethodDefinitionInGroup(IEnumerable<ParameterDeclaration> parameters, IEnumerable<MethodDefinition> group)
+
+        protected virtual MethodDefinition FindMethodDefinitionInGroup(IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group)
         {
             var args = new List<ParameterDeclaration>(parameters);
+            var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
             foreach (var method in group)
             {
-                if (args.Count == method.Parameters.Count)
+                if (args.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
                 {
                     bool match = true;
                     for (int i = 0; i < method.Parameters.Count; i++)
@@ -1978,6 +1979,11 @@ namespace Bridge.NET
                 foreach (var p in methodDef.Parameters)
                 {
                     sb.Append("$").Append(p.ParameterType.Name);
+                }
+
+                if (methodDef.HasGenericParameters)
+                {
+                    sb.Append("$").Append(methodDef.GenericParameters.Count);
                 }
 
                 name = sb.ToString();
@@ -2449,6 +2455,22 @@ namespace Bridge.NET
                 foreach (var p in args)
                 {
                     sb.Append("$").Append(p.Type.Name);
+                }
+
+                var defaultResolvedMethod = invocationResult.Member as DefaultResolvedMethod;
+
+                if (defaultResolvedMethod != null && defaultResolvedMethod.TypeParameters.Count > 0)
+                {
+                    sb.Append("$").Append(defaultResolvedMethod.TypeParameters.Count);
+                }
+                else
+                {
+                    var specializedMethod = invocationResult.Member as SpecializedMethod;
+
+                    if (specializedMethod != null && specializedMethod.TypeParameters.Count > 0)
+                    {
+                        sb.Append("$").Append(specializedMethod.TypeParameters.Count);
+                    }
                 }
 
                 name = sb.ToString();

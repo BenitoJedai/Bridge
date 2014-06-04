@@ -10,8 +10,10 @@ namespace Bridge.NET
     public partial class Emitter : Visitor
     {
         const string ROOT = "Bridge";
-        const string BIND = "bind";
-        const string BIND_SCOPE = "bindScope";
+        const string DELEGATE_BIND = "fn.bind";
+        const string DELEGATE_BIND_SCOPE = "fn.bindScope";
+        const string DELEGATE_COMBINE = "fn.combine";
+        const string DELEGATE_REMOVE = "fn.remove";
         const string CAST = "cast";
         const string AS = "as";
         const string IS = "is";
