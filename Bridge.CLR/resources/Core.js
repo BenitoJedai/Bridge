@@ -1,6 +1,6 @@
 Bridge = {
 	is : function (obj, type) {
-	  if (typeof type == "string") {
+	  if (typeof type == 'string') {
 	    type = Bridge.unroll(type);
 	  }
 
@@ -63,7 +63,7 @@ Bridge = {
 	  for (var i = 0; i < names.length; i++) {
 	    var name = names[i];
 
-	    if (typeof obj[name] == "function") {
+	    if (typeof obj[name] == 'function') {
 	      obj[name](values[name]);
 	    }
 	    else {
@@ -144,7 +144,7 @@ Bridge = {
   },
 
   unroll: function (value) {
-    var d = value.split("."),
+    var d = value.split('.'),
         o = window[d[0]],
         i;
 
