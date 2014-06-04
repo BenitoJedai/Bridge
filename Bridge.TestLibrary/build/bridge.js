@@ -16,12 +16,7 @@ if(Bridge.isArray(obj)&&type==Bridge.IEnumerable){return true;}
 if(!type.$$inheritors){return false;}
 var inheritors=type.$$inheritors;for(var i=0;i<inheritors.length;i++){if(Bridge.is(obj,inheritors[i])){return true;}}
 return false;},as:function(obj,type){return Bridge.is(obj,type)?obj:null;},cast:function(obj,type){var result=Bridge.as(obj,type);if(result==null){throw Error('Unable to cast type '+Bridge.getTypeName(obj.constructor)+' to type '+Bridge.getTypeName(type));}
-return result;},getTypeName:function(type){return type.$name||'[native Object]';},bind:function(obj,method,args,appendArgs){if(arguments.length===2){return function(){return method.apply(obj,arguments)}}
-return function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
-else if(typeof appendArgs=='number'){callArgs=Array.prototype.slice.call(arguments,0);if(appendArgs===0){callArgs.unshift.apply(callArgs,args);}
-else if(appendArgs<callArgs.length){callArgs.splice.apply(callArgs,[appendArgs,0].concat(args));}
-else{callArgs.push.apply(callArgs,args);}}
-return method.apply(obj,callArgs);};},bindScope:function(obj,method){return function(){var callArgs=Array.prototype.slice.call(arguments,0);callArgs.unshift.apply(callArgs,[obj]);return method.apply(obj,callArgs);};},apply:function(obj,values){var names=Bridge.getPropertyNames(values,false);for(var i=0;i<names.length;i++){var name=names[i];if(typeof obj[name]=="function"){obj[name](values[name]);}
+return result;},getTypeName:function(type){return type.$name||'[native Object]';},apply:function(obj,values){var names=Bridge.getPropertyNames(values,false);for(var i=0;i<names.length;i++){var name=names[i];if(typeof obj[name]=="function"){obj[name](values[name]);}
 else{obj[name]=values[name];}}
 return obj;},getEnumerator:function(obj){if(obj&&obj.getEnumerator){return obj.getEnumerator();}
 if((Object.prototype.toString.call(obj)==='[object Array]')||(obj&&Bridge.isDefined(obj.length))){return new Bridge.ArrayEnumerator(obj);}
@@ -34,7 +29,17 @@ o=o[d[i]];}
 return o;},equals:function(a,b){if(a&&Bridge.isFunction(a.equals)){return a.equals(b);}
 else if(Bridge.isDate(a)&&Bridge.isDate(b)){return a.valueOf()===b.valueOf();}
 else if(Bridge.isNull(a)&&Bridge.isNull(b)){return true;}
-return a===b;}};
+return a===b;},fn:{bind:function(obj,method,args,appendArgs){if(arguments.length===2){return function(){return method.apply(obj,arguments)}}
+return function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
+else if(typeof appendArgs=='number'){callArgs=Array.prototype.slice.call(arguments,0);if(appendArgs===0){callArgs.unshift.apply(callArgs,args);}
+else if(appendArgs<callArgs.length){callArgs.splice.apply(callArgs,[appendArgs,0].concat(args));}
+else{callArgs.push.apply(callArgs,args);}}
+return method.apply(obj,callArgs);};},bindScope:function(obj,method){return function(){var callArgs=Array.prototype.slice.call(arguments,0);callArgs.unshift.apply(callArgs,[obj]);return method.apply(obj,callArgs);};},$build:function(handlers){var fn=function(){var list=arguments.callee.$invocationList,result,i,handler;for(i=0;i<list.length;i++){handler=list[i];result=handler.apply(null,arguments);}
+return result;};fn.$invocationList=handlers?Array.prototype.slice.call(handlers,0):[];return fn;},combine:function(fn1,fn2){if(!fn1||!fn2){return fn1||fn2;}
+var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationList?fn2.$invocationList:[fn2];return Bridge.fn.$build(list1.concat(list2));},remove:function(fn1,fn2){if(!fn1||!fn2){return fn1||null;}
+var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationList?fn2.$invocationList:[fn2],result=[],exclude,i,j;for(i=list1.length-1;i>=0;i--){exclude=false;for(j=0;j<list2.length;j++){if(list1[i]===list2[j]){exclude=true;break;}}
+if(!exclude){result.push(list1[i]);}}
+result.reverse();return Bridge.fn.$build(result);}}};
 
 (function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=="function"&&typeof base[name]=="function"&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
 prototype.$$name=className;function Class(){if(!(this instanceof Class)){var args=Array.prototype.slice.call(arguments,0),object=Object.create(Class.prototype),result=Class.apply(object,args);if(typeof result==='object'){return result;}else{return object;}}

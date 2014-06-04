@@ -23,7 +23,7 @@ namespace Bridge.NET
 
             if (this.MethodsGroup != null)
             {
-                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration.Parameters, this.MethodsGroup);
+                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration.Parameters, methodDeclaration.TypeParameters, this.MethodsGroup);
                 string name = this.GetOverloadName(methodDef);
                 this.EmitMethodDetector(this.MethodsGroupBuilder, methodDef, name);
 
@@ -263,77 +263,104 @@ namespace Bridge.NET
 
         public override void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
         {
+            var delegateOperator = false;
             if (this.ResolveOperator(binaryOperatorExpression))
             {
                 return;
             }
+            else if (binaryOperatorExpression.Operator == BinaryOperatorType.Add ||
+                binaryOperatorExpression.Operator == BinaryOperatorType.Subtract)
+            {
+                var leftResolverResult = this.Resolver.ResolveNode(binaryOperatorExpression.Left, this);
+                var rightResolverResult = this.Resolver.ResolveNode(binaryOperatorExpression.Right, this);
+                var add = binaryOperatorExpression.Operator == BinaryOperatorType.Add;
+
+                if (this.Validator.IsDelegateOrLambda(leftResolverResult) && this.Validator.IsDelegateOrLambda(rightResolverResult))
+                {
+                    delegateOperator = true;
+                    this.Write(Emitter.ROOT + "." + (add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE));
+                    this.WriteOpenParentheses();
+                }
+            }    
             
             binaryOperatorExpression.Left.AcceptVisitor(this);
-            this.WriteSpace();
-
-            switch (binaryOperatorExpression.Operator)
+            if (!delegateOperator)
             {
-                case BinaryOperatorType.Add:
-                    this.Write("+");
-                    break;
-                case BinaryOperatorType.BitwiseAnd:
-                    this.Write("&");
-                    break;
-                case BinaryOperatorType.BitwiseOr:
-                    this.Write("|");
-                    break;
-                case BinaryOperatorType.ConditionalAnd:
-                    this.Write("&&");
-                    break;
-                case BinaryOperatorType.NullCoalescing:
-                case BinaryOperatorType.ConditionalOr:
-                    this.Write("||");
-                    break;
-                case BinaryOperatorType.Divide:
-                    this.Write("/");
-                    break;
-                case BinaryOperatorType.Equality:
-                    this.Write("==");
-                    break;
-                case BinaryOperatorType.ExclusiveOr:
-                    this.Write("^");
-                    break;
-                case BinaryOperatorType.GreaterThan:
-                    this.Write(">");
-                    break;
-                case BinaryOperatorType.GreaterThanOrEqual:
-                    this.Write(">=");
-                    break;
-                case BinaryOperatorType.InEquality:
-                    this.Write("!=");
-                    break;
-                case BinaryOperatorType.LessThan:
-                    this.Write("<");
-                    break;
-                case BinaryOperatorType.LessThanOrEqual:
-                    this.Write("<=");
-                    break;
-                case BinaryOperatorType.Modulus:
-                    this.Write("%");
-                    break;
-                case BinaryOperatorType.Multiply:
-                    this.Write("*");
-                    break;
-                case BinaryOperatorType.ShiftLeft:
-                    this.Write("<<");
-                    break;
-                case BinaryOperatorType.ShiftRight:
-                    this.Write(">>");
-                    break;
-                case BinaryOperatorType.Subtract:
-                    this.Write("-");
-                    break;
-                default:
-                    throw this.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
+                this.WriteSpace();
+
+                switch (binaryOperatorExpression.Operator)
+                {
+                    case BinaryOperatorType.Add:
+                        this.Write("+");
+                        break;
+                    case BinaryOperatorType.BitwiseAnd:
+                        this.Write("&");
+                        break;
+                    case BinaryOperatorType.BitwiseOr:
+                        this.Write("|");
+                        break;
+                    case BinaryOperatorType.ConditionalAnd:
+                        this.Write("&&");
+                        break;
+                    case BinaryOperatorType.NullCoalescing:
+                    case BinaryOperatorType.ConditionalOr:
+                        this.Write("||");
+                        break;
+                    case BinaryOperatorType.Divide:
+                        this.Write("/");
+                        break;
+                    case BinaryOperatorType.Equality:
+                        this.Write("==");
+                        break;
+                    case BinaryOperatorType.ExclusiveOr:
+                        this.Write("^");
+                        break;
+                    case BinaryOperatorType.GreaterThan:
+                        this.Write(">");
+                        break;
+                    case BinaryOperatorType.GreaterThanOrEqual:
+                        this.Write(">=");
+                        break;
+                    case BinaryOperatorType.InEquality:
+                        this.Write("!=");
+                        break;
+                    case BinaryOperatorType.LessThan:
+                        this.Write("<");
+                        break;
+                    case BinaryOperatorType.LessThanOrEqual:
+                        this.Write("<=");
+                        break;
+                    case BinaryOperatorType.Modulus:
+                        this.Write("%");
+                        break;
+                    case BinaryOperatorType.Multiply:
+                        this.Write("*");
+                        break;
+                    case BinaryOperatorType.ShiftLeft:
+                        this.Write("<<");
+                        break;
+                    case BinaryOperatorType.ShiftRight:
+                        this.Write(">>");
+                        break;
+                    case BinaryOperatorType.Subtract:
+                        this.Write("-");
+                        break;
+                    default:
+                        throw this.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
+                }
             }
+            else
+            {
+                this.WriteComma();
+            }  
 
             this.WriteSpace();
             binaryOperatorExpression.Right.AcceptVisitor(this);
+
+            if (delegateOperator)
+            {
+                this.WriteCloseParentheses();
+            }
         }
 
         public override void VisitIdentifierExpression(IdentifierExpression identifierExpression)
@@ -383,7 +410,7 @@ namespace Bridge.NET
                     {
                         var resolvedMethod = (DefaultResolvedMethod)memberResult.Member;
                         var isExtensionMethod = resolvedMethod.IsExtensionMethod;
-                        this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.BIND_SCOPE : Emitter.BIND) + "(");
+                        this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.DELEGATE_BIND_SCOPE : Emitter.DELEGATE_BIND) + "(");
 
                         if (isStatic)
                         {
@@ -592,7 +619,7 @@ namespace Bridge.NET
 
                     var isExtensionMethod = resolvedMethod.IsExtensionMethod;
 
-                    this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.BIND_SCOPE : Emitter.BIND ) + "(");
+                    this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.DELEGATE_BIND_SCOPE : Emitter.DELEGATE_BIND ) + "(");
                     memberReferenceExpression.Target.AcceptVisitor(this);
                     this.Write(", ");
 
@@ -931,66 +958,100 @@ namespace Bridge.NET
 
         public override void VisitAssignmentExpression(AssignmentExpression assignmentExpression)
         {
+            var delegateAssigment = false;
             var initCount = this.Writers.Count;
+
+            if (assignmentExpression.Operator == AssignmentOperatorType.Add ||
+                assignmentExpression.Operator == AssignmentOperatorType.Subtract)
+            {
+                var leftResolverResult = this.Resolver.ResolveNode(assignmentExpression.Left, this);
+                var rightResolverResult = this.Resolver.ResolveNode(assignmentExpression.Right, this);
+                var add = assignmentExpression.Operator == AssignmentOperatorType.Add;
+
+                if (this.Validator.IsDelegateOrLambda(leftResolverResult) && this.Validator.IsDelegateOrLambda(rightResolverResult))
+                {                    
+                    this.IsAssignment = true;
+                    assignmentExpression.Left.AcceptVisitor(this);
+                    this.IsAssignment = false;
+                    this.Write(" = ");
+                    
+                    delegateAssigment = true;
+                    this.Write(Emitter.ROOT + "." + (add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE));
+                    this.WriteOpenParentheses();
+                }
+            }           
+            
             this.IsAssignment = true;
             assignmentExpression.Left.AcceptVisitor(this);
-            this.IsAssignment = false;
+            this.IsAssignment = false;            
 
-            if (this.Writers.Count == 0)
+            if (this.Writers.Count == 0 && !delegateAssigment)
             {
                 this.WriteSpace();
-            }
-            
-            switch (assignmentExpression.Operator)
-            {
-                case AssignmentOperatorType.Assign:
-                    break;
-                case AssignmentOperatorType.Add:
-                    this.Write("+");
-                    break;
-                case AssignmentOperatorType.BitwiseAnd:
-                    this.Write("&");
-                    break;
-                case AssignmentOperatorType.BitwiseOr:
-                    this.Write("|");
-                    break;
-                case AssignmentOperatorType.Divide:
-                    this.Write("/");
-                    break;
-                case AssignmentOperatorType.ExclusiveOr:
-                    this.Write("^");
-                    break;
-                case AssignmentOperatorType.Modulus:
-                    this.Write("%");
-                    break;
-                case AssignmentOperatorType.Multiply:
-                    this.Write("*");
-                    break;
-                case AssignmentOperatorType.ShiftLeft:
-                    this.Write("<<");
-                    break;
-                case AssignmentOperatorType.ShiftRight:
-                    this.Write(">>");
-                    break;
-                case AssignmentOperatorType.Subtract:
-                    this.Write("-");
-                    break;
-                default:
-                    throw this.CreateException(assignmentExpression, "Unsupported assignment operator: " + assignmentExpression.Operator.ToString());
-            }
-
-            int count = this.Writers.Count;
-
-            if (count == 0)
-            {
-                this.Write("= ");
             }            
+
+            if (!delegateAssigment)
+            {
+                switch (assignmentExpression.Operator)
+                {
+                    case AssignmentOperatorType.Assign:
+                        break;
+                    case AssignmentOperatorType.Add:
+                        this.Write("+");
+                        break;
+                    case AssignmentOperatorType.BitwiseAnd:
+                        this.Write("&");
+                        break;
+                    case AssignmentOperatorType.BitwiseOr:
+                        this.Write("|");
+                        break;
+                    case AssignmentOperatorType.Divide:
+                        this.Write("/");
+                        break;
+                    case AssignmentOperatorType.ExclusiveOr:
+                        this.Write("^");
+                        break;
+                    case AssignmentOperatorType.Modulus:
+                        this.Write("%");
+                        break;
+                    case AssignmentOperatorType.Multiply:
+                        this.Write("*");
+                        break;
+                    case AssignmentOperatorType.ShiftLeft:
+                        this.Write("<<");
+                        break;
+                    case AssignmentOperatorType.ShiftRight:
+                        this.Write(">>");
+                        break;
+                    case AssignmentOperatorType.Subtract:
+                        this.Write("-");
+                        break;
+                    default:
+                        throw this.CreateException(assignmentExpression, "Unsupported assignment operator: " + assignmentExpression.Operator.ToString());
+                }
+
+                int count = this.Writers.Count;
+
+                if (count == 0)
+                {
+                    this.Write("= ");
+                }
+            }
+            else
+            {
+                this.WriteComma();
+            }  
 
             assignmentExpression.Right.AcceptVisitor(this);
 
             if (this.Writers.Count > initCount)
             {
                 this.PopWriter();
+            }
+
+            if (delegateAssigment)
+            {
+                this.WriteCloseParentheses();
             }
         }
 

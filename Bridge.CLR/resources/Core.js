@@ -53,47 +53,6 @@ Bridge = {
 	   return type.$name || '[native Object]';	  
 	},
 	
-	bind: function (obj, method, args, appendArgs) {
-	    if (arguments.length === 2) {
-	        return function () {
-	            return method.apply(obj, arguments)
-	        }
-	    }
-
-	    return function () {
-	        var callArgs = args || arguments;
-
-	        if (appendArgs === true) {
-	            callArgs = Array.prototype.slice.call(arguments, 0);
-	            callArgs = callArgs.concat(args);
-	        }
-	        else if (typeof appendArgs == 'number') {
-	            callArgs = Array.prototype.slice.call(arguments, 0);
-	            
-	            if (appendArgs === 0) {
-	                callArgs.unshift.apply(callArgs, args);
-	            }
-	            else if (appendArgs < callArgs.length) {
-	                callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
-	            }
-	            else {
-	                callArgs.push.apply(callArgs, args);
-	            }
-	        }
-
-	        return method.apply(obj, callArgs);
-	    };
-	},
-
-	bindScope: function (obj, method) {
-	    return function () {
-	        var callArgs = Array.prototype.slice.call(arguments, 0);
-	        callArgs.unshift.apply(callArgs, [obj]);
-
-	        return method.apply(obj, callArgs);
-	    };
-	},
-	
 	apply : function (obj, values) {
 	  var names = Bridge.getPropertyNames(values, false);
 	  for(var i = 0; i < names.length; i++) {
@@ -203,5 +162,106 @@ Bridge = {
         }
         
         return a === b;
+    },
+
+    fn: {
+        bind: function (obj, method, args, appendArgs) {
+            if (arguments.length === 2) {
+                return function () {
+                    return method.apply(obj, arguments)
+                }
+            }
+
+            return function () {
+                var callArgs = args || arguments;
+
+                if (appendArgs === true) {
+                    callArgs = Array.prototype.slice.call(arguments, 0);
+                    callArgs = callArgs.concat(args);
+                }
+                else if (typeof appendArgs == 'number') {
+                    callArgs = Array.prototype.slice.call(arguments, 0);
+
+                    if (appendArgs === 0) {
+                        callArgs.unshift.apply(callArgs, args);
+                    }
+                    else if (appendArgs < callArgs.length) {
+                        callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+                    }
+                    else {
+                        callArgs.push.apply(callArgs, args);
+                    }
+                }
+
+                return method.apply(obj, callArgs);
+            };
+        },
+
+        bindScope: function (obj, method) {
+            return function () {
+                var callArgs = Array.prototype.slice.call(arguments, 0);
+                callArgs.unshift.apply(callArgs, [obj]);
+
+                return method.apply(obj, callArgs);
+            };
+        },
+
+        $build: function (handlers) {
+            var fn = function () {
+                var list = arguments.callee.$invocationList,
+                    result,
+                    i,
+                    handler;
+
+                for (i = 0; i < list.length; i++) {
+                    handler = list[i];
+                    result = handler.apply(null, arguments);
+                }
+                return result;
+            };
+
+            fn.$invocationList = handlers ? Array.prototype.slice.call(handlers, 0) : [];
+            return fn;
+        },
+
+        combine: function (fn1, fn2) {
+            if (!fn1 || !fn2) {                
+                return fn1 || fn2;
+            }
+
+            var list1 = fn1.$invocationList ? fn1.$invocationList : [fn1],
+                list2 = fn2.$invocationList ? fn2.$invocationList : [fn2];
+
+            return Bridge.fn.$build(list1.concat(list2));
+        },
+
+        remove: function (fn1, fn2) {
+            if (!fn1 || !fn2) {
+                return fn1 || null;
+            }
+
+            var list1 = fn1.$invocationList ? fn1.$invocationList : [fn1],
+                list2 = fn2.$invocationList ? fn2.$invocationList : [fn2],
+                result = [],
+                exclude,
+                i, j;
+            
+            for (i = list1.length - 1; i >= 0; i--) {
+                exclude = false;
+                for (j = 0; j < list2.length; j++) {
+                    if (list1[i] === list2[j]) {
+                        exclude = true;
+                        break;
+                    }
+                }
+
+                if (!exclude) {
+                    result.push(list1[i]);
+                }
+            }
+
+            result.reverse();
+            return Bridge.fn.$build(result);
+        }
     }
 };

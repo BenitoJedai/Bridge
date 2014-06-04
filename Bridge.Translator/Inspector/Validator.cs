@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using ICSharpCode.NRefactory.Semantics;
+using ICSharpCode.NRefactory.CSharp.Resolver;
 
 namespace Bridge.NET
 {
@@ -512,5 +514,11 @@ namespace Bridge.NET
             }
             return typeInfo;
         }
+        
+        public virtual bool IsDelegateOrLambda(ResolveResult result)
+        {
+            return result.Type.Kind == ICSharpCode.NRefactory.TypeSystem.TypeKind.Delegate || result is LambdaResolveResult;
+        }
+        
     }
 }
