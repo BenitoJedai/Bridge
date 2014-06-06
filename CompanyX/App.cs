@@ -47,17 +47,17 @@ namespace CompanyX
                 Console.Log("+=OnLoad");
             };
 
-            var input = Document.GetElementById("input1");
-            
+            var input = Document.GetElementById("input1") as Input;
+
+            input.Value = "test2";
             //input.Value = "MyValue";
-            input["value"] = "test2";
         }
 
         public static void Start()
         {
             Document.AddEventListener("DOMContentLoaded", LoadInit, false);
 
-            Window.Inline<string>("console.log('Window.Inline');");
+            //Window.Inline<string>("console.log('Window.Inline');");
 
             var temp1 = "Hello World";
             

@@ -56,6 +56,7 @@
     <Compile Include="Attributes\ScriptAttribute.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Html\CaretPosition.cs" />
+    <Compile Include="Html\Elements\Input.cs" />
     <Compile Include="Html\INodeFilter.cs" />
     <Compile Include="Html\NodeFilter.cs" />
     <Compile Include="Html\NodeIterator.cs" />
