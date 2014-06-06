@@ -58,6 +58,7 @@ namespace Bridge.Build
         protected virtual void LogMessage(string level, string message)
         {
             level = level ?? "message";
+
             switch(level.ToLowerInvariant())
             {
                 case "message":
@@ -75,9 +76,11 @@ namespace Bridge.Build
         public override bool Execute()
         {
             var success = true;
+
             try
             {
                 var translator = new Bridge.NET.Translator(this.ProjectPath);
+                
                 translator.CLRLocation = Path.Combine(this.AssemliesPath, "Bridge.CLR.dll");                
                 translator.Rebuild = false;
                 translator.ChangeCase = this.ChangeCase;
@@ -85,6 +88,7 @@ namespace Bridge.Build
                 translator.Translate();
 
                 string fileName = Path.Combine(this.OutputPath, Path.GetFileNameWithoutExtension(this.Assembly.ItemSpec) + ".js");
+                
                 if (translator.Outputs.Count == 1)
                 {
                     translator.SaveToFile(fileName);

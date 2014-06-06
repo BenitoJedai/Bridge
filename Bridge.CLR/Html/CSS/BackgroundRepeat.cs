@@ -5,7 +5,7 @@
     /// </summary>
     [Ignore]
     [Enum(Emit.StringNameLowerCase)]
-[Name("String")]
+    [Name("String")]
     public enum BackgroundRepeat
     {
         /// <summary>

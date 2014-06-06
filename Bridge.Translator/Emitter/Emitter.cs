@@ -1,18 +1,16 @@
-﻿using System;
+﻿using Ext.Net.Utilities;
+using ICSharpCode.NRefactory.CSharp;
+using ICSharpCode.NRefactory.Semantics;
+using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Mono.Cecil;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
-using System.Text.RegularExpressions;
-using ICSharpCode.NRefactory.CSharp;
-using System.Linq;
-using Newtonsoft.Json;
-using Ext.Net.Utilities;
-using ICSharpCode.NRefactory.TypeSystem;
-using System.Globalization;
-using ICSharpCode.NRefactory.TypeSystem.Implementation;
-using ICSharpCode.NRefactory.Semantics;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Bridge.NET
 {

@@ -2,6 +2,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Window
 
 using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
