@@ -10,7 +10,7 @@ namespace Bridge.CLR.Html
         {
         }
 
-        public string Value { get; set; }
+        public string Value;
 
     }
 }

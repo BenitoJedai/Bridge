@@ -48,8 +48,8 @@ namespace CompanyX
             };
 
             var input = Document.GetElementById("input1") as Input;
-
             input.Value = "test2";
+            
             //input.Value = "MyValue";
         }
 
