@@ -2066,21 +2066,21 @@ namespace Bridge.NET
 
         protected virtual string GetInline(ICustomAttributeProvider provider)
         {
-            var attr = this.GetAttribute(provider.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            var attr = this.GetAttribute(provider.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
             
             return attr != null ? ((string)attr.ConstructorArguments.First().Value) : null;
         }
         
         protected virtual string GetInline(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
 
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
         }
 
         protected virtual string GetInline(IEntity entity)
         {
-            string attrName = Translator.CLR_ASSEMBLY + ".InlineAttribute";
+            string attrName = Translator.CLR_ASSEMBLY + ".TemplateAttribute";
 
             if (entity.EntityType == EntityType.Property) 
             {

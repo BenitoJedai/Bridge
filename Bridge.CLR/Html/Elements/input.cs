@@ -10,8 +10,6 @@ namespace Bridge.CLR.Html
         {
         }
 
-        public bool Autofocus { get; set; }
-
         public string Value { get; set; }
 
     }
