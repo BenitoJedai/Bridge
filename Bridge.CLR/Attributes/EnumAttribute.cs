@@ -4,15 +4,15 @@ namespace Bridge.CLR
 {
     [Ignore]
     [AttributeUsage(AttributeTargets.Enum)]
-    public class EnumEmitAttribute : Attribute
+    public class EnumAttribute : Attribute
     {
-        public EnumEmitAttribute(EnumEmit enumEmit)
+        public EnumAttribute(Emit emit)
         {
         }
     }
 
     [Ignore]
-    public enum EnumEmit
+    public enum Emit
     {
         Name = 1,
         Value = 2,
