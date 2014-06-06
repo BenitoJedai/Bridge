@@ -40,12 +40,12 @@ namespace System.Collections.Generic
 
         public TValue this[TKey key]
         {
-            [Inline("get({0})")]
+            [Template("get({0})")]
             get
             {
                 return default(TValue);
             }
-            [Inline("set({0})")]
+            [Template("set({0})")]
             set
             {
             }

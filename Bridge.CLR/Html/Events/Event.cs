@@ -118,25 +118,25 @@ namespace Bridge.CLR.Html
     [Ignore]
     public static class EventsExtension
     {
-        [Inline("Bridge.is({0}, MouseEvent)")]
+        [Template("Bridge.is({0}, MouseEvent)")]
         public static bool IsMouseEvent(this Event e)
         {
             return false;
         }
 
-        [Inline("Bridge.is({0}, FocusEvent)")]
+        [Template("Bridge.is({0}, FocusEvent)")]
         public static bool IsFocusEvent(this Event e)
         {
             return false;
         }
 
-        [Inline("Bridge.is({0}, UIEvent)")]
+        [Template("Bridge.is({0}, UIEvent)")]
         public static bool IsUIEvent(this Event e)
         {
             return false;
         }
 
-        [Inline("Bridge.is({0}, KeyboardEvent)")]
+        [Template("Bridge.is({0}, KeyboardEvent)")]
         public static bool IsKeyboardEvent(this Event e)
         {
             return false;

@@ -31,12 +31,12 @@ namespace Bridge.CLR
             return null;
         }
 
-        [Inline("delete {0}")]
+        [Template("delete {0}")]
         public static void Delete(object value)
         {
         }
 
-        [Inline("Bridge.is({0})")]
+        [Template("Bridge.is({0})")]
         public static bool Is(object type, string typeName)
         {
             return false;

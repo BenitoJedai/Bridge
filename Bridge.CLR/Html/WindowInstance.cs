@@ -13,7 +13,7 @@ namespace Bridge.CLR.Html
     {
         #region Properties
 
-        [Inline("arguments")]
+        [Template("arguments")]
         public object[] Arguments;
 
         /// <summary>

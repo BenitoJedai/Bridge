@@ -1361,19 +1361,19 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The global Infinity property is a numeric value representing infinity.
         /// </summary>
-        [Inline("Infinity")]
+        [Template("Infinity")]
         public static readonly double Infinity;
 
         /// <summary>
         /// The global NaN property is a value representing Not-A-Number.
         /// </summary>
-        [Inline("NaN")]
+        [Template("NaN")]
         public static readonly double NaN;
 
         /// <summary>
         /// The global undefined property represents the value undefined.
         /// </summary>
-        [Inline("undefined")]
+        [Template("undefined")]
         public static readonly object Undefined;
 
         /// <summary>
@@ -1382,7 +1382,7 @@ namespace Bridge.CLR.Html
         /// <typeparam name="T"></typeparam>
         /// <param name="expression">A string representing a JavaScript expression, statement, or sequence of statements. The expression can include variables and properties of existing objects.</param>
         /// <returns></returns>
-        [Inline("eval({0})")]
+        [Template("eval({0})")]
         public static T Eval<T>(string expression)
         {
             return default(T);
@@ -1394,7 +1394,7 @@ namespace Bridge.CLR.Html
         /// <typeparam name="T"></typeparam>
         /// <param name="code"></param>
         /// <returns></returns>
-        [Bridge.CLR.Inline]
+        [Bridge.CLR.Template]
         public static T Inline<T>(string code)
         {
             return default(T);
@@ -1405,7 +1405,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="testValue">The value to be tested for finiteness.</param>
         /// <returns></returns>
-        [Inline("isFinite({0})")]
+        [Template("isFinite({0})")]
         public static bool IsFinite(object testValue)
         {
             return false;
@@ -1416,7 +1416,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="value">A string that represents the value you want to parse.</param>
         /// <returns></returns>
-        [Inline("parseFloat({0})")]
+        [Template("parseFloat({0})")]
         public static double ParseFloat(string value)
         {
             return 0;
@@ -1427,7 +1427,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
         /// <returns></returns>
-        [Inline("parseInt({0})")]
+        [Template("parseInt({0})")]
         public static int ParseInt(string value)
         {
             return 0;
@@ -1439,7 +1439,7 @@ namespace Bridge.CLR.Html
         /// <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
         /// <param name="radix">An integer that represents the radix of the above mentioned string. Always specify this parameter to eliminate reader confusion and to guarantee predictable behavior. Different implementations produce different results when a radix is not specified.</param>
         /// <returns></returns>
-        [Inline("parseInt({0}, {1})")]
+        [Template("parseInt({0}, {1})")]
         public static int ParseInt(string value, int radix)
         {
             return 0;
@@ -1450,7 +1450,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="testValue">The value to be tested.</param>
         /// <returns></returns>
-        [Inline("isNaN({0})")]
+        [Template("isNaN({0})")]
         public static bool IsNaN(object testValue)
         {
             return false;
@@ -1461,7 +1461,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="encodedURI">A complete, encoded Uniform Resource Identifier.</param>
         /// <returns></returns>
-        [Inline("decodeURI({0})")]
+        [Template("decodeURI({0})")]
         public static string DecodeURI(string encodedURI)
         {
             return null;
@@ -1472,7 +1472,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="encodedURI">An encoded component of a Uniform Resource Identifier.</param>
         /// <returns></returns>
-        [Inline("decodeURIComponent({0})")]
+        [Template("decodeURIComponent({0})")]
         public static string DecodeURIComponent(string encodedURI)
         {
             return null;
@@ -1483,7 +1483,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="uri">A complete Uniform Resource Identifier.</param>
         /// <returns></returns>
-        [Inline("encodeURI({0})")]
+        [Template("encodeURI({0})")]
         public static string EncodeURI(string uri)
         {
             return null;
@@ -1494,7 +1494,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="component">A component of a URI.</param>
         /// <returns></returns>
-        [Inline("encodeURIComponent({0})")]
+        [Template("encodeURIComponent({0})")]
         public static string EncodeURIComponent(string component)
         {
             return null;
@@ -1503,26 +1503,26 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// An Array-like object corresponding to the arguments passed to a function.
         /// </summary>
-        [Inline("arguments")]
+        [Template("arguments")]
         public static readonly object[] Arguments;
 
-        [Inline("debugger")]
+        [Template("debugger")]
         public static void Debugger()
         {
         }
 
-        [Inline("typeof {0}")]
+        [Template("typeof {0}")]
         public static string TypeOf(object obj)
         {
             return null;
         }
 
-        [Inline("delete {0}")]
+        [Template("delete {0}")]
         public static void Delete(object value)
         {
         }
 
-        [Inline("typeof {0} !== 'undefined'")]
+        [Template("typeof {0} !== 'undefined'")]
         public static bool IsDefined(object value)
         {
             return false;

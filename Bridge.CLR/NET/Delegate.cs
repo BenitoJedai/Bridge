@@ -27,13 +27,13 @@ namespace System
             return null; 
         }
         
-        [Inline("Bridge.fn.combine({0});")]
+        [Template("Bridge.fn.combine({0});")]
         public static Delegate Combine(Delegate a, Delegate b)
         {
             return null;
         }
 
-        [Inline("Bridge.fn.remove({0});")]
+        [Template("Bridge.fn.remove({0});")]
         public static Delegate Remove(Delegate source, Delegate value)
         {
             return null;

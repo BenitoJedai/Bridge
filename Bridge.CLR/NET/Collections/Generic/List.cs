@@ -16,12 +16,12 @@ namespace System.Collections.Generic
 
         public T this[int index]
         {
-            [Inline("get({0})")]
+            [Template("get({0})")]
             get
             {
                 return default(T);
             }
-            [Inline("set({0})")]
+            [Template("set({0})")]
             set
             {
             }

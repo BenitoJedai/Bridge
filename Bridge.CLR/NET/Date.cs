@@ -121,25 +121,25 @@ namespace System
             return false;
         }
 
-        [Inline("Bridge.equals({0})")]
+        [Template("Bridge.equals({0})")]
         public static bool operator ==(Date d1, object d2)
         {
             return false;
         }
 
-        [Inline("Bridge.equals({0})")]
+        [Template("Bridge.equals({0})")]
         public static bool operator ==(Date d1, Date d2)
         {
             return false;
         }
 
-        [Inline("!Bridge.equals({0})")]
+        [Template("!Bridge.equals({0})")]
         public static bool operator !=(Date d1, object d2)
         {
             return false;
         }
 
-        [Inline("!Bridge.equals({0})")]
+        [Template("!Bridge.equals({0})")]
         public static bool operator !=(Date d1, Date d2)
         {
             return false;
@@ -194,37 +194,37 @@ namespace System
             return null;
         }
 
-        [Inline("{0},{1},{2},{3},{4},{5},{6}")]
+        [Template("{0},{1},{2},{3},{4},{5},{6}")]
         public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds, int ms)
         {
             return null;
         }
 
-        [Inline("{0},{1},{2},{3},{4},{5}")]
+        [Template("{0},{1},{2},{3},{4},{5}")]
         public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds)
         {
             return null;
         }
 
-        [Inline("{0},{1},{2},{3},{4}")]
+        [Template("{0},{1},{2},{3},{4}")]
         public static Date UTC(int year, int month, int date, int hours, int minutes)
         {
             return null;
         }
 
-        [Inline("{0},{1},{2},{3}")]
+        [Template("{0},{1},{2},{3}")]
         public static Date UTC(int year, int month, int date, int hours)
         {
             return null;
         }
 
-        [Inline("{0},{1},{2}")]
+        [Template("{0},{1},{2}")]
         public static Date UTC(int year, int month, int date)
         {
             return null;
         }
 
-        [Inline("{0},{1}")]
+        [Template("{0},{1}")]
         public static Date UTC(int year, int month)
         {
             return null;
