@@ -2,7 +2,7 @@
 
 namespace Bridge.CLR
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
     public sealed class CastAttribute : Attribute
     {
