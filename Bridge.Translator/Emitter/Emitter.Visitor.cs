@@ -250,7 +250,7 @@ namespace Bridge.NET
                     if (!string.IsNullOrWhiteSpace(inline))
                     {
                         this.PushWriter(inline);
-                        this.EmitExpressionList(new[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right });
+                        this.EmitExpressionList(new[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right }, null);
                         this.PopWriter();
 
                         return true;
@@ -706,9 +706,12 @@ namespace Bridge.NET
         }
 
         public override void VisitInvocationExpression(InvocationExpression invocationExpression)
-        {
-                        
+        {                        
             Tuple<bool, bool, string> inlineInfo = this.GetInlineCode(invocationExpression);
+            var tupleArguments = this.GetArgumentsList(invocationExpression);
+            var argsExpressions = tupleArguments.Item1;
+            var paramsArg = tupleArguments.Item2;
+            var argsCount = argsExpressions.Count();
 
             if (inlineInfo != null)
             {
@@ -735,13 +738,19 @@ namespace Bridge.NET
                 {
                     this.Write("");
                     StringBuilder savedBuilder = this.Output;
-                    var args = new List<string>(invocationExpression.Arguments.Count);
 
-                    foreach (var arg in invocationExpression.Arguments)
+                    var args = new List<string>(argsCount);
+
+                    foreach (var arg in argsExpressions)
                     {
-                        this.Output = new StringBuilder();
+                        this.Output = new StringBuilder();                        
                         arg.AcceptVisitor(this);
-                        args.Add(this.Output.ToString());
+                        args.Add((arg == paramsArg ? "[" : "") + this.Output.ToString());
+                    }
+
+                    if (paramsArg != null)
+                    {
+                        args[args.Count - 1] = args[args.Count - 1] + "]";
                     }
 
                     this.Output = savedBuilder;
@@ -813,17 +822,22 @@ namespace Bridge.NET
                             {
                                 this.Write("");
                                 StringBuilder savedBuilder = this.Output;
-                                var args = new List<string>(invocationExpression.Arguments.Count + 1);
+                                var args = new List<string>(argsCount + 1);
 
                                 this.Output = new StringBuilder();
                                 this.WriteThisExtension(invocationExpression);
                                 args.Add(this.Output.ToString());
 
-                                foreach (var arg in invocationExpression.Arguments)
+                                foreach (var arg in argsExpressions)
                                 {
                                     this.Output = new StringBuilder();
                                     arg.AcceptVisitor(this);
-                                    args.Add(this.Output.ToString());
+                                    args.Add((arg == paramsArg ? "[" : "") + this.Output.ToString());
+                                }
+
+                                if (paramsArg != null)
+                                {
+                                    args[args.Count - 1] = args[args.Count - 1] + "]";
                                 }
 
                                 this.Output = savedBuilder;
@@ -839,12 +853,12 @@ namespace Bridge.NET
 
                                 this.WriteThisExtension(invocationExpression);
 
-                                if (invocationExpression.Arguments.Count > 0)
+                                if (argsCount > 0)
                                 {
                                     this.WriteComma();
                                 }
 
-                                this.EmitExpressionList(invocationExpression.Arguments);
+                                this.EmitExpressionList(argsExpressions, paramsArg);
 
                                 this.WriteCloseParentheses();
                             }
@@ -904,7 +918,7 @@ namespace Bridge.NET
                     needComma = true;
                 }
 
-                foreach (var arg in invocationExpression.Arguments)
+                foreach (var arg in argsExpressions)
                 {
                     if (needComma)
                     {
@@ -930,31 +944,17 @@ namespace Bridge.NET
 
                 if (this.Writers.Count > count)
                 {
-                    this.EmitExpressionList(invocationExpression.Arguments);                    
+                    this.EmitExpressionList(argsExpressions, paramsArg);                    
                     this.PopWriter();
                 }
                 else
                 {
                     this.WriteOpenParentheses();
-                    this.EmitExpressionList(invocationExpression.Arguments);
+                    this.EmitExpressionList(argsExpressions, paramsArg);
                     this.WriteCloseParentheses();
                 }                
             }
-        }
-
-        protected virtual void WriteThisExtension(InvocationExpression invocationExpression)
-        {
-            if (invocationExpression.Target.HasChildren)
-            {
-                var first = invocationExpression.Target.Children.ElementAt(0);
-                var expression = first as Expression;
-
-                if (expression != null)
-                {
-                    expression.AcceptVisitor(this);
-                }                
-            }
-        }
+        }        
 
         public override void VisitAssignmentExpression(AssignmentExpression assignmentExpression)
         {
@@ -1082,16 +1082,18 @@ namespace Bridge.NET
                 throw this.CreateException(arrayCreateExpression, "Multi-dimensional arrays are not supported");
             }
 
-            this.WriteOpenBracket();
-            this.WriteSpace();
-            var elements = arrayCreateExpression.Initializer.Elements;
-            this.EmitExpressionList(elements);
-
-            if (elements.Count > 0)
+            if (arrayCreateExpression.Initializer.IsNull && arrayCreateExpression.Arguments.Count > 0)
             {
-                this.WriteSpace();
+                this.Write("new Array(");
+                arrayCreateExpression.Arguments.First().AcceptVisitor(this);
+                this.Write(")");
+
+                return;
             }
 
+            this.WriteOpenBracket();
+            var elements = arrayCreateExpression.Initializer.Elements;
+            this.EmitExpressionList(elements, null);
             this.WriteCloseBracket();
         }
 
@@ -1167,7 +1169,7 @@ namespace Bridge.NET
                     }
                 }
 
-                this.EmitExpressionList(objectCreateExpression.Arguments);
+                this.EmitExpressionList(objectCreateExpression.Arguments, null);
                 this.WriteCloseParentheses();
 
                 if (hasInitializer)
@@ -1332,7 +1334,7 @@ namespace Bridge.NET
 
                     this.WriteDot();
                     this.PushWriter(code);
-                    this.EmitExpressionList(indexerExpression.Arguments);
+                    this.EmitExpressionList(indexerExpression.Arguments, null);
                     
 
                     if (!this.IsAssignment)

@@ -13,6 +13,7 @@ using System.Globalization;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using ICSharpCode.NRefactory.Semantics;
 using System.IO;
+using ICSharpCode.NRefactory.CSharp.Resolver;
 
 namespace Bridge.NET
 {
@@ -996,7 +997,7 @@ namespace Bridge.NET
             this.WriteCloseParentheses();
         }
 
-        protected virtual void EmitExpressionList(IEnumerable<Expression> expressions)
+        protected virtual void EmitExpressionList(IEnumerable<Expression> expressions, Expression paramArg)
         {
             bool needComma = false;
             int count = this.Writers.Count;
@@ -1008,6 +1009,11 @@ namespace Bridge.NET
                     this.WriteComma();
                 }
 
+                if (expr == paramArg)
+                {
+                    this.WriteOpenBracket();
+                }
+
                 needComma = true;
                 expr.AcceptVisitor(this);
 
@@ -1015,6 +1021,11 @@ namespace Bridge.NET
                 {
                     this.PopWriter();
                 }
+            }
+
+            if (paramArg != null)
+            {
+                this.WriteCloseBracket();
             }
         }
 
@@ -1892,7 +1903,9 @@ namespace Bridge.NET
                     sb.Append("Bridge.is(arguments[");
                     sb.Append(i);
                     sb.Append("], ");
-                    sb.Append(this.ShortenTypeName(this.ResolveType(method.Parameters[i].ParameterType.FullName)));
+                    
+                    var paramType = method.Parameters[i].ParameterType;
+                    sb.Append(paramType.IsArray ? "Array" : this.ShortenTypeName(this.ResolveType(paramType.FullName)));
                     sb.Append(")");
                 }
 
@@ -1941,10 +1954,14 @@ namespace Bridge.NET
                         }
                         else
                         {
-                            var name = this.ResolveType(type.ToString());
+                            var isArray = type.ToString().Contains("[]");
+                            
+                            var typeName = isArray ? type.ToString().Replace("[]", "") : type.ToString();
+                            var name = this.ResolveType(typeName);
+                            
                             var typeDef = this.TypeDefinitions[name];
 
-                            if (typeDef.FullName != method.Parameters[i].ParameterType.FullName) 
+                            if ((typeDef.FullName + (isArray ? "[]" : "")) != method.Parameters[i].ParameterType.FullName) 
                             {
                                 match = false;
                                 break;
@@ -1960,37 +1977,7 @@ namespace Bridge.NET
             }
 
             return null;
-        }
-
-        protected virtual string GetOverloadName(MethodDefinition methodDef)
-        {
-            var name = this.GetMethodName(methodDef);
-            var attr = this.GetAttribute(methodDef.CustomAttributes, Translator.CLR_ASSEMBLY + ".Name");
-
-            if (methodDef.IsConstructor) 
-            {
-                name = "$init";
-            }
-
-            if (attr == null && methodDef.Parameters.Count > 0)
-            {
-                StringBuilder sb = new StringBuilder(name);                
-
-                foreach (var p in methodDef.Parameters)
-                {
-                    sb.Append("$").Append(p.ParameterType.Name);
-                }
-
-                if (methodDef.HasGenericParameters)
-                {
-                    sb.Append("$").Append(methodDef.GenericParameters.Count);
-                }
-
-                name = sb.ToString();
-            }
-
-            return name;
-        }
+        }        
 
         protected virtual string GetEntityName(EntityDeclaration entity, bool cancelChangeCase = false)
         {
@@ -2216,110 +2203,6 @@ namespace Bridge.NET
             }
         }
 
-        
-
-        protected virtual PropertyDeclaration GetPropertyMember(MemberReferenceExpression memberReferenceExpression)
-        {            
-            bool isThis = memberReferenceExpression.Target is ThisReferenceExpression || memberReferenceExpression.Target is BaseReferenceExpression;
-            string name = memberReferenceExpression.MemberName;
-
-            if (isThis) 
-            {
-                IDictionary<string, PropertyDeclaration> dict = this.TypeInfo.InstanceProperties;
-                return dict.ContainsKey(name) ? dict[name] : null;
-            }
-
-            IdentifierExpression expr = memberReferenceExpression.Target as IdentifierExpression;
-
-            if (expr != null)
-            {
-                if (this.Locals.ContainsKey(expr.Identifier)) 
-                {
-                    var type = this.Locals[expr.Identifier];
-                    string resolved = this.ResolveType(type.ToString());
-
-                    if(!string.IsNullOrEmpty(resolved)) 
-                    {
-                        var typeInfo = this.Types.FirstOrDefault(t => t.FullName == resolved);
-
-                        if (typeInfo != null)
-                        {
-                            if (typeInfo.InstanceProperties.ContainsKey(name))
-                            {
-                                return typeInfo.InstanceProperties[name];
-                            }
-
-                            if (typeInfo.StaticProperties.ContainsKey(name))
-                            {
-                                return typeInfo.StaticProperties[name];
-                            }
-                        }                        
-                    }
-                }
-                else
-                {
-                    IMemberDefinition member = this.ResolveFieldOrMethod(expr.Identifier, 0);
-
-                    if (member != null && member is FieldDefinition)
-                    {
-                        FieldDefinition field = member as FieldDefinition;
-                        string resolved = this.ResolveType(field.FieldType.Name);
-
-                        if (!string.IsNullOrEmpty(resolved))
-                        {
-                            var typeInfo = this.Types.FirstOrDefault(t => t.FullName == resolved);
-
-                            if (typeInfo != null)
-                            {
-                                if (typeInfo.InstanceProperties.ContainsKey(name))
-                                {
-                                    return typeInfo.InstanceProperties[name];
-                                }
-
-                                if (typeInfo.StaticProperties.ContainsKey(name))
-                                {
-                                    return typeInfo.StaticProperties[name];
-                                }
-                            }                        
-                        }
-                    }
-                    else
-                    {
-                        string resolved = this.ResolveType(expr.Identifier);
-
-                        if (!string.IsNullOrEmpty(resolved))
-                        {
-                            var typeInfo = this.Types.FirstOrDefault(t => t.FullName == resolved);
-
-                            if (typeInfo != null)
-                            {
-                                if (typeInfo.InstanceProperties.ContainsKey(name))
-                                {
-                                    return typeInfo.InstanceProperties[name];
-                                }
-
-                                if (typeInfo.StaticProperties.ContainsKey(name))
-                                {
-                                    return typeInfo.StaticProperties[name];
-                                }
-                            }
-                            else if (this.TypeDefinitions.ContainsKey(resolved))
-                            {
-                                TypeDefinition typeDef = this.TypeDefinitions[resolved];
-                                PropertyDefinition propDef = typeDef.Properties.FirstOrDefault(p => p.Name == name);
-
-                                if (propDef != null)
-                                {
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }        
-
         protected virtual void EmitTypeReference(AstType astType)
         {
             var composedType = astType as ComposedType;
@@ -2436,6 +2319,36 @@ namespace Bridge.NET
             return resolvedMethod != null && resolvedMethod.IsPartial && !resolvedMethod.HasBody;
         }
 
+        protected virtual string GetOverloadName(MethodDefinition methodDef)
+        {
+            var name = this.GetMethodName(methodDef);
+            var attr = this.GetAttribute(methodDef.CustomAttributes, Translator.CLR_ASSEMBLY + ".Name");
+
+            if (methodDef.IsConstructor)
+            {
+                name = "$init";
+            }
+
+            if (attr == null && methodDef.Parameters.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder(name);
+
+                foreach (var p in methodDef.Parameters)
+                {
+                    sb.Append("$").Append(p.ParameterType.Name.Replace("[]", "$Array"));
+                }
+
+                if (methodDef.HasGenericParameters)
+                {
+                    sb.Append("$").Append(methodDef.GenericParameters.Count);
+                }
+
+                name = sb.ToString();
+            }
+
+            return name;
+        }
+
         protected virtual string GetOverloadNameInvocationResolveResult(InvocationResolveResult invocationResult)
         {
             var typeDef = invocationResult.Member.DeclaringType as DefaultResolvedTypeDefinition;
@@ -2454,7 +2367,7 @@ namespace Bridge.NET
 
                 foreach (var p in args)
                 {
-                    sb.Append("$").Append(p.Type.Name);
+                    sb.Append("$").Append(p.Type.Name.Replace("[]", "$Array"));
                 }
 
                 var defaultResolvedMethod = invocationResult.Member as DefaultResolvedMethod;
@@ -2485,6 +2398,86 @@ namespace Bridge.NET
                 }
 
                 return name;
+            }
+        }
+
+        protected virtual Tuple<IEnumerable<Expression>, Expression> GetArgumentsList(InvocationExpression invocationExpression)
+        {
+            var arguments = invocationExpression.Arguments.ToList();
+            var resolveResult = this.Resolver.ResolveNode(invocationExpression, this) as InvocationResolveResult;
+            Expression paramsArg = null;
+
+            if (resolveResult != null)
+            {
+                var parameters = resolveResult.Member.Parameters;
+                var resolvedMethod = resolveResult.Member as DefaultResolvedMethod;
+                var invocationResult = resolveResult as CSharpInvocationResolveResult;
+                int shift = 0;
+
+                if (resolvedMethod != null && invocationResult != null &&
+                    resolvedMethod.IsExtensionMethod && invocationResult.IsExtensionMethodInvocation)
+                {
+                    shift = 1;
+                }
+
+                Expression[] result = new Expression[parameters.Count - shift];
+
+                int i = 0;                
+                foreach (var arg in arguments)
+                {
+                    if (arg is NamedArgumentExpression)
+                    {
+                        NamedArgumentExpression namedArg = (NamedArgumentExpression)arg;
+                        var namedParam = parameters.First(p => p.Name == namedArg.Name);
+                        var index = parameters.IndexOf(namedParam);
+
+                        result[index] = namedArg.Expression;
+                    }                    
+                    else 
+                    {
+                        if (paramsArg == null && parameters[i + shift].IsParams && !this.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition))
+                        {
+                            paramsArg = arg;
+                        }
+
+                        if (i >= result.Length)
+                        {
+                            var list = result.ToList();
+                            list.AddRange(new Expression[arguments.Count - i]);
+
+                            result = list.ToArray();
+                        }
+
+                        result[i] = arg;
+                    }
+
+                    i++;
+                }
+
+                for (i = 0; i < result.Length; i++)
+                {
+                    if (result[i] == null)
+                    {
+                        result[i] = new PrimitiveExpression(parameters[i + shift].ConstantValue);
+                    }
+                }
+                return new Tuple<IEnumerable<Expression>, Expression>(result, paramsArg);
+            }
+
+            return new Tuple<IEnumerable<Expression>, Expression>(arguments, paramsArg);
+        }
+
+        protected virtual void WriteThisExtension(InvocationExpression invocationExpression)
+        {
+            if (invocationExpression.Target.HasChildren)
+            {
+                var first = invocationExpression.Target.Children.ElementAt(0);
+                var expression = first as Expression;
+
+                if (expression != null)
+                {
+                    expression.AcceptVisitor(this);
+                }
             }
         }
     }

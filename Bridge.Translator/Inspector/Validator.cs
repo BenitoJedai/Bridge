@@ -291,11 +291,6 @@ namespace Bridge.NET
                 {
                     Exception.Throw("Reference parameters are not supported: {0}", method);
                 }
-
-                if (param.CustomAttributes.Any(a => a.Constructor.DeclaringType.FullName == "System.ParamArrayAttribute"))
-                {
-                    Exception.Throw("Param arrays are not supported: {0}", method);
-                }
             }
         }
 
