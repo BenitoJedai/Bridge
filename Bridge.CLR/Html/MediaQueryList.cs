@@ -2,14 +2,15 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList
 
 using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// A MediaQueryList object maintains a list of media queries on a document, and handles sending notifications to listeners when the media queries on the document change.
     /// This makes it possible to observe a document to detect when its media queries change, instead of polling the values periodically, if you need to programmatically detect changes to the values of media queries on a document.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("MediaQueryList")]
+    [Ignore]
+    [Name("MediaQueryList")]
     public class MediaQueryList
     {
         private MediaQueryList()

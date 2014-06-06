@@ -2,13 +2,14 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Window
 
 using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("window")]
+    [Ignore]
+    [Name("window")]
     public static class Window
     {
         #region Properties
@@ -1151,229 +1152,229 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// An event handler property for abort events on the window
         /// </summary>
-        [Bridge.CLR.Name("onabort")]
+        [Name("onabort")]
         public static Action<Event> OnAbort;
 
         /// <summary>
         /// An event handler property for before-unload events on the window
         /// </summary>
-        [Bridge.CLR.Name("onbeforeunload")]
+        [Name("onbeforeunload")]
         public static Action<Event> OnBeforeUnload;
 
         /// <summary>
         /// An event handler property for blur events on the window
         /// </summary>
-        [Bridge.CLR.Name("onblur")]
+        [Name("onblur")]
         public static Action<Event> OnBlur;
 
         /// <summary>
         /// An event handler property for change events on the window
         /// </summary>
-        [Bridge.CLR.Name("onchange")]
+        [Name("onchange")]
         public static Action<Event> OnChange;
 
         /// <summary>
         /// An event handler property for click events on the window
         /// </summary>
-        [Bridge.CLR.Name("onclick")]
+        [Name("onclick")]
         public static Action<Event> OnClick;
 
         /// <summary>
         /// An event handler property for handling the window close event
         /// </summary>
-        [Bridge.CLR.Name("onclose")]
+        [Name("onclose")]
         public static Action<Event> OnClose;
 
         /// <summary>
         /// An event handler property for right-click events on the window
         /// </summary>
-        [Bridge.CLR.Name("oncontextmenu")]
+        [Name("oncontextmenu")]
         public static Action<Event> OnContextMenu;
 
         /// <summary>
         /// An event handler property for any ambient light levels changes
         /// </summary>
-        [Bridge.CLR.Name("ondevicelight")]
+        [Name("ondevicelight")]
         public static Action<Event> OnDeviceLight;
 
         /// <summary>
         /// FIXME: NeedsContents
         /// </summary>
-        [Bridge.CLR.Name("ondevicemotion")]
+        [Name("ondevicemotion")]
         public static Action<Event> OnDeviceMotion;
 
         /// <summary>
         /// An event handler property for any device orientation changes
         /// </summary>
-        [Bridge.CLR.Name("ondeviceorientation")]
+        [Name("ondeviceorientation")]
         public static Action<Event> OnDeviceOrientation;
 
         /// <summary>
         /// An event handler property for device proximity event
         /// </summary>
-        [Bridge.CLR.Name("ondeviceproximity")]
+        [Name("ondeviceproximity")]
         public static Action<Event> OnDeviceProximity;
 
         /// <summary>
         /// An event handler property for drag and drop events on the window
         /// </summary>
-        [Bridge.CLR.Name("ondragdrop")]
+        [Name("ondragdrop")]
         public static Action<Event> OnDragDrop;
 
         /// <summary>
         /// An event handler property for errors raised on the window
         /// </summary>
-        [Bridge.CLR.Name("onerror")]
+        [Name("onerror")]
         public static Action<Event> OnError;
 
         /// <summary>
         /// An event handler property for focus events on the window
         /// </summary>
-        [Bridge.CLR.Name("onfocus")]
+        [Name("onfocus")]
         public static Action<Event> OnFocus;
 
         /// <summary>
         /// An event handler property for hash change events on the window; called when the part of the URL after the hash mark ("#") changes
         /// </summary>
-        [Bridge.CLR.Name("onhashchange")]
+        [Name("onhashchange")]
         public static Action<Event> OnHashChange;
 
         /// <summary>
         /// An event handler property for keydown events on the window
         /// </summary>
-        [Bridge.CLR.Name("onkeydown")]
+        [Name("onkeydown")]
         public static Action<Event> OnKeyDown;
 
         /// <summary>
         /// An event handler property for keypress events on the window
         /// </summary>
-        [Bridge.CLR.Name("onkeypress")]
+        [Name("onkeypress")]
         public static Action<Event> OnKeyPress;
 
         /// <summary>
         /// An event handler property for keyup events on the window
         /// </summary>
-        [Bridge.CLR.Name("onkeyup")]
+        [Name("onkeyup")]
         public static Action<Event> OnKeyUp;
 
         /// <summary>
         /// An event handler property for window loading
         /// </summary>
-        [Bridge.CLR.Name("onload")]
+        [Name("onload")]
         public static Action<Event> OnLoad;
 
         /// <summary>
         /// An event handler property for mousedown events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmousedown")]
+        [Name("onmousedown")]
         public static Action<Event> OnMouseDown;
 
         /// <summary>
         /// An event handler property for mousemove events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmousemove")]
+        [Name("onmousemove")]
         public static Action<Event> OnMouseMove;
 
         /// <summary>
         /// An event handler property for mouseout events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmouseout")]
+        [Name("onmouseout")]
         public static Action<Event> OnMouseOut;
 
         /// <summary>
         /// An event handler property for mouseover events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmouseover")]
+        [Name("onmouseover")]
         public static Action<Event> OnMouseOver;
 
         /// <summary>
         /// An event handler property for mouseup events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmouseup")]
+        [Name("onmouseup")]
         public static Action<Event> OnMouseUp;
 
         /// <summary>
         /// An event handler property for paint events on the window
         /// </summary>
-        [Bridge.CLR.Name("onpaint")]
+        [Name("onpaint")]
         public static Action<Event> OnPaint;
 
         /// <summary>
         /// An event handler property for popstate events, which are fired when navigating to a session history entry representing a state object
         /// </summary>
-        [Bridge.CLR.Name("onpopstate")]
+        [Name("onpopstate")]
         public static Action<Event> OnPopState;
 
         /// <summary>
         /// An event handler property for reset events on the window
         /// </summary>
-        [Bridge.CLR.Name("onreset")]
+        [Name("onreset")]
         public static Action<Event> OnReset;
 
         /// <summary>
         /// An event handler property for window resizing
         /// </summary>
-        [Bridge.CLR.Name("onresize")]
+        [Name("onresize")]
         public static Action<Event> OnResize;
 
         /// <summary>
         /// An event handler property for window scrolling
         /// </summary>
-        [Bridge.CLR.Name("onscroll")]
+        [Name("onscroll")]
         public static Action<Event> OnScroll;
 
         /// <summary>
         /// An event handler property for window selection
         /// </summary>
-        [Bridge.CLR.Name("onselect")]
+        [Name("onselect")]
         public static Action<Event> OnSelect;
 
         /// <summary>
         /// An event handler property for submits on window forms
         /// </summary>
-        [Bridge.CLR.Name("onsubmit")]
+        [Name("onsubmit")]
         public static Action<Event> OnSubmit;
 
         /// <summary>
         /// An event handler property for unload events on the window
         /// </summary>
-        [Bridge.CLR.Name("onunload")]
+        [Name("onunload")]
         public static Action<Event> OnUnload;
 
         /// <summary>
         /// An event handler property for user proximity events
         /// </summary>
-        [Bridge.CLR.Name("onuserproximity")]
+        [Name("onuserproximity")]
         public static Action<Event> OnUserProximity;
 
         /// <summary>
         /// An event handler property for pageshow events on the window
         /// </summary>
-        [Bridge.CLR.Name("onpageshow")]
+        [Name("onpageshow")]
         public static Action<Event> OnPageShow;
 
         /// <summary>
         /// An event handler property for pagehide events on the window
         /// </summary>
-        [Bridge.CLR.Name("onpagehide")]
+        [Name("onpagehide")]
         public static Action<Event> OnPageHide;
 
         /// <summary>
         /// The global Infinity property is a numeric value representing infinity.
         /// </summary>
-        [Bridge.CLR.Inline("Infinity")]
+        [Template("Infinity")]
         public static readonly double Infinity;
 
         /// <summary>
         /// The global NaN property is a value representing Not-A-Number.
         /// </summary>
-        [Bridge.CLR.Inline("NaN")]
+        [Template("NaN")]
         public static readonly double NaN;
 
         /// <summary>
         /// The global undefined property represents the value undefined.
         /// </summary>
-        [Bridge.CLR.Inline("undefined")]
+        [Template("undefined")]
         public static readonly object Undefined;
 
         /// <summary>
@@ -1382,7 +1383,7 @@ namespace Bridge.CLR.Html
         /// <typeparam name="T"></typeparam>
         /// <param name="expression">A string representing a JavaScript expression, statement, or sequence of statements. The expression can include variables and properties of existing objects.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("eval({0})")]
+        [Template("eval({0})")]
         public static T Eval<T>(string expression)
         {
             return default(T);
@@ -1394,7 +1395,7 @@ namespace Bridge.CLR.Html
         /// <typeparam name="T"></typeparam>
         /// <param name="code"></param>
         /// <returns></returns>
-        [Bridge.CLR.Inline]
+        [Bridge.CLR.Template]
         public static T Inline<T>(string code)
         {
             return default(T);
@@ -1405,7 +1406,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="testValue">The value to be tested for finiteness.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("isFinite({0})")]
+        [Template("isFinite({0})")]
         public static bool IsFinite(object testValue)
         {
             return false;
@@ -1416,7 +1417,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="value">A string that represents the value you want to parse.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("parseFloat({0})")]
+        [Template("parseFloat({0})")]
         public static double ParseFloat(string value)
         {
             return 0;
@@ -1427,7 +1428,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("parseInt({0})")]
+        [Template("parseInt({0})")]
         public static int ParseInt(string value)
         {
             return 0;
@@ -1439,7 +1440,7 @@ namespace Bridge.CLR.Html
         /// <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
         /// <param name="radix">An integer that represents the radix of the above mentioned string. Always specify this parameter to eliminate reader confusion and to guarantee predictable behavior. Different implementations produce different results when a radix is not specified.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("parseInt({0}, {1})")]
+        [Template("parseInt({0}, {1})")]
         public static int ParseInt(string value, int radix)
         {
             return 0;
@@ -1450,7 +1451,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="testValue">The value to be tested.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("isNaN({0})")]
+        [Template("isNaN({0})")]
         public static bool IsNaN(object testValue)
         {
             return false;
@@ -1461,7 +1462,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="encodedURI">A complete, encoded Uniform Resource Identifier.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("decodeURI({0})")]
+        [Template("decodeURI({0})")]
         public static string DecodeURI(string encodedURI)
         {
             return null;
@@ -1472,7 +1473,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="encodedURI">An encoded component of a Uniform Resource Identifier.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("decodeURIComponent({0})")]
+        [Template("decodeURIComponent({0})")]
         public static string DecodeURIComponent(string encodedURI)
         {
             return null;
@@ -1483,7 +1484,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="uri">A complete Uniform Resource Identifier.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("encodeURI({0})")]
+        [Template("encodeURI({0})")]
         public static string EncodeURI(string uri)
         {
             return null;
@@ -1494,7 +1495,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="component">A component of a URI.</param>
         /// <returns></returns>
-        [Bridge.CLR.Inline("encodeURIComponent({0})")]
+        [Template("encodeURIComponent({0})")]
         public static string EncodeURIComponent(string component)
         {
             return null;
@@ -1503,26 +1504,26 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// An Array-like object corresponding to the arguments passed to a function.
         /// </summary>
-        [Bridge.CLR.Inline("arguments")]
+        [Template("arguments")]
         public static readonly object[] Arguments;
 
-        [Bridge.CLR.Inline("debugger")]
+        [Template("debugger")]
         public static void Debugger()
         {
         }
 
-        [Bridge.CLR.Inline("typeof {0}")]
+        [Template("typeof {0}")]
         public static string TypeOf(object obj)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("delete {0}")]
+        [Template("delete {0}")]
         public static void Delete(object value)
         {
         }
 
-        [Bridge.CLR.Inline("typeof {0} !== 'undefined'")]
+        [Template("typeof {0} !== 'undefined'")]
         public static bool IsDefined(object value)
         {
             return false;

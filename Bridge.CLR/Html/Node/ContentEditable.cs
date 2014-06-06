@@ -1,12 +1,13 @@
 ﻿using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// Indicate whether or not the element is editable.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum ContentEditable
     {
         /// <summary>

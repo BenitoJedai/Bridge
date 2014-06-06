@@ -3,8 +3,8 @@
     /// <summary>
     /// The FocusEvent interface represents focus-related events like focus, blur, focusin, or focusout.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("FocusEvent")]
+    [Ignore]
+    [Name("FocusEvent")]
     public class FocusEvent : UIEvent
     {
         private FocusEvent()

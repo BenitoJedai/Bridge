@@ -3,9 +3,9 @@
     /// <summary>
     /// The column-span CSS property makes it possible for an element to span across all columns when its value is set to all. An element that spans more than one column is called a spanning element.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum ColumnSpan
     {
         /// <summary>

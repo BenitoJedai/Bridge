@@ -3,9 +3,9 @@
     /// <summary>
     /// The empty-cells CSS property specifies how user agents should render borders and backgrounds around cells that have no visible content.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum EmptyCells
     {
         /// <summary>

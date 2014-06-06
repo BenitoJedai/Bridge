@@ -6,8 +6,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// The Coordinates interface represents the position and attitude of the device on Earth, as well as the accuracy with which these data are computed.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class GeolocationCoordinates
     {
         private GeolocationCoordinates()

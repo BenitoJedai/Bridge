@@ -3,8 +3,8 @@
     /// <summary>
     /// The DOMImplementation interface represent an object providing methods which are not dependent on any particular document. Such an object is returned by the Document.implementation property.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("DOMImplementation")]
+    [Ignore]
+    [Name("DOMImplementation")]
 	public partial class DOMImplementation 
     {
 		internal DOMImplementation() 

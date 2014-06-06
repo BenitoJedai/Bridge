@@ -3,9 +3,9 @@
     /// <summary>
     /// The border style CSS property sets the width of the border of a box.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum BorderWidth
     {
         /// <summary>

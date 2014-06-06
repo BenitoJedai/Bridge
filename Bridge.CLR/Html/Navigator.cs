@@ -7,8 +7,8 @@ namespace Bridge.CLR.Html
     ///  The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.
     /// A Navigator object can be retrieved using the read-only Window.navigator property.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Navigator")]
+    [Ignore]
+    [Name("Navigator")]
     public class Navigator
     {
         private Navigator()

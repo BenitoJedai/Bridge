@@ -4,8 +4,8 @@
 	/// The NodeIterator interface represents an iterator over the members of a list of the nodes in a subtree of the DOM. The nodes will be returned in document order.
     /// A NodeIterator can be created using the Document.createNodeIterator() method
 	/// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("NodeIterator")]
+    [Ignore]
+    [Name("NodeIterator")]
 	public class NodeIterator 
     {
 		internal NodeIterator() 

@@ -2,13 +2,12 @@
 using Bridge.CLR;
 using System;
 
-[assembly:FilesHierrarchy(TypesSplit.ByModule)]
-
 namespace CompanyX
 {
     // [FileName(filename)]
     // [Namespace] // exclude namespace from JavaScript filename
     // [Module] // define a class as an AMD
+    // [assembly:FilesHierrarchy(TypesSplit.ByModule)]
     // [assembly: OutputDir] // define output directory for .js files
 
     // partial classes supported
@@ -18,20 +17,87 @@ namespace CompanyX
     public class Company
     {
         public string Name { get; set; }
-        
-        //public void DoSomething()
-        //{
-        //    Console.Log("DoSomething called");
-        //}
     }
 
     public static class App
     {
         public static string Name = "Geoff";
 
+        public static void LoadInit()
+        {
+            Console.Log("LoadInit");
+
+            var div = Document.GetElementById("test");
+            div.InnerHTML = "Hello World";
+            div.ClassName = "box";
+            div.Style.Height = "50px";
+            div.Style.Width = "150px";
+            div.Style.BorderRadius = "10px";
+            div.Style.BoxShadow = "2px 2px 2px #808080";
+
+            Document.Body.OnLoad += delegate
+            {
+                //var div2 = new Element();
+                //div2.ClassName = "box";
+                //div2.Style.Height = "100px";
+                //div2.Style.Width = "100px";
+
+                //Document.Body.AppendChild(div2);
+
+                Console.Log("+=OnLoad");
+            };
+
+            var input = Document.GetElementById("input1") as Input;
+
+            input.Value = "test2";
+            //input.Value = "MyValue";
+        }
+
         public static void Start()
         {
-            var person = new Person { Name = Name };
+            Document.AddEventListener("DOMContentLoaded", LoadInit, false);
+
+            //Window.Inline<string>("console.log('Window.Inline');");
+
+            var temp1 = "Hello World";
+            
+            /*@
+                * console.log('temp1', temp1);
+                * 
+                * var temp2 = 'Hello World2';
+                * 
+                * console.log('temp2', temp2);            
+                @*/
+
+            /*@
+                console.log('temp1', temp1);
+            
+                var temp2 = 'Hello World2';
+            
+                console.log('temp2', temp2);            
+                @*/
+
+            var test = "test";
+            
+            /**
+             * console.log('temp1', temp1);
+             * 
+             * var temp2 = 'Hello World2";
+             * 
+             * console.log('temp2', temp2);
+             */
+        
+            //window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', load )
+
+            Console.Log("Default DateTime", new DateTime().DateData);
+
+            var date1 = new DateTime();
+            var date2 = new DateTime(2000, 11, 05);
+
+            Console.Log("date1", date1.DateData);
+            Console.Log("date2", date2.DateData);
+
+            var person = new Person (Name);
 
             person.DoSomething(person);
             person.DoSomething("Hello Person");
@@ -39,13 +105,7 @@ namespace CompanyX
 
             var company = new Company { Name = "Object.NET" };
 
-            var customer = new Customer { IsGood = true };
-
-            Console.Log("IsGood", customer.IsGood);
-
             //company.DoSomething();
-
-
 
             //Person.DoSomething(person);
 

@@ -4,8 +4,8 @@
     /// The Range interface represents a fragment of a document that can contain nodes and parts of text nodes in a given document.
     /// A range can be created using the createRange method of the Document object. Range objects can also be retrieved by using the getRangeAt method of the Selection object. There also is the Range() constructor available.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Range")]
+    [Ignore]
+    [Name("Range")]
 	public partial class Range 
     {
 		public Range() 

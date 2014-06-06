@@ -3,9 +3,9 @@
     /// <summary>
     /// The border-collapse CSS property selects a table's border model. This has a big influence on the look and style of the table cells.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum BorderCollapse
     {
         /// <summary>

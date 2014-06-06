@@ -3,9 +3,9 @@
     /// <summary>
     /// The background-blend-mode CSS property describes how a background should blend with the element's background that is below it and the element's background color. Background elements should be blended while content appearance should be kept unchanged.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum BackgroundBlendMode
     {
         /// <summary>
@@ -31,25 +31,25 @@
         /// <summary>
         /// Brightens the backdrop color to reflect the source color
         /// </summary>
-        [Bridge.CLR.Name("color-dodge")]
+        [Name("color-dodge")]
         ColorDodge, 
         
         /// <summary>
         /// Darkens the backdrop color to reflect the source color.
         /// </summary>
-        [Bridge.CLR.Name("color-burn")]
+        [Name("color-burn")]
         ColorBurn, 
 
         /// <summary>
         /// Multiplies or screens the colors, depending on the source color value.
         /// </summary>
-        [Bridge.CLR.Name("hard-light")]
+        [Name("hard-light")]
         HardLight, 
 
         /// <summary>
         /// Darkens or lightens the colors, depending on the source color value.
         /// </summary>
-        [Bridge.CLR.Name("soft-light")]
+        [Name("soft-light")]
         SoftLight, 
         
         /// <summary>

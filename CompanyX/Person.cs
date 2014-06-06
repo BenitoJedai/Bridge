@@ -5,6 +5,13 @@ namespace CompanyX
 {
     public class Person
     {
+        public Person() { }
+
+        public Person(string name)
+        {
+            this.Name = name;
+        }
+
         public string Name { get; set; }
 
         public void DoSomething(Person person)

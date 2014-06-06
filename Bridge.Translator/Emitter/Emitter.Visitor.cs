@@ -1319,7 +1319,7 @@ namespace Bridge.NET
                 {
                     var specProp = (SpecializedProperty)member;
                     var method = this.IsAssignment ? specProp.Setter : specProp.Getter;
-                    inlineAttr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+                    inlineAttr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
                 }
             }
 

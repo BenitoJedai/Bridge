@@ -1,12 +1,13 @@
 ﻿using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// Relationship of nodes
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Ignore]
+    [Enum(Emit.Value)]
+    [Name("Number")]
     [Flags]
     public enum DocumentPosition
     {

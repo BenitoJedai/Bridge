@@ -30,9 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GoodCustomer.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="Moment.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

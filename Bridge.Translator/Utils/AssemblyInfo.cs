@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 namespace Bridge.NET
 {
     public enum TypesSplit

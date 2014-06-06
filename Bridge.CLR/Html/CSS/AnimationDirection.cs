@@ -3,9 +3,9 @@
     /// <summary>
     /// The animation-direction CSS property indicates whether the animation should play in reverse on alternate cycles.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum AnimationDirection
     {
         /// <summary>
@@ -31,7 +31,7 @@
         /// <summary>
         /// The animation plays backward on the first play-through, then forward on the next, then continues to alternate. The count to determinate if it is an even or an odd iteration starts at one.
         /// </summary>
-        [Bridge.CLR.Name("alternate-reverse")]
+        [Name("alternate-reverse")]
         AlternateReverse
     }
 }

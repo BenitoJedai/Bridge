@@ -6,8 +6,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// The screen object is a special object for inspecting properties of the screen on which the current window is being rendered.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Screen")]
+    [Ignore]
+    [Name("Screen")]
     public class Screen
     {
         private Screen()

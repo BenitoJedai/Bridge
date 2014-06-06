@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// HTMLCollection is an class representing a generic collection (array) of elements (in document order) and offers methods and properties for selecting from the list.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("HTMLCollection")]
+    [Ignore]
+    [Name("HTMLCollection")]
     public class HTMLCollection: IEnumerable<Element>
     {
         protected internal HTMLCollection()
@@ -43,7 +44,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		[Bridge.CLR.Name("item")]
+		[Name("item")]
         public Element GetItem(int index) 
         {
 			return null;
@@ -54,7 +55,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [Bridge.CLR.Name("namedItem")]
+        [Name("namedItem")]
         public Element GetNamedItem(string name)
         {
             return null;

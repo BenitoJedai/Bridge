@@ -3,9 +3,9 @@
     /// <summary>
     /// The vertical-align CSS property specifies the vertical alignment of an inline or table-cell box.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum VerticalAlign
     {
         /// <summary>
@@ -31,13 +31,13 @@
         /// <summary>
         /// Aligns the top of the element with the top of the parent element's font.
         /// </summary>
-        [Bridge.CLR.Name("text-top")]
+        [Name("text-top")]
         TextTop,
 
         /// <summary>
         /// Aligns the bottom of the element with the bottom of the parent element's font.
         /// </summary>
-        [Bridge.CLR.Name("text-bottom")]
+        [Name("text-bottom")]
         TextBottom,
 
         /// <summary>

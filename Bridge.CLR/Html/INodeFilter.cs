@@ -10,9 +10,9 @@
         NodeFilterResult AcceptNode(Node node);
 	}
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Ignore]
+    [Enum(Emit.Value)]
+    [Name("Number")]
     public enum NodeFilterResult
     {
         /// <summary>

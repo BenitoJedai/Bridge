@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
-using ICSharpCode.NRefactory.CSharp;
+﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
+using Mono.Cecil;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Bridge.NET
 {

@@ -3,9 +3,9 @@
     /// <summary>
     /// The text-transform CSS property specifies how to capitalize an element's text. It can be used to make text appear in all-uppercase or all-lowercase, or with each word capitalized.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum TextTransform
     {
         /// <summary>
@@ -36,7 +36,7 @@
         /// <summary>
         /// Is a keyword forcing the writing of a character, mainly ideograms and latin scripts inside a square, allowing them to be aligned in the usual East Asian scripts (like Chinese or Japanese).
         /// </summary>
-        [Bridge.CLR.Name("full-width")]
+        [Name("full-width")]
         FullWidth
     }
 }

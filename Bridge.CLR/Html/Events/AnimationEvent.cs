@@ -3,8 +3,8 @@
     /// <summary>
     /// The AnimationEvent interface represents events providing information related to animations.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("AnimationEvent")]
+    [Ignore]
+    [Name("AnimationEvent")]
     public class AnimationEvent : Event
     {
         private AnimationEvent()

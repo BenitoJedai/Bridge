@@ -1,10 +1,11 @@
 ﻿// Event WebAPI by Mozilla Contributors is licensed under CC-BY-SA 2.5.
 // https://developer.mozilla.org/en-US/docs/Web/API/EventListener
+
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
-    [Bridge.CLR.Cast("function(obj){return Bridge.isFunction(obj.handleEvent);}")]
+    [Ignore]
+    [Name("Object")]
+    [Bridge.CLR.Cast("{$is: function(obj){return Bridge.isFunction(obj.handleEvent);}}")]
     public interface IEventListener
     {
         /// <summary>

@@ -1,11 +1,12 @@
 ﻿using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// Each web page loaded in the browser has its own document object. The Document interface serves as an entry point to the web page's content (the DOM tree, including elements such as body and table) and provides functionality global to the document (such as obtaining the page's URL and creating new elements in the document).
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("document")]
+    [Ignore]
+    [Name("document")]
     public static class Document
     {
         #region Node implementation
@@ -453,379 +454,379 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The oncopy property returns the onCopy event handler code on the current element.
         /// </summary>
-        [Bridge.CLR.Name("oncopy")]
+        [Name("oncopy")]
         public static Delegate OnCopy;
 
         /// <summary>
         /// Returns the event handling code for the cut event.
         /// </summary>
-        [Bridge.CLR.Name("oncut")]
+        [Name("oncut")]
         public static Delegate OnCut;
 
         /// <summary>
         /// Returns the event handling code for the paste event.
         /// </summary>
-        [Bridge.CLR.Name("onpaste")]
+        [Name("onpaste")]
         public static Delegate OnPaste;
 
         /// <summary>
         /// Returns the event handling code for the wheel event.
         /// </summary>
-        [Bridge.CLR.Name("onwheel")]
+        [Name("onwheel")]
         public static Delegate OnWheel;      
 
         /// <summary>
         ///  EventHandler representing the code to be called when the abort event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onabort")]
+        [Name("onabort")]
         public static Action<Event> OnAbort;
 
         /// <summary>
         /// EventHandler representing the code to be called when the blur event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onblur")]
+        [Name("onblur")]
         public static Action<Event> OnBlur;
 
         /// <summary>
         /// OnErrorEventHandler representing the code to be called when the error event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onerror")]
+        [Name("onerror")]
         public static ErrorEventHandler OnError;
 
         /// <summary>
         /// EventHandler representing the code to be called when the focus event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onfocus")]
+        [Name("onfocus")]
         public static Action<Event> OnFocus;
 
         /// <summary>
         /// EventHandler representing the code to be called when the cancel event is raised.
         /// </summary>
-        [Bridge.CLR.Name("oncancel")]
+        [Name("oncancel")]
         public static Action<Event> OnCancel;
 
         /// <summary>
         /// EventHandler representing the code to be called when the canplay event is raised
         /// </summary>
-        [Bridge.CLR.Name("oncanplay")]
+        [Name("oncanplay")]
         public static Action<Event> OnCanPlay;
 
         /// <summary>
         /// EventHandler representing the code to be called when the canplaythrough event is raised.
         /// </summary>
-        [Bridge.CLR.Name("oncanplaythrough")]
+        [Name("oncanplaythrough")]
         public static Action<Event> OnCanPlayThrough;
 
         /// <summary>
         /// EventHandler representing the code to be called when the change event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onchange")]
+        [Name("onchange")]
         public static Action<Event> OnChange;
 
         /// <summary>
         /// EventHandler representing the code to be called when the click event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onclick")]
+        [Name("onclick")]
         public static Action<Event> OnClick;
 
         /// <summary>
         /// EventHandler representing the code to be called when the close event is raised.
         /// </summary>
-        [Bridge.CLR.Name("onclose")]
+        [Name("onclose")]
         public static Action<Event> OnClose;
 
         /// <summary>
         /// EventHandler representing the code to be called when the contextmenu event is raised.
         /// </summary>
-        [Bridge.CLR.Name("oncontextmenu")]
+        [Name("oncontextmenu")]
         public static Action<Event> OnContextMenu;
 
         /// <summary>
         /// EventHandler representing the code to be called when the cuechange event is raised.
         /// </summary>
-        [Bridge.CLR.Name("oncuechange")]
+        [Name("oncuechange")]
         public static Action<Event> OnCueChange;
 
         /// <summary>
         /// EventHandler representing the code to be called when the dblclick event is raised.
         /// </summary>
-        [Bridge.CLR.Name("ondblclick")]
+        [Name("ondblclick")]
         public static Action<Event> OnDblClick;
 
         /// <summary>
         /// EventHandler representing the code to be called when the drag event is raised.
         /// </summary>
-        [Bridge.CLR.Name("ondrag")]
+        [Name("ondrag")]
         public static Action<Event> OnDrag;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragend event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondragend")]
+        [Name("ondragend")]
         public static Action<Event> OnDragEnd;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragenter event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondragenter")]
+        [Name("ondragenter")]
         public static Action<Event> OnDragEnter;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragexit event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondragexit")]
+        [Name("ondragexit")]
         public static Action<Event> OnDragExit;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragleave event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondragleave")]
+        [Name("ondragleave")]
         public static Action<Event> OnDragLeave;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragover event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondragover")]
+        [Name("ondragover")]
         public static Action<Event> OnDragOver;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the dragstart event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondragstart")]
+        [Name("ondragstart")]
         public static Action<Event> OnDragStart;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the drop event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondrop")]
+        [Name("ondrop")]
         public static Action<Event> OnDrop;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the durationchange event is raised
         /// </summary>
-        [Bridge.CLR.Name("ondurationchange")]
+        [Name("ondurationchange")]
         public static Action<Event> OnDurationChange;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the emptied event is raised
         /// </summary>
-        [Bridge.CLR.Name("onemptied")]
+        [Name("onemptied")]
         public static Action<Event> OnEmptied;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the ended event is raised
         /// </summary>
-        [Bridge.CLR.Name("onended")]
+        [Name("onended")]
         public static Action<Event> OnEnded;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the input event is raised
         /// </summary>
-        [Bridge.CLR.Name("oninput")]
+        [Name("oninput")]
         public static Action<Event> OnInput;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the invalid event is raised
         /// </summary>
-        [Bridge.CLR.Name("oninvalid")]
+        [Name("oninvalid")]
         public static Action<Event> OnInvalid;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the keydown event is raised
         /// </summary>
-        [Bridge.CLR.Name("onkeydown")]
+        [Name("onkeydown")]
         public static Action<Event> OnKeyDown;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the keypress event is raised
         /// </summary>
-        [Bridge.CLR.Name("onkeypress")]
+        [Name("onkeypress")]
         public static Action<Event> OnKeyPress;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the keyup event is raised
         /// </summary>
-        [Bridge.CLR.Name("onkeyup")]
+        [Name("onkeyup")]
         public static Action<Event> OnKeyUp;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the load event is raised
         /// </summary>
-        [Bridge.CLR.Name("onload")]
+        [Name("onload")]
         public static Action<Event> OnLoad;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the loadeddata event is raised
         /// </summary>
-        [Bridge.CLR.Name("onloadeddata")]
+        [Name("onloadeddata")]
         public static Action<Event> OnLoadedData;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the loadedmetadata event is raised
         /// </summary>
-        [Bridge.CLR.Name("onloadedmetadata")]
+        [Name("onloadedmetadata")]
         public static Action<Event> OnLoadedMetaData;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the loadstart event is raised
         /// </summary>
-        [Bridge.CLR.Name("onloadstart")]
+        [Name("onloadstart")]
         public static Action<Event> OnLoadStart;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mousedown event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmousedown")]
+        [Name("onmousedown")]
         public static Action<Event> OnMouseDown;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseenter event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmouseenter")]
+        [Name("onmouseenter")]
         public static Action<Event> OnMouseEnter;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseleave event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmouseleave")]
+        [Name("onmouseleave")]
         public static Action<Event> OnMouseLeave;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mousemove event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmousemove")]
+        [Name("onmousemove")]
         public static Action<Event> OnMouseMove;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseout event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmouseout")]
+        [Name("onmouseout")]
         public static Action<Event> OnMouseOut;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseover event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmouseover")]
+        [Name("onmouseover")]
         public static Action<Event> OnMouseOver;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mouseup event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmouseup")]
+        [Name("onmouseup")]
         public static Action<Event> OnMouseUp;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the mousewheel event is raised
         /// </summary>
-        [Bridge.CLR.Name("onmousewheel")]
+        [Name("onmousewheel")]
         public static Action<Event> OnMouseWheel;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the pause event is raised
         /// </summary>
-        [Bridge.CLR.Name("onpause")]
+        [Name("onpause")]
         public static Action<Event> OnPause;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the play event is raised
         /// </summary>
-        [Bridge.CLR.Name("onplay")]
+        [Name("onplay")]
         public static Action<Event> OnPlay;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the playing event is raised
         /// </summary>
-        [Bridge.CLR.Name("onplaying")]
+        [Name("onplaying")]
         public static Action<Event> OnPlaying;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the progress event is raised
         /// </summary>
-        [Bridge.CLR.Name("onprogress")]
+        [Name("onprogress")]
         public static Action<Event> OnProgress;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the ratechange event is raised
         /// </summary>
-        [Bridge.CLR.Name("onratechange")]
+        [Name("onratechange")]
         public static Action<Event> OnRateChange;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the reset event is raised
         /// </summary>
-        [Bridge.CLR.Name("onreset")]
+        [Name("onreset")]
         public static Action<Event> OnReset;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the scroll event is raised
         /// </summary>
-        [Bridge.CLR.Name("onscroll")]
+        [Name("onscroll")]
         public static Action<Event> OnScroll;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the seeked event is raised
         /// </summary>
-        [Bridge.CLR.Name("onseeked")]
+        [Name("onseeked")]
         public static Action<Event> OnSeeked;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the seeking event is raised
         /// </summary>
-        [Bridge.CLR.Name("onseeking")]
+        [Name("onseeking")]
         public static Action<Event> OnSeeking;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the select event is raised
         /// </summary>
-        [Bridge.CLR.Name("onselect")]
+        [Name("onselect")]
         public static Action<Event> OnSelect;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the show event is raised
         /// </summary>
-        [Bridge.CLR.Name("onshow")]
+        [Name("onshow")]
         public static Action<Event> OnShow;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the sort event is raised
         /// </summary>
-        [Bridge.CLR.Name("onsort")]
+        [Name("onsort")]
         public static Action<Event> OnSort;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the stalled event is raised
         /// </summary>
-        [Bridge.CLR.Name("onstalled")]
+        [Name("onstalled")]
         public static Action<Event> OnStalled;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the submit event is raised
         /// </summary>
-        [Bridge.CLR.Name("onsubmit")]
+        [Name("onsubmit")]
         public static Action<Event> OnSubmit;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the suspend event is raised
         /// </summary>
-        [Bridge.CLR.Name("onsuspend")]
+        [Name("onsuspend")]
         public static Action<Event> OnSuspend;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the timeupdate event is raised
         /// </summary>
-        [Bridge.CLR.Name("ontimeupdate")]
+        [Name("ontimeupdate")]
         public static Action<Event> OnTimeUpdate;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the volumechange event is raised
         /// </summary>
-        [Bridge.CLR.Name("onvolumechange")]
+        [Name("onvolumechange")]
         public static Action<Event> OnVolumeChange;
 
         /// <summary>
         /// Is an EventHandler representing the code to be called when the waiting event is raised
         /// </summary>
-        [Bridge.CLR.Name("onwaiting")]
+        [Name("onwaiting")]
         public static Action<Event> OnWaiting;
         
         #endregion Node implementation
@@ -1033,7 +1034,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// Returns the event handling code for the readystatechange event.
         /// </summary>
-        [Bridge.CLR.Name("onreadystatechange")]
+        [Name("onreadystatechange")]
         public static Action<Event> OnReadyStateChange;
 
         /// <summary>

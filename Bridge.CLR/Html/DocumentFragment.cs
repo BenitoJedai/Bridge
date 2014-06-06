@@ -1,8 +1,9 @@
 ﻿using System;
+
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("DocumentFragment")]
+    [Ignore]
+    [Name("DocumentFragment")]
     public class DocumentFragment : Node
     {
         /// <summary>

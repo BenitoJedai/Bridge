@@ -3,8 +3,8 @@
     /// <summary>
     /// The DOM WheelEvent represents events that occur due to the user moving a mouse wheel or similar input device.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("WheelEvent")]
+    [Ignore]
+    [Name("WheelEvent")]
     public class WheelEvent : Event
     {
         private WheelEvent()
@@ -35,7 +35,7 @@
     /// <summary>
     /// Unit of delta values.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum DeltaMode
     {
         /// <summary>

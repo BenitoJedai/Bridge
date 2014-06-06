@@ -1,7 +1,7 @@
 ﻿namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("CSSValue")]
+    [Ignore]
+    [Name("CSSValue")]
     public class CSSValue
     {
         protected internal CSSValue()

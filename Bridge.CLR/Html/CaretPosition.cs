@@ -3,8 +3,8 @@
     /// <summary>
     /// The CaretPosition interface represents the caret postion, an indicator for the text insertion point. You can get a CaretPosition using the document.caretPositionFromPoint method.
     /// </summary>
-	[Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("CaretPosition")]
+	[Ignore]
+    [Name("CaretPosition")]
     public class CaretPosition 
     {
 		internal CaretPosition() 

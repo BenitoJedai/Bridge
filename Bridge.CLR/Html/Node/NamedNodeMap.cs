@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// A collection of nodes returned by Node.attributes
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("NamedNodeMap")]
+    [Ignore]
+    [Name("NamedNodeMap")]
     public class NamedNodeMap: IEnumerable<Node>
     {
         protected internal NamedNodeMap()
@@ -73,7 +74,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        [Bridge.CLR.Name("item")]
+        [Name("item")]
         public Node GetItem(int index)
         {
             return null;

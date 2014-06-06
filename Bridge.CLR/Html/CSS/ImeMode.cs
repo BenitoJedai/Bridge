@@ -3,9 +3,9 @@
     /// <summary>
     /// The ime-mode CSS property controls the state of the input method editor for text fields.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum ImeMode
     {
         /// <summary>

@@ -3,13 +3,13 @@
  * @author    : Object.NET, Inc. http://www.bridge.net/
  * @date      : 2014-06-01
  * @copyright : Copyright (c) 2008-2014, Object.NET, Inc. (http://www.object.net/). All rights reserved.
- * @license   : See license.txt and http://www.bridge.net/license/.
+ * @license   : See license.txt and https://github.com/bridgedotnet/Bridge.NET/blob/master/LICENSE.
  */
 
 
 Bridge={is:function(obj,type){if(typeof type=="string"){type=Bridge.unroll(type);}
 if(obj==null){return false;}
-if(Bridge.isFunction(type)){return type(obj);}
+if(Bridge.isFunction(type.$is)){return type.$is(obj);}
 if(Bridge.isFunction(type.instanceOf)){return type.instanceOf(obj);}
 if((obj.constructor==type)||(obj instanceof type)){return true;}
 if(Bridge.isArray(obj)&&type==Bridge.IEnumerable){return true;}
@@ -21,10 +21,9 @@ else{obj[name]=values[name];}}
 return obj;},getEnumerator:function(obj){if(obj&&obj.getEnumerator){return obj.getEnumerator();}
 if((Object.prototype.toString.call(obj)==='[object Array]')||(obj&&Bridge.isDefined(obj.length))){return new Bridge.ArrayEnumerator(obj);}
 throw Error('Cannot create enumerator');},getPropertyNames:function(obj,includeFunctions){var names=[],name;for(name in obj){if(includeFunctions||typeof obj[name]!=='function'){names.push(name);}}
-return names;},isDefined:function(value){return typeof value!=='undefined';},toArray:function(ienumerable){var i,item,len
-result=[];if(Bridge.isArray(ienumerable)){for(i=0,len=ienumerable.length;i<len;++i){result.push(ienumerable[i]);}}
+return names;},isDefined:function(value){return typeof value!=='undefined';},toArray:function(ienumerable){var i,item,len,result=[];if(Bridge.isArray(ienumerable)){for(i=0,len=ienumerable.length;i<len;++i){result.push(ienumerable[i]);}}
 else{i=Bridge.getEnumerator(ienumerable);while(i.hasNext()){item=i.next();result.push(item);}}
-return result;},isArray:function(obj){return Object.prototype.toString.call(obj)==='[object Array]';},isFunction:function(obj){return typeof(obj)==='function'&&obj.prototype&&!obj.prototype.call&&!obj.prototype.apply;},isDate:function(obj){return Object.prototype.toString.call(obj)==='[object Date]';},isNull:function(value){return(value===null)||(value===undefined);},unroll:function(value){var d=value.split("."),o=window[d[0]],i;for(var i=1;i<d.length;i++){if(!o){return null;}
+return result;},isArray:function(obj){return Object.prototype.toString.call(obj)==='[object Array]';},isFunction:function(obj){return typeof(obj)==='function';},isDate:function(obj){return Object.prototype.toString.call(obj)==='[object Date]';},isNull:function(value){return(value===null)||(value===undefined);},unroll:function(value){var d=value.split("."),o=window[d[0]],i;for(var i=1;i<d.length;i++){if(!o){return null;}
 o=o[d[i]];}
 return o;},equals:function(a,b){if(a&&Bridge.isFunction(a.equals)){return a.equals(b);}
 else if(Bridge.isDate(a)&&Bridge.isDate(b)){return a.valueOf()===b.valueOf();}

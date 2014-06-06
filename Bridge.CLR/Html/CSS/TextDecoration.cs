@@ -3,9 +3,9 @@
     /// <summary>
     /// The text-decoration CSS property is used to set the text formatting to underline, overline, line-through or blink.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum TextDecoration
     {
         /// <summary>
@@ -31,7 +31,7 @@
         /// <summary>
         /// Each line of text has a line through the middle.
         /// </summary>
-        [Bridge.CLR.Name("line-through")]
+        [Name("line-through")]
         LineThrough        
     }
 }

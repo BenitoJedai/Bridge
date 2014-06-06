@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Ext.Net.Utilities;
+using ICSharpCode.NRefactory.CSharp;
+using ICSharpCode.NRefactory.Semantics;
+using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Mono.Cecil;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
-using System.Text.RegularExpressions;
-using ICSharpCode.NRefactory.CSharp;
-using System.Linq;
-using Newtonsoft.Json;
-using Ext.Net.Utilities;
-using ICSharpCode.NRefactory.TypeSystem;
-using System.Globalization;
-using ICSharpCode.NRefactory.TypeSystem.Implementation;
-using ICSharpCode.NRefactory.Semantics;
 using System.IO;
 using ICSharpCode.NRefactory.CSharp.Resolver;
+using System.Linq;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -2055,21 +2053,21 @@ namespace Bridge.NET
 
         protected virtual string GetInline(ICustomAttributeProvider provider)
         {
-            var attr = this.GetAttribute(provider.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            var attr = this.GetAttribute(provider.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
             
             return attr != null ? ((string)attr.ConstructorArguments.First().Value) : null;
         }
         
         protected virtual string GetInline(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
 
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
         }
 
         protected virtual string GetInline(IEntity entity)
         {
-            string attrName = Translator.CLR_ASSEMBLY + ".InlineAttribute";
+            string attrName = Translator.CLR_ASSEMBLY + ".TemplateAttribute";
 
             if (entity.EntityType == EntityType.Property) 
             {

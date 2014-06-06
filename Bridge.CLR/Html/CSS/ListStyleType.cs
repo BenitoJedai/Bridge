@@ -3,9 +3,9 @@
     /// <summary>
     /// The list-style-type CSS property specifies appearance of a list item element. As it is the only one who defaults to display:list-item, this is usually a <li> element, but can be any element with this display value.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum ListStyleType
     {
         /// <summary>
@@ -21,32 +21,32 @@
         
         Decimal,
         
-        [Bridge.CLR.Name("decimal-leading-zero")]
+        [Name("decimal-leading-zero")]
         DecimalLeadingZero,
         
-        [Bridge.CLR.Name("lower-roman")]
+        [Name("lower-roman")]
         LowerRoman,
     
-        [Bridge.CLR.Name("upper-roman")]
+        [Name("upper-roman")]
         UpperRoman,
 
-        [Bridge.CLR.Name("lower-greek")]
+        [Name("lower-greek")]
         LowerGreek,
         
-        [Bridge.CLR.Name("lower-latin")]
+        [Name("lower-latin")]
         LowerLatin,
         
-        [Bridge.CLR.Name("upper-latin")]
+        [Name("upper-latin")]
         UpperLatin,
         
         Armenian,
         
         Georgian,
         
-        [Bridge.CLR.Name("lower-alpha")]
+        [Name("lower-alpha")]
         LowerAlpha,
 
-        [Bridge.CLR.Name("upper-alpha")]
+        [Name("upper-alpha")]
         UpperAlpha,
         
         None

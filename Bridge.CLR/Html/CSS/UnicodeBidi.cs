@@ -3,9 +3,9 @@
     /// <summary>
     /// The unicode-bidi CSS property together with the direction property relates to the handling of bidirectional text in a document.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum UnicodeBidi
     {
         /// <summary>
@@ -26,7 +26,7 @@
         /// <summary>
         /// For inline elements this creates an override. For block container elements this creates an override for inline-level descendants not within another block container element. This means that inside the element, reordering is strictly in sequence according to the direction property; the implicit part of the bidirectional algorithm is ignored.
         /// </summary>
-        [Bridge.CLR.Name("bidi-override")]
+        [Name("bidi-override")]
         BidiOverride,
 
         /// <summary>
@@ -37,7 +37,7 @@
         /// <summary>
         /// This keyword applies the isolation behavior of the isolate keyword to the surrounding content and the override behavior of the bidi-override keyword to the inner content.
         /// </summary>
-        [Bridge.CLR.Name("isolate-override")]
+        [Name("isolate-override")]
         IsolateOverride,
 
         /// <summary>

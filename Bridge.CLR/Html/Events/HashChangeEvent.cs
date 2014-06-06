@@ -3,8 +3,8 @@
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("HashChangeEvent")]
+    [Ignore]
+    [Name("HashChangeEvent")]
     public class HashChangeEvent : Event
     {
         private HashChangeEvent()

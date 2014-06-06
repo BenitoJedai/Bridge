@@ -5,8 +5,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// This type represents a set of space-separated tokens.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("DOMTokenList")]
+    [Ignore]
+    [Name("DOMTokenList")]
 	public class DOMTokenList : IEnumerable<string>
     {
         protected internal DOMTokenList()
@@ -31,7 +31,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        [Bridge.CLR.Name("item")]
+        [Name("item")]
         public string GetItem(int index)
         {
             return null;

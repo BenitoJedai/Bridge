@@ -3,9 +3,9 @@
     /// <summary>
     /// The font-stretch CSS property selects a normal, condensed, or expanded face from a font.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum FontStretch
     {
         /// <summary>
@@ -21,7 +21,7 @@
         /// <summary>
         /// Specifies a font face more condensed than normal, with ultra-condensed as the most condensed.
         /// </summary>
-        [Bridge.CLR.Name("semi-condensed")]
+        [Name("semi-condensed")]
         SemiCondensed, 
     
         /// <summary>
@@ -32,19 +32,19 @@
         /// <summary>
         /// Specifies a font face more condensed than normal, with ultra-condensed as the most condensed.
         /// </summary>
-        [Bridge.CLR.Name("extra-condensed")]
+        [Name("extra-condensed")]
         ExtraCondensed, 
     
         /// <summary>
         /// Specifies a font face more condensed than normal, with ultra-condensed as the most condensed.
         /// </summary>
-        [Bridge.CLR.Name("ultra-condensed")]
+        [Name("ultra-condensed")]
         UltraCondensed,
 
         /// <summary>
         /// Specifies a font face more expanded than normal, with ultra-expanded as the most expanded.
         /// </summary>
-        [Bridge.CLR.Name("semi-expanded")]
+        [Name("semi-expanded")]
         SemiExpanded, 
     
         /// <summary>
@@ -55,13 +55,13 @@
         /// <summary>
         /// Specifies a font face more expanded than normal, with ultra-expanded as the most expanded.
         /// </summary>
-        [Bridge.CLR.Name("extra-expanded")]
+        [Name("extra-expanded")]
         ExtraExpanded, 
     
         /// <summary>
         /// Specifies a font face more expanded than normal, with ultra-expanded as the most expanded.
         /// </summary>
-        [Bridge.CLR.Name("ultra-expanded")]
+        [Name("ultra-expanded")]
         UltraExpanded
     }
 }

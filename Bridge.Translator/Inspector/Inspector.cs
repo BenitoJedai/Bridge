@@ -51,7 +51,7 @@ namespace Bridge.NET
 
         protected virtual bool HasInline(EntityDeclaration declaration) 
         {
-            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Inline");
+            return this.HasAttribute(declaration, Translator.CLR_ASSEMBLY + ".Template");
         }
 
         protected virtual bool HasScript(EntityDeclaration declaration)

@@ -3,8 +3,8 @@
 
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("HTMLIFrameElement")]
+    [Ignore]
+    [Name("HTMLIFrameElement")]
     public class IFrameElement: Element
     {
         private IFrameElement()

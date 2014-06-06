@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS flex-wrap property specifies whether the children are forced into a single line or if the items can be flowed on multiple lines.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum FlexWrap
     {
         /// <summary>
@@ -26,7 +26,7 @@
         /// <summary>
         /// Behaves the same as wrap but cross-start and cross-end are permuted.
         /// </summary>
-        [Bridge.CLR.Name("wrap-reverse")]
+        [Name("wrap-reverse")]
         WrapReverse
     }
 }

@@ -137,19 +137,19 @@ namespace Bridge.NET
 
         public virtual bool IsInlineMethod(MethodDefinition method)
         {
-            var attr = this.GetAttribute(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            var attr = this.GetAttribute(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
 
             return attr != null && !attr.HasConstructorArguments;
         }
 
         public virtual string GetInlineCode(MethodDefinition method) 
         {
-            return this.GetAttributeValue(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            return this.GetAttributeValue(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
         }
 
         public virtual string GetInlineCode(PropertyDefinition property)
         {
-            return this.GetAttributeValue(property.CustomAttributes, Translator.CLR_ASSEMBLY + ".InlineAttribute");
+            return this.GetAttributeValue(property.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
         }
 
         public virtual bool IsObjectLiteral(TypeDefinition type)

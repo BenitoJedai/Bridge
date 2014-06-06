@@ -2,18 +2,19 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Window
 
 using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>
     /// The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Window")]
+    [Ignore]
+    [Name("Window")]
     public class WindowInstance
     {
         #region Properties
 
-        [Bridge.CLR.Inline("arguments")]
+        [Template("arguments")]
         public object[] Arguments;
 
         /// <summary>
@@ -1154,211 +1155,211 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// An event handler property for abort events on the window
         /// </summary>
-        [Bridge.CLR.Name("onabort")]
+        [Name("onabort")]
         public Action<Event> OnAbort;
 
         /// <summary>
         /// An event handler property for before-unload events on the window
         /// </summary>
-        [Bridge.CLR.Name("onbeforeunload")]
+        [Name("onbeforeunload")]
         public Action<Event> OnBeforeUnload;
 
         /// <summary>
         /// An event handler property for blur events on the window
         /// </summary>
-        [Bridge.CLR.Name("onblur")]
+        [Name("onblur")]
         public Action<Event> OnBlur;
 
         /// <summary>
         /// An event handler property for change events on the window
         /// </summary>
-        [Bridge.CLR.Name("onchange")]
+        [Name("onchange")]
         public Action<Event> OnChange;
 
         /// <summary>
         /// An event handler property for click events on the window
         /// </summary>
-        [Bridge.CLR.Name("onclick")]
+        [Name("onclick")]
         public Action<Event> OnClick;
 
         /// <summary>
         /// An event handler property for handling the window close event
         /// </summary>
-        [Bridge.CLR.Name("onclose")]
+        [Name("onclose")]
         public Action<Event> OnClose;
 
         /// <summary>
         /// An event handler property for right-click events on the window
         /// </summary>
-        [Bridge.CLR.Name("oncontextmenu")]
+        [Name("oncontextmenu")]
         public Action<Event> OnContextMenu;
 
         /// <summary>
         /// An event handler property for any ambient light levels changes
         /// </summary>
-        [Bridge.CLR.Name("ondevicelight")]
+        [Name("ondevicelight")]
         public Action<Event> OnDeviceLight;
 
         /// <summary>
         /// FIXME: NeedsContents
         /// </summary>
-        [Bridge.CLR.Name("ondevicemotion")]
+        [Name("ondevicemotion")]
         public Action<Event> OnDeviceMotion;
 
         /// <summary>
         /// An event handler property for any device orientation changes
         /// </summary>
-        [Bridge.CLR.Name("ondeviceorientation")]
+        [Name("ondeviceorientation")]
         public Action<Event> OnDeviceOrientation;
 
         /// <summary>
         /// An event handler property for device proximity event
         /// </summary>
-        [Bridge.CLR.Name("ondeviceproximity")]
+        [Name("ondeviceproximity")]
         public Action<Event> OnDeviceProximity;
 
         /// <summary>
         /// An event handler property for drag and drop events on the window
         /// </summary>
-        [Bridge.CLR.Name("ondragdrop")]
+        [Name("ondragdrop")]
         public Action<Event> OnDragDrop;
 
         /// <summary>
         /// An event handler property for errors raised on the window
         /// </summary>
-        [Bridge.CLR.Name("onerror")]
+        [Name("onerror")]
         public Action<Event> OnError;
 
         /// <summary>
         /// An event handler property for focus events on the window
         /// </summary>
-        [Bridge.CLR.Name("onfocus")]
+        [Name("onfocus")]
         public Action<Event> OnFocus;
 
         /// <summary>
         /// An event handler property for hash change events on the window; called when the part of the URL after the hash mark ("#") changes
         /// </summary>
-        [Bridge.CLR.Name("onhashchange")]
+        [Name("onhashchange")]
         public Action<Event> OnHashChange;
 
         /// <summary>
         /// An event handler property for keydown events on the window
         /// </summary>
-        [Bridge.CLR.Name("onkeydown")]
+        [Name("onkeydown")]
         public Action<Event> OnKeyDown;
 
         /// <summary>
         /// An event handler property for keypress events on the window
         /// </summary>
-        [Bridge.CLR.Name("onkeypress")]
+        [Name("onkeypress")]
         public Action<Event> OnKeyPress;
 
         /// <summary>
         /// An event handler property for keyup events on the window
         /// </summary>
-        [Bridge.CLR.Name("onkeyup")]
+        [Name("onkeyup")]
         public Action<Event> OnKeyUp;
 
         /// <summary>
         /// An event handler property for window loading
         /// </summary>
-        [Bridge.CLR.Name("onload")]
+        [Name("onload")]
         public Action<Event> OnLoad;
 
         /// <summary>
         /// An event handler property for mousedown events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmousedown")]
+        [Name("onmousedown")]
         public Action<Event> OnMouseDown;
 
         /// <summary>
         /// An event handler property for mousemove events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmousemove")]
+        [Name("onmousemove")]
         public Action<Event> OnMouseMove;
 
         /// <summary>
         /// An event handler property for mouseout events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmouseout")]
+        [Name("onmouseout")]
         public Action<Event> OnMouseOut;
 
         /// <summary>
         /// An event handler property for mouseover events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmouseover")]
+        [Name("onmouseover")]
         public Action<Event> OnMouseOver;
 
         /// <summary>
         /// An event handler property for mouseup events on the window
         /// </summary>
-        [Bridge.CLR.Name("onmouseup")]
+        [Name("onmouseup")]
         public Action<Event> OnMouseUp;
 
         /// <summary>
         /// An event handler property for paint events on the window
         /// </summary>
-        [Bridge.CLR.Name("onpaint")]
+        [Name("onpaint")]
         public Action<Event> OnPaint;
 
         /// <summary>
         /// An event handler property for popstate events, which are fired when navigating to a session history entry representing a state object
         /// </summary>
-        [Bridge.CLR.Name("onpopstate")]
+        [Name("onpopstate")]
         public Action<Event> OnPopState;
 
         /// <summary>
         /// An event handler property for reset events on the window
         /// </summary>
-        [Bridge.CLR.Name("onreset")]
+        [Name("onreset")]
         public Action<Event> OnReset;
 
         /// <summary>
         /// An event handler property for window resizing
         /// </summary>
-        [Bridge.CLR.Name("onresize")]
+        [Name("onresize")]
         public Action<Event> OnResize;
 
         /// <summary>
         /// An event handler property for window scrolling
         /// </summary>
-        [Bridge.CLR.Name("onscroll")]
+        [Name("onscroll")]
         public Action<Event> OnScroll;
 
         /// <summary>
         /// An event handler property for window selection
         /// </summary>
-        [Bridge.CLR.Name("onselect")]
+        [Name("onselect")]
         public Action<Event> OnSelect;
 
         /// <summary>
         /// An event handler property for submits on window forms
         /// </summary>
-        [Bridge.CLR.Name("onsubmit")]
+        [Name("onsubmit")]
         public Action<Event> OnSubmit;
 
         /// <summary>
         /// An event handler property for unload events on the window
         /// </summary>
-        [Bridge.CLR.Name("onunload")]
+        [Name("onunload")]
         public Action<Event> OnUnload;
 
         /// <summary>
         /// An event handler property for user proximity events
         /// </summary>
-        [Bridge.CLR.Name("onuserproximity")]
+        [Name("onuserproximity")]
         public Action<Event> OnUserProximity;
 
         /// <summary>
         /// An event handler property for pageshow events on the window
         /// </summary>
-        [Bridge.CLR.Name("onpageshow")]
+        [Name("onpageshow")]
         public Action<Event> OnPageShow;
 
         /// <summary>
         /// An event handler property for pagehide events on the window
         /// </summary>
-        [Bridge.CLR.Name("onpagehide")]
+        [Name("onpagehide")]
         public Action<Event> OnPageHide;
 
         #endregion Methods

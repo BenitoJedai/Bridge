@@ -1,7 +1,7 @@
 ﻿namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("BarProp")]
+    [Ignore]
+    [Name("BarProp")]
     public class BarProp
     {
         private BarProp()

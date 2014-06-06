@@ -3,9 +3,9 @@
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum DominantBaseline
     {
         /// <summary>
@@ -16,19 +16,19 @@
         /// <summary>
         /// The dominant baseline-identifier is set using the computed value of the 'script' property. The 'writing-mode' value, whether horizontal or vertical is used to select the baseline-table that correspond to that baseline-identifier.
         /// </summary>
-        [Bridge.CLR.Name("use-script")]
+        [Name("use-script")]
         UseScript,
 
         /// <summary>
         /// The dominant baseline-identifier, the baseline-table and the baseline-table font-size remain the same as that of the parent.
         /// </summary>
-        [Bridge.CLR.Name("no-change")]
+        [Name("no-change")]
         NoChange,
         
         /// <summary>
         /// The dominant baseline-identifier and the baseline table remain the same, but the baseline-table font-size is changed to the value of the 'font-size' property on this element. This re-scales the baseline table for the current 'font-size'.
         /// </summary>
-        [Bridge.CLR.Name("reset-size")]
+        [Name("reset-size")]
         ResetSize,
 
         /// <summary>
@@ -64,13 +64,13 @@
         /// <summary>
         /// The dominant baseline-identifier is set to be 'text-after-edge'. The derived baseline-table is constructed from the defined baselines in a baseline-table in the nominal font.
         /// </summary>
-        [Bridge.CLR.Name("text-after-edge")]
+        [Name("text-after-edge")]
         TextAfterEdge,
 
         /// <summary>
         /// The dominant baseline-identifier is set to be 'text-before-edge'. The derived baseline-table is constructed from the defined baselines in a baseline-table in the nominal font.
         /// </summary>
-        [Bridge.CLR.Name("text-before-edge")]
+        [Name("text-before-edge")]
         TextBeforeEdge
     }
 }

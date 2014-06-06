@@ -3,9 +3,9 @@
     /// <summary>
     /// Determines whether touch input may trigger default behavior supplied by the user agent, such as panning or zooming.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum TouchAction
     {
         /// <summary>
@@ -26,13 +26,13 @@
         /// <summary>
         /// The user agent MAY consider touches that begin on the element only for the purposes of horizontally scrolling the element's nearest ancestor with horizontally scrollable content.
         /// </summary>
-        [Bridge.CLR.Name("pan-x")]
+        [Name("pan-x")]
         PanX,
 
         /// <summary>
         /// The user agent MAY consider touches that begin on the element only for the purposes of vertically scrolling the element's nearest ancestor with vertically scrollable content.
         /// </summary>
-        [Bridge.CLR.Name("pan-y")]
+        [Name("pan-y")]
         PanY
     }
 }

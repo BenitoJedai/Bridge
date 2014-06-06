@@ -3,9 +3,9 @@
     /// <summary>
     /// The border-image-repeat CSS property defines how the middle part of a border image is handled so that it can match the size of the border. It has a one-value syntax which describes the behavior of all the sides, and a two-value syntax that sets a different value for the horizontal and vertical behavior.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum BorderImageRepeat
     {
         /// <summary>

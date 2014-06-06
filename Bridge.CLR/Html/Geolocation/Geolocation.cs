@@ -11,8 +11,8 @@ namespace Bridge.CLR.Html
     /// 
     /// Note: For security reasons, when a web page tries to access location information, the user is notified and asked to grant permission. Be aware that each browser has its own policies and methods for requesting this permission.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class Geolocation
     {
         private Geolocation()

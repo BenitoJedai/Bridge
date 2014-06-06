@@ -3,9 +3,9 @@
     /// <summary>
     /// The resize CSS property lets you control the resizability of an element.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum Resize
     {
         /// <summary>

@@ -3,9 +3,9 @@
     /// <summary>
     /// The word-wrap CSS property is used to specify whether or not the browser may break lines within words in order to prevent overflow (in other words, force wrapping) when an otherwise unbreakable string is too long to fit in its containing box.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum WordWrap
     {
         /// <summary>
@@ -21,7 +21,7 @@
         /// <summary>
         /// Indicates that normally unbreakable words may be broken at arbitrary points if there are no otherwise acceptable break points in the line.
         /// </summary>
-        [Bridge.CLR.Name("break-all")]
+        [Name("break-all")]
         BreakAll
     }
 }

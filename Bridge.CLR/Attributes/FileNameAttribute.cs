@@ -5,7 +5,7 @@ namespace Bridge.CLR
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct | AttributeTargets.Interface)]
     public sealed class FileNameAttribute : Attribute
     {
@@ -17,7 +17,7 @@ namespace Bridge.CLR
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class OutputDirAttribute : Attribute
     {
@@ -26,7 +26,7 @@ namespace Bridge.CLR
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class FilesHierrarchyAttribute : Attribute
     {
@@ -39,7 +39,7 @@ namespace Bridge.CLR
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum TypesSplit
     {
         ByFullName = 1,

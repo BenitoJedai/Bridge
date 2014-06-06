@@ -1,13 +1,14 @@
 ﻿using System;
+
 namespace Bridge.CLR.Html 
 {
 	/// <summary>
     /// types of Node that must to be presented
 	/// </summary>
     [Flags]
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Ignore]
+    [Enum(Emit.Value)]
+    [Name("Number")]
 	public enum NodeFilter 
     {
 		/// <summary>

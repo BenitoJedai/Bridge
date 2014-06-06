@@ -5,8 +5,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// A type returned by some APIs which contains a list of DOMString (strings).
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("DOMStringList")]
+    [Ignore]
+    [Name("DOMStringList")]
 	public class DOMStringList : IEnumerable<string>
     {
 		internal DOMStringList() 
@@ -41,7 +41,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		[Bridge.CLR.Name("item")]
+		[Name("item")]
         public string GetItem(int index) 
         {
 			return null;

@@ -3,9 +3,9 @@
     /// <summary>
     /// The hyphens CSS property tells the browser how to go about splitting words to improve the layout of text when line-wrapping.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum Hyphens
     {
         /// <summary>

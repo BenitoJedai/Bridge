@@ -3,9 +3,9 @@
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Ignore]
+    [Enum(Emit.Value)]
+    [Name("Number")]
     public enum RangeComparison 
     {
 		/// <summary>

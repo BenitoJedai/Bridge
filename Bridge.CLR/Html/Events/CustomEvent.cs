@@ -3,8 +3,8 @@
     /// <summary>
     /// The DOM CustomEvent are events initialized by an application for any purpose.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("CustomEvent")]
+    [Ignore]
+    [Name("CustomEvent")]
     public class CustomEvent : Event
     {
         private CustomEvent()
@@ -32,8 +32,8 @@
         }
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class CustomEventInit : EventInit
     {
         /// <summary>

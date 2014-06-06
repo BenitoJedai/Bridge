@@ -6,8 +6,8 @@ namespace Bridge.CLR.Html
     /// The StyleSheetList interface provides the abstraction of an ordered collection of style sheets.
     /// The items in the StyleSheetList are accessible via an integral index, starting from 0.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("StyleSheetList")]
+    [Ignore]
+    [Name("StyleSheetList")]
     public class StyleSheetList : IEnumerable<StyleSheet>
     {
 		internal StyleSheetList() 
@@ -22,7 +22,7 @@ namespace Bridge.CLR.Html
 			}
 		}
 		
-        [Bridge.CLR.Name("item")]
+        [Name("item")]
 		public StyleSheet GetItem(int index) 
         {
 			return null;

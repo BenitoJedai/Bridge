@@ -3,9 +3,9 @@
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+    [Ignore]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum FlexDirection
     {
         /// <summary>
@@ -21,7 +21,7 @@
         /// <summary>
         /// Behaves the same as row but the main-start and main-end points are permuted.
         /// </summary>
-        [Bridge.CLR.Name("row-reverse")]
+        [Name("row-reverse")]
         RowReverse,
 
         /// <summary>
@@ -32,7 +32,7 @@
         /// <summary>
         /// Behaves the same as column but the main-start and main-end are permuted.
         /// </summary>
-        [Bridge.CLR.Name("column-reverse")]
+        [Name("column-reverse")]
         ColumnReverse
     }
 }
