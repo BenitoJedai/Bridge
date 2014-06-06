@@ -4,7 +4,7 @@
     /// The transform-style CSS property determines if the children of the element are positioned in the 3D-space or are flattened in the plane of the element.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum TransformStyle
     {

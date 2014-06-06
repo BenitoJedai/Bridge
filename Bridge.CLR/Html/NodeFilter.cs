@@ -6,7 +6,7 @@ namespace Bridge.CLR.Html
 	/// </summary>
     [Flags]
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
+    [Enum(Emit.Value)]
     [Name("Number")]
 	public enum NodeFilter 
     {

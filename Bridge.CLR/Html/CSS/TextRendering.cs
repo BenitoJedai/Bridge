@@ -4,7 +4,7 @@
     /// The text-rendering CSS property provides information to the rendering engine about what to optimize for when rendering text.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringName)]
+    [Enum(Emit.StringName)]
     [Name("String")]
     public enum TextRendering
     {

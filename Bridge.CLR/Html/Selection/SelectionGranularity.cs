@@ -4,7 +4,7 @@
     /// The distance to adjust the current selection or cursor position. 
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum SelectionGranularity
     {

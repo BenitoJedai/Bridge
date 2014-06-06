@@ -4,7 +4,7 @@
     /// The CSS flex-wrap property specifies whether the children are forced into a single line or if the items can be flowed on multiple lines.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum FlexWrap
     {

@@ -4,7 +4,7 @@
     /// The CSS text-underline-position property specifies the position of the underline which is set using the text-decoration property underline value.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum TextUnderlinePosition
     {

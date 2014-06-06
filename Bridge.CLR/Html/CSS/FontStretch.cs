@@ -4,7 +4,7 @@
     /// The font-stretch CSS property selects a normal, condensed, or expanded face from a font.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum FontStretch
     {

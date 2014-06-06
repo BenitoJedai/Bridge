@@ -4,7 +4,7 @@
     /// The word-break CSS property is used to specify how (or if) to break lines within words.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum WordBreak
     {

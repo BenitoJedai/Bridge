@@ -4,7 +4,7 @@
     /// The CSS justify-content property defines how a browser distributes available space between and around elements when aligning flex items in the main-axis of the current line. 
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum JustifyContent
     {

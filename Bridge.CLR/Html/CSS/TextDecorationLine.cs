@@ -4,7 +4,7 @@
     /// The text-decoration-line CSS property sets what kind of line decorations are added to an element.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum TextDecorationLine
     {

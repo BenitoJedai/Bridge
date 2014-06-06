@@ -4,7 +4,7 @@
     /// The background-repeat CSS property defines how background images are repeated. 
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum BackgroundRepeat
     {

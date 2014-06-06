@@ -4,7 +4,7 @@
     /// The unicode-bidi CSS property together with the direction property relates to the handling of bidirectional text in a document.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum UnicodeBidi
     {

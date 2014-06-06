@@ -11,7 +11,7 @@
 	}
 
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
+    [Enum(Emit.Value)]
     [Name("Number")]
     public enum NodeFilterResult
     {

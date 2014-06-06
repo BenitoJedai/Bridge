@@ -4,7 +4,7 @@
     /// Determines whether touch input may trigger default behavior supplied by the user agent, such as panning or zooming.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum TouchAction
     {

@@ -4,7 +4,7 @@
     /// The white-space CSS property is used to to describe how whitespace inside the element is handled.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum WhiteSpace
     {

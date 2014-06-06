@@ -4,7 +4,7 @@
     /// The border style CSS property sets the line style of the border of a box.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum BorderStyle
     {

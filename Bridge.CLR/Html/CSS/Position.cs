@@ -4,7 +4,7 @@
     /// The position CSS property chooses alternative rules for positioning elements, designed to be useful for scripted animation effects.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum Position
     {

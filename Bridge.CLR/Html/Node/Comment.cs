@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Bridge.CLR.Html
 {
     /// <summary>

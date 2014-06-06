@@ -4,7 +4,7 @@
     /// The vertical-align CSS property specifies the vertical alignment of an inline or table-cell box.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum VerticalAlign
     {

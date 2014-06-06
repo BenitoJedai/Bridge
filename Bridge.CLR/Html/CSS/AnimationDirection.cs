@@ -4,8 +4,8 @@
     /// The animation-direction CSS property indicates whether the animation should play in reverse on alternate cycles.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Name("String")]
+    [Enum(Emit.StringNameLowerCase)]
+    [Name("String")]
     public enum AnimationDirection
     {
         /// <summary>

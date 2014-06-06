@@ -4,7 +4,7 @@
     /// The ‘object-fit’ property specifies how the contents of a replaced element should be fitted to the box established by its used height and width.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum ObjectFit
     {

@@ -4,7 +4,7 @@
     /// Allows to specify what happens to an element when it is broken due to a page break or column break, or for inline elements, a line break.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum BoxDecorationBreak
     {

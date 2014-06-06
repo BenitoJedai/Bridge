@@ -4,7 +4,7 @@
     /// The font-style CSS property allows italic or oblique faces to be selected within a font-family.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum FontStyle
     {

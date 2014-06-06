@@ -4,7 +4,7 @@
     /// The table-layout CSS property defines the algorithm to be used to layout the table cells, rows, and columns.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum TableLayout
     {

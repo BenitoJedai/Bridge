@@ -4,7 +4,7 @@
     /// The CSS align-items property aligns flex items of the current flex line the same way as justify-content but in the perpendicular direction.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum AlignItems
     {

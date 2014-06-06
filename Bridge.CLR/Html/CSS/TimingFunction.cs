@@ -4,7 +4,7 @@
     /// The CSS animation-timing-function property specifies how a CSS animation should progress over the duration of each cycle. 
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum TimingFunction
     {

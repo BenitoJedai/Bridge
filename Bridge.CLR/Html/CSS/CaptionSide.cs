@@ -4,7 +4,7 @@
     /// The caption-side CSS property positions the content of a table's <caption> on the specified side.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum CaptionSide
     {

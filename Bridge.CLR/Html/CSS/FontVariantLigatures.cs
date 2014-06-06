@@ -4,7 +4,7 @@
     ///  font-variant-ligatures is a CSS property to control ligatures in text.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
     public enum FontVariantLigatures
     {

@@ -1283,7 +1283,7 @@ namespace Bridge.CLR.Html
     /// These constants describe the location on the keyboard of key events. 
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.Value)]
+    [Enum(Emit.Value)]
     public enum KeyLocation
     {
         /// <summary>

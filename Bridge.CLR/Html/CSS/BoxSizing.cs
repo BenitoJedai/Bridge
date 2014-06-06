@@ -4,7 +4,7 @@
     /// The box-sizing CSS property is used to alter the default CSS box model used to calculate widths and heights of elements.
     /// </summary>
     [Ignore]
-    [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
+    [Enum(Emit.StringNameLowerCase)]
 [Name("String")]
     public enum BoxSizing
     {
