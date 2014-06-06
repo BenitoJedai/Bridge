@@ -3,9 +3,9 @@
     /// <summary>
     /// The page-break-inside CSS property adjusts page breaks inside the current element.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum PageBreakInside
     {
         /// <summary>

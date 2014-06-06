@@ -3,8 +3,8 @@
     /// <summary>
     /// The DocumentType interface represents a Node containing a doctype.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("DocumentType")]
+    [Ignore]
+    [Name("DocumentType")]
 	public class DocumentType : Node 
     {
 		internal DocumentType() 

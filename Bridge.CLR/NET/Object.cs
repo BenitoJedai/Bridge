@@ -52,7 +52,7 @@ namespace System
     [Ignore]
     public static class ObjectExtensions
     {
-        [Bridge.CLR.Inline("Bridge.fn.call({0})")]
+        [Inline("Bridge.fn.call({0})")]
         public static void CallFn(this object obj, string name, params object[] args)
         {
         }

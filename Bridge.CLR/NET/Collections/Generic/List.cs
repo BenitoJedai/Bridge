@@ -1,7 +1,9 @@
+using Bridge.CLR;
+
 namespace System.Collections.Generic 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Bridge.List")]
+    [Ignore]
+    [Name("Bridge.List")]
     public sealed class List<T> : ICollection<T> 
     {
         public List() 
@@ -14,12 +16,12 @@ namespace System.Collections.Generic
 
         public T this[int index]
         {
-            [Bridge.CLR.Inline("get({0})")]
+            [Inline("get({0})")]
             get
             {
                 return default(T);
             }
-            [Bridge.CLR.Inline("set({0})")]
+            [Inline("set({0})")]
             set
             {
             }

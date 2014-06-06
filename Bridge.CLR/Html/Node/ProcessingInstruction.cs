@@ -4,8 +4,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// A processing instruction provides an opportunity for application-specific instructions to be embedded within XML and which can be ignored by XML processors which do not support processing their instructions (outside of their having a place in the DOM).
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("ProcessingInstruction")]
+    [Ignore]
+    [Name("ProcessingInstruction")]
     public class ProcessingInstruction : CharacterData
     {
         internal ProcessingInstruction()

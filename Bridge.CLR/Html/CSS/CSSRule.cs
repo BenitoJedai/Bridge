@@ -3,8 +3,8 @@
     /// <summary>
     /// An object implementing the CSSRule DOM interface represents a single CSS at-rule. References to a CSSRule-implementing object may be obtained by looking at a CSS style sheet's cssRules list.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("CSSRule")]
+    [Ignore]
+    [Name("CSSRule")]
     public class CSSRule
     {
         protected internal CSSRule()

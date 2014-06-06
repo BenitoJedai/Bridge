@@ -1,7 +1,9 @@
+using Bridge.CLR;
+
 namespace System.Collections 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Bridge.IEnumerator")]
+    [Ignore]
+    [Name("Bridge.IEnumerator")]
     public interface IEnumerator 
     {
         object Current 

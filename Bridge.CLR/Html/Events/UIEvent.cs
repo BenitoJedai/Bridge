@@ -2,8 +2,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/event
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("UIEvent")]
+    [Ignore]
+    [Name("UIEvent")]
     public class UIEvent : Event
     {
         internal UIEvent()
@@ -68,8 +68,8 @@ namespace Bridge.CLR.Html
         public string ReturnValue;        
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class UIEventInit : EventInit
     {
         /// <summary>

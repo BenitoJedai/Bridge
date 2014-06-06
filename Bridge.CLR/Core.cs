@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+
 namespace Bridge.CLR
 {
-    [Bridge.CLR.Name("Bridge")]
-    [Bridge.CLR.Ignore]
+    [Name("Bridge")]
+    [Ignore]
     public static class Core
     {
         public static object Apply(object obj, object values)
@@ -30,12 +31,12 @@ namespace Bridge.CLR
             return null;
         }
 
-        [Bridge.CLR.Inline("delete {0}")]
+        [Inline("delete {0}")]
         public static void Delete(object value)
         {
         }
 
-        [Bridge.CLR.Inline("Bridge.is({0})")]
+        [Inline("Bridge.is({0})")]
         public static bool Is(object type, string typeName)
         {
             return false;

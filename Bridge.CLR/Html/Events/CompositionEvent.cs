@@ -3,8 +3,8 @@
     /// <summary>
     /// The DOM CompositionEvent represents events that occur due to the user indirectly entering text.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("CompositionEvent")]
+    [Ignore]
+    [Name("CompositionEvent")]
     public class CompositionEvent : UIEvent
     {
         private CompositionEvent()

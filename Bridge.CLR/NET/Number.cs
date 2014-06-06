@@ -1,8 +1,10 @@
-﻿namespace System 
+﻿using Bridge.CLR;
+
+namespace System 
 {
-    [Bridge.CLR.Ignore] 
-    [Bridge.CLR.Name("Number")]
-    [Bridge.CLR.Constructor("~~")]
+    [Ignore] 
+    [Name("Number")]
+    [Constructor("~~")]
     public struct Int32  
     {
         public const int MAX_VALUE = 0;
@@ -18,9 +20,9 @@
         }
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Number")]
-    [Bridge.CLR.Constructor("Number")]
+    [Ignore]
+    [Name("Number")]
+    [Constructor("Number")]
     public struct Double 
     {
         public const double MAX_VALUE = 0;

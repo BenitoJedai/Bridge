@@ -4,9 +4,9 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// Indicate whether or not the element is editable.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum ContentEditable
     {
         /// <summary>

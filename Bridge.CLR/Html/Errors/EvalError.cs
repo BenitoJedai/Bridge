@@ -1,11 +1,13 @@
-﻿namespace System 
+﻿using Bridge.CLR;
+
+namespace System 
 {
     /// <summary>
     /// The EvalError object indicates an error regarding the global eval() function.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("EvalError")]
-    [Bridge.CLR.Constructor("EvalError")]
+    [Ignore]
+    [Name("EvalError")]
+    [Constructor("EvalError")]
     public class EvalException : Exception
     {
         public EvalException()

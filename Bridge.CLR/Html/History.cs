@@ -4,8 +4,8 @@
 
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("History")]
+    [Ignore]
+    [Name("History")]
     public class History
     {
         private History()

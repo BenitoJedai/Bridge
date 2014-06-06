@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS all shorthand property resets all properties, but unicode-bidi and direction to their initial or inherited value.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum All
     {
         /// <summary>

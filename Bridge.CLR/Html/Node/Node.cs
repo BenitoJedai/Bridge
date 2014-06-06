@@ -4,8 +4,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// A Node is an interface from which a number of DOM types inherit, and allows these various types to be treated (or tested) similarly.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Node")]
+    [Ignore]
+    [Name("Node")]
     public class Node
     {
         protected internal Node()

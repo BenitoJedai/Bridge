@@ -2,8 +2,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/event
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("KeyboardEvent")]
+    [Ignore]
+    [Name("KeyboardEvent")]
     public class KeyboardEvent: UIEvent
     {
         internal KeyboardEvent()
@@ -1235,8 +1235,8 @@ namespace Bridge.CLR.Html
         #endregion Key codes consts
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class KeyboardEventInit : UIEventInit
     {
         /// <summary>
@@ -1282,7 +1282,7 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// These constants describe the location on the keyboard of key events. 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.Value)]
     public enum KeyLocation
     {

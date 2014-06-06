@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS property pointer-events allows authors to control under what circumstances (if any) a particular graphic element can become the target of mouse events. When this property is unspecified, the same characteristics of the visiblePainted value apply to SVG content.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringName)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum PointerEvents
     {
         /// <summary>

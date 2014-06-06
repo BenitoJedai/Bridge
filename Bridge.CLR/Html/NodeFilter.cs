@@ -5,9 +5,9 @@ namespace Bridge.CLR.Html
     /// types of Node that must to be presented
 	/// </summary>
     [Flags]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Name("Number")]
 	public enum NodeFilter 
     {
 		/// <summary>

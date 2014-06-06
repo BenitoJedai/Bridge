@@ -3,9 +3,9 @@
     /// <summary>
     /// The direction in which to adjust the current selection. 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum SelectionDirection
     {
         /// <summary>

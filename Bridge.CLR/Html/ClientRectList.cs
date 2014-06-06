@@ -4,8 +4,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// collection of rectangles that indicate the bounding rectangles for each box in a client.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("ClientRectList")]
+    [Ignore]
+    [Name("ClientRectList")]
     public class ClientRectList: IEnumerable<ClientRect>
     {
         protected internal ClientRectList()
@@ -30,7 +30,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		[Bridge.CLR.Name("item")]
+		[Name("item")]
         public ClientRect GetItem(int index) 
         {
 			return null;

@@ -1,5 +1,7 @@
-﻿[Bridge.CLR.Ignore]
-[Bridge.CLR.Name("RegExp")]
+﻿using Bridge.CLR;
+
+[Ignore]
+[Name("RegExp")]
 public sealed class RegExp 
 {
     public int LastIndex = 0;

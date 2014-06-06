@@ -2,8 +2,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/EventListener
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     [Bridge.CLR.Cast("function(obj){return Bridge.isFunction(obj.handleEvent);}")]
     public interface IEventListener
     {

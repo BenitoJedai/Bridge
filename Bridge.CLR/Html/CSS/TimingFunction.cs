@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS animation-timing-function property specifies how a CSS animation should progress over the duration of each cycle. 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum TimingFunction
     {
         /// <summary>
@@ -21,19 +21,19 @@
         /// <summary>
         /// 
         /// </summary>
-        [Bridge.CLR.Name("ease-in")]
+        [Name("ease-in")]
         EaseIn,
 
         /// <summary>
         /// 
         /// </summary>
-        [Bridge.CLR.Name("ease-out")]
+        [Name("ease-out")]
         EaseOut,
 
         /// <summary>
         /// 
         /// </summary>
-        [Bridge.CLR.Name("ease-in-out")]
+        [Name("ease-in-out")]
         EaseInOut,
 
         /// <summary>
@@ -44,13 +44,13 @@
         /// <summary>
         /// 
         /// </summary>
-        [Bridge.CLR.Name("step-start")]
+        [Name("step-start")]
         StepStart,
 
         /// <summary>
         /// 
         /// </summary>
-        [Bridge.CLR.Name("step-end")]
+        [Name("step-end")]
         StepEnd
     }
 }

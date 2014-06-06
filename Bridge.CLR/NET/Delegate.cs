@@ -1,7 +1,9 @@
-﻿namespace System 
+﻿using Bridge.CLR;
+
+namespace System 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Function")]
+    [Ignore]
+    [Name("Function")]
     public class Delegate 
     {
         public readonly int Length = 0;
@@ -25,21 +27,21 @@
             return null; 
         }
         
-        [Bridge.CLR.Inline("Bridge.fn.combine({0});")]
+        [Inline("Bridge.fn.combine({0});")]
         public static Delegate Combine(Delegate a, Delegate b)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("Bridge.fn.remove({0});")]
+        [Inline("Bridge.fn.remove({0});")]
         public static Delegate Remove(Delegate source, Delegate value)
         {
             return null;
         }
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Function")]
+    [Ignore]
+    [Name("Function")]
     public class MulticastDelegate : Delegate 
     {
         protected MulticastDelegate() { }

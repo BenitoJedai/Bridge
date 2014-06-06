@@ -3,9 +3,9 @@
     /// <summary>
     /// The ‘object-fit’ property specifies how the contents of a replaced element should be fitted to the box established by its used height and width.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum ObjectFit
     {
         /// <summary>
@@ -36,7 +36,7 @@
         /// <summary>
         /// The replaced content is not resized to fit inside the element's content box: determine the object's concrete object size using the default sizing algorithm with no specified size, and a default object size equal to the replaced element's used width and height.
         /// </summary>
-        [Bridge.CLR.Name("scale-down")]
+        [Name("scale-down")]
         ScaleDown
     }
 }

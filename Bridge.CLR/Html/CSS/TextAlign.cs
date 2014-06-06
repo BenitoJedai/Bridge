@@ -3,9 +3,9 @@
     /// <summary>
     /// The text-align CSS property describes how inline content like text is aligned in its parent block element. text-align does not control the alignment of block elements itself, only their inline content.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum TextAlign
     {
         /// <summary>
@@ -46,10 +46,10 @@
         /// <summary>
         /// Similar to inherit with the difference that the value start and end are calculated according the parent's direction and are replaced by the adequate left or right value.       
         /// </summary>
-        [Bridge.CLR.Name("match-parent")]
+        [Name("match-parent")]
         MatchParent,
 
-        [Bridge.CLR.Name("start end")]
+        [Name("start end")]
         StartEnd
     }
 }

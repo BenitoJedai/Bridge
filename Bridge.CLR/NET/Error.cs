@@ -1,8 +1,10 @@
-﻿namespace System 
+﻿using Bridge.CLR;
+
+namespace System 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Error")]
-    [Bridge.CLR.Constructor("Error")]
+    [Ignore]
+    [Name("Error")]
+    [Constructor("Error")]
     public class Exception 
     {
         /// <summary>
@@ -45,9 +47,9 @@
         }
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Error")]
-    [Bridge.CLR.Constructor("Error")]
+    [Ignore]
+    [Name("Error")]
+    [Constructor("Error")]
     public class NotImplementedException : Exception 
     {
     }

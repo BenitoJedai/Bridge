@@ -3,9 +3,9 @@
     /// <summary>
     /// returns an unsigned short integer representing the type of the node.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Name("Number")]
     public enum NodeType
     {
         Element = 1,

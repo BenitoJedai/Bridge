@@ -4,8 +4,8 @@
     /// The TreeWalker object represents the nodes of a document subtree and a position within them.
     /// A TreeWalker can be created using the Document.createTreeWalker() method.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("TreeWalker")]
+    [Ignore]
+    [Name("TreeWalker")]
 	public class TreeWalker 
     {
 		internal TreeWalker() 

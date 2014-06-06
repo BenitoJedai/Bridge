@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS text-underline-position property specifies the position of the underline which is set using the text-decoration property underline value.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum TextUnderlinePosition
     {
         /// <summary>
@@ -33,10 +33,10 @@
         /// </summary>
         Right,
 
-        [Bridge.CLR.Name("under left")]
+        [Name("under left")]
         UnderLeft,
 
-        [Bridge.CLR.Name("right under")]
+        [Name("right under")]
         RightUnder
     }
 }

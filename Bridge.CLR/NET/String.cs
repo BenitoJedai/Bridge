@@ -1,8 +1,10 @@
-﻿namespace System
+﻿using Bridge.CLR;
+
+namespace System
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("String")]
-    [Bridge.CLR.Constructor("String")]
+    [Ignore]
+    [Name("String")]
+    [Constructor("String")]
     public sealed class String
     {
         public readonly int Length = 0;

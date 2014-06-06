@@ -3,9 +3,9 @@
     /// <summary>
     /// The text-decoration-line CSS property sets what kind of line decorations are added to an element.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum TextDecorationLine
     {
         /// <summary>
@@ -31,7 +31,7 @@
         /// <summary>
         /// Each line of text has a line through the middle.
         /// </summary>
-        [Bridge.CLR.Name("line-through")]
+        [Name("line-through")]
         LineThrough,
 
         /// <summary>

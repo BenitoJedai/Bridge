@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using Bridge.CLR;
+
 namespace System 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Array")]
+    [Ignore]
+    [Name("Array")]
     public sealed class Array : IEnumerable 
     {
         public readonly int Length = 0;

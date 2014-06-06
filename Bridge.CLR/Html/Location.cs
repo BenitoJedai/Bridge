@@ -3,8 +3,8 @@
 
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Location")]
+    [Ignore]
+    [Name("Location")]
     public class Location
     {
         private Location()

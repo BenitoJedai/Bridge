@@ -3,9 +3,9 @@
     /// <summary>
     /// The overflow CSS property specifies whether to clip content, render scroll bars or display overflow content of a block-level element.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum Overflow
     {
         /// <summary>

@@ -4,8 +4,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// NodeList objects are collections of nodes such as those returned by Node.childNodes and the querySelectorAll method.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("NodeList")]
+    [Ignore]
+    [Name("NodeList")]
     public class NodeList: IEnumerable<Node>
     {
         protected internal NodeList()
@@ -30,7 +30,7 @@ namespace Bridge.CLR.Html
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		[Bridge.CLR.Name("item")]
+		[Name("item")]
         public Node GetItem(int index) 
         {
 			return null;

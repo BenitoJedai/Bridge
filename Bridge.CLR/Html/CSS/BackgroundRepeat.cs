@@ -3,21 +3,21 @@
     /// <summary>
     /// The background-repeat CSS property defines how background images are repeated. 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+[Name("String")]
     public enum BackgroundRepeat
     {
         /// <summary>
         /// the equivalent of repeat no-repeat
         /// </summary>
-        [Bridge.CLR.Name("repeat-x")]
+        [Name("repeat-x")]
         RepeatX,
 
         /// <summary>
         /// the equivalent of no-repeat repeat
         /// </summary>
-        [Bridge.CLR.Name("repeat-y")]
+        [Name("repeat-y")]
         RepeatY,
 
         /// <summary>
@@ -38,7 +38,7 @@
         /// <summary>
         /// The image is not repeated (and hence the background image painting area will not necessarily been entirely covered). The position of the non-repeated background image is defined by the background-position CSS property.
         /// </summary>
-        [Bridge.CLR.Name("no-repeat")]
+        [Name("no-repeat")]
         NoRepeat	
     }
 }

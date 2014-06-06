@@ -3,9 +3,9 @@
     /// <summary>
     /// This value specifies whether the user agent is allowed to synthesize bold or oblique font faces when a font family lacks bold or italic faces.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum FontSynthesis
     {
         /// <summary>
@@ -26,7 +26,7 @@
         /// <summary>
         /// user agent is allowed to synthesize both bold and oblique.
         /// </summary>
-        [Bridge.CLR.Name("weight style")]
+        [Name("weight style")]
         WeightStyle
     }
 }

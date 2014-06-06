@@ -4,9 +4,9 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// Relationship of nodes
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.Value)]
-    [Bridge.CLR.Name("Number")]
+    [Name("Number")]
     [Flags]
     public enum DocumentPosition
     {

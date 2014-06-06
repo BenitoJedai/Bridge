@@ -1,7 +1,9 @@
+using Bridge.CLR;
+
 namespace System.Collections.Generic 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public sealed class KeyValuePair<TKey, TValue> 
     {
         internal KeyValuePair() 

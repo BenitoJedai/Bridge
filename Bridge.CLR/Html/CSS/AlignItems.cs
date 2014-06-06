@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS align-items property aligns flex items of the current flex line the same way as justify-content but in the perpendicular direction.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+[Name("String")]
     public enum AlignItems
     {
         /// <summary>
@@ -16,13 +16,13 @@
         /// <summary>
         /// The cross-start margin edge of the flex item is flushed with the cross-start edge of the line.
         /// </summary>
-        [Bridge.CLR.Name("flex-start")]
+        [Name("flex-start")]
         FlexStart,
 
         /// <summary>
         /// The cross-end margin edge of the flex item is flushed with the cross-end edge of the line.
         /// </summary>
-        [Bridge.CLR.Name("flex-end")]
+        [Name("flex-end")]
         FlexEnd,
 
         /// <summary>

@@ -1,7 +1,9 @@
+using Bridge.CLR;
+
 namespace System.Collections.Generic 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Bridge.Dictionary")]
+    [Ignore]
+    [Name("Bridge.Dictionary")]
     public sealed class Dictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>> 
     {
         public Dictionary() 
@@ -38,12 +40,12 @@ namespace System.Collections.Generic
 
         public TValue this[TKey key]
         {
-            [Bridge.CLR.Inline("get({0})")]
+            [Inline("get({0})")]
             get
             {
                 return default(TValue);
             }
-            [Bridge.CLR.Inline("set({0})")]
+            [Inline("set({0})")]
             set
             {
             }

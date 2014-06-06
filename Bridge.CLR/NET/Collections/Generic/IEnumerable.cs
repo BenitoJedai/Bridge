@@ -1,7 +1,9 @@
+using Bridge.CLR;
+
 namespace System.Collections.Generic 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Bridge.IEnumerable")]
+    [Ignore]
+    [Name("Bridge.IEnumerable")]
     public interface IEnumerable<T> 
     {
         IEnumerator<T> GetEnumerator();

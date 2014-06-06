@@ -3,9 +3,9 @@
     /// <summary>
     /// If a background-image is specified, the background-attachment CSS property determines whether that image's position is fixed within the viewport, or scrolls along with its containing block.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+[Name("String")]
     public enum BackgroundAttachment
     {
         /// <summary>

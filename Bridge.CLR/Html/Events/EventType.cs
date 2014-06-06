@@ -3,7 +3,7 @@
     /// <summary>
     /// These events are defined in official Web specifications, and should be common across browsers. Each event is listed along with the interface representing the object sent to recipients of the event (so you can find information about what data is provided with each event) as well as a link to the specification or specifications that define the event.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [EnumEmit(EnumEmit.StringNameLowerCase)]
     public enum EventType
     {
@@ -185,7 +185,7 @@
         /// Event - HTML5
         /// The document has finished loading (but not its dependent resources).
         /// </summary>
-        [Bridge.CLR.Name(false)]
+        [Name(false)]
         DOMContentLoaded,
 
         /// <summary>
@@ -258,7 +258,7 @@
         /// TimeEvent - SVG
         /// A SMIL animation element ends.
         /// </summary>
-        [Bridge.CLR.Name("endEvent")]
+        [Name("endEvent")]
         EndEvent,
 
         /// <summary>
@@ -574,7 +574,7 @@
         /// TimeEvent - SVG
         /// A SMIL animation element is repeated.
         /// </summary>
-        [Bridge.CLR.Name("repeatEvent")]
+        [Name("repeatEvent")]
         RepeatEvent,
 
         /// <summary>
@@ -653,49 +653,49 @@
         /// SVGEvent - SVG
         /// Page loading has been stopped before the SVG was loaded.
         /// </summary>
-        [Bridge.CLR.Name("SVGAbort")]
+        [Name("SVGAbort")]
         SVGAbort,
 
         /// <summary>
         /// SVGEvent - SVG
         /// An error has occurred before the SVG was loaded.
         /// </summary>
-        [Bridge.CLR.Name("SVGError")]
+        [Name("SVGError")]
         SVGError,
 
         /// <summary>
         /// SVGEvent - SVG
         /// An SVG document has been loaded and parsed.
         /// </summary>
-        [Bridge.CLR.Name("SVGLoad")]
+        [Name("SVGLoad")]
         SVGLoad,
 
         /// <summary>
         /// SVGEvent - SVG
         /// An SVG document is being resized.
         /// </summary>
-        [Bridge.CLR.Name("SVGResize")]
+        [Name("SVGResize")]
         SVGResize,
 
         /// <summary>
         /// SVGEvent - SVG
         /// An SVG document is being scrolled.
         /// </summary>
-        [Bridge.CLR.Name("SVGScroll")]
+        [Name("SVGScroll")]
         SVGScroll,
 
         /// <summary>
         /// SVGEvent - SVG
         /// An SVG document has been removed from a window or frame.
         /// </summary>
-        [Bridge.CLR.Name("SVGUnload")]
+        [Name("SVGUnload")]
         SVGUnload,
 
         /// <summary>
         /// SVGZoomEvent - SVG
         /// An SVG document is being zoomed.
         /// </summary>
-        [Bridge.CLR.Name("SVGZoom")]
+        [Name("SVGZoom")]
         SVGZoom,
 
         /// <summary>

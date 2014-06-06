@@ -3,7 +3,7 @@
     /// <summary>
     /// CSS rule types
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.Value)]
     public enum CSSRuleType
     {

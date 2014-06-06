@@ -1,7 +1,9 @@
-﻿namespace System
+﻿using Bridge.CLR;
+
+namespace System
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Date")]
+    [Ignore]
+    [Name("Date")]
     public class Date
     {
         public static double operator -(Date d1, Date d2)
@@ -119,25 +121,25 @@
             return false;
         }
 
-        [Bridge.CLR.Inline("Bridge.equals({0})")]
+        [Inline("Bridge.equals({0})")]
         public static bool operator ==(Date d1, object d2)
         {
             return false;
         }
 
-        [Bridge.CLR.Inline("Bridge.equals({0})")]
+        [Inline("Bridge.equals({0})")]
         public static bool operator ==(Date d1, Date d2)
         {
             return false;
         }
 
-        [Bridge.CLR.Inline("!Bridge.equals({0})")]
+        [Inline("!Bridge.equals({0})")]
         public static bool operator !=(Date d1, object d2)
         {
             return false;
         }
 
-        [Bridge.CLR.Inline("!Bridge.equals({0})")]
+        [Inline("!Bridge.equals({0})")]
         public static bool operator !=(Date d1, Date d2)
         {
             return false;
@@ -192,37 +194,37 @@
             return null;
         }
 
-        [Bridge.CLR.Inline("{0},{1},{2},{3},{4},{5},{6}")]
+        [Inline("{0},{1},{2},{3},{4},{5},{6}")]
         public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds, int ms)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("{0},{1},{2},{3},{4},{5}")]
+        [Inline("{0},{1},{2},{3},{4},{5}")]
         public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("{0},{1},{2},{3},{4}")]
+        [Inline("{0},{1},{2},{3},{4}")]
         public static Date UTC(int year, int month, int date, int hours, int minutes)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("{0},{1},{2},{3}")]
+        [Inline("{0},{1},{2},{3}")]
         public static Date UTC(int year, int month, int date, int hours)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("{0},{1},{2}")]
+        [Inline("{0},{1},{2}")]
         public static Date UTC(int year, int month, int date)
         {
             return null;
         }
 
-        [Bridge.CLR.Inline("{0},{1}")]
+        [Inline("{0},{1}")]
         public static Date UTC(int year, int month)
         {
             return null;

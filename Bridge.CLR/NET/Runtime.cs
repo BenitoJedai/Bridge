@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using Bridge.CLR;
 
 namespace System
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class Attribute
     {
         internal Attribute()
@@ -13,7 +14,7 @@ namespace System
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum AttributeTargets
     {
         Assembly = 0x0001,
@@ -37,7 +38,7 @@ namespace System
               Delegate | ReturnValue | GenericParameter
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class AttributeUsageAttribute : Attribute
     {
         public AttributeUsageAttribute(AttributeTargets validOn)
@@ -57,7 +58,7 @@ namespace System.Runtime.InteropServices
 {
     [ComVisible(true)]
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class ComVisibleAttribute : Attribute
     {
         public ComVisibleAttribute(bool visibility)
@@ -73,7 +74,7 @@ namespace System.Runtime.InteropServices
     }
 
     [AttributeUsageAttribute(AttributeTargets.Parameter)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class OutAttribute : Attribute
     {
     }
@@ -83,7 +84,7 @@ namespace System.Runtime.InteropServices
 {
     [ComVisible(true)]
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class GuidAttribute : Attribute
     {
         public GuidAttribute(string guid)
@@ -102,7 +103,7 @@ namespace System.Runtime.InteropServices
 namespace System.Reflection
 {
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyTitleAttribute : Attribute
     {
         public AssemblyTitleAttribute(string title)
@@ -118,7 +119,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyDescriptionAttribute : Attribute
     {
         public AssemblyDescriptionAttribute(string description)
@@ -134,7 +135,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyConfigurationAttribute : Attribute
     {
         public AssemblyConfigurationAttribute(string configuration)
@@ -150,7 +151,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyCompanyAttribute : Attribute
     {
         public AssemblyCompanyAttribute(string company)
@@ -166,7 +167,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyProductAttribute : Attribute
     {
         public AssemblyProductAttribute(string product)
@@ -182,7 +183,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyCopyrightAttribute : Attribute
     {
         public AssemblyCopyrightAttribute(string copyright)
@@ -198,7 +199,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyTrademarkAttribute : Attribute
     {
         public AssemblyTrademarkAttribute(string trademark)
@@ -214,7 +215,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyCultureAttribute : Attribute
     {
         public AssemblyCultureAttribute(string culture)
@@ -230,7 +231,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyVersionAttribute : Attribute
     {
         public AssemblyVersionAttribute(string version)
@@ -246,7 +247,7 @@ namespace System.Reflection
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class AssemblyFileVersionAttribute : Attribute
     {
         public AssemblyFileVersionAttribute(string version)
@@ -261,7 +262,7 @@ namespace System.Reflection
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class DefaultMemberAttribute : Attribute
     {
         public DefaultMemberAttribute(string memberName)
@@ -280,7 +281,7 @@ namespace System.Reflection
 namespace System.Runtime.Versioning
 {
     [AttributeUsage(AttributeTargets.Assembly)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class TargetFrameworkAttribute : Attribute
     {
         public TargetFrameworkAttribute()
@@ -308,7 +309,7 @@ namespace System.Runtime.Versioning
 
 namespace System.Runtime.CompilerServices
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public static class RuntimeHelpers
     {
         public static void InitializeArray(Array array, RuntimeFieldHandle handle)
@@ -330,7 +331,7 @@ namespace System.Runtime.CompilerServices
     }
     
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class ExtensionAttribute : Attribute
     {
         public ExtensionAttribute()
@@ -339,7 +340,7 @@ namespace System.Runtime.CompilerServices
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue)]
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class DynamicAttribute : Attribute
     {        
         public DynamicAttribute() 
@@ -358,7 +359,7 @@ namespace System.Runtime.CompilerServices
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class CallSite
     {
         public CallSiteBinder Binder 
@@ -375,7 +376,7 @@ namespace System.Runtime.CompilerServices
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class CallSite<T> : CallSite where T : class
     {
         public T Update 
@@ -394,7 +395,7 @@ namespace System.Runtime.CompilerServices
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public abstract class CallSiteBinder
     {
         public static LabelTarget UpdateLabel 
@@ -414,7 +415,7 @@ namespace System.Runtime.CompilerServices
 
 namespace Microsoft.CSharp.RuntimeBinder
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public static class Binder
     {
         public static CallSiteBinder BinaryOperation(CSharpBinderFlags flags, ExpressionType operation, Type context, IEnumerable<CSharpArgumentInfo> argumentInfo)
@@ -473,7 +474,7 @@ namespace Microsoft.CSharp.RuntimeBinder
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum CSharpBinderFlags
     {
         None = 0,
@@ -488,7 +489,7 @@ namespace Microsoft.CSharp.RuntimeBinder
         ResultDiscarded = 256,
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class CSharpArgumentInfo
     {
         public static CSharpArgumentInfo Create(CSharpArgumentInfoFlags flags, string name)
@@ -497,7 +498,7 @@ namespace Microsoft.CSharp.RuntimeBinder
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum CSharpArgumentInfoFlags
     {
         None = 0,
@@ -512,7 +513,7 @@ namespace Microsoft.CSharp.RuntimeBinder
 
 namespace System.Linq.Expressions
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public sealed class LabelTarget
     {
         internal LabelTarget() 
@@ -537,7 +538,7 @@ namespace System.Linq.Expressions
         }        
     } 
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum ExpressionType
     {
         Add,

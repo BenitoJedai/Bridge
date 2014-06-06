@@ -3,9 +3,9 @@
     /// <summary>
     /// loading status of the document
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum ReadyState
     {
         /// <summary>

@@ -2,7 +2,7 @@
 
 namespace Bridge.CLR
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [AttributeUsage(AttributeTargets.Enum)]
     public class EnumEmitAttribute : Attribute
     {
@@ -11,7 +11,7 @@ namespace Bridge.CLR
         }
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum EnumEmit
     {
         Name = 1,

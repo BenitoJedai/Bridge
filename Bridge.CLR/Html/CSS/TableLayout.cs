@@ -3,9 +3,9 @@
     /// <summary>
     /// The table-layout CSS property defines the algorithm to be used to layout the table cells, rows, and columns.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum TableLayout
     {
         /// <summary>

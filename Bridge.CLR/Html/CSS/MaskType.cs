@@ -3,9 +3,9 @@
     /// <summary>
     /// The CSS mask-type properties defines if a SVG <mask> element is a luminance or an alpha mask.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum MaskType
     {
         /// <summary>

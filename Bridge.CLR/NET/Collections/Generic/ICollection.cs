@@ -1,7 +1,9 @@
+using Bridge.CLR;
+
 namespace System.Collections.Generic 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Bridge.ICollection")]
+    [Ignore]
+    [Name("Bridge.ICollection")]
     public interface ICollection<T> : IEnumerable<T> 
     {
         int Count 

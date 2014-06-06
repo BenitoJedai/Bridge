@@ -6,8 +6,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// The console object provides access to the browser's debugging console (e.g. the Web Console in Firefox). The specifics of how it works vary from browser to browser, but there is a de facto set of features that are typically provided.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("console")]
+    [Ignore]
+    [Name("console")]
     public static class Console
     {
         /// <summary>

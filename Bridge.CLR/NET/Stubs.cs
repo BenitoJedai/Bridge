@@ -1,6 +1,8 @@
-﻿namespace System 
+﻿using Bridge.CLR;
+
+namespace System 
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class Type 
     {
         public static Type GetTypeFromHandle(RuntimeTypeHandle typeHandle)
@@ -9,93 +11,93 @@
         } 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class ValueType 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class Enum 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct IntPtr 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct UIntPtr 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public class ParamArrayAttribute 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public interface IDisposable 
     {
         void Dispose();
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct Void
     { 
     }
     
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct Byte 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct Int16 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct Int64 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct Single 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct Char 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct SByte 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct UInt16 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct UInt32 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct UInt64 
     { 
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct RuntimeTypeHandle
     {
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public struct RuntimeFieldHandle
     {
     }

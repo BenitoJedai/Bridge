@@ -2,8 +2,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Performance
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Performance")]
+    [Ignore]
+    [Name("Performance")]
     public class Performance
     {
         private Performance()
@@ -34,8 +34,8 @@ namespace Bridge.CLR.Html
     /// The PerformanceTiming interface represents timing-related performance information for the given page.
     /// An object of this type can be obtained by calling the Performance.timing read-only attribute.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("PerformanceTiming")]
+    [Ignore]
+    [Name("PerformanceTiming")]
     public class PerformanceTiming
     {
         private PerformanceTiming()
@@ -152,8 +152,8 @@ namespace Bridge.CLR.Html
     /// The PerformanceNavigation interface represents information about how the navigation to the current document was done.
     /// An object of this type can be obtained by calling the Performance.navigation read-only attribute.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("PerformanceNavigation")]
+    [Ignore]
+    [Name("PerformanceNavigation")]
     public class PerformanceNavigation
     {
         private PerformanceNavigation()
@@ -174,7 +174,7 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// A constant describing how the navigation to this page was done. 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum PerformanceNavigationType
     {
         /// <summary>

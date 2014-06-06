@@ -3,8 +3,8 @@
     /// <summary>
     /// An object implementing the StyleSheet interface represents a single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("StyleSheet")]
+    [Ignore]
+    [Name("StyleSheet")]
 	public class StyleSheet 
     {
 		protected internal StyleSheet() 

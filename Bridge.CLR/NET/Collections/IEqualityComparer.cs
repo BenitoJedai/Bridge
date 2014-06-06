@@ -1,6 +1,8 @@
-﻿namespace System.Collections
+﻿using Bridge.CLR;
+
+namespace System.Collections
 {
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public interface IEqualityComparer
     {
         bool Equals(object x, object y);

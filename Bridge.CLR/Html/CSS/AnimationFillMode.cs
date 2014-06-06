@@ -3,9 +3,9 @@
     /// <summary>
     /// The animation-fill-mode CSS property specifies how a CSS animation should apply styles to its target before and after it is executing.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+[Name("String")]
     public enum AnimationFillMode
     {
         /// <summary>

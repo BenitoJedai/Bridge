@@ -2,8 +2,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/event
 namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Event")]
+    [Ignore]
+    [Name("Event")]
     public class Event
     {
         internal Event()
@@ -97,8 +97,8 @@ namespace Bridge.CLR.Html
         }
     }
 
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class EventInit
     {
         /// <summary>
@@ -115,28 +115,28 @@ namespace Bridge.CLR.Html
         public bool Cancelable;
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public static class EventsExtension
     {
-        [Bridge.CLR.Inline("Bridge.is({0}, MouseEvent)")]
+        [Inline("Bridge.is({0}, MouseEvent)")]
         public static bool IsMouseEvent(this Event e)
         {
             return false;
         }
 
-        [Bridge.CLR.Inline("Bridge.is({0}, FocusEvent)")]
+        [Inline("Bridge.is({0}, FocusEvent)")]
         public static bool IsFocusEvent(this Event e)
         {
             return false;
         }
 
-        [Bridge.CLR.Inline("Bridge.is({0}, UIEvent)")]
+        [Inline("Bridge.is({0}, UIEvent)")]
         public static bool IsUIEvent(this Event e)
         {
             return false;
         }
 
-        [Bridge.CLR.Inline("Bridge.is({0}, KeyboardEvent)")]
+        [Inline("Bridge.is({0}, KeyboardEvent)")]
         public static bool IsKeyboardEvent(this Event e)
         {
             return false;

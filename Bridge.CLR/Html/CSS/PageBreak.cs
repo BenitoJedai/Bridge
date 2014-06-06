@@ -3,9 +3,9 @@
     /// <summary>
     /// The page-break-after CSS property adjusts page breaks after/before the current element.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum PageBreak
     {
         /// <summary>

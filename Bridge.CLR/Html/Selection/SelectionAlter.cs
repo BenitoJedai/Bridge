@@ -3,9 +3,9 @@
     /// <summary>
     /// The type of selection change.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum SelectionAlter
     {
         /// <summary>

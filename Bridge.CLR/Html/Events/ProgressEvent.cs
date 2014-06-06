@@ -3,8 +3,8 @@
     /// <summary>
     /// The ProgressEvent interface represents events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>).
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("ProgressEvent")]
+    [Ignore]
+    [Name("ProgressEvent")]
     public class ProgressEvent : Event
     {
         private ProgressEvent()

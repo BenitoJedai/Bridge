@@ -1,7 +1,7 @@
 ﻿namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Storage")]
+    [Ignore]
+    [Name("Storage")]
     public class Storage
     {
         private Storage()

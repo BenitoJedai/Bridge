@@ -5,8 +5,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// MediaList representing the intended destination medium for style information.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("MediaList")]
+    [Ignore]
+    [Name("MediaList")]
 	public class MediaList : IEnumerable<string>
     {		
         internal MediaList() 
@@ -29,7 +29,7 @@ namespace Bridge.CLR.Html
         {
 		}		
 
-        [Bridge.CLR.Name("item")]
+        [Name("item")]
 		public string GetItem(int index) 
         {
 			return null;

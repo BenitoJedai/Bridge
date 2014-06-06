@@ -3,9 +3,9 @@
     /// <summary>
     /// The image-rendering CSS property provides a hint to the user agent about how to handle its image rendering.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum ImageRendering
     {
         /// <summary>
@@ -21,7 +21,7 @@
         /// <summary>
         /// 
         /// </summary>
-        [Bridge.CLR.Name("crisp-edges")]
+        [Name("crisp-edges")]
         CrispEdges,
 
         /// <summary>

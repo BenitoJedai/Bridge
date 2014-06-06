@@ -1,8 +1,10 @@
-﻿namespace System 
+﻿using Bridge.CLR;
+
+namespace System 
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Boolean")]
-    [Bridge.CLR.Constructor("!!")]
+    [Ignore]
+    [Name("Boolean")]
+    [Constructor("!!")]
     public struct Boolean 
     {
         public Boolean(object value) 

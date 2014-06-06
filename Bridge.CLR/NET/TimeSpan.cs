@@ -1,7 +1,9 @@
-﻿namespace System
+﻿using Bridge.CLR;
+
+namespace System
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("TimeSpan")]
+    [Ignore]
+    [Name("TimeSpan")]
     public struct TimeSpan
     {
         public const long TicksPerDay = 864000000000;

@@ -3,9 +3,9 @@
     /// <summary>
     /// 
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-[Bridge.CLR.Name("String")]
+[Name("String")]
     public enum Cursor
     {
         /// <summary>
@@ -27,7 +27,7 @@
         /// <summary>
         /// A context menu is available under the cursor. Only IE 10 and up have implemented this on Windows
         /// </summary>
-        [Bridge.CLR.Name("context-menu")]
+        [Name("context-menu")]
         ContextMenu,
 
         /// <summary>
@@ -68,7 +68,7 @@
         /// <summary>
         /// Indicating that vertical text can be selected, typically a sideways I-beam.
         /// </summary>
-        [Bridge.CLR.Name("vertical-text")]
+        [Name("vertical-text")]
         VerticalText,
 
         /// <summary>
@@ -89,115 +89,115 @@
         /// <summary>
         /// Cursor showing that a drop is not allowed at the current location.
         /// </summary>
-        [Bridge.CLR.Name("no-drop")]
+        [Name("no-drop")]
         NoDrop,
 
         /// <summary>
         /// Cursor showing that something cannot be done.
         /// </summary>
-        [Bridge.CLR.Name("not-allowed")]
+        [Name("not-allowed")]
         NotAllowed,
 
         /// <summary>
         /// Cursor showing that something can be scrolled in any direction (panned).
         /// </summary>
-        [Bridge.CLR.Name("all-scroll")]
+        [Name("all-scroll")]
         AllScroll,
 
         /// <summary>
         /// The item/column can be resized horizontally. Often rendered as arrows pointing left and right with a vertical bar separating.
         /// </summary>
-        [Bridge.CLR.Name("col-resize")]
+        [Name("col-resize")]
         ColResize,
 
         /// <summary>
         /// The item/row can be resized vertically. Often rendered as arrows pointing up and down with a horizontal bar separating them.
         /// </summary>
-        [Bridge.CLR.Name("row-resize")]
+        [Name("row-resize")]
         RowResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("n-resize")]
+        [Name("n-resize")]
         NorthResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("e-resize")]
+        [Name("e-resize")]
         EastResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("s-resize")]
+        [Name("s-resize")]
         SouthResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("w-resize")]
+        [Name("w-resize")]
         WestResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("ne-resize")]
+        [Name("ne-resize")]
         NorthEastResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("nw-resize")]
+        [Name("nw-resize")]
         NorthWestResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("se-resize")]
+        [Name("se-resize")]
         SouthEastResize,
 
         /// <summary>
         /// Some edge is to be moved.
         /// </summary>
-        [Bridge.CLR.Name("sw-resize")]
+        [Name("sw-resize")]
         SouthWestResize,
 
         /// <summary>
         /// Indicates a bidirectional resize cursor.
         /// </summary>
-        [Bridge.CLR.Name("ew-resize")]
+        [Name("ew-resize")]
         EastWestResize,
 
         /// <summary>
         /// Indicates a bidirectional resize cursor.
         /// </summary>
-        [Bridge.CLR.Name("ns-resize")]
+        [Name("ns-resize")]
         NorthSouthResize,
 
         /// <summary>
         /// Indicates a bidirectional resize cursor.
         /// </summary>
-        [Bridge.CLR.Name("nesw-resize")]
+        [Name("nesw-resize")]
         NorthEastSouthWestResize,
 
         /// <summary>
         /// Indicates a bidirectional resize cursor.
         /// </summary>
-        [Bridge.CLR.Name("nwse-resize")]
+        [Name("nwse-resize")]
         NorthWestSouthEastResize,
 
         /// <summary>
         /// Indicates that something can be zoomed (magnified) in or out.
         /// </summary>
-        [Bridge.CLR.Name("zoom-in")]
+        [Name("zoom-in")]
         ZoomIn,
 
         /// <summary>
         /// Indicates that something can be zoomed (magnified) in or out.
         /// </summary>
-        [Bridge.CLR.Name("zoom-out")]
+        [Name("zoom-out")]
         ZoomOut,
 
         /// <summary>

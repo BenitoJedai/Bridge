@@ -4,8 +4,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// A CSSStyleDeclaration is an interface to the declaration block returned by the style property of a cssRule in a stylesheet, when the rule is a CSSStyleRule.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("CSSStyleDeclaration")]
+    [Ignore]
+    [Name("CSSStyleDeclaration")]
     public class CSSStyleDeclaration: IEnumerable<string>
     {
         protected internal CSSStyleDeclaration()
@@ -50,7 +50,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The animation-direction CSS property indicates whether the animation should play in reverse on alternate cycles.
         /// </summary>
-        [Bridge.CLR.Name("animationDirection")]
+        [Name("animationDirection")]
         public string AnimationDirectionString;
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The animation-fill-mode CSS property specifies how a CSS animation should apply styles to its target before and after it is executing.
         /// </summary>
-        [Bridge.CLR.Name("animationFillMode")]
+        [Name("animationFillMode")]
         public string AnimationFillModeString;
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The animation-play-state CSS property determines whether an animation is running or paused. You can query this property's value to determine whether or not the animation is currently running; in addition, you can set its value to pause and resume playback of an animation.
         /// </summary>
-        [Bridge.CLR.Name("animationPlayState")]
+        [Name("animationPlayState")]
         public string AnimationPlayStateString;
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The CSS animation-timing-function property specifies how a CSS animation should progress over the duration of each cycle.
         /// </summary>
-        [Bridge.CLR.Name("animationTimingFunction")]
+        [Name("animationTimingFunction")]
         public string AnimationTimingFunctionString;
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The background-color CSS property sets the background color of an element, either through a color value or the keyword transparent.
         /// </summary>
-        [Bridge.CLR.Name("backgroundColor")]
+        [Name("backgroundColor")]
         public string BackgroundColorString;
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The background-repeat CSS property defines how background images are repeated. A background image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at all. When the repetition of the image tiles doesn't let them exactly cover the background, the way adjustments are done can be controlled by the author: by default, the last image is clipped, but the different tiles can instead be re-sized, or space can be inserted between the tiles.
         /// </summary>
-        [Bridge.CLR.Name("backgroundRepeat")]
+        [Name("backgroundRepeat")]
         public string BackgroundRepeatString;
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-bottom-color CSS property sets the color of the bottom border of an element. Note that in many cases the shorthand CSS properties border-color or border-bottom are more convenient and preferable.
         /// </summary>
-        [Bridge.CLR.Name("borderBottomColor")]
+        [Name("borderBottomColor")]
         public string BorderBottomColorString;
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-bottom-width CSS property sets the width of the bottom border of a box.
         /// </summary>
-        [Bridge.CLR.Name("borderBottomWidth")]
+        [Name("borderBottomWidth")]
         public string BorderBottomWidthString;
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-color CSS property is a shorthand for setting the color of the four sides of an element's border: border-top-color, border-right-color, border-bottom-color, border-left-color
         /// </summary>
-        [Bridge.CLR.Name("borderColor")]
+        [Name("borderColor")]
         public string BorderColorString;
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-image-repeat CSS property defines how the middle part of a border image is handled so that it can match the size of the border. It has a one-value syntax which describes the behavior of all the sides, and a two-value syntax that sets a different value for the horizontal and vertical behavior.
         /// </summary>
-        [Bridge.CLR.Name("borderImageRepeat")]
+        [Name("borderImageRepeat")]
         public string BorderImageRepeatString;
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-left-color CSS property sets the color of the bottom border of an element. Note that in many cases the shorthand CSS properties border-color or border-left are more convenient and preferable.
         /// </summary>
-        [Bridge.CLR.Name("borderLeftColor")]
+        [Name("borderLeftColor")]
         public string BorderLeftColorString;
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-left-width CSS property sets the width of the left border of a box.
         /// </summary>
-        [Bridge.CLR.Name("borderLeftWidth")]
+        [Name("borderLeftWidth")]
         public string BorderLeftWidthString;
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-right-color CSS property sets the color of the right border of an element. Note that in many cases the shorthand CSS properties  border-color or border-right are more convenient and preferable.
         /// </summary>
-        [Bridge.CLR.Name("borderRightColor")]
+        [Name("borderRightColor")]
         public string BorderRightColorString;
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-right-width CSS property sets the width of the right border of a box.
         /// </summary>
-        [Bridge.CLR.Name("borderRightWidth")]
+        [Name("borderRightWidth")]
         public BorderWidth BorderRightWidthString;
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-top-color CSS property sets the color of the top border of an element. Note that in many cases the shorthand CSS properties border-color or border-top are more convenient and preferable.
         /// </summary>
-        [Bridge.CLR.Name("borderTopColor")]
+        [Name("borderTopColor")]
         public string BorderTopColorString;
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-top-width CSS property sets the width of the top border of a box.
         /// </summary>
-        [Bridge.CLR.Name("borderTopWidth")]
+        [Name("borderTopWidth")]
         public string BorderTopWidthString;
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The border-width CSS property sets the width of the border of a box. Using the shorthand property border is often more convenient.
         /// </summary>
-        [Bridge.CLR.Name("borderWidth")]
+        [Name("borderWidth")]
         public string BorderWidthString;
 
         /// <summary>
@@ -454,7 +454,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The CSS color property sets the foreground color of an element's text content, and its decorations. It doesn't affect any other characteristic of the element; it should really be called text-color and would have been named so, save for historical reasons and its appearance in CSS Level 1.
         /// </summary>
-        [Bridge.CLR.Name("color")]
+        [Name("color")]
         public string ColorString;
 
         /// <summary>
@@ -490,7 +490,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The column-rule-color CSS property lets you set the color of the rule drawn between columns in multi-column layouts.
         /// </summary>
-        [Bridge.CLR.Name("columnRuleColor")]
+        [Name("columnRuleColor")]
         public string ColumnRuleColorString;
 
         /// <summary>
@@ -506,7 +506,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The column-rule-width CSS property lets you set the width of the rule drawn between columns in multi-column layouts.
         /// </summary>
-        [Bridge.CLR.Name("columnRuleWidth")]
+        [Name("columnRuleWidth")]
         public string ColumnRuleWidthString;
 
         /// <summary>
@@ -1019,7 +1019,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The outline-color CSS property sets the color of the outline of an element. An outline is a line that is drawn around elements, outside the border edge, to make the element stand out.
         /// </summary>
-        [Bridge.CLR.Name("outlineColor")]
+        [Name("outlineColor")]
         public string OutlineColorString;
 
         /// <summary>
@@ -1040,7 +1040,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The outline-width CSS property is used to set the width of the outline of an element. An outline is a line that is drawn around elements, outside the border edge, to make the element stand out:
         /// </summary>
-        [Bridge.CLR.Name("outlineWidth")]
+        [Name("outlineWidth")]
         public string OutlineWidthString;
 
         /// <summary>
@@ -1176,7 +1176,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The text-decoration CSS property is used to set the text formatting to underline, overline, line-through or blink.
         /// </summary>
-        [Bridge.CLR.Name("textDecoration")]
+        [Name("textDecoration")]
         public string TextDecorationString;
 
         /// <summary>
@@ -1187,7 +1187,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The text-decoration-color CSS property sets the color used when drawing underlines, overlines, or strike-throughs specified by text-decoration-line. 
         /// </summary>
-        [Bridge.CLR.Name("textDecorationColor")]
+        [Name("textDecorationColor")]
         public string TextDecorationColorString;
 
         /// <summary>
@@ -1198,7 +1198,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The text-decoration-line CSS property sets what kind of line decorations are added to an element.
         /// </summary>
-        [Bridge.CLR.Name("textDecorationLine")]
+        [Name("textDecorationLine")]
         public string TextDecorationLineString;
 
         /// <summary>
@@ -1294,7 +1294,7 @@ namespace Bridge.CLR.Html
         /// <summary>
         /// The CSS transition-timing-function property is used to describe how the intermediate values of the CSS properties being affected by a transition effect are calculated. This in essence lets you establish an acceleration curve, so that the speed of the transition can vary over its duration.
         /// </summary>
-        [Bridge.CLR.Name("transitionTimingFunction")]
+        [Name("transitionTimingFunction")]
         public string TransitionTimingFunctionString;
 
         /// <summary>

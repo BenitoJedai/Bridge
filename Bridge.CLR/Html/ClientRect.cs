@@ -1,7 +1,7 @@
 ﻿namespace Bridge.CLR.Html
 {
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("ClientRect")]
+    [Ignore]
+    [Name("ClientRect")]
 	public class ClientRect  
     {
 		public ClientRect() 

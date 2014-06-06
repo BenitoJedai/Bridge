@@ -6,8 +6,8 @@ namespace Bridge.CLR.Html
     /// <summary>
     /// The PositionError interface represents the reason of an error occuring when using the geolocating device.
     /// </summary>
-    [Bridge.CLR.Ignore]
-    [Bridge.CLR.Name("Object")]
+    [Ignore]
+    [Name("Object")]
     public class GeolocationPositionError
     {
         private GeolocationPositionError()
@@ -25,7 +25,7 @@ namespace Bridge.CLR.Html
         public readonly string Message;
     }
 
-    [Bridge.CLR.Ignore]
+    [Ignore]
     public enum GeolocationErrorCode
     {
         /// <summary>

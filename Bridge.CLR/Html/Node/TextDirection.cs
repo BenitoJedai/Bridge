@@ -3,9 +3,9 @@
     /// <summary>
     /// The element attribute gets or sets the text writing directionality of the content of the current element.
     /// </summary>
-    [Bridge.CLR.Ignore]
+    [Ignore]
     [Bridge.CLR.EnumEmit(EnumEmit.StringNameLowerCase)]
-    [Bridge.CLR.Name("String")]
+    [Name("String")]
     public enum TextDirection
     {
         /// <summary>
