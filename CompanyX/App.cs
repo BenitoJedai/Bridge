@@ -1,9 +1,6 @@
 ﻿using Bridge.CLR.Html;
 using Bridge.CLR;
-using Bridge;
 using System;
-
-
 
 namespace CompanyX
 {
@@ -107,10 +104,6 @@ namespace CompanyX
             person.DoSomething("Person.Name", person);
 
             var company = new Company { Name = "Object.NET" };
-
-            var customer = new Customer { IsGood = true };
-
-            Console.Log("IsGood", customer.IsGood);
 
             //company.DoSomething();
 
