@@ -69,7 +69,7 @@ namespace Bridge.NET
 
         public virtual int EnumEmitMode(DefaultResolvedTypeDefinition type)
         {
-            string enumAttr = Translator.CLR_ASSEMBLY + ".EnumEmitAttribute";
+            string enumAttr = Translator.CLR_ASSEMBLY + ".EnumAttribute";
             int result = -1;
             type.Attributes.Any(attr => {
                 if (attr.Constructor != null && attr.Constructor.DeclaringType.FullName == enumAttr && attr.PositionalArguments.Count > 0)
