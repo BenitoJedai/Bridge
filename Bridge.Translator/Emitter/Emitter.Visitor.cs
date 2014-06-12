@@ -310,7 +310,7 @@ namespace Bridge.NET
                         this.Write("/");
                         break;
                     case BinaryOperatorType.Equality:
-                        this.Write("==");
+                        this.Write("===");
                         break;
                     case BinaryOperatorType.ExclusiveOr:
                         this.Write("^");
@@ -322,7 +322,7 @@ namespace Bridge.NET
                         this.Write(">=");
                         break;
                     case BinaryOperatorType.InEquality:
-                        this.Write("!=");
+                        this.Write("!==");
                         break;
                     case BinaryOperatorType.LessThan:
                         this.Write("<");
@@ -543,9 +543,32 @@ namespace Bridge.NET
             MemberResolveResult member = resolveResult as MemberResolveResult;           
             
             string inline = member != null ? this.GetInline(member.Member) : null;
+            bool hasInline = !string.IsNullOrEmpty(inline);
+            bool hasThis = hasInline && inline.Contains("{this}");
             string appendAdditionalCode = null;
 
-            if (!string.IsNullOrEmpty(inline) && member.Member.IsStatic)
+            if (hasThis) 
+            {
+                this.Write("");
+                var oldBuilder = this.Output;
+                this.Output = new StringBuilder();
+                memberReferenceExpression.Target.AcceptVisitor(this);
+                inline = inline.Replace("{this}", this.Output.ToString());
+                this.Output = oldBuilder;
+
+                if (resolveResult is InvocationResolveResult)
+                {
+                    this.PushWriter(inline);
+                }
+                else
+                {
+                    this.Write(inline);
+                }
+                
+                return;
+            }
+
+            if (hasInline && member.Member.IsStatic)
             {
                 this.PushWriter(inline);                
             }
@@ -648,7 +671,14 @@ namespace Bridge.NET
                 }
                 else if (!string.IsNullOrEmpty(inline))
                 {
-                    this.PushWriter(inline);
+                    if (resolveResult is InvocationResolveResult)
+                    {
+                        this.PushWriter(inline);
+                    }
+                    else
+                    {
+                        this.Write(inline);
+                    }
                 }
                 else if (member.Member.EntityType == EntityType.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous && !this.Validator.IsObjectLiteral(member.Member.DeclaringTypeDefinition))
                 {
@@ -825,7 +855,7 @@ namespace Bridge.NET
                                 var args = new List<string>(argsCount + 1);
 
                                 this.Output = new StringBuilder();
-                                this.WriteThisExtension(invocationExpression);
+                                this.WriteThisExtension(invocationExpression.Target);
                                 args.Add(this.Output.ToString());
 
                                 foreach (var arg in argsExpressions)
@@ -851,7 +881,7 @@ namespace Bridge.NET
                                 this.Write(name);
                                 this.WriteOpenParentheses();
 
-                                this.WriteThisExtension(invocationExpression);
+                                this.WriteThisExtension(invocationExpression.Target);
 
                                 if (argsCount > 0)
                                 {
@@ -1117,10 +1147,22 @@ namespace Bridge.NET
                 return;
             }
 
-            var customCtor = this.Validator.GetCustomConstructor(type) ?? "";
+            var tupleArguments = this.GetArgumentsList(objectCreateExpression);
+            var argsExpressions = tupleArguments.Item1;
+            var paramsArg = tupleArguments.Item2;
+            var argsCount = argsExpressions.Count();
+
+            var invocationResolveResult = this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult;
+            string inlineCode = null;
+            if (invocationResolveResult != null)
+            {
+                inlineCode = this.GetInline(invocationResolveResult.Member);
+            }
+
+            var customCtor = this.Validator.GetCustomConstructor(type) ?? "";            
             var hasInitializer = !objectCreateExpression.Initializer.IsNull && objectCreateExpression.Initializer.Elements.Count > 0;
 
-            if (Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
+            if (inlineCode == null && Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
             {
                 this.WriteOpenBrace();
                 this.WriteSpace();
@@ -1147,30 +1189,55 @@ namespace Bridge.NET
                     this.WriteOpenParentheses();
                 }
 
-                if (String.IsNullOrEmpty(customCtor))
+                if (inlineCode != null)
                 {
-                    this.WriteNew();
-                    objectCreateExpression.Type.AcceptVisitor(this);
+                    StringBuilder savedBuilder = this.Output;
+
+                    var args = new List<string>(argsCount);
+
+                    foreach (var arg in argsExpressions)
+                    {
+                        this.Output = new StringBuilder();
+                        arg.AcceptVisitor(this);
+                        args.Add((arg == paramsArg ? "[" : "") + this.Output.ToString());
+                    }
+
+                    if (paramsArg != null)
+                    {
+                        args[args.Count - 1] = args[args.Count - 1] + "]";
+                    }
+
+                    this.Output = savedBuilder;
+
+                    this.Output.Append(String.Format(inlineCode, args.ToArray()));
                 }
                 else
                 {
-                    this.Write(customCtor);
-                }               
 
-                this.WriteOpenParentheses();
-
-                if (!this.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor) > 1)
-                {
-                    this.WriteScript(this.GetOverloadNameInvocationResolveResult(this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult));
-
-                    if (objectCreateExpression.Arguments.Count > 0)
+                    if (String.IsNullOrEmpty(customCtor))
                     {
-                        this.WriteComma();
+                        this.WriteNew();
+                        objectCreateExpression.Type.AcceptVisitor(this);
                     }
-                }
+                    else
+                    {
+                        this.Write(customCtor);
+                    }
 
-                this.EmitExpressionList(objectCreateExpression.Arguments, null);
-                this.WriteCloseParentheses();
+                    this.WriteOpenParentheses();
+
+                    if (!this.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor) > 1)
+                    {
+                        this.WriteScript(this.GetOverloadNameInvocationResolveResult(this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult));
+
+                        if (objectCreateExpression.Arguments.Count > 0)
+                        {
+                            this.WriteComma();
+                        }
+                    }
+                    this.EmitExpressionList(argsExpressions, paramsArg);
+                    this.WriteCloseParentheses();
+                }
 
                 if (hasInitializer)
                 {
@@ -1374,37 +1441,90 @@ namespace Bridge.NET
 
         public override void VisitCastExpression(CastExpression castExpression)
         {
+            bool isInlineCast;
+            string castCode = this.GetCastCode(castExpression.Expression, castExpression.Type, out isInlineCast);
+
+            if (isInlineCast)
+            {
+                this.EmitInlineCast(castExpression.Expression, castExpression.Type, castCode);
+                return;
+            }
+            
             this.Write(Emitter.ROOT);
             this.WriteDot();
             this.Write(Emitter.CAST);
             this.WriteOpenParentheses();
             castExpression.Expression.AcceptVisitor(this);
-            this.WriteComma();
-            castExpression.Type.AcceptVisitor(this);
+            this.WriteComma();           
+
+            if (castCode != null)
+            {
+                this.Write(castCode);
+            }
+            else
+            {
+                this.EmitCastType(castExpression.Type);
+            }
             this.WriteCloseParentheses();
-        }
+        }        
 
         public override void VisitAsExpression(AsExpression asExpression)
         {
+            bool isInlineCast;
+            string castCode = this.GetCastCode(asExpression.Expression, asExpression.Type, out isInlineCast);
+
+            if (isInlineCast)
+            {
+                this.EmitInlineCast(asExpression.Expression, asExpression.Type, castCode);
+                return;
+            }
+
             this.Write(Emitter.ROOT);
             this.WriteDot();
             this.Write(Emitter.AS);
             this.WriteOpenParentheses();
             asExpression.Expression.AcceptVisitor(this);
             this.WriteComma();
-            asExpression.Type.AcceptVisitor(this);
+
+            if (castCode != null)
+            {
+                this.Write(castCode);
+            }
+            else
+            {
+                this.EmitCastType(asExpression.Type);
+            }
+
             this.WriteCloseParentheses();
         }
 
         public override void VisitIsExpression(IsExpression isExpression)
         {
+            bool isInlineCast;
+            string castCode = this.GetCastCode(isExpression.Expression, isExpression.Type, out isInlineCast);
+
+            if (isInlineCast)
+            {
+                this.EmitInlineCast(isExpression.Expression, isExpression.Type, castCode);
+                return;
+            }
+
             this.Write(Emitter.ROOT);
             this.WriteDot();
             this.Write(Emitter.IS);
             this.WriteOpenParentheses();
             isExpression.Expression.AcceptVisitor(this);
             this.WriteComma();
-            isExpression.Type.AcceptVisitor(this);
+
+            if (castCode != null)
+            {
+                this.Write(castCode);
+            }
+            else
+            {
+                this.EmitCastType(isExpression.Type);
+            }
+
             this.WriteCloseParentheses();
         }
 

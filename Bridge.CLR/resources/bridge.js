@@ -40,6 +40,9 @@ var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationLis
 if(!exclude){result.push(list1[i]);}}
 result.reverse();return Bridge.fn.$build(result);}}};
 
+Bridge.nullable={hasValue:function(obj){return(obj!==null)&&(obj!==undefined);},getValue:function(obj){if(!Bridge.nullable.hasValue(obj)){throw Error("Nullable instance doesn't have a value.");}
+return obj;},getValueOrDefault:function(obj,defValue){return Bridge.nullable.hasValue(obj)?obj:defValue;}};
+
 (function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=='function'&&typeof base[name]=='function'&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
 prototype.$$name=className;function Class(){if(!(this instanceof Class)){var args=Array.prototype.slice.call(arguments,0),object=Object.create(Class.prototype),result=Class.apply(object,args);return typeof result==='object'?result:object;}
 if(!initializing){if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=='string'&&Bridge.isFunction(this[arguments[0]])){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}

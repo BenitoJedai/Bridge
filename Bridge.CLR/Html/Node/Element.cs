@@ -6,7 +6,13 @@ namespace Bridge.CLR.Html
     [Name("HTMLElement")]
     public class Element : Node
     {
-        protected internal Element()
+        [Template("document.createElement('div')")]
+        public Element()
+        {
+        }
+
+        [Template("document.createElement({0})")]
+        public Element(string tagName)
         {
         }
 

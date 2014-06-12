@@ -55,8 +55,18 @@
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\ScriptAttribute.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Html\Elements\InputType.cs" />
+    <Compile Include="Html\Elements\FormElement.cs" />
+    <Compile Include="Html\File\BlobPropertyBag.cs" />
+    <Compile Include="Html\File\Endings.cs" />
+    <Compile Include="Html\File\File.cs" />
+    <Compile Include="Html\File\FileList.cs" />
+    <Compile Include="Html\FormControlsCollection.cs" />
+    <Compile Include="Html\TypedArray\ArrayBuffer.cs" />
+    <Compile Include="Html\TypedArray\ArrayBufferView.cs" />
     <Compile Include="Html\CaretPosition.cs" />
-    <Compile Include="Html\Elements\Input.cs" />
+    <Compile Include="Html\Elements\InputElement.cs" />
+    <Compile Include="Html\File\Blob.cs" />
     <Compile Include="Html\INodeFilter.cs" />
     <Compile Include="Html\NodeFilter.cs" />
     <Compile Include="Html\NodeIterator.cs" />
@@ -212,6 +222,8 @@
     <Compile Include="Html\Location.cs" />
     <Compile Include="Html\BarProp.cs" />
     <Compile Include="Html\TreeWalker.cs" />
+    <Compile Include="Html\TypedArray\DataView.cs" />
+    <Compile Include="Html\ValidityState.cs" />
     <Compile Include="Html\WindowInstance.cs" />
     <Compile Include="Html\Window.cs" />
     <Compile Include="System\Action.cs" />
@@ -238,6 +250,7 @@
     <Compile Include="System\Error.cs" />
     <Compile Include="System\Delegate.cs" />
     <Compile Include="System\Math.cs" />
+    <Compile Include="System\Nullable.cs" />
     <Compile Include="System\Number.cs" />
     <Compile Include="System\Object.cs" />
     <Compile Include="System\RegExp.cs" />
@@ -245,11 +258,13 @@
     <Compile Include="System\String.cs" />
     <Compile Include="System\Stubs.cs" />
     <Compile Include="System\TimeSpan.cs" />
+    <Compile Include="System\Any.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\Browser.js" />
     <Content Include="resources\Class.js" />
     <Content Include="resources\Collections.js" />
+    <Content Include="resources\Nullable.js" />
     <Content Include="resources\Core.js" />
     <EmbeddedResource Include="resources\bridge-debug.js" />
     <EmbeddedResource Include="resources\bridge.js" />

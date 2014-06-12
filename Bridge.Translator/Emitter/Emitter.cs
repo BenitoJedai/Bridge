@@ -556,7 +556,13 @@ namespace Bridge.NET
 
                         if (resolveResult is TypeResolveResult)
                         {
-                            sb.Append("$").Append(((TypeResolveResult)resolveResult).Type.Name);    
+                            var type = ((TypeResolveResult)resolveResult).Type;
+                            sb.Append("$").Append(type.Name);
+
+                            if (type.TypeParameterCount > 0)
+                            {
+                                sb.Append("$").Append(type.TypeParameterCount);
+                            }
                         }
                         else
                         {
@@ -1502,6 +1508,8 @@ namespace Bridge.NET
 
         protected virtual string ResolveNamespaceOrType(string id, bool allowNamespaces)
         {
+            id = id.LeftOf('<').Replace("`", "$");
+            
             if (allowNamespaces && this.Namespaces.Contains(id))
             {
                 return id;
@@ -1944,7 +1952,7 @@ namespace Bridge.NET
 
                         if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
                         {
-                            if (((TypeResolveResult)resolveResult).Type.FullName != method.Parameters[i].ParameterType.FullName)
+                            if (((TypeResolveResult)resolveResult).Type.ReflectionName != method.Parameters[i].ParameterType.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
                             {
                                 match = false;
                                 break;
@@ -2333,7 +2341,7 @@ namespace Bridge.NET
 
                 foreach (var p in methodDef.Parameters)
                 {
-                    sb.Append("$").Append(p.ParameterType.Name.Replace("[]", "$Array"));
+                    sb.Append("$").Append(p.ParameterType.Name.Replace("[]", "$Array").Replace("`", "$"));
                 }
 
                 if (methodDef.HasGenericParameters)
@@ -2366,6 +2374,10 @@ namespace Bridge.NET
                 foreach (var p in args)
                 {
                     sb.Append("$").Append(p.Type.Name.Replace("[]", "$Array"));
+                    if (p.Type.TypeParameterCount > 0)
+                    {
+                        sb.Append("$").Append(p.Type.TypeParameterCount);
+                    }
                 }
 
                 var defaultResolvedMethod = invocationResult.Member as DefaultResolvedMethod;
@@ -2403,6 +2415,20 @@ namespace Bridge.NET
         {
             var arguments = invocationExpression.Arguments.ToList();
             var resolveResult = this.Resolver.ResolveNode(invocationExpression, this) as InvocationResolveResult;
+
+            return this.GetArgumentsList(resolveResult, arguments);
+        }
+
+        protected virtual Tuple<IEnumerable<Expression>, Expression> GetArgumentsList(ObjectCreateExpression objectCreateExpression)
+        {
+            var arguments = objectCreateExpression.Arguments.ToList();
+            var resolveResult = this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult;
+
+            return this.GetArgumentsList(resolveResult, arguments);
+        }
+
+        protected virtual Tuple<IEnumerable<Expression>, Expression> GetArgumentsList(InvocationResolveResult resolveResult, IList<Expression> arguments)
+        {            
             Expression paramsArg = null;
 
             if (resolveResult != null)
@@ -2465,17 +2491,118 @@ namespace Bridge.NET
             return new Tuple<IEnumerable<Expression>, Expression>(arguments, paramsArg);
         }
 
-        protected virtual void WriteThisExtension(InvocationExpression invocationExpression)
+        protected virtual void WriteThisExtension(Expression target)
         {
-            if (invocationExpression.Target.HasChildren)
+            if (target.HasChildren)
             {
-                var first = invocationExpression.Target.Children.ElementAt(0);
+                var first = target.Children.ElementAt(0);
                 var expression = first as Expression;
 
                 if (expression != null)
                 {
                     expression.AcceptVisitor(this);
                 }
+            }
+        }
+
+        protected virtual string GetCastCode(Expression expression, AstType astType, out bool isInline)
+        {
+            var resolveResult = this.Resolver.ResolveNode(astType, this) as TypeResolveResult;
+            var exprResolveResult = this.Resolver.ResolveNode(expression, this);
+            string inline = null;
+            isInline = false;
+
+            var method = exprResolveResult.Type.GetMethods().FirstOrDefault(m =>
+            {
+                if (m.IsOperator && m.Name == "op_Explicit" && 
+                    m.Parameters.Count == 1 &&                     
+                    m.ReturnType.ReflectionName == resolveResult.Type.ReflectionName &&
+                    m.Parameters[0].Type.ReflectionName == exprResolveResult.Type.ReflectionName                    
+                    )
+                {
+                    string tmpInline = this.GetInline(m);
+                    if (!string.IsNullOrWhiteSpace(tmpInline)) 
+                    {
+                        inline = tmpInline;
+                        return true;
+                    }                    
+                }
+                
+                return false;
+            });            
+
+            if (inline != null) 
+            {
+                isInline = true;
+                return inline;
+            }
+
+            if (resolveResult != null)
+            {
+                IEnumerable<IAttribute> attributes = null;
+                DefaultResolvedTypeDefinition type = resolveResult.Type as DefaultResolvedTypeDefinition;
+                if (type != null)
+                {
+                    attributes = type.Attributes;
+                }
+                else
+                {
+                    ParameterizedType paramType = resolveResult.Type as ParameterizedType;
+                    if (paramType != null)
+                    {
+                        attributes = paramType.GetDefinition().Attributes;
+                    }
+                }
+
+                if (attributes != null)
+                {
+                    var attribute = this.GetAttribute(attributes, Translator.CLR_ASSEMBLY + ".CastAttribute");
+
+                    if (attribute != null)
+                    {
+                        return attribute.PositionalArguments[0].ConstantValue.ToString();
+                    }
+                }
+            }
+            return null;
+        }
+
+        protected virtual void EmitInlineCast(Expression expression, AstType astType, string castCode)
+        {
+            this.Write("");
+
+            if (castCode.Contains("{this}"))
+            {
+                var oldBuilder = this.Output;
+                this.Output = new StringBuilder();
+                expression.AcceptVisitor(this);
+                castCode = castCode.Replace("{this}", this.Output.ToString());
+                this.Output = oldBuilder;
+            }
+
+            if (castCode.Contains("{0}"))
+            {
+                var oldBuilder = this.Output;
+                this.Output = new StringBuilder();
+                this.EmitCastType(astType);
+                castCode = castCode.Replace("{0}", this.Output.ToString());
+                this.Output = oldBuilder;
+            }
+
+            this.Write(castCode);
+        }
+
+        protected virtual void EmitCastType(AstType astType)
+        {
+            var resolveResult = this.Resolver.ResolveNode(astType, this);
+
+            if (NullableType.IsNullable(resolveResult.Type))
+            {
+                this.Write(this.ShortenTypeName(Helpers.ReplaceSpecialChars(NullableType.GetUnderlyingType(resolveResult.Type).FullName)));
+            }
+            else
+            {
+                astType.AcceptVisitor(this);
             }
         }
     }
