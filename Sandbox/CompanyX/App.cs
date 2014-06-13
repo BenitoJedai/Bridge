@@ -49,6 +49,11 @@ namespace CompanyX
 
             var input = Document.GetElementById("input1") as InputElement;
             input.Value = "test2";
+
+            var div2 = new Element { ClassName = "box" };
+
+            div2.AppendChild(input);
+            div.AppendChild(div2);
             
             //input.Value = "MyValue";
         }

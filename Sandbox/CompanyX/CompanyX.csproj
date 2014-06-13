@@ -57,9 +57,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\assemblies\BridgeNoTask.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)Bridge.DateTime\Build\DateTime.js" "$(ProjectDir)Build\DateTime.js*" /y
-xcopy "$(SolutionDir)Bridge.DateTime\Build\DateTime.DayOfWeek.js" "$(ProjectDir)Build\DateTime.DayOfWeek.js*" /y
-xcopy "$(SolutionDir)Bridge.DateTime\Build\DateTime.UX.js" "$(ProjectDir)Build\DateTime.UX.js*" /y
+    <PostBuildEvent>xcopy "$(SolutionDir)Extensions\Bridge.DateTime\Build\DateTime.js" "$(ProjectDir)Build\DateTime.js*" /y
+
+xcopy "$(SolutionDir)Extensions\Bridge.DateTime\Build\DateTime.DayOfWeek.js" "$(ProjectDir)Build\DateTime.DayOfWeek.js*" /y
+
+xcopy "$(SolutionDir)Extensions\Bridge.DateTime\Build\DateTime.UX.js" "$(ProjectDir)Build\DateTime.UX.js*" /y
 
 "$(ProjectDir)build.bat"</PostBuildEvent>
   </PropertyGroup>

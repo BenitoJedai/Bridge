@@ -1,13 +1,18 @@
 /assemblies/*
 !/assemblies/*.targets
 
-/CompanyX/Build/*.js
+/Sandbox/Bridge.TestLibrary/build/*.js
+/Sandbox/CompanyX/Build/*.js
+/Extensions/Bridge.DateTime/Build/*
 
 .DS_Store
 
-/Bridge.TestLibrary/build/*
-/Bridge.DateTime/Build/*
-/DateTime/Build/*
+# NuGet Packages Directory
+packages/*
+!packages/repositories.config
+
+Libs/NRefactory/packages/*
+!Libs/NRefactory/packages/repositories.config
 
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
@@ -89,14 +94,6 @@ publish
 
 # Publish Web Output
 *.Publish.xml
-
-# NuGet Packages Directory
-packages/*
-!packages/repositories.config
-
-Libs/NRefactory/packages/*
-!Libs/NRefactory/packages/repositories.config
-
 
 # Windows Azure Build Output
 csx
