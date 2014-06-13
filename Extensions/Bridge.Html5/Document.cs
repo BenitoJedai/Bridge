@@ -1346,11 +1346,32 @@ namespace Bridge.Html5
         }
 
         /// <summary>
+        /// Returns a reference to the element by its ID.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id">id is a case-sensitive string representing the unique ID of the element being sought.</param>
+        /// <returns>element is a reference to an Element object, or null if an element with the specified ID is not in the document.</returns>
+        public static T GetElementById<T>(string id) where T:Element
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Returns the first element within the document (using depth-first pre-order traversal of the document's nodes) that matches the specified group of selectors.
         /// </summary>
         /// <param name="selectors">selectors is a string containing one or more CSS selectors separated by commas.</param>
         /// <returns></returns>
         public static Element QuerySelector(string selectors)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the first element within the document (using depth-first pre-order traversal of the document's nodes) that matches the specified group of selectors.
+        /// </summary>
+        /// <param name="selectors">selectors is a string containing one or more CSS selectors separated by commas.</param>
+        /// <returns></returns>
+        public static T QuerySelector<T>(string selectors) where T : Element
         {
             return null;
         }

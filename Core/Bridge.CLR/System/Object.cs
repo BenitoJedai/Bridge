@@ -56,5 +56,11 @@ namespace System
         public static void CallFn(this object obj, string name, params object[] args)
         {
         }
+
+        [Template("{0}")]
+        public static T As<T>(this object obj)
+        {
+            return default(T);
+        }
     }
 }

@@ -2077,7 +2077,7 @@ namespace Bridge.NET
         {
             string attrName = Translator.CLR_ASSEMBLY + ".TemplateAttribute";
 
-            if (entity.EntityType == EntityType.Property) 
+            if (entity.SymbolKind == SymbolKind.Property) 
             {
                 var prop = (IProperty)entity;
                 entity = this.IsAssignment ? prop.Setter : prop.Getter;
@@ -2321,7 +2321,7 @@ namespace Bridge.NET
             {
                 return false;
             }
-            var resolvedMethod = invocationResult.Member as DefaultResolvedMethod;
+            var resolvedMethod = invocationResult.Member as IMethod;
             return resolvedMethod != null && resolvedMethod.IsPartial && !resolvedMethod.HasBody;
         }
 
@@ -2380,20 +2380,11 @@ namespace Bridge.NET
                     }
                 }
 
-                var defaultResolvedMethod = invocationResult.Member as DefaultResolvedMethod;
+                var defaultResolvedMethod = invocationResult.Member as IMethod;
 
                 if (defaultResolvedMethod != null && defaultResolvedMethod.TypeParameters.Count > 0)
                 {
                     sb.Append("$").Append(defaultResolvedMethod.TypeParameters.Count);
-                }
-                else
-                {
-                    var specializedMethod = invocationResult.Member as SpecializedMethod;
-
-                    if (specializedMethod != null && specializedMethod.TypeParameters.Count > 0)
-                    {
-                        sb.Append("$").Append(specializedMethod.TypeParameters.Count);
-                    }
                 }
 
                 name = sb.ToString();
@@ -2434,7 +2425,7 @@ namespace Bridge.NET
             if (resolveResult != null)
             {
                 var parameters = resolveResult.Member.Parameters;
-                var resolvedMethod = resolveResult.Member as DefaultResolvedMethod;
+                var resolvedMethod = resolveResult.Member as IMethod;
                 var invocationResult = resolveResult as CSharpInvocationResolveResult;
                 int shift = 0;
 

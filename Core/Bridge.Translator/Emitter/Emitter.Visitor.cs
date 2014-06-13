@@ -397,9 +397,9 @@ namespace Bridge.NET
                         
                         return;
                     }
-
+                    
                     if (memberResult != null &&
-                         memberResult.Member is DefaultResolvedMethod &&
+                         memberResult.Member is IMethod &&
                          !(
                             identifierExpression.Parent is InvocationExpression &&
                             identifierExpression.NextSibling != null &&
@@ -408,7 +408,7 @@ namespace Bridge.NET
                          )
                     )
                     {
-                        var resolvedMethod = (DefaultResolvedMethod)memberResult.Member;
+                        var resolvedMethod = (IMethod)memberResult.Member;
                         var isExtensionMethod = resolvedMethod.IsExtensionMethod;
                         this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.DELEGATE_BIND_SCOPE : Emitter.DELEGATE_BIND) + "(");
 
@@ -628,8 +628,8 @@ namespace Bridge.NET
                     this.Write(this.ShortenTypeName(typeResolveResult.Type.FullName));
                     return;
                 }
-                else if (member != null && 
-                         member.Member is DefaultResolvedMethod && 
+                else if (member != null &&
+                         member.Member is IMethod && 
                          !(
                             memberReferenceExpression.Parent is InvocationExpression && 
                             memberReferenceExpression.NextSibling != null && 
@@ -637,8 +637,8 @@ namespace Bridge.NET
                             ((TokenRole)memberReferenceExpression.NextSibling.Role).Token == "("
                          )
                     )
-                {                    
-                    var resolvedMethod = (DefaultResolvedMethod)member.Member;
+                {
+                    var resolvedMethod = (IMethod)member.Member;
 
                     var isExtensionMethod = resolvedMethod.IsExtensionMethod;
 
@@ -842,7 +842,7 @@ namespace Bridge.NET
 
                     if (invocationResult != null)
                     {
-                        var resolvedMethod = invocationResult.Member as DefaultResolvedMethod;
+                        var resolvedMethod = invocationResult.Member as IMethod;
 
                         if (resolvedMethod != null && resolvedMethod.IsExtensionMethod)
                         {

@@ -54,7 +54,7 @@
     <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\ScriptAttribute.cs" />
-    <Compile Include="Core.cs" />
+    <Compile Include="Script.cs" />
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\Boolean.cs" />

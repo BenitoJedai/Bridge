@@ -127,7 +127,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of years represented by value.</returns>
         public DateTime AddYears(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetFullYear(this.DateData.GetFullYear() + value);
             }
@@ -142,7 +142,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and months.</returns>
         public DateTime AddMonths(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetMonth(this.DateData.GetMonth() + value);
             }
@@ -157,7 +157,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of days represented by value.</returns>
         public DateTime AddDays(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetDate(this.DateData.GetDate() + value);
             }
@@ -172,7 +172,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of hours represented by value.</returns>
         public DateTime AddHours(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetHours(this.DateData.GetHours() + value);
             }
@@ -187,7 +187,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of minutes represented by value.</returns>
         public DateTime AddMinutes(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetMinutes(this.DateData.GetMinutes() + value);
             }            
@@ -202,7 +202,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of seconds represented by value.</returns>
         public DateTime AddSeconds(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetSeconds(this.DateData.GetSeconds() + value);
             }
@@ -217,7 +217,7 @@ namespace System
         /// <returns>An object whose value is the sum of the date and time represented by this instance and the number of milliseconds represented by value.</returns>
         public DateTime AddMilliseconds(int value)
         {
-            if (Window.IsDefined(value))
+            if (Script.IsDefined(value))
             {
                 this.DateData.SetMilliseconds(this.DateData.GetMilliseconds() + value);
             }

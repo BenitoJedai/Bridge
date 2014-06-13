@@ -10,19 +10,8 @@ namespace TestProject
     {
         public static void Start()
         {
-            Window.OnLoad = delegate {
-                var txt = new InputElement()
-                {
-                    Value = "Hello Input",
-                    Style =
-                    {
-                        Width = "239px",
-                        Color = HTMLColor.Red
-                    }
-                };
-
-                Document.Body.AppendChild(txt);
-            };            
+            Document.GetElementById("id").As<InputElement>().Value = "test";
+            Document.GetElementById("id").CallFn("fnName");
         }
     }
 }

@@ -1389,19 +1389,7 @@ namespace Bridge.Html5
         public static T Eval<T>(string expression)
         {
             return default(T);
-        }
-                
-        /// <summary>
-        /// Inject javascript code
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        [Bridge.CLR.Template]
-        public static T Inline<T>(string code)
-        {
-            return default(T);
-        }
+        }         
 
         /// <summary>
         /// The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.
@@ -1501,34 +1489,6 @@ namespace Bridge.Html5
         public static string EncodeURIComponent(string component)
         {
             return null;
-        }
-
-        /// <summary>
-        /// An Array-like object corresponding to the arguments passed to a function.
-        /// </summary>
-        [Template("arguments")]
-        public static readonly object[] Arguments;
-
-        [Template("debugger")]
-        public static void Debugger()
-        {
-        }
-
-        [Template("typeof {0}")]
-        public static string TypeOf(object obj)
-        {
-            return null;
-        }
-
-        [Template("delete {0}")]
-        public static void Delete(object value)
-        {
-        }
-
-        [Template("typeof {0} !== 'undefined'")]
-        public static bool IsDefined(object value)
-        {
-            return false;
         }
 
         #endregion Methods

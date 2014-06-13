@@ -39,6 +39,16 @@ namespace Bridge.Html5
         }
 
         /// <summary>
+        /// Returns the first Element node within the DocumentFragment, in document order, that matches the specified selectors.
+        /// </summary>
+        /// <param name="selectors">selectors is a string containing one or more CSS selectors separated by commas.</param>
+        /// <returns></returns>
+        public T QuerySelector<T>(string selectors) where T : Element
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Returns a NodeList of all the Element nodes within the DocumentFragment that match the specified selectors.
         /// </summary>
         /// <param name="selectors">String containing one or more CSS selectors separated by commas.</param>
@@ -54,6 +64,16 @@ namespace Bridge.Html5
         /// <param name="elementId"></param>
         /// <returns></returns>
         public Element GetElementById(string elementId)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the first Element node within the DocumentFragment, in document order, that matches the specified ID.
+        /// </summary>
+        /// <param name="id">id is a case-sensitive string representing the unique ID of the element being sought.</param>
+        /// <returns>element is a reference to an Element object, or null if an element with the specified ID is not in the document.</returns>
+        public T GetElementById<T>(string id) where T : Element
         {
             return null;
         }

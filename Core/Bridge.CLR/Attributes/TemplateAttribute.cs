@@ -9,7 +9,7 @@ namespace Bridge.CLR
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Constructor)]
     public sealed class TemplateAttribute : Attribute
     {
-        public TemplateAttribute()
+        internal TemplateAttribute()
         {
         }
 
