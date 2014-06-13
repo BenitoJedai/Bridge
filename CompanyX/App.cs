@@ -37,20 +37,37 @@ namespace CompanyX
 
             Document.Body.OnLoad += delegate
             {
-                //var div2 = new Element();
-                //div2.ClassName = "box";
-                //div2.Style.Height = "100px";
-                //div2.Style.Width = "100px";
-
-                //Document.Body.AppendChild(div2);
-
                 Console.Log("+=OnLoad");
             };
 
-            var input = Document.GetElementById("input1") as Input;
+            //var input = Document.GetElementById<InputElement>("input1");
+
+            var input = Document.GetElementById("input1") as InputElement;
             input.Value = "test2";
-            
-            //input.Value = "MyValue";
+
+            var txt = new InputElement()
+            {
+                Value = "Hello Input",
+                Style =
+                {
+                    Width = "100px"
+                }
+            };
+
+            div.AppendChild(txt);
+
+            //if (input is Input)
+            //{
+            //    Console.Log("Input = true");
+            //}
+
+            //Window.Alert(input.Value);
+
+            Document.GetElementById("input1")
+                .AddEventListener("click", delegate (Event e)
+            {
+                Window.Alert("Hello World...");
+            }, false);
         }
 
         public static void Start()
