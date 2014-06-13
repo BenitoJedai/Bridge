@@ -94,6 +94,10 @@ publish
 packages/*
 !packages/repositories.config
 
+Libs/NRefactory/packages/*
+!Libs/NRefactory/packages/repositories.config
+
+
 # Windows Azure Build Output
 csx
 *.build.csdef
