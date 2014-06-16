@@ -124,8 +124,16 @@
     <Compile Include="DOMStringList.cs" />
     <Compile Include="DOMStringMap.cs" />
     <Compile Include="DOMTokenList.cs" />
+    <Compile Include="Elements\BRElement.cs" />
+    <Compile Include="Elements\BodyElement.cs" />
+    <Compile Include="Elements\BaseElement.cs" />
+    <Compile Include="Elements\AudioElement.cs" />
+    <Compile Include="Elements\AreaElement.cs" />
     <Compile Include="Elements\FormElement.cs" />
+    <Compile Include="Elements\AnchorElement.cs" />
+    <Compile Include="Elements\ButtonElement.cs" />
     <Compile Include="Elements\InputElement.cs" />
+    <Compile Include="Elements\ButtonType.cs" />
     <Compile Include="Elements\InputType.cs" />
     <Compile Include="ErrorEventHandler.cs" />
     <Compile Include="Errors\EvalError.cs" />
@@ -199,10 +207,11 @@
     <Compile Include="TypedArray\ArrayBuffer.cs" />
     <Compile Include="TypedArray\ArrayBufferView.cs" />
     <Compile Include="TypedArray\DataView.cs" />
+    <Compile Include="URLSearchParams.cs" />
     <Compile Include="ValidityState.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="WindowInstance.cs" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\assemblies\BridgeNoTask.targets" />  
+  <Import Project="..\..\assemblies\BridgeNoTask.targets" />
 </Project>

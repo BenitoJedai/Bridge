@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Bridge.CLR;
 
 namespace Bridge.Html5

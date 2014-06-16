@@ -348,7 +348,7 @@ namespace Bridge.Html5
         /// <summary>
         /// The access key assigned to the element.
         /// </summary>
-        public readonly string AccessKey;
+        public string AccessKey;
 
         /// <summary>
         /// A string that represents the element's assigned access key.

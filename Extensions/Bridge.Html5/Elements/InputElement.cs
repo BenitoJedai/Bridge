@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Bridge.CLR;
 
 namespace Bridge.Html5
@@ -25,11 +24,6 @@ namespace Bridge.Html5
         /// image/* representing image files HTML5
         /// </summary>
         public string Accept;
-
-        /// <summary>
-        /// A single-character that the user can press to switch input focus to the control. This attribute is global in HTML5. Obsolete since HTML5
-        /// </summary>
-        public string AccessKey;
 
         /// <summary>
         /// Alignment of the element.
