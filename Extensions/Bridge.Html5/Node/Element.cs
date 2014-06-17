@@ -421,6 +421,11 @@ namespace Bridge.Html5
         public string Title;
 
         /// <summary>
+        /// Current value in the control.
+        /// </summary>
+        public string Value;
+
+        /// <summary>
         ///  EventHandler representing the code to be called when the abort event is raised.
         /// </summary>
         [Name("onabort")]
