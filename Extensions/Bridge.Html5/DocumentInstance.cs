@@ -710,6 +710,18 @@ namespace Bridge.Html5
         }
 
         /// <summary>
+        /// In an HTML document creates the specified HTML element or HTMLUnknownElement if the element is not known.
+        /// In a XUL document creates the specified XUL element.
+        /// In other documents creates an element with a null namespaceURI.
+        /// </summary>
+        /// <param name="tagName">tagName is a string that specifies the type of element to be created. The nodeName of the created element is initialized with the value of tagName. Don't use qualified names (like "html:a") with this method.</param>
+        /// <returns>created element object</returns>
+        public T CreateElement<T>(string tagName) where T:Element
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Creates an element with the specified namespace URI and qualified name.
         /// </summary>
         /// <param name="namespaceURI"> a string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. (see section below for "Valid Namespace URI's")</param>
@@ -721,11 +733,32 @@ namespace Bridge.Html5
         }
 
         /// <summary>
+        /// Creates an element with the specified namespace URI and qualified name.
+        /// </summary>
+        /// <param name="namespaceURI"> a string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. (see section below for "Valid Namespace URI's")</param>
+        /// <param name="qualifiedName">a string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName</param>
+        /// <returns>the created element.</returns>
+        public T CreateElementNS<T>(string namespaceURI, string qualifiedName) where T:Element
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Creates an event of the type specified. The returned object should be first initialized and can then be passed to element.dispatchEvent.
         /// </summary>
         /// <param name="type">type is a string that represents the type of event to be created. Possible event types include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".</param>
         /// <returns>the created Event object.</returns>
         public Event CreateEvent(string type)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Creates an event of the type specified. The returned object should be first initialized and can then be passed to element.dispatchEvent.
+        /// </summary>
+        /// <param name="type">type is a string that represents the type of event to be created. Possible event types include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".</param>
+        /// <returns>the created Event object.</returns>
+        public T CreateEvent<T>(string type) where T:Event
         {
             return null;
         }
