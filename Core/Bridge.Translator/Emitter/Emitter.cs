@@ -12,6 +12,7 @@ using System.IO;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Bridge.NET
 {
@@ -1024,6 +1025,7 @@ namespace Bridge.NET
                 if (this.Writers.Count != count)
                 {
                     this.PopWriter();
+                    count = this.Writers.Count;
                 }
             }
 
@@ -1699,7 +1701,7 @@ namespace Bridge.NET
             return this.GetAttribute(method.Attributes, "Delegate") != null;
         }
 
-        protected virtual Tuple<bool, bool, string> GetInlineCode(InvocationExpression node)
+        protected virtual Tuple<bool, bool, string> AltGetInlineCode(InvocationExpression node)
         {
             var parts = new List<string>();
             Expression current = node.Target;
@@ -1778,12 +1780,29 @@ namespace Bridge.NET
                 {
                     bool isInlineMethod = this.Validator.IsInlineMethod(method);
                     string inlineCode = isInlineMethod ? null : this.Validator.GetInlineCode(method);
-                    
+
                     return new Tuple<bool, bool, string>(method.IsStatic, isInlineMethod, inlineCode);
                 }
             }
 
             return null;
+        }
+
+        protected virtual Tuple<bool, bool, string> GetInlineCode(InvocationExpression node)
+        {
+            var resolveResult = this.Resolver.ResolveNode(node, this);
+            var invocationResolveResult = resolveResult as InvocationResolveResult;
+
+            if (invocationResolveResult == null)
+            {
+                return this.AltGetInlineCode(node);
+            }
+
+            bool isInlineMethod = this.IsInlineMethod(invocationResolveResult.Member);
+            var inlineCode = isInlineMethod ? null : this.GetInline(invocationResolveResult.Member);
+            var isStatic = invocationResolveResult.Member.IsStatic;
+
+            return new Tuple<bool, bool, string>(isStatic, isInlineMethod, inlineCode);
         }
 
         protected virtual IEnumerable<string> GetScript(EntityDeclaration method)
@@ -2097,6 +2116,24 @@ namespace Bridge.NET
             return null;
         }
 
+        protected virtual bool IsInlineMethod(IEntity entity)
+        {
+            string attrName = Translator.CLR_ASSEMBLY + ".TemplateAttribute";
+
+            if (entity != null)
+            {
+                var attr = entity.Attributes.FirstOrDefault(a =>
+                {
+
+                    return a.AttributeType.FullName == attrName;
+                });
+
+                return attr != null && attr.PositionalArguments.Count == 0;
+            }
+
+            return false;
+        }
+
         protected virtual IEnumerable<string> GetScriptArguments(ICSharpCode.NRefactory.CSharp.Attribute attr)
         {
             if (attr == null)
@@ -2402,85 +2439,7 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual Tuple<IEnumerable<Expression>, Expression> GetArgumentsList(InvocationExpression invocationExpression)
-        {
-            var arguments = invocationExpression.Arguments.ToList();
-            var resolveResult = this.Resolver.ResolveNode(invocationExpression, this) as InvocationResolveResult;
-
-            return this.GetArgumentsList(resolveResult, arguments);
-        }
-
-        protected virtual Tuple<IEnumerable<Expression>, Expression> GetArgumentsList(ObjectCreateExpression objectCreateExpression)
-        {
-            var arguments = objectCreateExpression.Arguments.ToList();
-            var resolveResult = this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult;
-
-            return this.GetArgumentsList(resolveResult, arguments);
-        }
-
-        protected virtual Tuple<IEnumerable<Expression>, Expression> GetArgumentsList(InvocationResolveResult resolveResult, IList<Expression> arguments)
-        {            
-            Expression paramsArg = null;
-
-            if (resolveResult != null)
-            {
-                var parameters = resolveResult.Member.Parameters;
-                var resolvedMethod = resolveResult.Member as IMethod;
-                var invocationResult = resolveResult as CSharpInvocationResolveResult;
-                int shift = 0;
-
-                if (resolvedMethod != null && invocationResult != null &&
-                    resolvedMethod.IsExtensionMethod && invocationResult.IsExtensionMethodInvocation)
-                {
-                    shift = 1;
-                }
-
-                Expression[] result = new Expression[parameters.Count - shift];
-
-                int i = 0;                
-                foreach (var arg in arguments)
-                {
-                    if (arg is NamedArgumentExpression)
-                    {
-                        NamedArgumentExpression namedArg = (NamedArgumentExpression)arg;
-                        var namedParam = parameters.First(p => p.Name == namedArg.Name);
-                        var index = parameters.IndexOf(namedParam);
-
-                        result[index] = namedArg.Expression;
-                    }                    
-                    else 
-                    {
-                        if (paramsArg == null && parameters[i + shift].IsParams && !this.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition))
-                        {
-                            paramsArg = arg;
-                        }
-
-                        if (i >= result.Length)
-                        {
-                            var list = result.ToList();
-                            list.AddRange(new Expression[arguments.Count - i]);
-
-                            result = list.ToArray();
-                        }
-
-                        result[i] = arg;
-                    }
-
-                    i++;
-                }
-
-                for (i = 0; i < result.Length; i++)
-                {
-                    if (result[i] == null)
-                    {
-                        result[i] = new PrimitiveExpression(parameters[i + shift].ConstantValue);
-                    }
-                }
-                return new Tuple<IEnumerable<Expression>, Expression>(result, paramsArg);
-            }
-
-            return new Tuple<IEnumerable<Expression>, Expression>(arguments, paramsArg);
-        }
+        
 
         protected virtual void WriteThisExtension(Expression target)
         {
@@ -2596,5 +2555,138 @@ namespace Bridge.NET
                 astType.AcceptVisitor(this);
             }
         }
+
+        protected virtual void EmitCastType(IType iType)
+        {
+            if (NullableType.IsNullable(iType))
+            {
+                this.Write(this.ShortenTypeName(Helpers.ReplaceSpecialChars(NullableType.GetUnderlyingType(iType).FullName)));
+            }
+            else if (iType.Kind == TypeKind.Array)
+            {
+                this.Write("Array");
+            }
+            else
+            {
+                this.Write(this.ShortenTypeName(Helpers.ReplaceSpecialChars(iType.FullName + (iType.TypeParameterCount > 0 ? ("$" + iType.TypeParameterCount) : ""))));
+            }
+        }
+
+        private static Regex _formatArg = new Regex(@"\{(\*?)(\w+)\}");
+        protected virtual IList<Expression> GetExpressionsByKey(IEnumerable<NamedParamExpression> expressions, string key)
+        {
+            
+            if (Regex.IsMatch(key, "\\d+"))
+            {
+                var list = new List<Expression>();
+                list.Add(expressions.Skip(int.Parse(key)).First().Expression);
+                return list;
+            }
+
+            return expressions.Where(e => e.Name == key).Select(e => e.Expression).ToList();
+        }
+
+        protected virtual AstType GetAstTypeByKey(IEnumerable<TypeParamExpression> types, string key)
+        {
+            return types.Where(e => e.Name == key && e.AstType != null).Select(e => e.AstType).FirstOrDefault();
+        }
+
+        protected virtual IType GetITypeByKey(IEnumerable<TypeParamExpression> types, string key)
+        {
+            return types.Where(e => e.Name == key && e.IType != null).Select(e => e.IType).FirstOrDefault();
+        }
+
+        protected virtual void EmitInlineExpressionList(ArgumentsInfo argsInfo, string inline)
+        {
+            IEnumerable<NamedParamExpression> expressions = argsInfo.NamedExpressions; 
+            IEnumerable<TypeParamExpression> typeParams = argsInfo.TypeArguments;
+            Expression paramsArg = argsInfo.ParamsExpression;
+            
+            var matches = _formatArg.Matches(inline);
+            if (matches.Count == 1 && matches[0].Groups[2].Value == "0")
+            {
+                this.PushWriter(inline);
+                this.EmitExpressionList(expressions.Select(e => e.Expression), paramsArg);
+                this.PopWriter();
+            }
+            else
+            {
+                this.Write("");
+                inline = _formatArg.Replace(inline, delegate(Match m)
+                {
+                    int count = this.Writers.Count;
+                    string key = m.Groups[2].Value;
+                    bool ignoreArray = m.Groups[1].Success && m.Groups[1].Value == "*";
+
+                    StringBuilder oldSb = this.Output;
+                    this.Output = new StringBuilder();
+
+                    if (key == "this" || key == argsInfo.ThisName)
+                    {
+                        string thisValue = argsInfo.GetThisValue();
+
+                        if (thisValue != null)
+                        {
+                            this.Write(thisValue);
+                        }
+                    }
+                    else
+                    {
+                        IList<Expression> exprs = this.GetExpressionsByKey(expressions, key);
+                        if (exprs.Count > 0)
+                        {
+                            if (exprs.Count > 1)
+                            {
+                                if (!ignoreArray)
+                                {
+                                    this.Write("[");
+                                }
+                                
+                                this.EmitExpressionList(exprs, null);
+
+                                if (!ignoreArray)
+                                {
+                                    this.Write("]");
+                                }
+                            }
+                            else
+                            {
+                                exprs[0].AcceptVisitor(this);
+                            }
+                        }
+                        else if (typeParams != null)
+                        {
+                            var type = this.GetAstTypeByKey(typeParams, key);
+
+                            if (type != null)
+                            {
+                                type.AcceptVisitor(this);
+                            }
+                            else
+                            {
+                                var iType = this.GetITypeByKey(typeParams, key);
+
+                                if (iType != null)
+                                {
+                                    this.EmitCastType(iType);
+                                }
+                            }
+                        }
+                    }
+
+                    if (this.Writers.Count != count)
+                    {
+                        this.PopWriter();
+                    }
+
+                    string replacement = this.Output.ToString();
+                    this.Output = oldSb;
+
+                    return replacement;
+                });
+
+                this.Write(inline);
+            }
+        }        
     }
 }

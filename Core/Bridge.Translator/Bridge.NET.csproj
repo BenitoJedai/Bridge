@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Emitter\ArgumentsInfo.cs" />
     <Compile Include="Emitter\EmitterOutput.cs" />
     <Compile Include="Utils\AssemblyInfo.cs" />
     <Compile Include="Utils\ILog.cs" />

@@ -249,9 +249,8 @@ namespace Bridge.NET
 
                     if (!string.IsNullOrWhiteSpace(inline))
                     {
-                        this.PushWriter(inline);
-                        this.EmitExpressionList(new[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right }, null);
-                        this.PopWriter();
+                        var argsInfo = new ArgumentsInfo(this, binaryOperatorExpression, orr);
+                        this.EmitInlineExpressionList(argsInfo, inline);
 
                         return true;
                     }
@@ -381,6 +380,16 @@ namespace Bridge.NET
 
             IMemberDefinition member = this.ResolveFieldOrMethod(id, identifierExpression.TypeArguments.Count);
 
+            if (member == null && memberResult != null)
+            {
+                var iMethod = memberResult.Member as IMethod;
+
+                if (iMethod != null)
+                {
+                    member = this.ResolveFieldOrMethod(id, iMethod.TypeParameters.Count);
+                }
+            }
+
             if (member != null)
             {
                 MethodDefinition method = member as MethodDefinition;
@@ -393,8 +402,7 @@ namespace Bridge.NET
                     string inline = this.GetInline(method);
 
                     if (!string.IsNullOrWhiteSpace(inline))
-                    {
-                        
+                    {                        
                         return;
                     }
                     
@@ -486,7 +494,7 @@ namespace Bridge.NET
                 return;
             }
 
-            if (memberResult != null && memberResult.Member.EntityType == EntityType.Property && memberResult.TargetResult.Type.Kind != TypeKind.Anonymous)
+            if (memberResult != null && memberResult.Member.SymbolKind == SymbolKind.Property && memberResult.TargetResult.Type.Kind != TypeKind.Anonymous)
             {
                 if (memberResult.Member.IsStatic)
                 {
@@ -680,7 +688,7 @@ namespace Bridge.NET
                         this.Write(inline);
                     }
                 }
-                else if (member.Member.EntityType == EntityType.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous && !this.Validator.IsObjectLiteral(member.Member.DeclaringTypeDefinition))
+                else if (member.Member.SymbolKind == SymbolKind.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous && !this.Validator.IsObjectLiteral(member.Member.DeclaringTypeDefinition))
                 {
                     if (!this.IsAssignment)
                     {
@@ -694,7 +702,7 @@ namespace Bridge.NET
                         this.PushWriter("set" + memberReferenceExpression.MemberName + "({0})");
                     }
                 }
-                else if (member.Member.EntityType == EntityType.Field)
+                else if (member.Member.SymbolKind == SymbolKind.Field)
                 {                    
                     bool isConst = this.IsMemberConst(member.Member);
 
@@ -738,11 +746,12 @@ namespace Bridge.NET
         public override void VisitInvocationExpression(InvocationExpression invocationExpression)
         {                        
             Tuple<bool, bool, string> inlineInfo = this.GetInlineCode(invocationExpression);
-            var tupleArguments = this.GetArgumentsList(invocationExpression);
-            var argsExpressions = tupleArguments.Item1;
-            var paramsArg = tupleArguments.Item2;
-            var argsCount = argsExpressions.Count();
+            var argsInfo = new ArgumentsInfo(this, invocationExpression);
 
+            var argsExpressions = argsInfo.ArgumentsExpressions;
+            var paramsArg = argsInfo.ParamsExpression;
+            var argsCount = argsExpressions.Count();
+            
             if (inlineInfo != null)
             {
                 bool isStaticMethod = inlineInfo.Item1;
@@ -757,7 +766,7 @@ namespace Bridge.NET
                         var inlineExpression = code as PrimitiveExpression;
                         if (inlineExpression == null)
                         {
-                            throw new Exception("Only primitive expression can be inlined: " + inlineExpression.GetText());
+                            throw new Exception("Only primitive expression can be inlined: " + inlineExpression.ToString());
                         }
 
                         this.Write(inlineExpression.Value);
@@ -766,39 +775,23 @@ namespace Bridge.NET
                 }
                 else if (!String.IsNullOrEmpty(inlineScript) && invocationExpression.Target is IdentifierExpression)
                 {
-                    this.Write("");
-                    StringBuilder savedBuilder = this.Output;
+                    argsInfo.ThisArgument = "this";
+                    bool noThis = !inlineScript.Contains("{this}");
 
-                    var args = new List<string>(argsCount);
-
-                    foreach (var arg in argsExpressions)
-                    {
-                        this.Output = new StringBuilder();                        
-                        arg.AcceptVisitor(this);
-                        args.Add((arg == paramsArg ? "[" : "") + this.Output.ToString());
-                    }
-
-                    if (paramsArg != null)
-                    {
-                        args[args.Count - 1] = args[args.Count - 1] + "]";
-                    }
-
-                    this.Output = savedBuilder;
-
-                    if (!isStaticMethod)
+                    if (!isStaticMethod && noThis)
                     {
                         this.WriteThis();
                         this.WriteDot();
                     }
 
-                    this.Output.Append(String.Format(inlineScript, args.ToArray()));
+                    this.EmitInlineExpressionList(argsInfo, inlineScript);
 
-                    if (!isStaticMethod)
+                    /*if (!isStaticMethod)
                     {
                         invocationExpression.Target.AcceptVisitor(this);
-                    }
+                    }*/
 
-                    return;
+                    return;                    
                 }
             }
 
@@ -852,27 +845,11 @@ namespace Bridge.NET
                             {
                                 this.Write("");
                                 StringBuilder savedBuilder = this.Output;
-                                var args = new List<string>(argsCount + 1);
-
                                 this.Output = new StringBuilder();
                                 this.WriteThisExtension(invocationExpression.Target);
-                                args.Add(this.Output.ToString());
-
-                                foreach (var arg in argsExpressions)
-                                {
-                                    this.Output = new StringBuilder();
-                                    arg.AcceptVisitor(this);
-                                    args.Add((arg == paramsArg ? "[" : "") + this.Output.ToString());
-                                }
-
-                                if (paramsArg != null)
-                                {
-                                    args[args.Count - 1] = args[args.Count - 1] + "]";
-                                }
-
+                                argsInfo.ThisArgument = this.Output.ToString();
                                 this.Output = savedBuilder;
-
-                                this.Output.Append(String.Format(inline, args.ToArray().Join(", ")));
+                                this.EmitInlineExpressionList(argsInfo, inline);                                
                             }
                             else
                             {
@@ -974,8 +951,15 @@ namespace Bridge.NET
 
                 if (this.Writers.Count > count)
                 {
-                    this.EmitExpressionList(argsExpressions, paramsArg);                    
-                    this.PopWriter();
+                    var tuple = this.Writers.Pop();
+                    this.EmitInlineExpressionList(argsInfo, tuple.Item1);
+                    var result = this.Output.ToString();
+                    this.Output = tuple.Item2;
+                    this.IsNewLine = tuple.Item3;
+                    this.Write(result);                    
+
+                    //this.EmitExpressionList(argsExpressions, paramsArg);
+                    //this.PopWriter();
                 }
                 else
                 {
@@ -1161,9 +1145,10 @@ namespace Bridge.NET
                 return;
             }
 
-            var tupleArguments = this.GetArgumentsList(objectCreateExpression);
-            var argsExpressions = tupleArguments.Item1;
-            var paramsArg = tupleArguments.Item2;
+            var argsInfo = new ArgumentsInfo(this, objectCreateExpression);
+            var argsExpressions = argsInfo.ArgumentsExpressions;
+            var argsNames = argsInfo.ArgumentsNames;
+            var paramsArg = argsInfo.ParamsExpression;
             var argsCount = argsExpressions.Count();
 
             var invocationResolveResult = this.Resolver.ResolveNode(objectCreateExpression, this) as InvocationResolveResult;
@@ -1205,25 +1190,7 @@ namespace Bridge.NET
 
                 if (inlineCode != null)
                 {
-                    StringBuilder savedBuilder = this.Output;
-
-                    var args = new List<string>(argsCount);
-
-                    foreach (var arg in argsExpressions)
-                    {
-                        this.Output = new StringBuilder();
-                        arg.AcceptVisitor(this);
-                        args.Add((arg == paramsArg ? "[" : "") + this.Output.ToString());
-                    }
-
-                    if (paramsArg != null)
-                    {
-                        args[args.Count - 1] = args[args.Count - 1] + "]";
-                    }
-
-                    this.Output = savedBuilder;
-
-                    this.Output.Append(String.Format(inlineCode, args.ToArray()));
+                    this.EmitInlineExpressionList(argsInfo, inlineCode);
                 }
                 else
                 {
@@ -1302,7 +1269,7 @@ namespace Bridge.NET
                 var member = ((MemberResolveResult)resolveResult).Member;
                 lowerCaseName = this.GetEntityName(member);
 
-                var isProperty = member.EntityType == EntityType.Property;
+                var isProperty = member.SymbolKind == SymbolKind.Property;
 
                 if (!isProperty)
                 {
