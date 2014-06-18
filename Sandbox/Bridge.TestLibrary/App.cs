@@ -6,12 +6,31 @@ using System.Collections.Generic;
 
 namespace TestProject
 {    
-    public partial class Class1
+    public partial class Class1<T>
     {
+        [Template("mmm({i})")]
+        public Class1(int i)
+        {
+
+        }
+
+        [Template("mmm({s}, {T})")]
+        public Class1(string s)
+        {
+
+        }
+
+        [Template("mmm({t}, {T})")]
+        public Class1(T t)
+        {
+
+        }
+
         public static void Start()
         {
-            Document.GetElementById("id").As<InputElement>().Value = "test";
-            Document.GetElementById("id").CallFn("fnName");
+            var c1 = new Class1<object>(1);
+            var c2 = new Class1<object>("s");
+            var c3 = new Class1<bool>(true);
         }
     }
 }
