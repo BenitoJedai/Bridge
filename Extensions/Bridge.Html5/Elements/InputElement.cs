@@ -336,15 +336,6 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="replacement"></param>
         /// <param name="start"></param>
-        public void SetRangeText(string replacement, int start)
-        {
-        }
-
-        /// <summary>
-        /// Replaces a range of text with the new text. Supported input types: text, search, url, tel, password.
-        /// </summary>
-        /// <param name="replacement"></param>
-        /// <param name="start"></param>
         /// <param name="end"></param>
         public void SetRangeText(string replacement, int start, int end)
         {

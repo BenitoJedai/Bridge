@@ -129,6 +129,11 @@
     <Compile Include="Elements\BaseElement.cs" />
     <Compile Include="Elements\AudioElement.cs" />
     <Compile Include="Elements\AreaElement.cs" />
+    <Compile Include="Elements\Align.cs" />
+    <Compile Include="Elements\HeadingElement.cs" />
+    <Compile Include="Elements\TextAreaElement.cs" />
+    <Compile Include="Elements\SpanElement.cs" />
+    <Compile Include="Elements\DivElement.cs" />
     <Compile Include="Elements\FormElement.cs" />
     <Compile Include="Elements\AnchorElement.cs" />
     <Compile Include="Elements\ButtonElement.cs" />
