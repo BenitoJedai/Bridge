@@ -62,5 +62,11 @@ namespace System
         {
             return default(T);
         }
+
+        [Template("Bridge.cast({obj}, {T})")]
+        public static T Cast<T>(this object obj)
+        {
+            return default(T);
+        }
     }
 }
