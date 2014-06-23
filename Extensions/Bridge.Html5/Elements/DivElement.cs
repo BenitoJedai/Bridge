@@ -14,10 +14,5 @@ namespace Bridge.Html5
         public DivElement()
         {
         }
-
-        /// <summary>
-        /// Enumerated property indicating alignment of the element's contents with respect to the surrounding context. The possible values are "left", "right", "justify", and "center".
-        /// </summary>
-        public Align Align;
     }
 }

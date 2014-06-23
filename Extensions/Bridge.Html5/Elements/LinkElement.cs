@@ -1,0 +1,84 @@
+﻿using System;
+using Bridge.CLR;
+
+namespace Bridge.Html5
+{
+    /// <summary>
+    /// The HTMLLinkElement interface represents reference information for external resources and the relationship of those resources to a document and vice-versa. This object inherits all of the properties and methods of the HTMLElement interface.
+    /// </summary>
+    [Ignore]
+    [Name("HTMLLinkElement")]
+    public class LinkElement : Element
+    {
+        [Template("document.createElement('link')")]
+        public LinkElement()
+        {
+        }
+
+        /// <summary>
+        /// Gets or sets the character encoding for the target resource.
+        /// </summary>
+        public string Charset;
+
+        /// <summary>
+        /// A DOMString that corresponds to the CORS setting for this link element. See CORS settings attributes for details.
+        /// </summary>
+        public string CrossOrigin;
+
+        /// <summary>
+        /// Gets or sets whether the link is disabled; currently only used with style sheet links.
+        /// </summary>
+        public bool Disabled;
+
+        /// <summary>
+        /// Gets or sets the URI for the target resource.
+        /// </summary>
+        public string Href;
+
+        /// <summary>
+        /// Gets or sets the language code for the linked resource.
+        /// </summary>
+        [Name("hreflang")]
+        public string HrefLang;
+
+        /// <summary>
+        /// Gets or sets a list of one or more media formats to which the resource applies.
+        /// </summary>
+        public string Media;
+
+        /// <summary>
+        /// Gets or sets the forward relationship of the linked resource from the document to the resource.
+        /// </summary>
+        public string Rel;
+
+        /// <summary>
+        /// Is a DOMTokenList that reflects the rel HTML attribute, as a list of tokens.
+        /// </summary>
+        public readonly DOMTokenList RelList;
+
+        /// <summary>
+        /// Gets or sets the reverse relationship of the linked resource from the resource to the document.
+        /// </summary>
+        public string Rev;
+
+        /// <summary>
+        /// Is a DOMSettableTokenList that reflects the sizes HTML attribute, as a list of tokens.
+        /// </summary>
+        public readonly DOMTokenList Sizes; // TODO: implement DOMSettableTokenList?
+
+        /// <summary>
+        /// Returns the StyleSheet object associated with the given element, or null if there is none.
+        /// </summary>
+        public readonly StyleSheet Sheet;
+
+        /// <summary>
+        /// Is a DOMString that reflects the target HTML attribute, indicating where to display the linked resource.
+        /// </summary>
+        public string Target; // TODO: Implement an enum of possible targets
+
+        /// <summary>
+        /// Gets or sets the MIME type of the linked resource.
+        /// </summary>
+        public string Type;
+    }
+}
