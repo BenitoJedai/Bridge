@@ -10,9 +10,6 @@ namespace Bridge.Html5
     [Name("HTMLHeadingElement")]
     public class HeadingElement : Element
     {
-        /// <summary>
-        /// Creates <h1></h1>
-        /// </summary>
         [Template("document.createElement('h1')")]
         public HeadingElement()
         {
@@ -25,11 +22,6 @@ namespace Bridge.Html5
         public HeadingElement(Heading h)
         {
         }
-
-        /// <summary>
-        /// Enumerated attribute indicating alignment of the heading with respect to the surrounding context.
-        /// </summary>
-        public Align Align;
     }
 
     /// <summary>

@@ -24,7 +24,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Reflects the cols HTML attribute, indicating the visible width of the text area.
         /// </summary>
-        public UInt32 Cols;
+        public int Cols;
 
         /// <summary>
         /// The default value as originally specified in HTML that created this object.
@@ -72,7 +72,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Reflects the rows HTML attribute, indicating the number of visible text lines for the control.
         /// </summary>
-        public UInt32 Rows;
+        public int Rows;
 
         /// <summary>
         /// The direction in which selection occurred. This is "forward" if selection was performed in the start-to-end direction of the current locale, or "backward" for the opposite direction. This can also be "none" if the direction is unknown."
