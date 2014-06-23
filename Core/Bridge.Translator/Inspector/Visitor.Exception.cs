@@ -6,17 +6,17 @@ namespace Bridge.NET
 {
     public abstract partial class Visitor : IAstVisitor 
     {
-        protected Exception CreateException(AstNode node, string message) 
+        public Exception CreateException(AstNode node, string message) 
         {
             if (String.IsNullOrEmpty(message))
             {
                 message = String.Format("Language construction {0} is not supported", node.GetType().Name);
             }
 
-            return Exception.Create("{0} {1}: {2}", message, node.StartLocation, node.GetText()); 
+            return Exception.Create("{0} {1}: {2}", message, node.StartLocation, node.ToString()); 
         }
 
-        protected Exception CreateException(AstNode node) 
+        public Exception CreateException(AstNode node) 
         {
             return this.CreateException(node, null);
         }

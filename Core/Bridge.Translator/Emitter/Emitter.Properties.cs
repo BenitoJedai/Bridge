@@ -9,29 +9,23 @@ namespace Bridge.NET
 {
     public partial class Emitter : Visitor
     {
-        const string ROOT = "Bridge";
-        const string DELEGATE_BIND = "fn.bind";
-        const string DELEGATE_BIND_SCOPE = "fn.bindScope";
-        const string DELEGATE_COMBINE = "fn.combine";
-        const string DELEGATE_REMOVE = "fn.remove";
-        const string CAST = "cast";
-        const string AS = "as";
-        const string IS = "is";
-        const string ENUMERATOR = "getEnumerator";
-        const string HAS_NEXT = "hasNext";
-        const string NEXT = "next";
-        const string APPLY_OBJECT = "apply";
-        const string MERGE_OBJECT = "merge";
+        public const string ROOT = "Bridge";
+        public const string DELEGATE_BIND = "fn.bind";
+        public const string DELEGATE_BIND_SCOPE = "fn.bindScope";
+        public const string DELEGATE_COMBINE = "fn.combine";
+        public const string DELEGATE_REMOVE = "fn.remove";
+        public const string CAST = "cast";
+        public const string AS = "as";
+        public const string IS = "is";
+        public const string ENUMERATOR = "getEnumerator";
+        public const string HAS_NEXT = "hasNext";
+        public const string NEXT = "next";
+        public const string APPLY_OBJECT = "apply";
+        public const string MERGE_OBJECT = "merge";
         public const string FIX_ARGUMENT_NAME = "__autofix__";
 
 
-        private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };
-
-        public Action<string, string> Log
-        {
-            get;
-            set;
-        }
+        private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };        
 
         public Validator Validator
         {
@@ -39,43 +33,43 @@ namespace Bridge.NET
             private set;
         }
 
-        protected List<TypeInfo> Types 
+        public List<TypeInfo> Types 
         { 
             get; 
             set; 
         }
 
-        protected bool IsAssignment
+        public bool IsAssignment
         {
             get;
             set;
         }
         
-        protected Dictionary<string, AstType> Locals 
+        public Dictionary<string, AstType> Locals 
         { 
             get; 
             set; 
         }
 
-        protected Stack<Dictionary<string, AstType>> LocalsStack 
+        public Stack<Dictionary<string, AstType>> LocalsStack 
         { 
             get; 
             set; 
         }
 
-        protected int Level 
+        public int Level 
         { 
             get; 
             set; 
         }
 
-        protected bool IsNewLine 
+        public bool IsNewLine 
         { 
             get; 
             set; 
         }
 
-        protected bool EnableSemicolon 
+        public bool EnableSemicolon 
         { 
             get; 
             set; 
@@ -94,13 +88,13 @@ namespace Bridge.NET
             }
         }
 
-        protected int IteratorCount 
+        public int IteratorCount 
         { 
             get; 
             set; 
         }
 
-        protected int ThisRefCounter 
+        public int ThisRefCounter 
         { 
             get; 
             set; 
@@ -121,16 +115,16 @@ namespace Bridge.NET
         public StringBuilder Output 
         { 
             get; 
-            protected set; 
+            set; 
         }
 
-        protected Stack<Tuple<string, StringBuilder, bool>> Writers
+        public Stack<Tuple<string, StringBuilder, bool>> Writers
         {
             get;
             set;
         }
 
-        protected bool Comma
+        public bool Comma
         {
             get;
             set;
