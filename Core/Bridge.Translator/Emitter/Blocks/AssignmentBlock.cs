@@ -1,5 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
+using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using System.Collections.Generic;
 
 namespace Bridge.NET
@@ -28,6 +30,7 @@ namespace Bridge.NET
             AssignmentExpression assignmentExpression = this.AssignmentExpression;
 
             var delegateAssigment = false;
+            bool isEvent = false;
             var initCount = this.Emitter.Writers.Count;
 
             if (assignmentExpression.Operator == AssignmentOperatorType.Add ||
@@ -37,21 +40,31 @@ namespace Bridge.NET
                 var rightResolverResult = this.Emitter.Resolver.ResolveNode(assignmentExpression.Right, this.Emitter);
                 var add = assignmentExpression.Operator == AssignmentOperatorType.Add;
 
-                if (this.Emitter.Validator.IsDelegateOrLambda(leftResolverResult) && this.Emitter.Validator.IsDelegateOrLambda(rightResolverResult))
+                if (this.Emitter.Validator.IsDelegateOrLambda(leftResolverResult))
                 {
-                    this.Emitter.IsAssignment = true;
-                    assignmentExpression.Left.AcceptVisitor(this.Emitter);
-                    this.Emitter.IsAssignment = false;
-                    this.Write(" = ");
-
                     delegateAssigment = true;
-                    this.Write(Emitter.ROOT + "." + (add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE));
-                    this.WriteOpenParentheses();
+                    var leftMemberResolveResult = leftResolverResult as MemberResolveResult;
+                    if (leftMemberResolveResult != null)
+                    {
+                        isEvent = leftMemberResolveResult.Member is DefaultResolvedEvent;
+                    }
+
+                    if (!isEvent)
+                    {
+                        this.Emitter.IsAssignment = true;
+                        assignmentExpression.Left.AcceptVisitor(this.Emitter);
+                        this.Emitter.IsAssignment = false;
+                        this.Write(" = ");
+                        this.Write(Emitter.ROOT + "." + (add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE));
+                        this.WriteOpenParentheses();
+                    }                    
                 }
             }
 
             this.Emitter.IsAssignment = true;
+            this.Emitter.AssignmentType = assignmentExpression.Operator;
             assignmentExpression.Left.AcceptVisitor(this.Emitter);
+            this.Emitter.AssignmentType = AssignmentOperatorType.Any;
             this.Emitter.IsAssignment = false;
 
             if (this.Emitter.Writers.Count == 0 && !delegateAssigment)
@@ -106,7 +119,7 @@ namespace Bridge.NET
                     this.Write("= ");
                 }
             }
-            else
+            else if (!isEvent)
             {
                 this.WriteComma();
             }

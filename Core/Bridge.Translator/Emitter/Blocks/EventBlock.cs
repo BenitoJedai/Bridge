@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -27,11 +28,15 @@ namespace Bridge.NET
         {
             foreach (var evt in events)
             {
-                string name = this.Emitter.GetEntityName(evt);
+                foreach (var evtVar in evt.Variables)
+                {
+                    string name = this.Emitter.GetEntityName(evt);
 
-                this.Write("this.", name, " = new Bridge.Event()");
-                this.WriteSemiColon();
-                this.WriteNewLine();
+                    this.Write("this.", name, " = ");
+                    evtVar.Initializer.AcceptVisitor(this.Emitter);
+                    this.WriteSemiColon();
+                    this.WriteNewLine();
+                }                
             }
         }        
     }

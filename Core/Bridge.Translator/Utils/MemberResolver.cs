@@ -102,7 +102,7 @@ namespace Bridge.NET
 
                     if (extMethods.Count() == 0 || extMethods.First().Count() == 0)
                     {
-                        throw new Exception("Cannot find method defintion for " + node.GetText());
+                        throw new Exception("Cannot find method defintion for " + node.ToString());
                     }
 
                     method = extMethods.First().First();
@@ -124,8 +124,8 @@ namespace Bridge.NET
                 {
                     return result;
                 }
-                
-                log.LogWarning(string.Format("Node resolving has failed {0}: {1}", node.StartLocation, node.GetText()));
+
+                log.LogWarning(string.Format("Node resolving has failed {0}: {1}", node.StartLocation, node.ToString()));
             }
 
             return result;

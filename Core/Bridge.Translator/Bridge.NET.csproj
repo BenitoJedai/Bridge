@@ -92,6 +92,7 @@
     <Compile Include="Emitter\Blocks\BreakBlock.cs" />
     <Compile Include="Emitter\Blocks\SwitchBlock.cs" />
     <Compile Include="Emitter\Blocks\DoWhileBlock.cs" />
+    <Compile Include="Emitter\Blocks\VisitorCustomEventBlock.cs" />
     <Compile Include="Emitter\Blocks\WhileBlock.cs" />
     <Compile Include="Emitter\Blocks\TryCatchBlock.cs" />
     <Compile Include="Emitter\Blocks\ConditionalBlock.cs" />

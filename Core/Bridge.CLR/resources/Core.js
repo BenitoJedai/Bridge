@@ -204,45 +204,61 @@ Bridge = {
     },
 
     bind: function (obj, method, args, appendArgs) {
-      if (arguments.length === 2) {
-        return function () {
-          return method.apply(obj, arguments)
-        }
-      }
-
-      return function () {
-        var callArgs = args || arguments;
-
-        if (appendArgs === true) {
-          callArgs = Array.prototype.slice.call(arguments, 0);
-          callArgs = callArgs.concat(args);
-        }
-        else if (typeof appendArgs == 'number') {
-          callArgs = Array.prototype.slice.call(arguments, 0);
-
-          if (appendArgs === 0) {
-            callArgs.unshift.apply(callArgs, args);
-          }
-          else if (appendArgs < callArgs.length) {
-            callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
-          }
-          else {
-            callArgs.push.apply(callArgs, args);
-          }
+        if (method && method.$method == method && method.$scope == obj) {
+            return method;
         }
 
-        return method.apply(obj, callArgs);
-      };
+        var fn = null;
+        if (arguments.length === 2) {
+            fn = function () {
+                return method.apply(obj, arguments)
+            };
+        }
+        else {
+            fn = function () {
+                var callArgs = args || arguments;
+
+                if (appendArgs === true) {
+                    callArgs = Array.prototype.slice.call(arguments, 0);
+                    callArgs = callArgs.concat(args);
+                }
+                else if (typeof appendArgs == 'number') {
+                    callArgs = Array.prototype.slice.call(arguments, 0);
+
+                    if (appendArgs === 0) {
+                        callArgs.unshift.apply(callArgs, args);
+                    }
+                    else if (appendArgs < callArgs.length) {
+                        callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+                    }
+                    else {
+                        callArgs.push.apply(callArgs, args);
+                    }
+                }
+
+                return method.apply(obj, callArgs);
+            };
+        }
+
+        fn.$method = method;
+        fn.$scope = obj;
+
+        return fn;
     },
 
     bindScope: function (obj, method) {
-      return function () {
+      var fn = function () {
         var callArgs = Array.prototype.slice.call(arguments, 0);
 
         callArgs.unshift.apply(callArgs, [obj]);
 
         return method.apply(obj, callArgs);
       };
+
+      fn.$method = method;
+      fn.$scope = obj;
+
+      return fn;
     },
 
     $build: function (handlers) {
@@ -261,6 +277,10 @@ Bridge = {
       };
 
       fn.$invocationList = handlers ? Array.prototype.slice.call(handlers, 0) : [];
+
+      if (fn.$invocationList.length == 0) {
+          return null;
+      }
 
       return fn;
     },
@@ -291,7 +311,8 @@ Bridge = {
         exclude = false;
 
         for (j = 0; j < list2.length; j++) {
-          if (list1[i] === list2[j]) {
+            if (list1[i] === list2[j] || 
+                (list1[i].$method === list2[j].$method && list1[i].$scope === list2[j].$scope)) {
             exclude = true;
             break;
           }

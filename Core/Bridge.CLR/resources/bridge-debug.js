@@ -212,45 +212,61 @@ Bridge = {
     },
 
     bind: function (obj, method, args, appendArgs) {
-      if (arguments.length === 2) {
-        return function () {
-          return method.apply(obj, arguments)
-        }
-      }
-
-      return function () {
-        var callArgs = args || arguments;
-
-        if (appendArgs === true) {
-          callArgs = Array.prototype.slice.call(arguments, 0);
-          callArgs = callArgs.concat(args);
-        }
-        else if (typeof appendArgs == 'number') {
-          callArgs = Array.prototype.slice.call(arguments, 0);
-
-          if (appendArgs === 0) {
-            callArgs.unshift.apply(callArgs, args);
-          }
-          else if (appendArgs < callArgs.length) {
-            callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
-          }
-          else {
-            callArgs.push.apply(callArgs, args);
-          }
+        if (method && method.$method == method && method.$scope == obj) {
+            return method;
         }
 
-        return method.apply(obj, callArgs);
-      };
+        var fn = null;
+        if (arguments.length === 2) {
+            fn = function () {
+                return method.apply(obj, arguments)
+            };
+        }
+        else {
+            fn = function () {
+                var callArgs = args || arguments;
+
+                if (appendArgs === true) {
+                    callArgs = Array.prototype.slice.call(arguments, 0);
+                    callArgs = callArgs.concat(args);
+                }
+                else if (typeof appendArgs == 'number') {
+                    callArgs = Array.prototype.slice.call(arguments, 0);
+
+                    if (appendArgs === 0) {
+                        callArgs.unshift.apply(callArgs, args);
+                    }
+                    else if (appendArgs < callArgs.length) {
+                        callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+                    }
+                    else {
+                        callArgs.push.apply(callArgs, args);
+                    }
+                }
+
+                return method.apply(obj, callArgs);
+            };
+        }
+
+        fn.$method = method;
+        fn.$scope = obj;
+
+        return fn;
     },
 
     bindScope: function (obj, method) {
-      return function () {
+      var fn = function () {
         var callArgs = Array.prototype.slice.call(arguments, 0);
 
         callArgs.unshift.apply(callArgs, [obj]);
 
         return method.apply(obj, callArgs);
       };
+
+      fn.$method = method;
+      fn.$scope = obj;
+
+      return fn;
     },
 
     $build: function (handlers) {
@@ -269,6 +285,10 @@ Bridge = {
       };
 
       fn.$invocationList = handlers ? Array.prototype.slice.call(handlers, 0) : [];
+
+      if (fn.$invocationList.length == 0) {
+          return null;
+      }
 
       return fn;
     },
@@ -299,7 +319,8 @@ Bridge = {
         exclude = false;
 
         for (j = 0; j < list2.length; j++) {
-          if (list1[i] === list2[j]) {
+            if (list1[i] === list2[j] || 
+                (list1[i].$method === list2[j].$method && list1[i].$scope === list2[j].$scope)) {
             exclude = true;
             break;
           }
@@ -350,13 +371,13 @@ Bridge.nullable = {
   // Create a new Class that inherits from this class
   Bridge.Class.extend = function (className, prop) {
     var extend = prop.$extend,
-		    statics = prop.$statics,
-		    base = extend ? extend[0].prototype : this.prototype,
-		    prototype,
-		    nameParts,
-		    scope = prop.$scope || window,
-		    i,
-		    name;
+		statics = prop.$statics,
+		base = extend ? extend[0].prototype : this.prototype,
+		prototype,
+		nameParts,
+		scope = prop.$scope || window,
+		i,
+		name;
 
     delete prop.$extend;
     delete prop.$statics;
@@ -366,6 +387,24 @@ Bridge.nullable = {
     initializing = true;
     prototype = extend ? new extend[0]() : new Object();
     initializing = false;
+
+    if (!prop.$multipleCtors && !prop.$init) {        
+        prop.$init = extend ? function () {
+            this.base();
+        } : function () { };
+    }
+
+    if (!prop.$multipleCtors && !prop.$init) {
+        prop.$init = extend ? function () {
+            this.base();
+        } : function () { };
+    }
+
+    if (!prop.$initMembers) {
+        prop.$initMembers = extend ? function () {
+            this.base();
+        } : function () { };
+    }
 
     // Copy the properties over onto the new prototype
     for (name in prop) {
@@ -406,6 +445,10 @@ Bridge.nullable = {
 
       // All construction is actually done in the init method
       if (!initializing) {
+        if (this.$initMembers) {
+            this.$initMembers();
+        }
+
         if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
           this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
         }

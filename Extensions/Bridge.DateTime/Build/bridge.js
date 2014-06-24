@@ -30,24 +30,31 @@ o=o[d[i]];}
 return o;},equals:function(a,b){if(a&&Bridge.isFunction(a.equals)){return a.equals(b);}
 else if(Bridge.isDate(a)&&Bridge.isDate(b)){return a.valueOf()===b.valueOf();}
 else if(Bridge.isNull(a)&&Bridge.isNull(b)){return true;}
-return a===b;},fn:{call:function(obj,fnName){var args=Array.prototype.slice.call(arguments,2);return obj[fnName].apply(obj,args);},bind:function(obj,method,args,appendArgs){if(arguments.length===2){return function(){return method.apply(obj,arguments)}}
-return function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
+return a===b;},fn:{call:function(obj,fnName){var args=Array.prototype.slice.call(arguments,2);return obj[fnName].apply(obj,args);},bind:function(obj,method,args,appendArgs){if(method&&method.$method==method&&method.$scope==obj){return method;}
+var fn=null;if(arguments.length===2){fn=function(){return method.apply(obj,arguments)};}
+else{fn=function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
 else if(typeof appendArgs=='number'){callArgs=Array.prototype.slice.call(arguments,0);if(appendArgs===0){callArgs.unshift.apply(callArgs,args);}
 else if(appendArgs<callArgs.length){callArgs.splice.apply(callArgs,[appendArgs,0].concat(args));}
 else{callArgs.push.apply(callArgs,args);}}
-return method.apply(obj,callArgs);};},bindScope:function(obj,method){return function(){var callArgs=Array.prototype.slice.call(arguments,0);callArgs.unshift.apply(callArgs,[obj]);return method.apply(obj,callArgs);};},$build:function(handlers){var fn=function(){var list=arguments.callee.$invocationList,result,i,handler;for(i=0;i<list.length;i++){handler=list[i];result=handler.apply(null,arguments);}
-return result;};fn.$invocationList=handlers?Array.prototype.slice.call(handlers,0):[];return fn;},combine:function(fn1,fn2){if(!fn1||!fn2){return fn1||fn2;}
+return method.apply(obj,callArgs);};}
+fn.$method=method;fn.$scope=obj;return fn;},bindScope:function(obj,method){var fn=function(){var callArgs=Array.prototype.slice.call(arguments,0);callArgs.unshift.apply(callArgs,[obj]);return method.apply(obj,callArgs);};fn.$method=method;fn.$scope=obj;return fn;},$build:function(handlers){var fn=function(){var list=arguments.callee.$invocationList,result,i,handler;for(i=0;i<list.length;i++){handler=list[i];result=handler.apply(null,arguments);}
+return result;};fn.$invocationList=handlers?Array.prototype.slice.call(handlers,0):[];if(fn.$invocationList.length==0){return null;}
+return fn;},combine:function(fn1,fn2){if(!fn1||!fn2){return fn1||fn2;}
 var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationList?fn2.$invocationList:[fn2];return Bridge.fn.$build(list1.concat(list2));},remove:function(fn1,fn2){if(!fn1||!fn2){return fn1||null;}
-var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationList?fn2.$invocationList:[fn2],result=[],exclude,i,j;for(i=list1.length-1;i>=0;i--){exclude=false;for(j=0;j<list2.length;j++){if(list1[i]===list2[j]){exclude=true;break;}}
+var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationList?fn2.$invocationList:[fn2],result=[],exclude,i,j;for(i=list1.length-1;i>=0;i--){exclude=false;for(j=0;j<list2.length;j++){if(list1[i]===list2[j]||(list1[i].$method===list2[j].$method&&list1[i].$scope===list2[j].$scope)){exclude=true;break;}}
 if(!exclude){result.push(list1[i]);}}
 result.reverse();return Bridge.fn.$build(result);}}};
 
 Bridge.nullable={hasValue:function(obj){return(obj!==null)&&(obj!==undefined);},getValue:function(obj){if(!Bridge.nullable.hasValue(obj)){throw Error("Nullable instance doesn't have a value.");}
 return obj;},getValueOrDefault:function(obj,defValue){return Bridge.nullable.hasValue(obj)?obj:defValue;}};
 
-(function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;for(name in prop){prototype[name]=typeof prop[name]=='function'&&typeof base[name]=='function'&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
+(function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;if(!prop.$multipleCtors&&!prop.$init){prop.$init=extend?function(){this.base();}:function(){};}
+if(!prop.$multipleCtors&&!prop.$init){prop.$init=extend?function(){this.base();}:function(){};}
+if(!prop.$initMembers){prop.$initMembers=extend?function(){this.base();}:function(){};}
+for(name in prop){prototype[name]=typeof prop[name]=='function'&&typeof base[name]=='function'&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
 prototype.$$name=className;function Class(){if(!(this instanceof Class)){var args=Array.prototype.slice.call(arguments,0),object=Object.create(Class.prototype),result=Class.apply(object,args);return typeof result==='object'?result:object;}
-if(!initializing){if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=='string'&&Bridge.isFunction(this[arguments[0]])){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}
+if(!initializing){if(this.$initMembers){this.$initMembers();}
+if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=='string'&&Bridge.isFunction(this[arguments[0]])){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}
 else if(this.$ctorDetector){this.$ctorDetector.apply(this,arguments);}
 else if(this.$init){this.$init.apply(this,arguments);}}}
 Class.prototype=prototype;Class.prototype.constructor=Class;Class.$$name=className;if(statics){for(name in statics){Class[name]=statics[name];}}

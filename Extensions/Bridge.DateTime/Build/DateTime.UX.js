@@ -10,7 +10,7 @@ Bridge.Class.extend('Bridge.DateTime.UX', {
             if (config.month >= 1 && config.month < 12) {
                 Bridge.DateTime.UX.setMonth(instance, config.month);
             }
-            if (config.day >= 1 && config.day <= Bridge.DateTime.daysInMonth(instance.getYear(), instance.getMonth())) {
+            if (config.day >= 1 && config.day <= Bridge.DateTime.daysInMonth(instance.get_Year(), instance.get_Month())) {
                 Bridge.DateTime.UX.setDay(instance, config.day);
             }
             if (config.hour >= 0 && config.hour <= 23) {
@@ -31,32 +31,32 @@ Bridge.Class.extend('Bridge.DateTime.UX', {
             return Bridge.DateTime.UX.set(instance, { hour: 0, minute: 0, second: 0, millisecond: 0 });
         },
         resetTime: function (instance) {
-            var now = Bridge.DateTime.getNow();
-            return Bridge.DateTime.UX.set(instance, { hour: now.getHour(), minute: now.getMinute(), second: now.getSecond(), millisecond: now.getMillisecond() });
+            var now = Bridge.DateTime.get_Now();
+            return Bridge.DateTime.UX.set(instance, { hour: now.get_Hour(), minute: now.get_Minute(), second: now.get_Second(), millisecond: now.get_Millisecond() });
         },
         clone: function (instance) {
             return new Bridge.DateTime("$init$Double", instance.dateData.getTime());
         },
         setYear: function (instance, year) {
-            return instance.addYears(-(instance.getYear() - year));
+            return instance.addYears(-(instance.get_Year() - year));
         },
         setMonth: function (instance, month) {
-            return instance.addMonths(-(instance.getMonth() - month));
+            return instance.addMonths(-(instance.get_Month() - month));
         },
         setDay: function (instance, day) {
-            return instance.addDays(-(instance.getDay() - day));
+            return instance.addDays(-(instance.get_Day() - day));
         },
         setHour: function (instance, hour) {
-            return instance.addHours(-(instance.getHour() - hour));
+            return instance.addHours(-(instance.get_Hour() - hour));
         },
         setMinute: function (instance, minute) {
-            return instance.addMinutes(-(instance.getMinute() - minute));
+            return instance.addMinutes(-(instance.get_Minute() - minute));
         },
         setSeconds: function (instance, second) {
-            return instance.addSeconds(-(instance.getSecond() - second));
+            return instance.addSeconds(-(instance.get_Second() - second));
         },
         setMilliseconds: function (instance, millisecond) {
-            return instance.addMilliseconds(-(instance.getMillisecond() - millisecond));
+            return instance.addMilliseconds(-(instance.get_Millisecond() - millisecond));
         }
     }
 });

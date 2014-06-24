@@ -16,13 +16,13 @@
   // Create a new Class that inherits from this class
   Bridge.Class.extend = function (className, prop) {
     var extend = prop.$extend,
-		    statics = prop.$statics,
-		    base = extend ? extend[0].prototype : this.prototype,
-		    prototype,
-		    nameParts,
-		    scope = prop.$scope || window,
-		    i,
-		    name;
+		statics = prop.$statics,
+		base = extend ? extend[0].prototype : this.prototype,
+		prototype,
+		nameParts,
+		scope = prop.$scope || window,
+		i,
+		name;
 
     delete prop.$extend;
     delete prop.$statics;
@@ -32,6 +32,24 @@
     initializing = true;
     prototype = extend ? new extend[0]() : new Object();
     initializing = false;
+
+    if (!prop.$multipleCtors && !prop.$init) {        
+        prop.$init = extend ? function () {
+            this.base();
+        } : function () { };
+    }
+
+    if (!prop.$multipleCtors && !prop.$init) {
+        prop.$init = extend ? function () {
+            this.base();
+        } : function () { };
+    }
+
+    if (!prop.$initMembers) {
+        prop.$initMembers = extend ? function () {
+            this.base();
+        } : function () { };
+    }
 
     // Copy the properties over onto the new prototype
     for (name in prop) {
@@ -72,6 +90,10 @@
 
       // All construction is actually done in the init method
       if (!initializing) {
+        if (this.$initMembers) {
+            this.$initMembers();
+        }
+
         if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
           this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
         }

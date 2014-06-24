@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -104,7 +105,7 @@ namespace Bridge.NET
             var isResolved = resolveResult != null && !(resolveResult is ErrorResolveResult);
             var memberResult = resolveResult as MemberResolveResult;
 
-            if (this.Emitter.Locals.ContainsKey(id))
+            if (this.Emitter.Locals != null && this.Emitter.Locals.ContainsKey(id))
             {
                 this.Write(id);
 
@@ -242,19 +243,53 @@ namespace Bridge.NET
 
                 if (!this.Emitter.IsAssignment)
                 {
-                    this.Write("get");
+                    this.Write("get_");
                     this.Write(id);
                     this.WriteOpenParentheses();
                     this.WriteCloseParentheses();
                 }
                 else
                 {
-                    this.PushWriter("set" + id + "({0})");
+                    this.PushWriter("set_" + id + "({0})");
                 }
+            }
+            else if (memberResult.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
+            {
+                if (memberResult.Member.IsStatic)
+                {
+                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
+                }
+                else
+                {
+                    this.WriteThis();
+                }
+
+                this.WriteDot();
+
+                this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add_" : "remove_");
+                this.Write(memberResult.Member.Name);
+                this.WriteOpenParentheses();
             }
             else
             {
-                throw this.Emitter.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
+                if (isResolved)
+                {
+                    if (memberResult.Member.IsStatic)
+                    {
+                        this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
+                    }
+                    else
+                    {
+                        this.WriteThis();
+                    }
+
+                    this.WriteDot();
+                    this.Write(this.Emitter.GetEntityName(memberResult.Member));
+                }
+                else
+                {
+                    throw this.Emitter.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
+                }
             }
         }        
     }

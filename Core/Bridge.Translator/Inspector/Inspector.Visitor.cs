@@ -173,6 +173,41 @@ namespace Bridge.NET
             }
         }
 
+        public override void VisitCustomEventDeclaration(CustomEventDeclaration customEventDeclaration)
+        {
+            if (customEventDeclaration.HasModifier(Modifiers.Abstract))
+            {
+                return;
+            }
+
+            bool isStatic = customEventDeclaration.HasModifier(Modifiers.Static);
+
+            IDictionary<string, EntityDeclaration> dict = isStatic
+                ? CurrentType.StaticProperties
+                : CurrentType.InstanceProperties;
+
+            var key = customEventDeclaration.Name;
+
+            dict.Add(key, customEventDeclaration);
+
+            if (!customEventDeclaration.AddAccessor.IsNull
+                && !this.HasInline(customEventDeclaration.AddAccessor)
+                && customEventDeclaration.AddAccessor.Body.IsNull
+                && !this.HasScript(customEventDeclaration.AddAccessor))
+            {
+                Expression initializer = this.GetDefaultFieldInitializer(customEventDeclaration.ReturnType);
+
+                if (isStatic)
+                {
+                    this.CurrentType.StaticFields.Add(customEventDeclaration.Name.ToLowerCamelCase(), initializer);
+                }
+                else
+                {
+                    this.CurrentType.InstanceFields.Add(customEventDeclaration.Name.ToLowerCamelCase(), initializer);
+                }
+            }
+        }
+
         public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
         {
             if (propertyDeclaration.HasModifier(Modifiers.Abstract))
@@ -182,7 +217,7 @@ namespace Bridge.NET
 
             bool isStatic = propertyDeclaration.HasModifier(Modifiers.Static);
 
-            IDictionary<string, PropertyDeclaration> dict = isStatic
+            IDictionary<string, EntityDeclaration> dict = isStatic
                 ? CurrentType.StaticProperties
                 : CurrentType.InstanceProperties;
 

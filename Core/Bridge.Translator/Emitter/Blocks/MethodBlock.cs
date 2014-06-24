@@ -36,21 +36,45 @@ namespace Bridge.NET
         {
             if (this.StaticBlock)
             {
-                this.EmitMethods(this.TypeInfo.StaticMethods, this.TypeInfo.StaticProperties);
+                this.EmitMethods(this.TypeInfo.StaticMethods, this.TypeInfo.StaticProperties, this.TypeInfo.StaticEvents);
             }
             else
             {
-                this.EmitMethods(this.TypeInfo.InstanceMethods, this.TypeInfo.InstanceProperties);
+                this.EmitMethods(this.TypeInfo.InstanceMethods, this.TypeInfo.InstanceProperties, this.TypeInfo.Events);
             }
         }
 
-        protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, PropertyDeclaration> properties)
+        protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, EntityDeclaration> properties, List<EventDeclaration> events)
         {
+            foreach (var e in events)
+            {
+                foreach (var evtVar in e.Variables)
+                {
+                    this.EnsureComma();
+                    this.EmitEventAccessor(e, evtVar, true);
+
+                    this.WriteComma();
+                    this.WriteNewLine();
+
+                    this.EmitEventAccessor(e, evtVar, false);
+                    this.Emitter.Comma = true;
+                }  
+            }
+            
             var names = new List<string>(properties.Keys);
 
             foreach (var name in names)
             {
-                this.Emitter.VisitPropertyDeclaration(properties[name]);
+                var prop = properties[name];
+
+                if (prop is PropertyDeclaration)
+                {
+                    this.Emitter.VisitPropertyDeclaration((PropertyDeclaration)prop);
+                }
+                else if (prop is CustomEventDeclaration)
+                {
+                    this.Emitter.VisitCustomEventDeclaration((CustomEventDeclaration)prop);
+                }
             }
 
             names = new List<string>(methods.Keys);
@@ -59,6 +83,35 @@ namespace Bridge.NET
             {
                 this.EmitMethodsGroup(methods[name]);
             }
+        }
+
+        protected void EmitEventAccessor(EventDeclaration e, VariableInitializer evtVar, bool add)
+        {
+            string name = evtVar.Name;
+
+            this.Write(add ? "add_" : "remove_", name, " : ");
+            this.WriteFunction();
+            this.WriteOpenParentheses();
+            this.Write("value");
+            this.WriteCloseParentheses();
+            this.WriteSpace();
+            this.BeginBlock();
+            this.WriteThis();
+            this.WriteDot();
+            this.Write(this.Emitter.GetEntityName(e));
+            this.Write(" = ");
+            this.Write(Emitter.ROOT, ".", add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE);
+            this.WriteOpenParentheses();
+            this.WriteThis();
+            this.WriteDot();
+            this.Write(this.Emitter.GetEntityName(e));
+            this.WriteComma();
+            this.WriteSpace();
+            this.Write("value");
+            this.WriteCloseParentheses();
+            this.WriteSemiColon();
+            this.WriteNewLine();
+            this.EndBlock();
         }
 
         protected virtual void EmitMethodsGroup(List<MethodDeclaration> group)

@@ -25,6 +25,11 @@ namespace Bridge.NET
             new VisitorPropertyBlock(this, propertyDeclaration).Emit();
         }
 
+        public override void VisitCustomEventDeclaration(CustomEventDeclaration customEventDeclaration)
+        {
+            new VisitorCustomEventBlock(this, customEventDeclaration).Emit();
+        }
+
         public override void VisitBlockStatement(BlockStatement blockStatement)
         {
             new Block(this, blockStatement).Emit();

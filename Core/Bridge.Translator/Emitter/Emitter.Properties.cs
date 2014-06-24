@@ -44,6 +44,12 @@ namespace Bridge.NET
             get;
             set;
         }
+
+        public AssignmentOperatorType AssignmentType
+        {
+            get;
+            set;
+        }
         
         public Dictionary<string, AstType> Locals 
         { 

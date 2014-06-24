@@ -5,32 +5,64 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace TestProject
-{    
-    public partial class Class1<T>
+{
+    public partial class Class1
     {
-        [Template("mmm({i})")]
-        public Class1(int i)
-        {
 
+        public delegate void Class1Event(int i);
+        public event Class1Event OnEvent = Class1_Event;
+        public static event Class1Event OnEvent2 = Class1_Event;
+
+        public static void Class1_Event(int i)
+        {
+            Console.Log("OnStaticEvent " + i);
         }
 
-        [Template("mmm({s}, {T})")]
-        public Class1(string s)
+        public void InstanceStart()
         {
+            this.OnEvent += Class1_OnEvent;
+            OnPropEvent += this.Class1_OnPropEvent;
 
+            if (this.OnEvent != null)
+            {
+                this.OnEvent(1);
+            }
+
+            this.OnEvent -= Class1_OnEvent;
+            OnPropEvent -= this.Class1_OnPropEvent;
+
+            if (this.OnEvent != null)
+            {
+                this.OnEvent(2);
+            }
         }
 
-        [Template("mmm({t}, {T})")]
-        public Class1(T t)
+        private void Class1_OnEvent(int i)
         {
+            Console.Log("OnEvent " + i);
+        }
 
+        private void Class1_OnPropEvent(int i)
+        {
+            Console.Log("OnPropEvent " + i);
+        }
+
+        public event Class1Event OnPropEvent
+        {
+            add
+            {
+                this.OnEvent += value;
+            }
+            remove
+            {
+                this.OnEvent -= value;
+            }
         }
 
         public static void Start()
         {
-            var c1 = new Class1<object>(1);
-            var c2 = new Class1<object>("s");
-            var c3 = new Class1<bool>(true);
+            OnEvent2(2);
+            new Class1().InstanceStart();            
         }
     }
 }

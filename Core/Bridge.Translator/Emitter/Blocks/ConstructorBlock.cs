@@ -46,16 +46,21 @@ namespace Bridge.NET
 
         protected virtual void EmitCtorForStaticClass()
         {
-            if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0)
+            if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0 || this.TypeInfo.StaticEvents.Count > 0)
             {
                 this.Write("$init");
                 this.WriteColon();
                 this.WriteFunction();
                 this.WriteOpenCloseParentheses(true);
 
-                this.BeginBlock();
+                this.BeginBlock();                
 
                 new FieldBlock(this.Emitter, this.TypeInfo, true).Emit();
+
+                if (this.TypeInfo.StaticEvents.Count > 0)
+                {
+                    new EventBlock(this.Emitter, this.TypeInfo.StaticEvents).Emit();
+                }
 
                 if (this.TypeInfo.StaticCtor != null)
                 {
@@ -72,12 +77,62 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void EmitCtorForInstantiableClass()
+        protected virtual void EmitInitMembers()
         {
+            if (this.TypeInfo.InstanceFields.Count == 0 && this.TypeInfo.Events.Count == 0)
+            {
+                return;
+            }
+
+            this.Write("$initMembers");
+
+            this.WriteColon();
+            this.WriteFunction();
+            this.WriteOpenParentheses();
+            this.WriteCloseParentheses();
+            this.WriteSpace();
+            this.BeginBlock();
+
+            var requireNewLine = false;
+            var changeCase = this.Emitter.ChangeCase;
+            var baseType = this.Emitter.GetBaseTypeDefinition();
+
+            if (!this.Emitter.Validator.IsIgnoreType(baseType))
+            {
+                this.Write("this.base();");
+                this.WriteNewLine();
+            }
+
+            if (this.TypeInfo.InstanceFields.Count > 0)
+            {
+                new FieldBlock(this.Emitter, this.TypeInfo, false).Emit();
+                requireNewLine = true;
+            }
+
+            if (this.TypeInfo.Events.Count > 0)
+            {
+                if (requireNewLine)
+                {
+                    this.WriteNewLine();
+                }
+                new EventBlock(this.Emitter, this.TypeInfo.Events).Emit();
+                requireNewLine = true;
+            }
+
+            this.EndBlock();
+            this.Emitter.Comma = true;
+        }
+
+        protected virtual void EmitCtorForInstantiableClass()
+        {            
+            this.EmitInitMembers();
+
+            this.EnsureComma();
+
             var baseType = this.Emitter.GetBaseTypeDefinition();
             var typeDef = this.Emitter.GetTypeDefinition();
 
-            if (this.TypeInfo.Ctors.Count == 0 || typeDef.IsValueType)
+            if (typeDef.IsValueType)
             {
                 this.TypeInfo.Ctors.Add(new ConstructorDeclaration
                 {
@@ -147,12 +202,6 @@ namespace Bridge.NET
                 var requireNewLine = false;
                 var changeCase = this.Emitter.ChangeCase;
 
-                if (this.TypeInfo.InstanceFields.Count > 0)
-                {
-                    new FieldBlock(this.Emitter, this.TypeInfo, false).Emit();
-                    requireNewLine = true;
-                }
-
                 if (baseType != null && !this.Emitter.Validator.IsIgnoreType(baseType) ||
                     (ctor.Initializer != null && ctor.Initializer.ConstructorInitializerType == ConstructorInitializerType.This))
                 {
@@ -161,16 +210,6 @@ namespace Bridge.NET
                         this.WriteNewLine();
                     }
                     this.EmitBaseConstructor(ctor, ctorName);
-                    requireNewLine = true;
-                }
-
-                if (this.TypeInfo.Events.Count > 0)
-                {
-                    if (requireNewLine)
-                    {
-                        this.WriteNewLine();
-                    }
-                    new EventBlock(this.Emitter, this.TypeInfo.Events).Emit();
                     requireNewLine = true;
                 }
 
