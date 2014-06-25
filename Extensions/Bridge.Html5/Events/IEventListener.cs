@@ -7,7 +7,7 @@ namespace Bridge.Html5
 {
     [Ignore]
     [Name("Object")]
-    [Bridge.CLR.Cast("{$is: function(obj){return Bridge.isFunction(obj.handleEvent);}}")]
+    [Cast("{$is: function(obj){return Bridge.isFunction(obj.handleEvent);}}")]
     public interface IEventListener
     {
         /// <summary>
