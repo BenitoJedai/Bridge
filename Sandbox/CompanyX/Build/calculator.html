@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>CompanyX Sample</title>
+    <script type="text/javascript" src="bridge-debug.js"></script>
+    <script type="text/javascript" src="Calculator.js?v=1"></script>
+    <script type="text/javascript">
+        Demo.Calculator.onReady();
+    </script>
+
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <style type="text/css">
+        .panel-body .row {
+            margin: 0 0 10px 0;
+        }
+
+        .panel-body h3 {
+            line-height : 20px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="col-md-3">
+        <div id="calculator" class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Calculator</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <button class="col-md-3 btn btn-warning">C</button>
+                    <h3 class="col-md-9 text-right"></h3>
+                </div>
+                
+                <div class="row">
+                    <button class="col-md-3 btn btn-default">7</button>
+                    <button class="col-md-3 btn btn-default">8</button>
+                    <button class="col-md-3 btn btn-default">9</button>
+                    <button class="col-md-3 btn btn-info">+</button>
+                </div>
+
+                <div class="row">
+                    <button class="col-md-3 btn btn-default">4</button>
+                    <button class="col-md-3 btn btn-default">5</button>
+                    <button class="col-md-3 btn btn-default">6</button>
+                    <button class="col-md-3 btn btn-info">-</button>
+                </div>
+
+                <div class="row">
+                    <button class="col-md-3 btn btn-default">1</button>
+                    <button class="col-md-3 btn btn-default">2</button>
+                    <button class="col-md-3 btn btn-default">3</button>
+                    <button class="col-md-3 btn btn-info">÷</button>
+                </div>
+
+                <div class="row">
+                    <button class="col-md-3 btn btn-default">0</button>
+                    <button class="col-md-3 btn btn-default">.</button>
+                    <button class="col-md-3 btn btn-success">=</button>
+                    <button class="col-md-3 btn btn-info">x</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
