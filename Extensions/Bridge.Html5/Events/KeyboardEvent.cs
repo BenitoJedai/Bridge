@@ -121,1117 +121,1117 @@ namespace Bridge.Html5
         /// <summary>
         /// Cancel key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CANCEL = 3;
 
         /// <summary>
         /// Help key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_HELP = 6;
 
         /// <summary>
         /// Backspace key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_BACK_SPACE = 8;
 
         /// <summary>
         /// Tab key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_TAB = 9;
 
         /// <summary>
         /// "5" key on Numpad when NumLock is unlocked. Or on Mac, clear key which is positioned at NumLock key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CLEAR = 12;
 
         /// <summary>
         /// Return/enter key on the main keyboard.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_RETURN = 13;
 
         /// <summary>
         /// Reserved, but not used. Obsolete since Gecko 30 (Dropped, see bug 969247.)
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ENTER = 14;
 
         /// <summary>
         /// Shift key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SHIFT = 16;
 
         /// <summary>
         /// Control key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CONTROL = 17;
 
         /// <summary>
         /// Alt (Option on Mac) key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ALT = 18;
 
         /// <summary>
         /// Pause key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PAUSE = 19;
 
         /// <summary>
         /// Caps lock.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CAPS_LOCK = 20;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_KANA = 21;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_HANGUL = 21;
 
         /// <summary>
         /// "英数" key on Japanese Mac keyboard.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_EISU = 22;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_JUNJA = 23;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_FINAL = 24;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_HANJA = 25;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_KANJI = 25;
 
         /// <summary>
         /// Escape key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ESCAPE = 27;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CONVERT = 28;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NONCONVERT = 29;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ACCEPT = 30;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_MODECHANGE = 31;
 
         /// <summary>
         /// Space bar.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SPACE = 32;
 
         /// <summary>
         /// Page Up key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PAGE_UP = 33;
 
         /// <summary>
         /// Page Down key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PAGE_DOWN = 34;
 
         /// <summary>
         /// End key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_END = 35;
 
         /// <summary>
         /// Home key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_HOME = 36;
 
         /// <summary>
         /// Left arrow.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_LEFT = 37;
 
         /// <summary>
         /// Up arrow.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_UP = 38;
 
         /// <summary>
         /// Right arrow.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_RIGHT = 39;
 
         /// <summary>
         /// Down arrow.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_DOWN = 40;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SELECT = 41;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PRINT = 42;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_EXECUTE = 43;
 
         /// <summary>
         /// Print Screen key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PRINTSCREEN = 44;
 
         /// <summary>
         /// Ins(ert) key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_INSERT = 45;
 
         /// <summary>
         /// Del(ete) key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_DELETE = 46;
 
         /// <summary>
         /// "0" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_0 = 48;
 
         /// <summary>
         /// "1" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_1 = 49;
 
         /// <summary>
         /// "2" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_2 = 50;
 
         /// <summary>
         /// "3" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_3 = 51;
 
         /// <summary>
         /// "4" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_4 = 52;
 
         /// <summary>
         /// "5" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_5 = 53;
 
         /// <summary>
         /// "6" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_6 = 54;
 
         /// <summary>
         /// "7" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_7 = 55;
 
         /// <summary>
         /// "8" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_8 = 56;
 
         /// <summary>
         /// "9" key in standard key location.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_9 = 57;
 
         /// <summary>
         /// Colon (":") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_COLON = 58;
 
         /// <summary>
         /// Semicolon (";") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SEMICOLON = 59;
 
         /// <summary>
         /// Less-than ("&lt;") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_LESS_THAN = 60;
 
         /// <summary>
         /// Equals ("=") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_EQUALS = 61;
 
         /// <summary>
         /// Greater-than (">") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_GREATER_THAN = 62;
 
         /// <summary>
         /// Question mark ("?") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_QUESTION_MARK = 63;
 
         /// <summary>
         /// Atmark ("@") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_AT = 64;
 
         /// <summary>
         /// "A" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_A = 65;
 
         /// <summary>
         /// "B" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_B = 66;
 
         /// <summary>
         /// "C" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_C = 67;
 
         /// <summary>
         /// "D" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_D = 68;
 
         /// <summary>
         /// "E" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_E = 69;
 
         /// <summary>
         /// "F" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F = 70;
 
         /// <summary>
         /// "G" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_G = 71;
 
         /// <summary>
         /// "H" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_H = 72;
 
         /// <summary>
         /// "I" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_I = 73;
 
         /// <summary>
         /// "J" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_J = 74;
 
         /// <summary>
         /// "K" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_K = 75;
 
         /// <summary>
         /// "L" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_L = 76;
 
         /// <summary>
         /// "M" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_M = 77;
 
         /// <summary>
         /// "N" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_N = 78;
 
         /// <summary>
         /// "O" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_O = 79;
 
         /// <summary>
         /// "P" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_P = 80;
 
         /// <summary>
         /// "Q" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_Q = 81;
 
         /// <summary>
         /// "R" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_R = 82;
 
         /// <summary>
         /// "S" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_S = 83;
 
         /// <summary>
         /// "T" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_T = 84;
 
         /// <summary>
         /// "U" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_U = 85;
 
         /// <summary>
         /// "V" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_V = 86;
 
         /// <summary>
         /// "W" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_W = 87;
 
         /// <summary>
         /// "X" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_X = 88;
 
         /// <summary>
         /// "Y" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_Y = 89;
 
         /// <summary>
         /// "Z" key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_Z = 90;
 
         /// <summary>
         /// Windows logo key on Windows. Or Super or Hyper key on Linux.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN = 91;
 
         /// <summary>
         /// Opening context menu key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CONTEXT_MENU = 93;
 
         /// <summary>
         /// Linux support for this keycode was added in Gecko 4.0.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SLEEP = 95;
 
         /// <summary>
         /// "0" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD0 = 96;
 
         /// <summary>
         /// "1" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD1 = 97;
 
         /// <summary>
         /// "2" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD2 = 98;
 
         /// <summary>
         /// "3" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD3 = 99;
 
         /// <summary>
         /// "4" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD4 = 100;
 
         /// <summary>
         /// "5" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD5 = 101;
 
         /// <summary>
         /// "6" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD6 = 102;
 
         /// <summary>
         /// "7" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD7 = 103;
 
         /// <summary>
         /// "8" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD8 = 104;
 
         /// <summary>
         /// "9" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUMPAD9 = 105;
 
         /// <summary>
         /// "*" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_MULTIPLY = 106;
 
         /// <summary>
         /// "+" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ADD = 107;
 
         /// <summary>
         ///  
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SEPARATOR = 108;
 
         /// <summary>
         /// "-" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SUBTRACT = 109;
 
         /// <summary>
         /// Decimal point on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_DECIMAL = 110;
 
         /// <summary>
         /// "/" on the numeric keypad.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_DIVIDE = 111;
 
         /// <summary>
         /// F1 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F1 = 112;
 
         /// <summary>
         /// F2 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F2 = 113;
 
         /// <summary>
         /// F3 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F3 = 114;
 
         /// <summary>
         /// F4 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F4 = 115;
 
         /// <summary>
         /// F5 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F5 = 116;
 
         /// <summary>
         /// F6 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F6 = 117;
 
         /// <summary>
         /// F7 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F7 = 118;
 
         /// <summary>
         /// F8 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F8 = 119;
 
         /// <summary>
         /// F9 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F9 = 120;
 
         /// <summary>
         /// F10 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F10 = 121;
 
         /// <summary>
         /// F11 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F11 = 122;
 
         /// <summary>
         /// F12 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F12 = 123;
 
         /// <summary>
         /// F13 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F13 = 124;
 
         /// <summary>
         /// F14 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F14 = 125;
 
         /// <summary>
         /// F15 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F15 = 126;
 
         /// <summary>
         /// F16 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F16 = 127;
 
         /// <summary>
         /// F17 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F17 = 128;
 
         /// <summary>
         /// F18 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F18 = 129;
 
         /// <summary>
         /// F19 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F19 = 130;
 
         /// <summary>
         /// F20 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F20 = 131;
 
         /// <summary>
         /// F21 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F21 = 132;
 
         /// <summary>
         /// F22 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F22 = 133;
 
         /// <summary>
         /// F23 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F23 = 134;
 
         /// <summary>
         /// F24 key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_F24 = 135;
 
         /// <summary>
         /// Num Lock key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_NUM_LOCK = 144;
 
         /// <summary>
         /// Scroll Lock key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SCROLL_LOCK = 145;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for "Dictionary" key on Fujitsu OASYS. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_FJ_JISHO = 146;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for "Unregister word" key on Fujitsu OASYS. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_FJ_MASSHOU = 147;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for "Register word" key on Fujitsu OASYS. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_FJ_TOUROKU = 148;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for "Left OYAYUBI" key on Fujitsu OASYS. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_FJ_LOYA = 149;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for "Right OYAYUBI" key on Fujitsu OASYS. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_FJ_ROYA = 150;
 
         /// <summary>
         /// Circumflex ("^") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CIRCUMFLEX = 160;
 
         /// <summary>
         /// Exclamation ("!") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_EXCLAMATION = 161;
 
         /// <summary>
         /// Double quote (""") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_DOUBLE_QUOTE = 162;
 
         /// <summary>
         /// Hash ("#") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_HASH = 163;
 
         /// <summary>
         /// Dollar sign ("$") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_DOLLAR = 164;
 
         /// <summary>
         /// Percent ("%") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PERCENT = 165;
 
         /// <summary>
         /// Ampersand ("&") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_AMPERSAND = 166;
 
         /// <summary>
         /// Underscore ("_") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_UNDERSCORE = 167;
 
         /// <summary>
         /// Open parenthesis ("(") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_OPEN_PAREN = 168;
 
         /// <summary>
         /// Close parenthesis (")") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CLOSE_PAREN = 169;
 
         /// <summary>
         /// Asterisk ("*") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ASTERISK = 170;
 
         /// <summary>
         /// Plus ("+") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PLUS = 171;
 
         /// <summary>
         /// Pipe ("|") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PIPE = 172;
 
         /// <summary>
         /// Hyphen-US/docs/Minus ("-") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_HYPHEN_MINUS = 173;
 
         /// <summary>
         /// Open curly bracket ("{") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_OPEN_CURLY_BRACKET = 174;
 
         /// <summary>
         /// Close curly bracket ("}") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CLOSE_CURLY_BRACKET = 175;
 
         /// <summary>
         /// Tilde ("~") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_TILDE = 176;
 
         /// <summary>
         /// Audio mute key. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_VOLUME_MUTE = 181;
 
         /// <summary>
         /// Audio volume down key Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_VOLUME_DOWN = 182;
 
         /// <summary>
         /// Audio volume up key Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_VOLUME_UP = 183;
 
         /// <summary>
         /// Comma (",") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_COMMA = 188;
 
         /// <summary>
         /// Period (".") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PERIOD = 190;
 
         /// <summary>
         /// Slash ("/") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_SLASH = 191;
 
         /// <summary>
         /// Back tick ("`") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_BACK_QUOTE = 192;
 
         /// <summary>
         /// Open square bracket ("[") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_OPEN_BRACKET = 219;
 
         /// <summary>
         /// Back slash ("\") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_BACK_SLASH = 220;
 
         /// <summary>
         /// Close square bracket ("]") key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CLOSE_BRACKET = 221;
 
         /// <summary>
         /// Quote (''') key.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_QUOTE = 222;
 
         /// <summary>
         /// Meta key on Linux, Command key on Mac.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_META = 224;
 
         /// <summary>
         /// AltGr key (Level 3 Shift key or Level 5 Shift key) on Linux.
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ALTGR = 225;
 
         /// <summary>
         /// An OEM specific key on Windows. This is (was?) used for Olivetti ICO keyboard.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_ICO_HELP = 227;
 
         /// <summary>
         /// An OEM specific key on Windows. This is (was?) used for Olivetti ICO keyboard.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_ICO_00 = 228;
 
         /// <summary>
         /// An OEM specific key on Windows. This is (was?) used for Olivetti ICO keyboard.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_ICO_CLEAR = 230;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_RESET = 233;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_JUMP = 234;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_PA1 = 235;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_PA2 = 236;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_PA3 = 237;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_WSCTRL = 238;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_CUSEL = 239;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_ATTN = 240;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_FINISH = 241;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_COPY = 242;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_AUTO = 243;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_ENLW = 244;
 
         /// <summary>
         /// An OEM specific key on Windows. This was used for Nokia/Ericsson's device.Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_BACKTAB = 245;
 
         /// <summary>
         /// Attn (Attension) key of IBM midrange computers, e.g., AS/400. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ATTN = 246;
 
         /// <summary>
         /// CrSel (Cursor Selection) key of IBM 3270 keyboard layout. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_CRSEL = 247;
 
         /// <summary>
         /// ExSel (Extend Selection) key of IBM 3270 keyboard layout. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_EXSEL = 248;
 
         /// <summary>
         /// Erase EOF key of IBM 3270 keyboard layout. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_EREOF = 249;
 
         /// <summary>
         /// Play key of IBM 3270 keyboard layout. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PLAY = 250;
 
         /// <summary>
         /// Zoom key. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_ZOOM = 251;
 
         /// <summary>
         /// PA1 key of IBM 3270 keyboard layout. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_PA1 = 253;
 
         /// <summary>
         /// Clear key, but we're not sure the meaning difference from DOM_VK_CLEAR. Requires Gecko 21.0
         /// </summary>
-        [Bridge.CLR.InlineConst]
+        [InlineConst]
         public const int DOM_VK_WIN_OEM_CLEAR = 254;
 
         

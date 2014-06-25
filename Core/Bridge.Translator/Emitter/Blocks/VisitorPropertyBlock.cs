@@ -39,7 +39,7 @@ namespace Bridge.NET
                     this.AddLocals(new ParameterDeclaration[] { new ParameterDeclaration { Name = "value" } });
                 }
 
-                this.Write((setter ? "set_" : "get_") + propertyDeclaration.Name);
+                this.Write((setter ? "set" : "get") + propertyDeclaration.Name);
                 this.WriteColon();
                 this.WriteFunction();
                 this.WriteOpenParentheses();

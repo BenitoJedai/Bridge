@@ -197,14 +197,14 @@ namespace Bridge.NET
                 {
                     if (!this.Emitter.IsAssignment)
                     {
-                        this.Write("get_");
+                        this.Write("get");
                         this.Write(memberReferenceExpression.MemberName);
                         this.WriteOpenParentheses();
                         this.WriteCloseParentheses();
                     }
                     else
                     {
-                        this.PushWriter("set_" + memberReferenceExpression.MemberName + "({0})");
+                        this.PushWriter("set" + memberReferenceExpression.MemberName + "({0})");
                     }
                 }
                 else if (member.Member.SymbolKind == SymbolKind.Field)
@@ -228,7 +228,7 @@ namespace Bridge.NET
                 }
                 else if (member.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
                 {
-                    this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add_" : "remove_");
+                    this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
                     this.Write(member.Member.Name);
                     this.WriteOpenParentheses();                    
                 }

@@ -243,14 +243,14 @@ namespace Bridge.NET
 
                 if (!this.Emitter.IsAssignment)
                 {
-                    this.Write("get_");
+                    this.Write("get");
                     this.Write(id);
                     this.WriteOpenParentheses();
                     this.WriteCloseParentheses();
                 }
                 else
                 {
-                    this.PushWriter("set_" + id + "({0})");
+                    this.PushWriter("set" + id + "({0})");
                 }
             }
             else if (memberResult.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
@@ -266,7 +266,7 @@ namespace Bridge.NET
 
                 this.WriteDot();
 
-                this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add_" : "remove_");
+                this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
                 this.Write(memberResult.Member.Name);
                 this.WriteOpenParentheses();
             }
