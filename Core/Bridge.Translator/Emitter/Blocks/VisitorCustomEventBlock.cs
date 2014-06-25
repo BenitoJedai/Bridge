@@ -36,7 +36,7 @@ namespace Bridge.NET
 
                 this.AddLocals(new ParameterDeclaration[] { new ParameterDeclaration { Name = "value" } });
 
-                this.Write((remover ? "remove_" : "add_") + customEventDeclaration.Name);
+                this.Write((remover ? "remove" : "add") + customEventDeclaration.Name);
                 this.WriteColon();
                 this.WriteFunction();
                 this.WriteOpenParentheses();

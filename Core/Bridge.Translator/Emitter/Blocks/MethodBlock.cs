@@ -89,7 +89,7 @@ namespace Bridge.NET
         {
             string name = evtVar.Name;
 
-            this.Write(add ? "add_" : "remove_", name, " : ");
+            this.Write(add ? "add" : "remove", name, " : ");
             this.WriteFunction();
             this.WriteOpenParentheses();
             this.Write("value");

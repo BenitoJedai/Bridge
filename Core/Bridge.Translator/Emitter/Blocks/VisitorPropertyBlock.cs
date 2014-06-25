@@ -63,12 +63,12 @@ namespace Bridge.NET
 
                         if (setter)
                         {
-                            this.Write("this.Emitter." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase() + " = value;");
+                            this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase() + " = value;");
                         }
                         else
                         {
                             this.WriteReturn(true);
-                            this.Write("this.Emitter." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase());
+                            this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase());
                             this.WriteSemiColon();
                         }
 
