@@ -36,7 +36,7 @@ namespace Bridge.CLR
         {
         }
 
-        [Template("Bridge.is({0})")]
+        [Template("Bridge.is({0}, {1})")]
         public static bool Is(object type, string typeName)
         {
             return false;
