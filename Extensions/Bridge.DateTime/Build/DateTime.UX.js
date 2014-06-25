@@ -1,4 +1,4 @@
-Bridge.Class.extend('Bridge.DateTime.UX', {
+﻿Bridge.Class.extend('Bridge.DateTime.UX', {
     $statics: {
         add: function (instance, config) {
             return instance.addYears(config.year).addMonths(config.month).addDays(config.day).addHours(config.hour).addMinutes(config.minute).addSeconds(config.second).addMilliseconds(config.millisecond);
