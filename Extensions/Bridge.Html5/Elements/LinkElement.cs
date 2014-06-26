@@ -16,16 +16,6 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Gets or sets the character encoding for the target resource.
-        /// </summary>
-        public string Charset;
-
-        /// <summary>
-        /// A DOMString that corresponds to the CORS setting for this link element. See CORS settings attributes for details.
-        /// </summary>
-        public string CrossOrigin;
-
-        /// <summary>
         /// Gets or sets whether the link is disabled; currently only used with style sheet links.
         /// </summary>
         public bool Disabled;
@@ -57,24 +47,14 @@ namespace Bridge.Html5
         public readonly DOMTokenList RelList;
 
         /// <summary>
-        /// Gets or sets the reverse relationship of the linked resource from the resource to the document.
-        /// </summary>
-        public string Rev;
-
-        /// <summary>
         /// Is a DOMSettableTokenList that reflects the sizes HTML attribute, as a list of tokens.
         /// </summary>
-        public readonly DOMTokenList Sizes; // TODO: implement DOMSettableTokenList?
+        public readonly DOMSettableTokenList Sizes;
 
         /// <summary>
         /// Returns the StyleSheet object associated with the given element, or null if there is none.
         /// </summary>
         public readonly StyleSheet Sheet;
-
-        /// <summary>
-        /// Is a DOMString that reflects the target HTML attribute, indicating where to display the linked resource.
-        /// </summary>
-        public string Target; // TODO: Implement an enum of possible targets
 
         /// <summary>
         /// Gets or sets the MIME type of the linked resource.

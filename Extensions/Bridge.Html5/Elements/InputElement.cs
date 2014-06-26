@@ -26,11 +26,6 @@ namespace Bridge.Html5
         public string Accept;
 
         /// <summary>
-        /// Alignment of the element.
-        /// </summary>
-        public string Align;
-
-        /// <summary>
         /// Reflects the alt HTML attribute, containing alternative text to use when type is image.
         /// </summary>
         public string Alt;
@@ -299,7 +294,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Sets a custom validity message for the element. If this message is not the empty string, then the element is suffering from a custom validity error, and does not validate.
         /// </summary>
-        /// <param name="error"></param>
+        /// <param name="error">The custom validity message</param>
         public void SetCustomValidity(string error)
         {
         }

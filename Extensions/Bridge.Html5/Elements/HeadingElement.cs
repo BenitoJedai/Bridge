@@ -19,7 +19,7 @@ namespace Bridge.Html5
         /// Creates a heading element of the specified type
         /// </summary>
         [Template("document.createElement({0})")]
-        public HeadingElement(Heading h)
+        public HeadingElement(HeadingType h)
         {
         }
     }
@@ -30,7 +30,7 @@ namespace Bridge.Html5
     [Ignore]
     [Enum(Emit.StringNameLowerCase)]
     [Name("String")]
-    public enum Heading
+    public enum HeadingType
     {
         /// <summary>
         /// <h1></h1>

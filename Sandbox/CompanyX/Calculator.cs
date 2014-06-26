@@ -9,7 +9,7 @@ namespace Demo
     {
         public static void OnReady()
         {
-            Document.AddEventListener("DOMContentLoaded", Init, false);
+            Document.AddEventListener(EventType.DOMContentLoaded, Init, false);
         }
 
         public static void Init()
@@ -18,27 +18,20 @@ namespace Demo
 
             // Get all the keys from document
             var keys = Document.QuerySelectorAll("#calculator button");
-
-            // TODO: issue with array emitting
-            //var operators = new string[4] { "+", "-", "x", "÷" };
-            var operators = Script.Write<string>("['+', '-', 'x', '÷']");
+            var operators = new string[4] { "+", "-", "x", "÷" };
             
             var decimalAdded = false;
 
             // Add onclick event to all the keys and perform operations
             for (var i = 0; i < keys.Length; i++)
             {
-                // TODO: Emit issue with .As<T>() Generic Extension Method
-                //keys[i].As<SpanElement>().OnClick = (Event e) =>
-
-                keys[i].OnClick = (Event e) =>
+                keys[i].As<SpanElement>().OnClick = (Event e) =>
                 {
                     // Get the input and button values
                     var input = Document.QuerySelector(".panel-body h3");
                     var inputVal = input.InnerHTML;
                     
-                    // TODO: How to use 'this' keyword?
-                    var btnVal = Script.Write<string>("this.innerHTML");
+                    var btnVal = e.Target.InnerHTML;
 
                     // Now, just append the key values (btnValue) to the input string and finally use javascript's eval function to get the result
                     // If clear key is pressed, erase everything
@@ -56,7 +49,7 @@ namespace Demo
 
                         // Replace all instances of x and ÷ with * and / respectively. 
                         // This can be done easily using regex and the 'g' tag which will replace all instances of the matched character/substring
-                        equation = equation.Replace("/x/g", "*").Replace("/÷/g", "/");
+                        equation = equation.Replace(new RegExp("/x/g"), "*").Replace(new RegExp("/÷/g"), "/");
 
                         // Final thing left to do is checking the last character of the equation. If it's an operator or a decimal, remove it
                         if (operators.IndexOf(lastChar) > -1 || lastChar == ".")

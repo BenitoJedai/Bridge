@@ -23,16 +23,11 @@ namespace Bridge.Html5
         /// <summary>
         /// Gets or sets the name of an HTTP response header to define for a document.
         /// </summary>
-        public string HttpEquiv; // TODO: Implement an enum
+        public string HttpEquiv;
 
         /// <summary>
         /// Gets or sets the name of a meta-data property to define for a document.
         /// </summary>
         public string Name;
-
-        /// <summary>
-        /// Gets or sets the name of a scheme used to interpret the value of a meta-data property.
-        /// </summary>
-        public string Scheme; // TODO: Implement an enum?
     }
 }
