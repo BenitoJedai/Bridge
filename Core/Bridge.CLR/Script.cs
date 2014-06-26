@@ -81,5 +81,10 @@ namespace Bridge.CLR
         {
             return null;
         }
+
+        public static T This<T>()
+        {
+            return default(T);
+        }
     }
 }

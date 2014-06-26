@@ -1562,6 +1562,9 @@ namespace Bridge.Html5
         {
         }
 
+        [Template("document")]
+        public static DocumentInstance Instance;
+
         //TODO: Document.createExpression(String expression, XPathNSResolver resolver)
         //TODO: Document.createNSResolver(Node resolver)
         //TODO: Document.evaluate(String expression, Node contextNode, XPathNSResolver resolver, Number type, Object result)

@@ -1492,5 +1492,8 @@ namespace Bridge.Html5
         }
 
         #endregion Methods
+
+        [Template("window")]
+        public static WindowInstance Instance;
     }
 }
