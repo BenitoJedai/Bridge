@@ -23,7 +23,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Is a live HTMLCollection representing the <area> elements associated to this <map>.
         /// </summary>
-        public readonly HTMLCollection Areas; // TODO: Implement as a collection of areas?
+        public readonly HTMLCollection<AreaElement> Areas;
 
         /// <summary>
         /// Is a live HTMLCollection representing the <img> and <object> elements associated to this <map>.

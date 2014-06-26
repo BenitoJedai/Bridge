@@ -15,10 +15,9 @@ namespace Bridge.Html5
         {
         }
 
-        // TODO: change HtmlCollection to a type of a collection of options. Like HTMLCollection<OptionElement> or HTMLOptionCollection
         /// <summary>
         /// A collection of the contained option elements.
         /// </summary>
-        public readonly HTMLCollection Options;
+        public readonly OptionsCollection Options;
     }
 }

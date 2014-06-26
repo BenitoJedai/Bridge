@@ -65,7 +65,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Reflects the sandbox HTML attribute, indicating extra restrictions on the behavior of the nested content.
         /// </summary>
-        // public DOMSettableTokenList Sandbox; // TODO: impelement a DOMSettableTokenList class
+        public DOMSettableTokenList Sandbox;
 
         /// <summary>
         /// Indicates whether the browser should provide scrollbars for the frame.

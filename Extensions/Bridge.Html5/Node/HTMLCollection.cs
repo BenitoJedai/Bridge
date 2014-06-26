@@ -5,11 +5,12 @@ using Bridge.CLR;
 namespace Bridge.Html5
 {
     /// <summary>
+    /// The generic version of the HTMLCollection class.
     /// HTMLCollection is an class representing a generic collection (array) of elements (in document order) and offers methods and properties for selecting from the list.
     /// </summary>
     [Ignore]
     [Name("HTMLCollection")]
-    public class HTMLCollection: IEnumerable<Element>
+    public class HTMLCollection<T>: IEnumerable<T> where T:Element
     {
         protected internal HTMLCollection()
         {
@@ -20,7 +21,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public Element this[int index] 
+        public T this[int index] 
         {
 			get 
             {
@@ -33,7 +34,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Element this[string name]
+        public T this[string name]
         {
             get
             {
@@ -47,7 +48,7 @@ namespace Bridge.Html5
         /// <param name="index"></param>
         /// <returns></returns>
 		[Name("item")]
-        public Element GetItem(int index) 
+        public T GetItem(int index) 
         {
 			return null;
 		}
@@ -58,7 +59,7 @@ namespace Bridge.Html5
         /// <param name="name"></param>
         /// <returns></returns>
         [Name("namedItem")]
-        public Element GetNamedItem(string name)
+        public T GetNamedItem(string name)
         {
             return null;
         }
@@ -68,9 +69,19 @@ namespace Bridge.Html5
         /// </summary>
         public readonly int Length;
 
-        public IEnumerator<Element> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return null;
         }
+    }
+
+    /// <summary>
+    /// The non-generic version of the HTMLCollection class.
+    /// HTMLCollection is an class representing a generic collection (array) of elements (in document order) and offers methods and properties for selecting from the list.
+    /// </summary>
+    [Ignore]
+    [Name("HTMLCollection")]
+    public class HTMLCollection: HTMLCollection<Element>
+    {
     }
 }

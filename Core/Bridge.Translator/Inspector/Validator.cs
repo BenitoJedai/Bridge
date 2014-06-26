@@ -6,6 +6,7 @@ using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.CSharp;
+using Ext.Net.Utilities;
 
 namespace Bridge.NET
 {
@@ -318,7 +319,7 @@ namespace Bridge.NET
             {
                 if(type.BaseType != null) 
                 {
-                    string parentName = type.BaseType.FullName;
+                    string parentName = type.BaseType.FullName.LeftOf('<').Replace("`", "$");
 
                     if (!allTypes.ContainsKey(parentName))
                     {
