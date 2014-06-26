@@ -14,6 +14,8 @@ namespace Bridge.NET
             this.Emitter = emitter;
             this.ArgumentsInfo = argsInfo;
             this.InlineCode = inline;
+
+            argsInfo.AddExtensionParam();
         }
         
         public ArgumentsInfo ArgumentsInfo 
@@ -64,90 +66,82 @@ namespace Bridge.NET
             Expression paramsArg = argsInfo.ParamsExpression;
 
             var matches = _formatArg.Matches(inline);
-            if (matches.Count == 1 && matches[0].Groups[2].Value == "0")
+
+            this.Write("");
+            inline = _formatArg.Replace(inline, delegate(Match m)
             {
-                this.PushWriter(inline);
-                new ExpressionListBlock(this.Emitter, expressions.Select(e => e.Expression), paramsArg).Emit();
-                this.PopWriter();
-            }
-            else
-            {
-                this.Write("");
-                inline = _formatArg.Replace(inline, delegate(Match m)
+                int count = this.Emitter.Writers.Count;
+                string key = m.Groups[2].Value;
+                bool ignoreArray = (m.Groups[1].Success && m.Groups[1].Value == "*") || argsInfo.ParamsExpression == null;
+
+                StringBuilder oldSb = this.Emitter.Output;
+                this.Emitter.Output = new StringBuilder();
+
+                if (key == "this" || key == argsInfo.ThisName || (key == "0" && argsInfo.IsExtensionMethod))
                 {
-                    int count = this.Emitter.Writers.Count;
-                    string key = m.Groups[2].Value;
-                    bool ignoreArray = m.Groups[1].Success && m.Groups[1].Value == "*";
+                    string thisValue = argsInfo.GetThisValue();
 
-                    StringBuilder oldSb = this.Emitter.Output;
-                    this.Emitter.Output = new StringBuilder();
-
-                    if (key == "this" || key == argsInfo.ThisName)
+                    if (thisValue != null)
                     {
-                        string thisValue = argsInfo.GetThisValue();
-
-                        if (thisValue != null)
+                        this.Write(thisValue);
+                    }
+                }
+                else
+                {
+                    IList<Expression> exprs = this.GetExpressionsByKey(expressions, key);
+                    if (exprs.Count > 0)
+                    {
+                        if (exprs.Count > 1)
                         {
-                            this.Write(thisValue);
+                            if (!ignoreArray)
+                            {
+                                this.Write("[");
+                            }
+
+                            new ExpressionListBlock(this.Emitter, exprs, null).Emit();
+
+                            if (!ignoreArray)
+                            {
+                                this.Write("]");
+                            }
+                        }
+                        else
+                        {
+                            exprs[0].AcceptVisitor(this.Emitter);
                         }
                     }
-                    else
+                    else if (typeParams != null)
                     {
-                        IList<Expression> exprs = this.GetExpressionsByKey(expressions, key);
-                        if (exprs.Count > 0)
+                        var type = this.GetAstTypeByKey(typeParams, key);
+
+                        if (type != null)
                         {
-                            if (exprs.Count > 1)
-                            {
-                                if (!ignoreArray)
-                                {
-                                    this.Write("[");
-                                }
-
-                                new ExpressionListBlock(this.Emitter, exprs, null).Emit();
-
-                                if (!ignoreArray)
-                                {
-                                    this.Write("]");
-                                }
-                            }
-                            else
-                            {
-                                exprs[0].AcceptVisitor(this.Emitter);
-                            }
+                            type.AcceptVisitor(this.Emitter);
                         }
-                        else if (typeParams != null)
+                        else
                         {
-                            var type = this.GetAstTypeByKey(typeParams, key);
+                            var iType = this.GetITypeByKey(typeParams, key);
 
-                            if (type != null)
+                            if (iType != null)
                             {
-                                type.AcceptVisitor(this.Emitter);
-                            }
-                            else
-                            {
-                                var iType = this.GetITypeByKey(typeParams, key);
-
-                                if (iType != null)
-                                {
-                                    new CastBlock(this.Emitter, iType).Emit();
-                                }
+                                new CastBlock(this.Emitter, iType).Emit();
                             }
                         }
                     }
+                }
 
-                    if (this.Emitter.Writers.Count != count)
-                    {
-                        this.PopWriter();
-                    }
+                if (this.Emitter.Writers.Count != count)
+                {
+                    this.PopWriter();
+                }
 
-                    string replacement = this.Emitter.Output.ToString();
-                    this.Emitter.Output = oldSb;
+                string replacement = this.Emitter.Output.ToString();
+                this.Emitter.Output = oldSb;
 
-                    return replacement;
-                });
+                return replacement;
+            });
 
-                this.Write(inline);
-            }
+            this.Write(inline);
         }
     }
 }

@@ -76,6 +76,12 @@ namespace Bridge.NET
             set;
         }
 
+        public bool IsExtensionMethod
+        {
+            get;
+            set;
+        }
+
         public ArgumentsInfo(Emitter emitter, InvocationExpression invocationExpression)
         {
             this.Emitter = emitter;
@@ -106,9 +112,17 @@ namespace Bridge.NET
             this.Expression = binaryOperatorExpression;
             this.OperatorResolveResult = operatorResolveResult;
 
-            this.ArgumentsExpressions = new Expression[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right };
-            this.ArgumentsNames = new string[] { "left", "right" };
-            this.CreateNamedExpressions(this.ArgumentsNames, this.ArgumentsExpressions);
+            if (operatorResolveResult.UserDefinedOperatorMethod != null)
+            {
+                this.BuildOperatorArgumentsList(new Expression[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right });
+                this.BuildOperatorTypedArguments();
+            }
+            else
+            {
+                this.ArgumentsExpressions = new Expression[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right };
+                this.ArgumentsNames = new string[] { "left", "right" };
+                this.CreateNamedExpressions(this.ArgumentsNames, this.ArgumentsExpressions);
+            }            
         }
 
         private void BuildTypedArguments(AstType type)
@@ -170,6 +184,19 @@ namespace Bridge.NET
             }
         }
 
+        private void BuildOperatorTypedArguments()
+        {
+            var method = this.OperatorResolveResult.UserDefinedOperatorMethod;
+
+            if (method != null)
+            {
+                for (int i = 0; i < method.TypeArguments.Count; i++)
+                {
+                    this.TypeArguments[i] = new TypeParamExpression(method.TypeParameters[i].Name, null, method.TypeArguments[i]);
+                }
+            }
+        }
+
         private void BuildArgumentsList(IList<Expression> arguments)
         {
             Expression paramsArg = null;
@@ -188,6 +215,7 @@ namespace Bridge.NET
                 {
                     shift = 1;
                     this.ThisName = resolvedMethod.Parameters[0].Name;
+                    this.IsExtensionMethod = true;
                 }
 
                 Expression[] result = new Expression[parameters.Count - shift];
@@ -207,9 +235,13 @@ namespace Bridge.NET
                     }
                     else
                     {
-                        if (paramsArg == null && parameters[i + shift].IsParams && !this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition))
+                        if (paramsArg == null && (parameters.Count > (i + shift)) && parameters[i + shift].IsParams)
                         {
-                            paramsArg = arg;
+                            if (!this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition))
+                            {
+                                paramsArg = arg;
+                            }
+                            
                             paramArgName = parameters[i + shift].Name;
                         }
 
@@ -226,7 +258,7 @@ namespace Bridge.NET
                         }
 
                         result[i] = arg;
-                        names[i] = i < parameters.Count ? parameters[i + shift].Name : paramArgName;
+                        names[i] = (i + shift) < parameters.Count ? parameters[i + shift].Name : paramArgName;
                     }
 
                     i++;
@@ -239,7 +271,7 @@ namespace Bridge.NET
                         result[i] = new PrimitiveExpression(parameters[i + shift].ConstantValue);
                         names[i] = parameters[i + shift].Name;
                     }
-                }
+                }                
 
                 this.ArgumentsExpressions = result;
                 this.ArgumentsNames = names;
@@ -250,6 +282,70 @@ namespace Bridge.NET
             {
                 this.ArgumentsExpressions = arguments.ToArray();
             }            
+        }
+
+        private void BuildOperatorArgumentsList(IList<Expression> arguments)
+        {
+            var resolveResult = this.OperatorResolveResult;
+
+            if (resolveResult != null)
+            {
+                var parameters = resolveResult.UserDefinedOperatorMethod.Parameters;
+                var resolvedMethod = resolveResult.UserDefinedOperatorMethod as IMethod;
+
+                Expression[] result = new Expression[parameters.Count];
+                string[] names = new string[result.Length];
+
+                int i = 0;
+                foreach (var arg in arguments)
+                {
+                    if (arg is NamedArgumentExpression)
+                    {
+                        NamedArgumentExpression namedArg = (NamedArgumentExpression)arg;
+                        var namedParam = parameters.First(p => p.Name == namedArg.Name);
+                        var index = parameters.IndexOf(namedParam);
+
+                        result[index] = namedArg.Expression;
+                        names[index] = namedArg.Name;
+                    }
+                    else
+                    {
+                        if (i >= result.Length)
+                        {
+                            var list = result.ToList();
+                            list.AddRange(new Expression[arguments.Count - i]);
+
+                            var strList = names.ToList();
+                            strList.AddRange(new string[arguments.Count - i]);
+
+                            result = list.ToArray();
+                            names = strList.ToArray();
+                        }
+
+                        result[i] = arg;
+                        names[i] = parameters[i].Name;
+                    }
+
+                    i++;
+                }
+
+                for (i = 0; i < result.Length; i++)
+                {
+                    if (result[i] == null)
+                    {
+                        result[i] = new PrimitiveExpression(parameters[i].ConstantValue);
+                        names[i] = parameters[i].Name;
+                    }
+                }
+
+                this.ArgumentsExpressions = result;
+                this.ArgumentsNames = names;
+                this.NamedExpressions = this.CreateNamedExpressions(names, result);
+            }
+            else
+            {
+                this.ArgumentsExpressions = arguments.ToArray();
+            }
         }
 
         private NamedParamExpression[] CreateNamedExpressions(string[] names, Expression[] expressions)
@@ -281,6 +377,36 @@ namespace Bridge.NET
             }
 
             return "null";
+        }
+
+        public void AddExtensionParam()
+        {
+            var result = this.ArgumentsExpressions;
+            var namedResult = this.NamedExpressions;
+            var names = this.ArgumentsNames;
+
+            if (this.IsExtensionMethod)
+            {
+                var list = result.ToList();
+                list.Insert(0, null);
+
+                var strList = names.ToList();
+                strList.Insert(0, null);
+
+                var namedList = namedResult.ToList();
+                namedList.Insert(0, new NamedParamExpression(this.ThisName, null));
+
+                result = list.ToArray();
+                names = strList.ToArray();
+                namedResult = namedList.ToArray();
+
+                result[0] = null;
+                names[0] = this.ThisName;
+            }
+
+            this.ArgumentsExpressions = result;
+            this.ArgumentsNames = names;
+            this.NamedExpressions = namedResult;
         }
     }
 

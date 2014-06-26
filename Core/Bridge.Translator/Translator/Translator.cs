@@ -71,7 +71,7 @@ namespace Bridge.NET
 
             var file = new System.IO.FileInfo(path);
             file.Directory.Create();
-            File.WriteAllText(file.FullName, builder.ToString());
+            File.WriteAllText(file.FullName, builder.ToString(), System.Text.UTF8Encoding.UTF8);
         }
 
         public virtual void SaveTo(string dir, string defaultFileName)
@@ -95,7 +95,7 @@ namespace Bridge.NET
 
                 var file = new System.IO.FileInfo(filePath);
                 file.Directory.Create();
-                File.WriteAllText(file.FullName, code);
+                File.WriteAllText(file.FullName, code, System.Text.UTF8Encoding.UTF8);
             }            
         }
 

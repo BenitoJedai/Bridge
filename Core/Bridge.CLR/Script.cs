@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Bridge.CLR;
 
 namespace Bridge.CLR
 {
@@ -36,7 +37,7 @@ namespace Bridge.CLR
         {
         }
 
-        [Template("Bridge.is({0})")]
+        [Template("Bridge.is({0}, {1})")]
         public static bool Is(object type, string typeName)
         {
             return false;
@@ -48,7 +49,7 @@ namespace Bridge.CLR
         /// <typeparam name="T"></typeparam>
         /// <param name="code"></param>
         /// <returns></returns>
-        [Bridge.CLR.Template]
+        [Template]
         public static T Write<T>(string code)
         {
             return default(T);
@@ -59,7 +60,7 @@ namespace Bridge.CLR
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        [Bridge.CLR.Template]
+        [Template]
         public static void Write(string code)
         {
         }

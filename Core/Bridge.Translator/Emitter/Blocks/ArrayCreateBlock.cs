@@ -21,7 +21,7 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            
+            this.VisitArrayCreateExpression();
         }
 
         protected void VisitArrayCreateExpression()

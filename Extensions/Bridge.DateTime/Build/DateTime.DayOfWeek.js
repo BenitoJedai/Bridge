@@ -1,4 +1,4 @@
-Bridge.Class.extend('Bridge.DayOfWeek', {
+﻿Bridge.Class.extend('Bridge.DayOfWeek', {
     $statics: {
         $init: function () {
             this.friday = 5;

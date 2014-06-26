@@ -23,9 +23,21 @@ namespace CompanyX
     {
         public static string Name = "Geoff";
 
+        public static void DoSomething(string title, string message = "")
+        {
+            Console.Log(title, message);
+        }
+
+        [Template("console.log({title}, {message})")]
+        public static void Log(string title, string message = "")
+        { 
+        }
+
         public static void LoadInit()
         {
             Console.Log("LoadInit");
+
+            DoSomething(message: "Message", title: "Title");
 
             var div = Document.GetElementById("test");
             div.InnerHTML = "Hello World";
@@ -37,25 +49,51 @@ namespace CompanyX
 
             Document.Body.OnLoad += delegate
             {
-                //var div2 = new Element();
-                //div2.ClassName = "box";
-                //div2.Style.Height = "100px";
-                //div2.Style.Width = "100px";
-
-                //Document.Body.AppendChild(div2);
-
                 Console.Log("+=OnLoad");
             };
 
+            var input6 = new DivElement { };
+
+
+            var input5 = Document.GetElementById("input1");
+            input5.Value = "";
+
+            var input4 = new InputElement { Value = "test" };
+
+            //var input2 = Document.GetElementById("input1").As<InputElement>();
+
             var input = Document.GetElementById("input1") as InputElement;
+
             input.Value = "test2";
 
-            var div2 = new Element { ClassName = "box" };
+            var div2 = new Element
+            {
+                ClassName = "box",
+                Style =
+                {
+                    Width = "100px"
+                }
+            };
 
             div2.AppendChild(input);
             div.AppendChild(div2);
+
+            Action<Event> onclick = (Event e) => Console.Log("onclick", Script.Arguments);
+            Action<Event> onclick2 = new Action<Event>(delegate
+            {
+                Console.Log("OnClick2", Script.Arguments);
+            });
             
-            //input.Value = "MyValue";
+            div.AppendChild(new ButtonElement
+            {
+                InnerHTML = "Submit",
+                OnClick = onclick2
+                //OnClick = onclick
+                //OnClick = new Action<Event>(delegate
+                //{
+                //    Console.Log("OnClick");
+                //})
+            });
         }
 
         public static void Start()
@@ -115,9 +153,9 @@ namespace CompanyX
             //Person.DoSomething(person);
 
             // Initalize int array fails
-            var items = new int[6] { 1, 1, 2, 3, 5, 8 };
+            //var items = new int[6] { 1, 1, 2, 3, 5, 8 };
 
-            Console.Log(items[5]);
+            //Console.Log(items[5]);
 
             Console.Log(DateTime.Today.DayOfYear);
 

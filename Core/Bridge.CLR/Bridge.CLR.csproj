@@ -74,6 +74,7 @@
     <Compile Include="System\Collections\IEnumerable.cs" />
     <Compile Include="System\Collections\IEnumerator.cs" />
     <Compile Include="System\Collections\IEqualityComparer.cs" />
+    <Compile Include="System\LocaleOptions.cs" />
     <Compile Include="System\Func.cs" />
     <Compile Include="System\Date.cs" />
     <Compile Include="System\Error.cs" />
