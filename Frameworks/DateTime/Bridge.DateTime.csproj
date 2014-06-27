@@ -40,10 +40,6 @@
     <Folder Include="Build\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\CLR\Bridge.CLR.csproj">
-      <Project>{de78b8b7-c0f5-415b-a70b-02194433f450}</Project>
-      <Name>Bridge.CLR</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Html5\Bridge.Html5.csproj">
       <Project>{99decd28-d3e3-4ea7-acae-ab5dfc9913bd}</Project>
       <Name>Bridge.Html5</Name>

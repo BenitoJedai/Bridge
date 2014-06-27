@@ -18,6 +18,14 @@ namespace System
             } 
         }
 
+        public T GetProperty<T>(string name)
+        {
+            return default(T);
+        }
+
+        [Template("{this}")]
+        public readonly dynamic Instance;
+
         public virtual string ToString() 
         { 
             return null; 

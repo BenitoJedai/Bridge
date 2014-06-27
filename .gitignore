@@ -121,3 +121,4 @@ UpgradeLog*.XML
 /Extensions/Bridge.DateTime/Build/*
 
 .DS_Store
+/Bridge.NET.local.sln

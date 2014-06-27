@@ -91,7 +91,10 @@ namespace Bridge.NET
             this.ResolveResult = emitter.Resolver.ResolveNode(invocationExpression, emitter) as InvocationResolveResult;
 
             this.BuildArgumentsList(arguments);
-            this.BuildTypedArguments(invocationExpression.Target);
+            if (this.ResolveResult != null) 
+            {
+                this.BuildTypedArguments(invocationExpression.Target);
+            }            
         }
 
         public ArgumentsInfo(Emitter emitter, ObjectCreateExpression objectCreateExpression)
