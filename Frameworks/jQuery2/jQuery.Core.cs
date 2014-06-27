@@ -16,9 +16,33 @@ namespace Bridge.jQuery2
         public jQuery(object obj)
         {
         }
-
+        
         [Template("$({0}, {1})")]
         public jQuery(object obj, object context)
+        {
+        }
+
+        /// <summary>
+        /// Accepts a string containing a CSS selector which is then used to match a set of elements.
+        /// </summary>
+        /// <param name="selector">A string containing a selector expression</param>
+        [Template("$({0})")]
+        public jQuery(string selector)
+        {
+        }
+
+        /// <summary>
+        /// Accepts a string containing a CSS selector which is then used to match a set of elements.
+        /// </summary>
+        /// <param name="selector">A string containing a selector expression</param>
+        /// <param name="context">A DOM Element, Document, or jQuery to use as context</param>
+        [Template("$({0}, {1})")]
+        public jQuery(string selector, DocumentInstance context)
+        {
+        }
+
+        [Template("$({0})")]
+        public jQuery(Element element)
         {
         }
 
@@ -91,6 +115,12 @@ namespace Bridge.jQuery2
 
         [Template("$({0})")]
         public static jQuery Object(object obj)
+        {
+            return null;
+        }
+
+        [Template("$({0})")]
+        public static jQuery Ready(Action callback)
         {
             return null;
         }

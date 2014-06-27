@@ -10,7 +10,7 @@ namespace Bridge.jQuery2
     [Constructor("$")]
     [Name("$")]
     public partial class jQuery : IEnumerable
-    {        
+    {
         [Template("$(this)")]
         public static readonly jQuery This;
 
