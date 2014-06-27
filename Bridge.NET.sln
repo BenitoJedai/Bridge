@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator", "Core\Translator\Translator.csproj", "{44124331-C60A-4071-B387-4B8E71324B10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Translator", "Core\Translator\Translator.csproj", "{44124331-C60A-4071-B387-4B8E71324B10}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DE78B8B7-C0F5-415B-A70B-02194433F450} = {DE78B8B7-C0F5-415B-A70B-02194433F450}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLR", "Core\CLR\CLR.csproj", "{DE78B8B7-C0F5-415B-A70B-02194433F450}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.CLR", "Core\CLR\CLR.csproj", "{DE78B8B7-C0F5-415B-A70B-02194433F450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Builder\Build\Build.csproj", "{28703D12-116A-4968-BD85-F26D7F7E7DA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Build", "Builder\Build\Build.csproj", "{28703D12-116A-4968-BD85-F26D7F7E7DA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "Builder\Builder\Builder.csproj", "{243BB709-3912-4C65-82D4-787A5E2201D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Builder", "Builder\Builder\Builder.csproj", "{243BB709-3912-4C65-82D4-787A5E2201D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateTime", "Frameworks\DateTime\DateTime.csproj", "{4107017F-22D4-4572-A19A-C530AA4F9294}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.DateTime", "Frameworks\DateTime\DateTime.csproj", "{4107017F-22D4-4572-A19A-C530AA4F9294}"
 	ProjectSection(ProjectDependencies) = postProject
 		{243BB709-3912-4C65-82D4-787A5E2201D7} = {243BB709-3912-4C65-82D4-787A5E2201D7}
 		{28703D12-116A-4968-BD85-F26D7F7E7DA4} = {28703D12-116A-4968-BD85-F26D7F7E7DA4}
@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateTime", "Frameworks\Date
 		{DE78B8B7-C0F5-415B-A70B-02194433F450} = {DE78B8B7-C0F5-415B-A70B-02194433F450}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Html5", "Core\Html5\Html5.csproj", "{99DECD28-D3E3-4EA7-ACAE-AB5DFC9913BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Html5", "Core\Html5\Html5.csproj", "{99DECD28-D3E3-4EA7-ACAE-AB5DFC9913BD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{243BB709-3912-4C65-82D4-787A5E2201D7} = {243BB709-3912-4C65-82D4-787A5E2201D7}
 		{28703D12-116A-4968-BD85-F26D7F7E7DA4} = {28703D12-116A-4968-BD85-F26D7F7E7DA4}
@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Builder", "Builder", "{1737
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frameworks", "Frameworks", "{246696B4-0384-4CE0-87CD-CFC6CC5CA565}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jQuery2", "Frameworks\jQuery2\jQuery2.csproj", "{BCCFB816-2F7F-4693-A16B-2BC0A7B39085}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.jQuery2", "Frameworks\jQuery2\jQuery2.csproj", "{BCCFB816-2F7F-4693-A16B-2BC0A7B39085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
