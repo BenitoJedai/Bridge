@@ -83,7 +83,14 @@ namespace Bridge.NET
 
             if (hasInline && member.Member.IsStatic)
             {
-                this.PushWriter(inline);
+                if (resolveResult is InvocationResolveResult)
+                {
+                    this.PushWriter(inline);
+                }
+                else
+                {
+                    this.Write(inline);
+                }
             }
             else
             {
