@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Ajax\AjaxReadyState.cs" />
+    <Compile Include="Ajax\FormData.cs" />
+    <Compile Include="Ajax\XMLHttpRequestUpload.cs" />
+    <Compile Include="Ajax\XMLHttpRequest.cs" />
+    <Compile Include="Ajax\XMLHttpRequestEventTarget.cs" />
+    <Compile Include="Ajax\XMLHttpRequestResponseType.cs" />
     <Compile Include="BarProp.cs" />
     <Compile Include="CaretPosition.cs" />
     <Compile Include="ClientRect.cs" />
@@ -207,6 +213,7 @@
     <Compile Include="Events\ProgressEvent.cs" />
     <Compile Include="Events\UIEvent.cs" />
     <Compile Include="Events\WheelEvent.cs" />
+    <Compile Include="Events\EventTarget.cs" />
     <Compile Include="File\Blob.cs" />
     <Compile Include="File\BlobPropertyBag.cs" />
     <Compile Include="File\Endings.cs" />
