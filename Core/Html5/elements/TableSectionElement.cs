@@ -35,22 +35,13 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Inserts a new row to the end of section.
-        /// </summary>
-        /// <returns>Returns a TableRowElement object that represents a new row added to a table element.</returns>
-        public TableRowElement InsertRow() // TODO: a possibility to define a parameter with a value by default?
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Inserts a new row just before the given position in the section. 
         /// If the given position is -1, it appends the row to the end of section. 
         /// If the given position is greater (or equal as it starts at zero) than the amount of rows in the section, or is smaller than -1, it raises a DOMException with the IndexSizeError value.
         /// </summary>
         /// <param name="index">The possition of a new row to insert</param>
         /// <returns>Returns a TableRowElement object that represents a new row added to a table element.</returns>
-        public TableRowElement InsertRow(int index) // TODO: a possibility to define a parameter with a value by default?
+        public TableRowElement InsertRow(int index = -1) // update docs
         {
             return null;
         }

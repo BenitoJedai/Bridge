@@ -86,22 +86,14 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Appends a new row in the table. If a table has multiple tbody elements, by default, the new row is inserted into the last tbody. To insert the row into a specific tbody, inserts rows to that body directly.
-        /// </summary>
-        /// <returns>Returns a TableRowElement representing a new row of the table.</returns>
-        public TableRowElement InsertRow() // TODO: index = -1 by default?
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Inserts a new row in the table at the given position.
+        /// Inserts a new row in the table and returns a reference to the row.
         /// If index is -1 or equal to the number of rows, the row is appended as the last row. If index is greater than the number of rows, an IndexSizeError exception will result.
-        /// If a table has multiple tbody elements, by default, the new row is inserted into the last tbody. To insert the row into a specific tbody, inserts rows to that body directly.
+        /// If index is omitted it defaults to -1.
+        /// If a table has multiple tbody elements, by default, the new row is inserted into the last tbody.
         /// </summary>
-        /// <param name="index">The row index of the new row</param>
-        /// <returns>Returns a TableRowElement representing a new row of the table.</returns>
-        public TableRowElement InsertRow(int index) //TODO: index = -1 by default?
+        /// <param name="index">The row index of the new row. Defaults to -1.</param>
+        /// <returns>Returns the TableRowElement representing the new row of the table.</returns>
+        public TableRowElement InsertRow(int index = -1)
         {
             return null;
         }
