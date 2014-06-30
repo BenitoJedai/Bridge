@@ -54,6 +54,6 @@ namespace Bridge.Html5
         /// <summary>
         /// The track element's text track data.
         /// </summary>
-        //public readonly TextTrack Track; // TODO: Implement TextTrack
+        public readonly TextTrack Track;
     }
 }

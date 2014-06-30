@@ -145,6 +145,11 @@ namespace Bridge.Html5
         public string Src;
 
         /// <summary>
+        /// Represents the list of TextTrack objects contained in the element.
+        /// </summary>
+        public TextTrackList TextTracks;
+
+        /// <summary>
         /// The audio volume, from 0.0 (silent) to 1.0 (loudest).
         /// </summary>
         public double Volume;

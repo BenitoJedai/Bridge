@@ -182,6 +182,7 @@
     <Compile Include="Elements\ButtonType.cs" />
     <Compile Include="Elements\InputType.cs" />
     <Compile Include="Elements\TitleElement.cs" />
+    <Compile Include="Elements\TextTrack.cs" />
     <Compile Include="Elements\TrackElement.cs" />
     <Compile Include="Elements\UListElement.cs" />
     <Compile Include="Elements\UnknownElement.cs" />
