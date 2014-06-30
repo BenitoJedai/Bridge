@@ -74,13 +74,7 @@ namespace Bridge.NET
         {
             this.WriteIndent();
             this.Emitter.Output.Append(this.Emitter.ToJavaScript(value));
-        }
-
-        protected virtual void WriteComment(string text)
-        {
-            this.Write("/* " + text + " */");
-            this.WriteNewLine();
-        }
+        }        
 
         protected virtual void WriteComma()
         {

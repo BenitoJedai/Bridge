@@ -27,6 +27,18 @@ namespace Bridge.NET
         private static Regex injectComment = new Regex("@(.*)@", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         private static Regex removeStars = new Regex("(^\\s*)(\\* )", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
+        protected virtual void WriteMultiLineComment(string text)
+        {
+            this.Write("/* " + text + " */");
+            this.WriteNewLine();
+        }
+
+        protected virtual void WriteSingleLineComment(string text)
+        {
+            this.Write("//" + text);
+            this.WriteNewLine();
+        }
+
         protected void VisitComment()
         {
             Comment comment = this.Comment;
@@ -38,9 +50,13 @@ namespace Bridge.NET
                 this.Write(code);
                 this.WriteNewLine();
             }
-            else if (comment.CommentType == CommentType.SingleLine || comment.CommentType == CommentType.MultiLine)
+            else if (comment.CommentType == CommentType.MultiLine)
             {
-                this.WriteComment(comment.Content);
+                this.WriteMultiLineComment(comment.Content);
+            }
+            else if (comment.CommentType == CommentType.SingleLine)
+            {
+                this.WriteSingleLineComment(comment.Content);
             }
         }
     }
