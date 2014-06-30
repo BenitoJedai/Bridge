@@ -136,7 +136,8 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Element NamedItem(string name)
+        //public Element NamedItem(string name)
+        public Any<Element, HTMLCollection> NamedItem(string name)
         {
             return null;
         }

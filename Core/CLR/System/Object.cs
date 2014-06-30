@@ -76,5 +76,17 @@ namespace System
         {
             return default(T);
         }
+
+        [Template("Bridge.as({obj}, {T})")]
+        public static T TryCast<T>(this object obj) where T:class
+        {
+            return default(T);
+        }
+
+        [Template("Bridge.is({obj}, {T})")]
+        public static bool Is<T>(this object obj)
+        {
+            return false;
+        }
     }
 }

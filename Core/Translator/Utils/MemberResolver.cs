@@ -86,9 +86,13 @@ namespace Bridge.NET
 
                 if (parentInvocation != null && method == null) 
                 {
-                    var typeDef = (DefaultResolvedTypeDefinition)methodGroupResolveResult.TargetType;
-                    var methods = typeDef.Methods.Where(m => m.Name == methodGroupResolveResult.MethodName);
-                    method = methods.FirstOrDefault();
+                    var typeDef = methodGroupResolveResult.TargetType as DefaultResolvedTypeDefinition;
+
+                    if (typeDef != null)
+                    {
+                        var methods = typeDef.Methods.Where(m => m.Name == methodGroupResolveResult.MethodName);
+                        method = methods.FirstOrDefault();
+                    }
                 }
 
                 if (method == null)
