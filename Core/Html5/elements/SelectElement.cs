@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Bridge.CLR;
 
 namespace Bridge.Html5
@@ -157,10 +158,13 @@ namespace Bridge.Html5
 
         /// <summary>
         /// Gets the item in the options collection with the specified name. The name string can match either the id or the name attribute of an option node. You can also access an item by specifying the name in array-style brackets or parentheses, without calling this method explicitly.
-        /// <param name="name">The name of the option to get.</param>
-        /// <returns>A node, if there is exactly one match.</returns>
         /// </summary>
-        public OptionElement NamedItem(string name)
+        /// <param name="name">The name of the option to get.</param>
+        /// <returns>
+        ///     - An OptionElement, if there is exactly one match. 
+        ///     - null if there are no matches.
+        ///     - An OptionsCollection in tree order of nodes whose name or id attributes match the specified name.</returns>
+        public Any<OptionElement, OptionsCollection> NamedItem(string name)
         {
             return null;
         }

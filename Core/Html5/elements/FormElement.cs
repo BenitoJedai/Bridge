@@ -110,9 +110,9 @@ namespace Bridge.Html5
         /// <summary>
         /// Gets the item or list of items in elements collection whose name or id match the specified name, or null if no items match. You can also specify the name in array-style brackets or parentheses after the form object name, without calling this method explicitly.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Element this[string name]
+        /// <param name="name">The name to match the Elements' name and id</param>
+        /// <returns>An Element or an HTMLCollection</returns>
+        public Any<Element, HTMLCollection> this[string name]
         {
             get
             {
@@ -134,9 +134,8 @@ namespace Bridge.Html5
         /// <summary>
         /// Gets the item or list of items in elements collection whose name or id match the specified name, or null if no items match. You can also specify the name in array-style brackets or parentheses after the form object name, without calling this method explicitly.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        //public Element NamedItem(string name)
+        /// <param name="name">The name to match the Elements' name and id</param>
+        /// <returns>An Element or an HTMLCollection</returns>
         public Any<Element, HTMLCollection> NamedItem(string name)
         {
             return null;
