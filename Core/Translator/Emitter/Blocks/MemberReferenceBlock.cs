@@ -33,10 +33,13 @@ namespace Bridge.NET
             MemberReferenceExpression memberReferenceExpression = this.MemberReferenceExpression;
 
             var resolveResult = this.Emitter.Resolver.ResolveNode(memberReferenceExpression, this.Emitter);
+            bool oldIsAssignment = this.Emitter.IsAssignment;
 
             if (resolveResult == null && !(resolveResult is ErrorResolveResult))
             {
+                this.Emitter.IsAssignment = false;
                 memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
+                this.Emitter.IsAssignment = oldIsAssignment;
                 this.WriteDot();
                 string name = Helpers.GetScriptName(memberReferenceExpression, false);
                 this.Write(name.ToLowerCamelCase());
@@ -65,7 +68,9 @@ namespace Bridge.NET
                 this.Write("");
                 var oldBuilder = this.Emitter.Output;
                 this.Emitter.Output = new StringBuilder();
+                this.Emitter.IsAssignment = false;
                 memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
+                this.Emitter.IsAssignment = oldIsAssignment;
                 inline = inline.Replace("{this}", this.Emitter.Output.ToString());
                 this.Emitter.Output = oldBuilder;
 
@@ -163,7 +168,9 @@ namespace Bridge.NET
                     var isExtensionMethod = resolvedMethod.IsExtensionMethod;
 
                     this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.DELEGATE_BIND_SCOPE : Emitter.DELEGATE_BIND) + "(");
+                    this.Emitter.IsAssignment = false;
                     memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
+                    this.Emitter.IsAssignment = oldIsAssignment;
                     this.Write(", ");
 
                     if (isExtensionMethod)
@@ -172,14 +179,18 @@ namespace Bridge.NET
                     }
                     else
                     {
+                        this.Emitter.IsAssignment = false;
                         memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
+                        this.Emitter.IsAssignment = oldIsAssignment;
                     }
 
                     appendAdditionalCode = ")";
                 }
                 else
                 {
+                    this.Emitter.IsAssignment = false;
                     memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
+                    this.Emitter.IsAssignment = oldIsAssignment;
                 }
 
 

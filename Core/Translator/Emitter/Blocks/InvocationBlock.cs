@@ -79,8 +79,15 @@ namespace Bridge.NET
                         {
                             throw new Exception("Only primitive expression can be inlined: " + inlineExpression.ToString());
                         }
-
+                        
                         this.Write(inlineExpression.Value);
+
+                        string value = inlineExpression.Value.ToString().Trim();
+                        if (value[value.Length - 1] == ';')
+                        {
+                            this.Emitter.EnableSemicolon = false;
+                            this.WriteNewLine();
+                        }
                         return;
                     }
                 }
@@ -95,11 +102,6 @@ namespace Bridge.NET
                         this.WriteDot();
                     }
                     new InlineArgumentsBlock(this.Emitter, argsInfo, inlineScript).Emit();
-
-                    /*if (!isStaticMethod)
-                    {
-                        invocationExpression.Target.AcceptVisitor(this);
-                    }*/
 
                     return;
                 }

@@ -25,11 +25,18 @@ namespace Bridge.NET
                 return;
             }
 
+            var oldSemiColon = this.Emitter.EnableSemicolon;
+
             this.ExpressionStatement.Expression.AcceptVisitor(this.Emitter);
 
             if (this.Emitter.EnableSemicolon)
             {
                 this.WriteSemiColon(true);
+            }
+
+            if (oldSemiColon)
+            {
+                this.Emitter.EnableSemicolon = true;
             }
         }        
     }

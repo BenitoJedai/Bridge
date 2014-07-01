@@ -28,6 +28,8 @@ namespace Bridge.NET
             bool needVar = true;
             bool needComma = false;
 
+            var oldSemiColon = this.Emitter.EnableSemicolon;
+
             foreach (var variable in this.VariableDeclarationStatement.Variables)
             {
                 this.Emitter.Validator.CheckIdentifier(variable.Name, this.VariableDeclarationStatement);
@@ -63,6 +65,11 @@ namespace Bridge.NET
             if (this.Emitter.EnableSemicolon && !needVar)
             {
                 this.WriteSemiColon(true);
+            }
+
+            if (oldSemiColon)
+            {
+                this.Emitter.EnableSemicolon = true;
             }
         }        
     }

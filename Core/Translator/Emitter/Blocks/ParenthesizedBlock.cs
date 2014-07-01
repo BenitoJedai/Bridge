@@ -20,10 +20,33 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.WriteOpenParentheses();
+            var ignoreParentheses = this.IgnoreParentheses(this.ParenthesizedExpression.Expression);
+
+            if (!ignoreParentheses)
+            {
+                this.WriteOpenParentheses();
+            }
 
             this.ParenthesizedExpression.Expression.AcceptVisitor(this.Emitter);
-            this.WriteCloseParentheses();
+
+            if (!ignoreParentheses)
+            {
+                this.WriteCloseParentheses();
+            }
+        }
+
+        protected bool IgnoreParentheses(Expression expression)
+        {
+            if (expression is CastExpression)
+            {
+                var simpleType = ((CastExpression)expression).Type as SimpleType;
+
+                if (simpleType != null && simpleType.Identifier == "dynamic")
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

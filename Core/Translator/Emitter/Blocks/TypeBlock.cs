@@ -35,6 +35,14 @@ namespace Bridge.NET
             }
             else
             {
+                var simpleType = astType as SimpleType;
+
+                if (simpleType != null && simpleType.Identifier == "dynamic")
+                {
+                    this.Write("Object");
+                    return;
+                }
+
                 string type = this.Emitter.ResolveType(Helpers.GetScriptName(astType, true));
 
                 if (String.IsNullOrEmpty(type))

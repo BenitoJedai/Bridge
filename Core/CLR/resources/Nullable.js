@@ -17,3 +17,5 @@ Bridge.nullable = {
         return Bridge.nullable.hasValue(obj) ? obj : defValue;
     }
 };
+
+Bridge.hasValue = Bridge.nullable.hasValue;

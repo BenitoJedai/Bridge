@@ -2,7 +2,7 @@
 // @source resources/Core.js
 
 Bridge = {
-	is : function (obj, type) {
+    is : function (obj, type) {
 	  if (typeof type == "string") {
         type = Bridge.unroll(type);
 	  }

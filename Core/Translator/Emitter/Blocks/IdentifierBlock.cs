@@ -6,6 +6,7 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -228,20 +229,60 @@ namespace Bridge.NET
                 return;
             }
 
-            if (memberResult != null && memberResult.Member.SymbolKind == SymbolKind.Property && memberResult.TargetResult.Type.Kind != TypeKind.Anonymous)
+            string inlineCode = memberResult != null ? this.Emitter.GetInline(memberResult.Member) : null;
+            bool hasInline = !string.IsNullOrEmpty(inlineCode);
+            bool hasThis = hasInline && inlineCode.Contains("{this}");
+            
+            if (hasThis)
             {
+                this.Write("");
+                var oldBuilder = this.Emitter.Output;
+                this.Emitter.Output = new StringBuilder();
+
                 if (memberResult.Member.IsStatic)
                 {
-                    this.Write(this.Emitter.ShortenTypeName(Helpers.ReplaceSpecialChars(memberResult.Member.DeclaringType.FullName)));
+                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(memberResult.Member.DeclaringType)));
                 }
                 else
                 {
                     this.WriteThis();
                 }
 
-                this.WriteDot();
+                inlineCode = inlineCode.Replace("{this}", this.Emitter.Output.ToString());
+                this.Emitter.Output = oldBuilder;
 
-                if (!this.Emitter.IsAssignment)
+                if (resolveResult is InvocationResolveResult)
+                {
+                    this.PushWriter(inlineCode);
+                }
+                else
+                {
+                    this.Write(inlineCode);
+                }
+
+                return;
+            }
+
+            if (hasInline && memberResult.Member.IsStatic)
+            {
+                if (resolveResult is InvocationResolveResult)
+                {
+                    this.PushWriter(inlineCode);
+                }
+                else
+                {
+                    this.Write(inlineCode);
+                }
+            }
+            else if (memberResult != null && memberResult.Member.SymbolKind == SymbolKind.Property && memberResult.TargetResult.Type.Kind != TypeKind.Anonymous)
+            {
+                this.WriteTarget(memberResult);
+
+                if (!string.IsNullOrWhiteSpace(inlineCode))
+                {
+                    this.Write(inlineCode);
+                }
+                else if (!this.Emitter.IsAssignment)
                 {
                     this.Write("get");
                     this.Write(id);
@@ -255,35 +296,29 @@ namespace Bridge.NET
             }
             else if (memberResult.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
             {
-                if (memberResult.Member.IsStatic)
+                this.WriteTarget(memberResult);
+
+                if (!string.IsNullOrWhiteSpace(inlineCode))
                 {
-                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
+                    this.Write(inlineCode);
                 }
                 else
                 {
-                    this.WriteThis();
+                    this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
+                    this.Write(memberResult.Member.Name);                    
                 }
 
-                this.WriteDot();
-
-                this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
-                this.Write(memberResult.Member.Name);
                 this.WriteOpenParentheses();
             }
             else
             {
-                if (isResolved)
+                if (!string.IsNullOrWhiteSpace(inlineCode))
                 {
-                    if (memberResult.Member.IsStatic)
-                    {
-                        this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
-                    }
-                    else
-                    {
-                        this.WriteThis();
-                    }
-
-                    this.WriteDot();
+                    this.Write(inlineCode);
+                }
+                else if (isResolved)
+                {
+                    this.WriteTarget(memberResult);
                     this.Write(this.Emitter.GetEntityName(memberResult.Member));
                 }
                 else
@@ -291,6 +326,20 @@ namespace Bridge.NET
                     throw this.Emitter.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
                 }
             }
-        }        
+        }
+
+        protected void WriteTarget(MemberResolveResult memberResult)
+        {
+            if (memberResult.Member.IsStatic)
+            {
+                this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(memberResult.Member.DeclaringType)));
+            }
+            else
+            {
+                this.WriteThis();
+            }
+
+            this.WriteDot();
+        }
     }
 }

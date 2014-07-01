@@ -24,7 +24,7 @@ namespace Bridge.NET
             this.VisitComment();
         }
 
-        private static Regex injectComment = new Regex("@(.*)@", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        private static Regex injectComment = new Regex("@(.*)@?", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         private static Regex removeStars = new Regex("(^\\s*)(\\* )", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
         protected virtual void WriteMultiLineComment(string text)

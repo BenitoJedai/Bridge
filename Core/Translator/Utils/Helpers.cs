@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
 using Mono.Cecil;
 using System.Text;
+using ICSharpCode.NRefactory.TypeSystem;
 
 namespace Bridge.NET
 {
@@ -135,6 +136,11 @@ namespace Bridge.NET
             }
             
             return result;
+        }
+
+        public static string GetScriptFullName(IType type)
+        {
+            return Helpers.ReplaceSpecialChars(type.FullName);
         }
 
         public static string GetScriptFullName(TypeDefinition type) 

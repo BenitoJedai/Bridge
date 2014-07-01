@@ -236,7 +236,8 @@ namespace Bridge.NET
         public virtual string GetMethodName(MethodDefinition method)
         {
             bool changeCase = !this.IsNativeMember(method.FullName) ? this.ChangeCase : true;
-            var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.CLR_ASSEMBLY + ".NameAttribute");
+            string attrName = Translator.CLR_ASSEMBLY + ".NameAttribute";
+            var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == attrName);
             bool isReserved = method.IsStatic && Emitter.IsReservedStaticName(method.Name) && !this.Validator.IsIgnoreType(method.DeclaringType);
             string name = method.Name;
 
@@ -381,7 +382,7 @@ namespace Bridge.NET
 
         public virtual string GetInline(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
+            var attr = this.GetAttribute(method.Attributes, Translator.CLR_ASSEMBLY + ".Template");
 
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
         }

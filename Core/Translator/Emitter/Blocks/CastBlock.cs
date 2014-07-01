@@ -105,21 +105,43 @@ namespace Bridge.NET
                 return;
             }
 
+            var simpleType = type as SimpleType;
+            bool hasValue = false;
+
+            if (simpleType != null && simpleType.Identifier == "dynamic")
+            {
+                if (method == Emitter.CAST || method == Emitter.AS)
+                {
+                    expression.AcceptVisitor(this.Emitter);
+                    return;
+                }
+                else if (method == Emitter.IS)
+                {
+                    hasValue = true;
+                    method = "hasValue";
+                }
+            }
+
             this.Write(Emitter.ROOT);
             this.WriteDot();
-            this.Write(Emitter.CAST);
+            this.Write(method);
             this.WriteOpenParentheses();
             expression.AcceptVisitor(this.Emitter);
-            this.WriteComma();
 
-            if (castCode != null)
+            if (!hasValue)
             {
-                this.Write(castCode);
+                this.WriteComma();
+
+                if (castCode != null)
+                {
+                    this.Write(castCode);
+                }
+                else
+                {
+                    this.EmitCastType(type);
+                }
             }
-            else
-            {
-                this.EmitCastType(type);
-            }
+
             this.WriteCloseParentheses();
         }        
 
