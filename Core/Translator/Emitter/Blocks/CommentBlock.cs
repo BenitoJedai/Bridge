@@ -29,7 +29,7 @@ namespace Bridge.NET
 
         protected virtual void WriteMultiLineComment(string text)
         {
-            this.Write("/* " + text + " */");
+            this.Write("/* " + text + "*/");
             this.WriteNewLine();
         }
 
