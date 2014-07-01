@@ -192,6 +192,7 @@
     <Compile Include="Elements\TrackElement.cs" />
     <Compile Include="Elements\UListElement.cs" />
     <Compile Include="Elements\UnknownElement.cs" />
+    <Compile Include="Elements\CanvasElement.cs" />
     <Compile Include="Elements\VideoElement.cs" />
     <Compile Include="ErrorEventHandler.cs" />
     <Compile Include="Errors\EvalError.cs" />
