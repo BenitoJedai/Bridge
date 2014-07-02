@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Bridge.CLR;
 
 namespace System
@@ -411,6 +412,152 @@ namespace System.Runtime.CompilerServices
             return null;
         }
     }
+
+    [Ignore]
+    public struct AsyncVoidMethodBuilder
+    {
+        public static AsyncVoidMethodBuilder Create()
+        {
+            return default(AsyncVoidMethodBuilder);
+        }
+
+        public void Start<TStateMachine>(ref TStateMachine stateMachine) where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void SetStateMachine(IAsyncStateMachine stateMachine)
+        {
+        }
+
+        public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : INotifyCompletion
+            where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : ICriticalNotifyCompletion
+            where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void SetResult()
+        {
+        }
+
+        public void SetException(Exception exception)
+        {
+        }
+    }
+
+    [Ignore]
+    public struct AsyncTaskMethodBuilder
+    {
+        public Task Task 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }
+
+        public static AsyncTaskMethodBuilder Create()
+        {
+            return default(AsyncTaskMethodBuilder);
+        }
+
+        public void Start<TStateMachine>(ref TStateMachine stateMachine) where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void SetStateMachine(IAsyncStateMachine stateMachine)
+        {
+        }
+
+        public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : INotifyCompletion
+            where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : ICriticalNotifyCompletion
+            where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void SetResult()
+        {
+        }
+
+        public void SetException(Exception exception)
+        {
+        }
+    }
+
+    [Ignore]
+    public struct AsyncTaskMethodBuilder<TResult>
+    {
+        public Task<TResult> Task 
+        { 
+            get 
+            { 
+                return null; 
+            } 
+        }
+
+        public static AsyncTaskMethodBuilder<TResult> Create()
+        {
+            return default(AsyncTaskMethodBuilder<TResult>);
+        }
+
+        public void Start<TStateMachine>(ref TStateMachine stateMachine) where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void SetStateMachine(IAsyncStateMachine stateMachine)
+        {
+        }
+
+        public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : INotifyCompletion
+            where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : ICriticalNotifyCompletion
+            where TStateMachine : IAsyncStateMachine
+        {
+        }
+
+        public void SetResult(TResult result)
+        {
+        }
+
+        public void SetException(Exception exception)
+        {
+        }
+    }
+
+    [Ignore]
+    public interface IAsyncStateMachine
+    {
+        void MoveNext();
+        void SetStateMachine(IAsyncStateMachine stateMachine);
+    }
+
+    [Ignore]
+    public interface INotifyCompletion
+    {
+        void OnCompleted(Action continuation);
+    }
+
+    [Ignore]
+    public interface ICriticalNotifyCompletion : INotifyCompletion
+    {
+        void UnsafeOnCompleted(Action continuation);
+    }
 }
 
 namespace Microsoft.CSharp.RuntimeBinder
@@ -626,5 +773,13 @@ namespace System.Linq.Expressions
         OnesComplement,
         IsTrue,
         IsFalse,
+    }
+}
+
+namespace System.Diagnostics
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Constructor | AttributeTargets.Method)]
+    public sealed class DebuggerStepThroughAttribute : Attribute
+    {
     }
 }

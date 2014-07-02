@@ -87,6 +87,10 @@
     <Compile Include="System\Runtime.cs" />
     <Compile Include="System\String.cs" />
     <Compile Include="System\Stubs.cs" />
+    <Compile Include="System\Threading\Promise.cs" />
+    <Compile Include="System\Threading\TaskAwaiter.cs" />
+    <Compile Include="System\Threading\TaskStatus.cs" />
+    <Compile Include="System\Threading\Task.cs" />
     <Compile Include="System\TimeSpan.cs" />
     <Compile Include="System\Any.cs" />
   </ItemGroup>
