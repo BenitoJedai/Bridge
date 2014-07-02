@@ -189,9 +189,9 @@ namespace System
         {
         }
 
-        public static Date Parse(string value)
+        public static double Parse(string value)
         {
-            return null;
+            return 0;
         }
 
         [Template("{0},{1},{2},{3},{4},{5},{6}")]
