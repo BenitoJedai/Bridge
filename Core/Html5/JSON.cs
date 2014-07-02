@@ -54,5 +54,85 @@ namespace Bridge.Html5
         {
             return default(T);
         }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <returns></returns>
+        public static string Stringify(object value)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <returns></returns>
+        public static string Stringify(object value, Func<string, object, object> replacer)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
+        /// <returns></returns>
+        public static string Stringify(object value, Func<string, object, object> replacer, int space)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
+        /// <returns></returns>
+        public static string Stringify(object value, Func<string, object, object> replacer, string space)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <returns></returns>
+        public static string Stringify(object value, string[] replacer)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
+        /// <returns></returns>
+        public static string Stringify(object value, string[] replacer, string space)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
+        /// <returns></returns>
+        public static string Stringify(object value, string[] replacer, int space)
+        {
+            return null;
+        }
     }
 }
