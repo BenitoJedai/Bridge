@@ -14,6 +14,11 @@ namespace Bridge.Html5
         }
 
         [Template("document.createElement({0})")]
+        public Element(ElementType type)
+        {
+        }
+
+        [Template("document.createElement({0})")]
         public Element(string tagName)
         {
         }
