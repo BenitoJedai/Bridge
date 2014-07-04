@@ -113,7 +113,7 @@ namespace Bridge.Html5
         /// Adds an element to the collection of option elements for this select element.
         /// <param name="element">An item to add to the collection of options.</param>
         /// </summary>
-        public void Add(Element element)
+        public virtual void Add(Element element)
         {
         }
 
@@ -122,7 +122,7 @@ namespace Bridge.Html5
         /// <param name="element">An item to add to the collection of options.</param>
         /// <param name="beforeElement">An item that the new item should be inserted before. If this parameter is null, the new element is appended to the end of the collection.</param>
         /// </summary>
-        public void Add(Element element, Element beforeElement)
+        public virtual void Add(Element element, Element beforeElement)
         {
         }
 
@@ -131,7 +131,7 @@ namespace Bridge.Html5
         /// <param name="element">An item to add to the collection of options.</param>
         /// <param name="beforeIndex">An index of an item that the new item should be inserted before. If the index does not exist, the new element is appended to the end of the collection.</param>
         /// </summary>
-        public void Add(Element element, int beforeIndex)
+        public virtual void Add(Element element, int beforeIndex)
         {
         }
 
@@ -140,7 +140,7 @@ namespace Bridge.Html5
         /// Checks whether the element has any constraints and whether it satisfies them. If the element fails its constraints, the browser fires a cancelable invalid event at the element (and returns false).
         /// </summary>
         /// <returns>A false value if the select element is a candidate for constraint evaluation and it does not satisfy its constraints. Returns true if the element is not constrained, or if it satisfies its constraints.</returns>
-        public bool CheckValidity()
+        public virtual bool CheckValidity()
         {
             return false;
         }
@@ -151,7 +151,7 @@ namespace Bridge.Html5
         /// <returns>The node at the specified index, or null if such a node does not exist in the collection.</returns>
         /// </summary>
         [Name("item")]
-        public OptionElement GetItem(int index)
+        public virtual OptionElement GetItem(int index)
         {
             return null;
         }
@@ -164,7 +164,7 @@ namespace Bridge.Html5
         ///     - An OptionElement, if there is exactly one match. 
         ///     - null if there are no matches.
         ///     - An OptionsCollection in tree order of nodes whose name or id attributes match the specified name.</returns>
-        public Any<OptionElement, OptionsCollection> NamedItem(string name)
+        public virtual Any<OptionElement, OptionsCollection> NamedItem(string name)
         {
             return null;
         }
@@ -173,7 +173,7 @@ namespace Bridge.Html5
         /// Removes the element at the specified index from the options collection for this select element.
         /// <param name="index">The zero-based index of the option element to remove from the collection.</param>
         /// </summary>
-        public void Remove(int index)
+        public virtual void Remove(int index)
         {
         }
 
@@ -181,7 +181,7 @@ namespace Bridge.Html5
         /// Sets the custom validity message for the selection element to the specified message. Use the empty string to indicate that the element does not have a custom validity error.
         /// </summary>
         /// <param name="error">The string to use for the custom validity message.</param>
-        public void SetCustomValidity(string error)
+        public virtual void SetCustomValidity(string error)
         {
         }
     }

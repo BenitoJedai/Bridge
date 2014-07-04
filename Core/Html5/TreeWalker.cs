@@ -38,7 +38,7 @@ namespace Bridge.Html5
         /// Moves the current Node to the first visible ancestor node in the document order, and returns the found node. It also moves the current node to this one. If no such node exists, or if it is before that the root node defined at the object construction, returns null and the current node is not changed.
         /// </summary>
         /// <returns></returns>
-        public Node ParentNode()
+        public virtual Node ParentNode()
         {
             return null;
         }
@@ -47,7 +47,7 @@ namespace Bridge.Html5
         /// Moves the current Node to the first visible child of the current node, and returns the found child. It also moves the current node to this child. If no such child exists, returns null and the current node is not changed.
 		/// </summary>
 		/// <returns></returns>
-		public Node FirstChild() 
+		public virtual Node FirstChild() 
         {
 			return null;
 		}
@@ -56,7 +56,7 @@ namespace Bridge.Html5
         /// Moves the current Node to the last visible child of the current node, and returns the found child. It also moves the current node to this child. If no such child exists, returns null and the current node is not changed.
         /// </summary>
         /// <returns></returns>
-		public Node LastChild() 
+		public virtual Node LastChild() 
         {
 			return null;
 		}
@@ -65,7 +65,7 @@ namespace Bridge.Html5
         /// Moves the current Node to its previous sibling, if any, and returns the found sibling. I there is no such node, return null and the current node is not changed.
         /// </summary>
         /// <returns></returns>
-        public Node PreviousSibling()
+        public virtual Node PreviousSibling()
         {
             return null;
         }
@@ -74,7 +74,7 @@ namespace Bridge.Html5
         /// Moves the current Node to its next sibling, if any, and returns the found sibling. I there is no such node, return null and the current node is not changed.
         /// </summary>
         /// <returns></returns>
-        public Node NextSibling()
+        public virtual Node NextSibling()
         {
             return null;
         }
@@ -83,7 +83,7 @@ namespace Bridge.Html5
         /// Moves the current Node to the previous visible node in the document order, and returns the found node. It also moves the current node to this one. If no such node exists,or if it is before that the root node defined at the object construction, returns null and the current node is not changed.
         /// </summary>
         /// <returns></returns>
-        public Node PreviousNode()
+        public virtual Node PreviousNode()
         {
             return null;
         }
@@ -92,7 +92,7 @@ namespace Bridge.Html5
         /// Moves the current Node to the next visible node in the document order, and returns the found node. It also moves the current node to this one. If no such node exists, returns null and the current node is not changed.
         /// </summary>
         /// <returns></returns>
-		public Node NextNode() 
+		public virtual Node NextNode() 
         {
 			return null;
 		}

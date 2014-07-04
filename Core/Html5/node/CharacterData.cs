@@ -39,7 +39,7 @@ namespace Bridge.Html5
         /// Appends the given DOMString to the CharacterData.data string; when this method returns, data contains the concatenated DOMString.
         /// </summary>
         /// <param name="data"></param>
-        public void AppendData(string data)
+        public virtual void AppendData(string data)
         {
         }
 
@@ -48,7 +48,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public void DeleteData(int offset, int count)
+        public virtual void DeleteData(int offset, int count)
         {
         }
 
@@ -57,14 +57,14 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="data"></param>
-        public void InsertData(int offset, string data)
+        public virtual void InsertData(int offset, string data)
         {
         }
 
         /// <summary>
         /// Removes the object from its parent children list.
         /// </summary>
-        public void Remove()
+        public virtual void Remove()
         {
         }
 
@@ -74,7 +74,7 @@ namespace Bridge.Html5
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <param name="data"></param>
-        public void ReplaceData(int offset, int count, string data)
+        public virtual void ReplaceData(int offset, int count, string data)
         {
         }
 
@@ -84,7 +84,7 @@ namespace Bridge.Html5
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public string SubstringData(int offset, int count)
+        public virtual string SubstringData(int offset, int count)
         {
             return null;
         }

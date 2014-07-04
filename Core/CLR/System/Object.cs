@@ -7,7 +7,7 @@ namespace System
     [Constructor("{ }")]
     public class Object
     {
-        public object this[string name] 
+        public virtual object this[string name] 
         { 
             get 
             { 
@@ -18,7 +18,7 @@ namespace System
             } 
         }
 
-        public T GetProperty<T>(string name)
+        public virtual T GetProperty<T>(string name)
         {
             return default(T);
         }
@@ -41,17 +41,17 @@ namespace System
             return null; 
         }
 
-        public bool HasOwnProperty(object v) 
+        public virtual bool HasOwnProperty(object v) 
         { 
             return false; 
         }
 
-        public bool IsPrototypeOf(object v) 
+        public virtual bool IsPrototypeOf(object v) 
         { 
             return false; 
         }
 
-        public bool PropertyIsEnumerable(object v) 
+        public virtual bool PropertyIsEnumerable(object v) 
         { 
             return false; 
         }        

@@ -12,7 +12,7 @@ namespace System.Threading.Tasks
         {
         }
 
-        public bool IsCompleted
+        public virtual bool IsCompleted
         {
             get
             {
@@ -20,11 +20,11 @@ namespace System.Threading.Tasks
             }
         }
 
-		public void OnCompleted(Action continuation) 
+		public virtual void OnCompleted(Action continuation) 
         {
         }
 
-		public void GetResult() 
+		public virtual void GetResult() 
         {
         }
 	}
@@ -37,7 +37,7 @@ namespace System.Threading.Tasks
         {
         }
 
-        public bool IsCompleted
+        public virtual bool IsCompleted
         {
             get
             {
@@ -45,11 +45,11 @@ namespace System.Threading.Tasks
             }
         }
 
-		public void OnCompleted(Action continuation) 
+		public virtual void OnCompleted(Action continuation) 
         {
         }
 
-		public TResult GetResult() 
+		public virtual TResult GetResult() 
         { 
             return default(TResult); 
         }

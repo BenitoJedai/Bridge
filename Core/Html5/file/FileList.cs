@@ -19,7 +19,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index">The zero-based index of the file to retrieve from the list.</param>
         /// <returns>The File representing the requested file.</returns>
-		public File this[int index] 
+		public virtual File this[int index] 
         {
 			get 
             {
@@ -33,7 +33,7 @@ namespace Bridge.Html5
         /// <param name="index">The zero-based index of the file to retrieve from the list.</param>
         /// <returns>The File representing the requested file.</returns>
         [Name("Item")]
-		public File GetItem(int index) 
+		public virtual File GetItem(int index) 
         {
 			return default(File);
 		}
@@ -43,7 +43,7 @@ namespace Bridge.Html5
         /// </summary>
         public readonly int Length;
 
-        public IEnumerator<File> GetEnumerator()
+        public virtual IEnumerator<File> GetEnumerator()
         {
             return null;
         }

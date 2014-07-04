@@ -30,7 +30,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public Text SplitText(int offset)
+        public virtual Text SplitText(int offset)
         {
             return null;
         }

@@ -23,26 +23,26 @@ namespace System.Threading.Tasks
         public readonly bool IsFaulted;
         public readonly TaskStatus Status;
 
-		public Task ContinueWith(Action<Task> continuationAction) 
+		public virtual Task ContinueWith(Action<Task> continuationAction) 
         {
 			return null;
 		}
 
-		public Task<TResult> ContinueWith<TResult>(Func<Task, TResult> continuationFunction) 
+		public virtual Task<TResult> ContinueWith<TResult>(Func<Task, TResult> continuationFunction) 
         {
 			return null;
 		}
 
-		public void Start() 
+		public virtual void Start() 
         {
 		}
 
-		public TaskAwaiter GetAwaiter() 
+		public virtual TaskAwaiter GetAwaiter() 
         {
 			return null;
 		}
 
-		public void Dispose() 
+		public virtual void Dispose() 
         {
 		}
 
@@ -149,7 +149,7 @@ namespace System.Threading.Tasks
         {
 		}
 
-		public TResult Result 
+		public virtual TResult Result 
         { 
             get 
             { 
@@ -157,17 +157,17 @@ namespace System.Threading.Tasks
             } 
         }
 
-		public Task ContinueWith(Action<Task<TResult>> continuationAction) 
+		public virtual Task ContinueWith(Action<Task<TResult>> continuationAction) 
         {
 			return null;
 		}
 
-		public new TaskAwaiter<TResult> GetAwaiter() 
+		public virtual new TaskAwaiter<TResult> GetAwaiter() 
         {
 			return null;
 		}
 
-		public Task<TNewResult> ContinueWith<TNewResult>(Func<Task<TResult>, TNewResult> continuationFunction) 
+		public virtual Task<TNewResult> ContinueWith<TNewResult>(Func<Task<TResult>, TNewResult> continuationFunction) 
         {
 			return null;
 		}

@@ -50,7 +50,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="startNode">The Node where the Range should start.</param>
         /// <param name="startOffset">An integer greater than or equal to zero representing the offset for the start of the Range from the start of startNode.</param>
-        public void SetStart(Node startNode, int startOffset)
+        public virtual void SetStart(Node startNode, int startOffset)
         {
         }
 
@@ -59,7 +59,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="endNode">The Node where the Range should end.</param>
         /// <param name="endOffset">An integer greater than or equal to zero representing the offset for the end of the Range from the start of endNode.</param>
-        public void SetEnd(Node endNode, int endOffset)
+        public virtual void SetEnd(Node endNode, int endOffset)
         {
         }
 
@@ -67,7 +67,7 @@ namespace Bridge.Html5
         /// Sets the start position of a Range relative to another Node.
         /// </summary>
         /// <param name="referenceNode">The Node before which the Range should start.</param>
-        public void SetStartBefore(Node referenceNode)
+        public virtual void SetStartBefore(Node referenceNode)
         {
         }
 
@@ -75,7 +75,7 @@ namespace Bridge.Html5
         /// Sets the start position of a Range relative to another Node.
         /// </summary>
         /// <param name="referenceNode">The Node to start the Range after.</param>
-        public void SetStartAfter(Node referenceNode)
+        public virtual void SetStartAfter(Node referenceNode)
         {
         }
 
@@ -83,7 +83,7 @@ namespace Bridge.Html5
         /// Sets the end position of a Range relative to another Node.
         /// </summary>
         /// <param name="referenceNode">The Node to end the Range before.</param>
-        public void SetEndBefore(Node referenceNode)
+        public virtual void SetEndBefore(Node referenceNode)
         {
         }
 
@@ -91,7 +91,7 @@ namespace Bridge.Html5
         /// Sets the end position of a Range relative to another Node.
         /// </summary>
         /// <param name="referenceNode">The Node to end the Range after.</param>
-        public void SetEndAfter(Node referenceNode)
+        public virtual void SetEndAfter(Node referenceNode)
         {
         }
 
@@ -99,7 +99,7 @@ namespace Bridge.Html5
         /// Sets the Range to contain the Node and its contents.
         /// </summary>
         /// <param name="referenceNode">The Node to select within a Range.</param>
-        public void SelectNode(Node referenceNode)
+        public virtual void SelectNode(Node referenceNode)
         {
         }
 
@@ -107,14 +107,14 @@ namespace Bridge.Html5
         /// Sets the Range to contain the contents of a Node.
         /// </summary>
         /// <param name="referenceNode">The Node whose contents will be selected within a Range.</param>
-        public void SelectNodeContents(Node referenceNode)
+        public virtual void SelectNodeContents(Node referenceNode)
         {
         }
 
         /// <summary>
         /// Collapses the Range to one of its boundary points.
         /// </summary>
-        public void Collapse()
+        public virtual void Collapse()
         {
         }
 
@@ -122,7 +122,7 @@ namespace Bridge.Html5
         /// Collapses the Range to one of its boundary points.
         /// </summary>
         /// <param name="toStart">A boolean value: true collapses the Range to its start, false to its end. If omitted, it defaults to false .</param>
-        public void Collapse(bool toStart)
+        public virtual void Collapse(bool toStart)
         {
         }
 
@@ -130,7 +130,7 @@ namespace Bridge.Html5
         /// Returns a DocumentFragment copying the nodes of a Range.
         /// </summary>
         /// <returns></returns>
-		public DocumentFragment CloneContents() 
+		public virtual DocumentFragment CloneContents() 
         {
 			return null;
 		}
@@ -138,7 +138,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Removes the contents of a Range from the Document.
         /// </summary>
-        public void DeleteContents()
+        public virtual void DeleteContents()
         {
         }
 
@@ -146,7 +146,7 @@ namespace Bridge.Html5
         /// Moves contents of a Range from the document tree into a DocumentFragment.
         /// </summary>
         /// <returns></returns>
-        public DocumentFragment ExtractContents()
+        public virtual DocumentFragment ExtractContents()
         {
             return null;
         }
@@ -155,7 +155,7 @@ namespace Bridge.Html5
         /// Insert a Node at the start of a Range.
         /// </summary>
         /// <param name="newNode">The Node to insert at the start of the range.</param>
-        public void InsertNode(Node newNode)
+        public virtual void InsertNode(Node newNode)
         {
         }
 
@@ -163,7 +163,7 @@ namespace Bridge.Html5
         /// Moves content of a Range into a new Node.
         /// </summary>
         /// <param name="newParent">A Node to split based on the range.</param>
-        public void SurroundContents(Node newParent)
+        public virtual void SurroundContents(Node newParent)
         {
         }
 
@@ -173,7 +173,7 @@ namespace Bridge.Html5
         /// <param name="how">A constant describing the comparison method</param>
         /// <param name="sourceRange">A Range to compare boundary points with the range.</param>
         /// <returns>A number, -1, 0, or 1, indicating whether the corresponding boundary-point of the Range is respectively before, equal to, or after the corresponding boundary-point of sourceRange.</returns>
-        public int CompareBoundaryPoints(RangeComparison how, Range sourceRange)
+        public virtual int CompareBoundaryPoints(RangeComparison how, Range sourceRange)
         {
             return 0;
         }
@@ -182,7 +182,7 @@ namespace Bridge.Html5
         /// Returns a Range object with boundary points identical to the cloned Range.
         /// </summary>
         /// <returns></returns>
-		public Range CloneRange() 
+		public virtual Range CloneRange() 
         {
 			return null;
 		}
@@ -190,7 +190,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Releases the Range from use to improve performance.
         /// </summary>
-        public void Detach()
+        public virtual void Detach()
         {
         }
 
@@ -200,7 +200,7 @@ namespace Bridge.Html5
         /// <param name="referenceNode">The Node to compare with the Range.</param>
         /// <param name="offset">An integer greater than or equal to zero representing the offset inside the referenceNode.</param>
         /// <returns>returns -1, 0, or 1 depending on whether the referenceNode is before, the same as, or after the Range.</returns>
-        public int ComparePoint(Node referenceNode, int offset) 
+        public virtual int ComparePoint(Node referenceNode, int offset) 
         {
 			return 0;
 		}
@@ -210,7 +210,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="tagString">Text that contains text and tags to be converted to a document fragment.</param>
         /// <returns></returns>
-        public DocumentFragment CreateContextualFragment(string tagString) 
+        public virtual DocumentFragment CreateContextualFragment(string tagString) 
         {
 			return null;
 		}
@@ -219,7 +219,7 @@ namespace Bridge.Html5
         /// Returns a ClientRect object which bounds the entire contents of the Range; this would be the union of all the rectangles returned by range.getClientRects().
         /// </summary>
         /// <returns></returns>
-        public ClientRect GetBoundingClientRect()
+        public virtual ClientRect GetBoundingClientRect()
         {
             return null;
         }
@@ -228,7 +228,7 @@ namespace Bridge.Html5
         /// Returns a list of ClientRect objects that aggregates the results of Element.getClientRects() for all the elements in the Range.
         /// </summary>
         /// <returns></returns>
-        public ClientRectList GetClientRects()
+        public virtual ClientRectList GetClientRects()
         {
             return null;
         }
@@ -238,7 +238,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="referenceNode">The Node to compare with the Range.</param>
         /// <returns></returns>
-        public bool IntersectsNode(Node referenceNode)
+        public virtual bool IntersectsNode(Node referenceNode)
         {
             return false;
         }
@@ -249,7 +249,7 @@ namespace Bridge.Html5
         /// <param name="referenceNode">The Node to compare with the Range.</param>
         /// <param name="offset">The offset into Node of the point to compare with the Range.</param>
         /// <returns></returns>
-        public bool IsPointInRange(Node referenceNode, int offset)
+        public virtual bool IsPointInRange(Node referenceNode, int offset)
         {
             return false;
         }		

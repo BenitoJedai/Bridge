@@ -70,7 +70,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Aborts the request if it has already been sent.
         /// </summary>
-        public void Abort()
+        public virtual void Abort()
         {
         }
 
@@ -78,7 +78,7 @@ namespace Bridge.Html5
         /// Returns all the response headers as a string, or null if no response has been received. Note: For multipart requests, this returns the headers from the current part of the request, not from the original channel.
         /// </summary>
         /// <returns></returns>
-        public string GetAllResponseHeaders()
+        public virtual string GetAllResponseHeaders()
         {
             return null;
         }
@@ -88,7 +88,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="header"></param>
         /// <returns></returns>
-        public string GetResponseHeader(string header)
+        public virtual string GetResponseHeader(string header)
         {
             return null;
         }
@@ -98,7 +98,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="method">The HTTP method to use, such as "GET", "POST", "PUT", "DELETE", etc. Ignored for non-HTTP(S) URLs.</param>
         /// <param name="url">The URL to send the request to.</param>
-        public void Open(string method, string url)
+        public virtual void Open(string method, string url)
         {
         }
 
@@ -108,7 +108,7 @@ namespace Bridge.Html5
         /// <param name="method">The HTTP method to use, such as "GET", "POST", "PUT", "DELETE", etc. Ignored for non-HTTP(S) URLs.</param>
         /// <param name="url">The URL to send the request to.</param>
         /// <param name="async">An optional boolean parameter, defaulting to true, indicating whether or not to perform the operation asynchronously. If this value is false, the send()method does not return until the response is received. If true, notification of a completed transaction is provided using event listeners. This must be true if the multipart attribute is true, or an exception will be thrown.</param>
-        public void Open(string method, string url, bool async)
+        public virtual void Open(string method, string url, bool async)
         {
         }
 
@@ -119,7 +119,7 @@ namespace Bridge.Html5
         /// <param name="url">The URL to send the request to.</param>
         /// <param name="async">An optional boolean parameter, defaulting to true, indicating whether or not to perform the operation asynchronously. If this value is false, the send()method does not return until the response is received. If true, notification of a completed transaction is provided using event listeners. This must be true if the multipart attribute is true, or an exception will be thrown.</param>
         /// <param name="user">The optional user name to use for authentication purposes; by default, this is an empty string.</param>
-        public void Open(string method, string url, bool async, string user)
+        public virtual void Open(string method, string url, bool async, string user)
         {
         }
 
@@ -131,7 +131,7 @@ namespace Bridge.Html5
         /// <param name="async">An optional boolean parameter, defaulting to true, indicating whether or not to perform the operation asynchronously. If this value is false, the send()method does not return until the response is received. If true, notification of a completed transaction is provided using event listeners. This must be true if the multipart attribute is true, or an exception will be thrown.</param>
         /// <param name="user">The optional user name to use for authentication purposes; by default, this is an empty string.</param>
         /// <param name="password">The optional password to use for authentication purposes; by default, this is an empty string.</param>
-        public void Open(string method, string url, bool async, string user, string password)
+        public virtual void Open(string method, string url, bool async, string user, string password)
         {
         }
 
@@ -139,22 +139,14 @@ namespace Bridge.Html5
         /// Overrides the MIME type returned by the server. This may be used, for example, to force a stream to be treated and parsed as text/xml, even if the server does not report it as such. This method must be called before send().
         /// </summary>
         /// <param name="mimetype"></param>
-        public void OverrideMimeType(string mimetype)
+        public virtual void OverrideMimeType(string mimetype)
         {
         }
 
         /// <summary>
         /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
         /// </summary>
-        public void Send()
-        {
-        }
-
-        /// <summary>
-        /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
-        /// </summary>
-        /// <param name="data"></param>
-        public void Send(ArrayBuffer data)
+        public virtual void Send()
         {
         }
 
@@ -162,7 +154,7 @@ namespace Bridge.Html5
         /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
         /// </summary>
         /// <param name="data"></param>
-        public void Send(ArrayBufferView data)
+        public virtual void Send(ArrayBuffer data)
         {
         }
 
@@ -170,7 +162,7 @@ namespace Bridge.Html5
         /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
         /// </summary>
         /// <param name="data"></param>
-        public void Send(Blob data)
+        public virtual void Send(ArrayBufferView data)
         {
         }
 
@@ -178,7 +170,15 @@ namespace Bridge.Html5
         /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
         /// </summary>
         /// <param name="data"></param>
-        public void Send(DocumentInstance data)
+        public virtual void Send(Blob data)
+        {
+        }
+
+        /// <summary>
+        /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
+        /// </summary>
+        /// <param name="data"></param>
+        public virtual void Send(DocumentInstance data)
         {
         }       
 
@@ -186,7 +186,7 @@ namespace Bridge.Html5
         /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
         /// </summary>
         /// <param name="data"></param>
-        public void Send(string data)
+        public virtual void Send(string data)
         {
         }
 
@@ -194,7 +194,7 @@ namespace Bridge.Html5
         /// Sends the request. If the request is asynchronous (which is the default), this method returns as soon as the request is sent. If the request is synchronous, this method doesn't return until the response has arrived.
         /// </summary>
         /// <param name="data"></param>
-        public void Send(FormData data)
+        public virtual void Send(FormData data)
         {
         }
 
@@ -203,7 +203,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="header">The name of the header whose value is to be set.</param>
         /// <param name="value">The value to set as the body of the header.</param>
-        public void SetRequestHeader(string header, string value)
+        public virtual void SetRequestHeader(string header, string value)
         {
         }
     }

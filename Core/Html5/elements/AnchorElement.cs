@@ -23,7 +23,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Is a DOMString representing a comma-separated list of coordinates.
         /// </summary>
-        public string Coords;
+        public  string Coords;
 
         /// <summary>
         /// Is a DOMString indicating that the linked resource is intended to be downloaded rather than displayed in the browser. The value represent the proposed name of the file. If the name is not a valid filename of the underlying OS, browser will adapt it. The value is a URL with a scheme like http:, file:, data: or even blob: (created with URL.createObjectURL).

@@ -30,7 +30,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">The name of the field whose data is contained in value.</param>
         /// <param name="value">The field's value. Can be a Blob, File, or a string, if neither, the value is converted to a string.</param>
-        public void Append(string name, string value)
+        public virtual void Append(string name, string value)
         {
         }
 
@@ -39,7 +39,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">The name of the field whose data is contained in value.</param>
         /// <param name="value">The field's value. Can be a Blob, File, or a string, if neither, the value is converted to a string.</param>
-		public void Append(string name, Blob value) 
+		public virtual void Append(string name, Blob value) 
         {
 		}
 
@@ -48,7 +48,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">The name of the field whose data is contained in value.</param>
         /// <param name="value">The field's value. Can be a Blob, File, or a string, if neither, the value is converted to a string.</param>
-        public void Append(string name, File value)
+        public virtual void Append(string name, File value)
         {
         }
 
@@ -58,7 +58,7 @@ namespace Bridge.Html5
         /// <param name="name">The name of the field whose data is contained in value.</param>
         /// <param name="value">The field's value. Can be a Blob, File, or a string, if neither, the value is converted to a string.</param>
         /// <param name="filename">The filename reported to the server, when a Blob or File is passed as second paramter. The default filename for Blob objects is "blob".</param>
-		public void Append(string name, Blob value, string filename) 
+		public virtual void Append(string name, Blob value, string filename) 
         {
 		}
 
@@ -68,7 +68,7 @@ namespace Bridge.Html5
         /// <param name="name">The name of the field whose data is contained in value.</param>
         /// <param name="value">The field's value. Can be a Blob, File, or a string, if neither, the value is converted to a string.</param>
         /// <param name="filename">The filename reported to the server, when a Blob or File is passed as second paramter. The default filename for Blob objects is "blob".</param>
-        public void Append(string name, File value, string filename)
+        public virtual void Append(string name, File value, string filename)
         {
         }
 	}

@@ -74,7 +74,7 @@ namespace Bridge.Html5
         /// If the provided URL is not valid, a DOMException of the SYNTAX_ERROR type is thrown.
         /// </summary>
         /// <param name="url">String containing the URL of the page to navigate to.</param>
-        public void Assign(string url)
+        public virtual void Assign(string url)
         {
         }
 
@@ -82,7 +82,7 @@ namespace Bridge.Html5
         /// The Location.reload()method Reloads the resource from the current URL. Its optional unique parameter is a Boolean, which, when it is true, causes the page to always be reloaded from the server. If it is false or not specified, the browser may reload the page from its cache.
         /// If the assignment can't happen because of a security violation, a DOMException of the SECURITY_ERROR type is thrown. This happens if the origin of the script calling the method is different from the origin of the page originally described by the Location object, mostly when the script is hosted on a different domain.
         /// </summary>
-        public void Reload()
+        public virtual void Reload()
         {
         }
 
@@ -91,7 +91,7 @@ namespace Bridge.Html5
         /// If the assignment can't happen because of a security violation, a DOMException of the SECURITY_ERROR type is thrown. This happens if the origin of the script calling the method is different from the origin of the page originally described by the Location object, mostly when the script is hosted on a different domain.
         /// </summary>
         /// <param name="forcedReload">Boolean flag, which, when it is true, causes the page to always be reloaded from the server. If it is false or not specified, the browser may reload the page from its cache.</param>
-        public void Reload(bool forcedReload)
+        public virtual void Reload(bool forcedReload)
         {
         }
 
@@ -99,7 +99,7 @@ namespace Bridge.Html5
         /// The Location.replace()method replaces the current resource with the one at the provided URL. The difference from the assign() method is that after using replace() the current page will not be saved in session History, meaning the user won't be able to use the back button to navigate to it.
         /// </summary>
         /// <param name="url">String containing the URL of the page to navigate to.</param>
-        public void Replace(string url)
+        public virtual void Replace(string url)
         {
         }
     }

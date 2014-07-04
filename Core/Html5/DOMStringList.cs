@@ -20,7 +20,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public string this[int index] 
+		public virtual string this[int index] 
         {
 			get 
             {
@@ -33,7 +33,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-		public bool Contains(string str) 
+		public virtual bool Contains(string str) 
         {
 			return false;
 		}		
@@ -44,7 +44,7 @@ namespace Bridge.Html5
         /// <param name="index"></param>
         /// <returns></returns>
 		[Name("item")]
-        public string GetItem(int index) 
+        public virtual string GetItem(int index) 
         {
 			return null;
 		}
@@ -54,7 +54,7 @@ namespace Bridge.Html5
         /// </summary>
         public readonly int Length;
 
-        public IEnumerator<string> GetEnumerator()
+        public virtual IEnumerator<string> GetEnumerator()
         {
             return null;
         }

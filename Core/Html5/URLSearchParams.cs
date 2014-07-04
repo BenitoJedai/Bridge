@@ -29,30 +29,30 @@ namespace Bridge.Html5
         {
 		}
 
-		public void Append(string name, string value) 
+		public virtual void Append(string name, string value) 
         {
 		}
 
-		public void Delete(string name) 
+		public virtual void Delete(string name) 
         {
 		}
 
-		public string Get(string name) 
-        {
-			return null;
-		}
-
-		public string[] GetAll(string name) 
+		public virtual string Get(string name) 
         {
 			return null;
 		}
 
-		public bool Has(string name) 
+		public virtual string[] GetAll(string name) 
+        {
+			return null;
+		}
+
+		public virtual bool Has(string name) 
         {
 			return false;
 		}
 
-		public void Set(string name, string value) 
+		public virtual void Set(string name, string value) 
         {
 		}
 	}

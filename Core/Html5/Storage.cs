@@ -20,7 +20,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public object this[string key] 
+        public virtual object this[string key] 
         {
             get {
                 return null;
@@ -32,7 +32,7 @@ namespace Bridge.Html5
         /// <summary>
         /// 
         /// </summary>
-        public void Clear() 
+        public virtual void Clear() 
         {
         }
 
@@ -41,7 +41,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public object GetItem(string key) 
+        public virtual object GetItem(string key) 
         {
             return null;
         }
@@ -51,7 +51,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public string Key(int index) 
+        public virtual string Key(int index) 
         {
             return null;
         }
@@ -60,7 +60,7 @@ namespace Bridge.Html5
         /// 
         /// </summary>
         /// <param name="key"></param>
-        public void RemoveItem(string key) 
+        public virtual void RemoveItem(string key) 
         {
         }
 
@@ -69,7 +69,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void SetItem(string key, object value) 
+        public virtual void SetItem(string key, object value) 
         {
         } 
     }

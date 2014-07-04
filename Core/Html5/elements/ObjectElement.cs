@@ -90,7 +90,7 @@ namespace Bridge.Html5
         /// Always returns true, because object objects are never candidates for constraint validation.
         /// </summary>
         /// <returns>Always returns true</returns>
-        public bool CheckValidity()
+        public virtual bool CheckValidity()
         {
             return true;
         }
@@ -99,7 +99,7 @@ namespace Bridge.Html5
         /// Sets a custom validity message for the element. If this message is not the empty string, then the element is suffering from a custom validity error, and does not validate.
         /// </summary>
         /// <param name="error">The custom validity message</param>
-        public void SetCustomValidity(string error)
+        public virtual void SetCustomValidity(string error)
         {
         }
     }

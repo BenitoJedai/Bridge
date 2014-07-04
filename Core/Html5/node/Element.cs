@@ -158,7 +158,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="e">Required. Reference to an event object to be dispatched.</param>
         /// <returns>Boolean that indicates whether the default action of the event was not canceled.</returns>
-        public bool DispatchEvent(Event e)
+        public virtual bool DispatchEvent(Event e)
         {
             return false;
         }
@@ -169,7 +169,7 @@ namespace Bridge.Html5
         /// <param name="attributeName">name of the attribute whose value you want to get.</param>
         /// <returns>string containing the value of attributeName.</returns>
         /// 
-        public string GetAttribute(string attributeName)
+        public virtual string GetAttribute(string attributeName)
         {
             return null;
         }
@@ -180,7 +180,7 @@ namespace Bridge.Html5
         /// <param name="namespace">The namespace in which to look for the specified attribute.</param>
         /// <param name="attributeName"></param>
         /// <returns>The string value of the specified attribute. If the attribute doesn't exist, the result is null.</returns>
-        public string GetAttributeNS(string @namespace, string attributeName)
+        public virtual string GetAttributeNS(string @namespace, string attributeName)
         {
             return null;
         }
@@ -189,7 +189,7 @@ namespace Bridge.Html5
         /// The Element.getBoundingClientRect() method returns a text rectangle object that encloses a group of text rectangles.
         /// </summary>
         /// <returns></returns>
-        public ClientRect GetBoundingClientRect()
+        public virtual ClientRect GetBoundingClientRect()
         {
             return null;
         }
@@ -198,7 +198,7 @@ namespace Bridge.Html5
         /// The Element.getClientRects() method returns a collection of rectangles that indicate the bounding rectangles for each box in a client.
         /// </summary>
         /// <returns></returns>
-        public ClientRectList GetClientRects()
+        public virtual ClientRectList GetClientRects()
         {
             return null;
         }
@@ -208,7 +208,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public HTMLCollection GetElementsByClassName(string name)
+        public virtual HTMLCollection GetElementsByClassName(string name)
         {
             return null;
         }
@@ -218,7 +218,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="tagName"></param>
         /// <returns></returns>
-        public HTMLCollection GetElementsByTagName(string tagName)
+        public virtual HTMLCollection GetElementsByTagName(string tagName)
         {
             return null;
         }
@@ -229,7 +229,7 @@ namespace Bridge.Html5
         /// <param name="namespaceURI">namespace URI of elements to look for</param>
         /// <param name="localName">local name of elements to look for or the special value "*", which matches all elements </param>
         /// <returns></returns>
-        public HTMLCollection GetElementsByTagNameNS(string namespaceURI, string localName)
+        public virtual HTMLCollection GetElementsByTagNameNS(string namespaceURI, string localName)
         {
             return null;
         }
@@ -239,7 +239,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="attName">string representing the name of the attribute.</param>
         /// <returns>holds the return value true or false.</returns>
-        public bool HasAttribute(string attName)
+        public virtual bool HasAttribute(string attName)
         {
             return false;
         }
@@ -250,7 +250,7 @@ namespace Bridge.Html5
         /// <param name="namespace">string specifying the namespace of the attribute.</param>
         /// <param name="localName">name of the attribute.</param>
         /// <returns></returns>
-        public bool HasAttributeNS(string @namespace, string localName)
+        public virtual bool HasAttributeNS(string @namespace, string localName)
         {
             return false;
         }
@@ -260,7 +260,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="selectors">selectors is a group of selectors to match on.</param>
         /// <returns></returns>
-        public Node QuerySelector(string selectors)
+        public virtual Node QuerySelector(string selectors)
         {
             return null;
         }
@@ -270,7 +270,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="selectors">selectors is a group of selectors to match on.</param>
         /// <returns></returns>
-        public NodeList QuerySelectorAll(string selectors)
+        public virtual NodeList QuerySelectorAll(string selectors)
         {
             return null;
         }
@@ -278,7 +278,7 @@ namespace Bridge.Html5
         /// <summary>
         /// The ChildNode.remove method removes the object from the tree it belongs to.
         /// </summary>
-        public void Remove()
+        public virtual void Remove()
         {
         }
 
@@ -286,7 +286,7 @@ namespace Bridge.Html5
         /// Removes an attribute from the specified element.
         /// </summary>
         /// <param name="attrName">String that names the attribute to be removed from element.</param>
-        public void RemoveAttribute(string attrName)
+        public virtual void RemoveAttribute(string attrName)
         {
         }
 
@@ -295,7 +295,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="namespaceURI">String that contains the namespace of the attribute.</param>
         /// <param name="attrName">String that names the attribute to be removed from the current node.</param>
-        public void RemoveAttributeNS(string namespaceURI, string attrName)
+        public virtual void RemoveAttributeNS(string namespaceURI, string attrName)
         {
         }
 
@@ -303,7 +303,7 @@ namespace Bridge.Html5
         /// Scrolls the page until the element gets into the view.
         /// </summary>
         /// <param name="alignWithTop">If true, the scrolled element is aligned with the top of the scroll area. If false, it is aligned with the bottom.</param>
-        public void ScrollIntoView(bool alignWithTop)
+        public virtual void ScrollIntoView(bool alignWithTop)
         {
         }
 
@@ -312,7 +312,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">the name of the attribute as a string.</param>
         /// <param name="value">the desired new value of the attribute.</param>
-        public void SetAttribute(string name, string value)
+        public virtual void SetAttribute(string name, string value)
         {
         }
 
@@ -322,14 +322,14 @@ namespace Bridge.Html5
         /// <param name="namespaceURI">String specifying the namespace of the attribute.</param>
         /// <param name="name">string identifying the attribute to be set.</param>
         /// <param name="value">the desired string value of the new attribute.</param>
-        public void SetAttributeNS(string namespaceURI, string name, string value)
+        public virtual void SetAttributeNS(string namespaceURI, string name, string value)
         {
         }
 
         /// <summary>
         /// Call this method during the handling of a mousedown event to retarget all mouse events to this element until the mouse button is released or document.releaseCapture() is called.
         /// </summary>
-        public void SetCapture()
+        public virtual void SetCapture()
         {
         }
 
@@ -337,7 +337,7 @@ namespace Bridge.Html5
         /// Call this method during the handling of a mousedown event to retarget all mouse events to this element until the mouse button is released or document.releaseCapture() is called.
         /// </summary>
         /// <param name="retargetToElement">If true, all events are targeted directly to this element; if false, events can also fire at descendants of this element.</param>
-        public void SetCapture(bool retargetToElement)
+        public virtual void SetCapture(bool retargetToElement)
         {
         }
 
@@ -346,7 +346,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="position">The position relative to the element</param>
         /// <param name="text">String to be parsed as HTML or XML and inserted into the tree.</param>
-        public void InsertAdjacentHTML(InsertPosition position, string text)
+        public virtual void InsertAdjacentHTML(InsertPosition position, string text)
         {
         }
 
@@ -823,21 +823,21 @@ namespace Bridge.Html5
         /// <summary>
         /// Removes keyboard focus from the currently focused element.
         /// </summary>
-        public void Blur()
+        public virtual void Blur()
         {
         }
 
         /// <summary>
         /// Sends a mouse click event to the element.
         /// </summary>
-        public void Click()
+        public virtual void Click()
         {
         }
 
         /// <summary>
         /// Makes the element the current keyboard focus.
         /// </summary>
-        public void Focus()
+        public virtual void Focus()
         {
         }
     }

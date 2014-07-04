@@ -29,7 +29,7 @@ namespace Bridge.Html5
         /// <param name="canBubble"></param>
         /// <param name="cancelable"></param>
         /// <param name="detail"></param>
-        public void InitCustomEvent(string type, bool canBubble, bool cancelable, object detail)
+        public virtual void InitCustomEvent(string type, bool canBubble, bool cancelable, object detail)
         {
         }
     }

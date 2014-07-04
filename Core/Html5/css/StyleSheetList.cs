@@ -16,7 +16,7 @@ namespace Bridge.Html5
         {
 		}
 
-		public StyleSheet this[int index] 
+		public virtual StyleSheet this[int index] 
         {
 			get 
             {
@@ -25,14 +25,14 @@ namespace Bridge.Html5
 		}
 		
         [Name("item")]
-		public StyleSheet GetItem(int index) 
+		public virtual StyleSheet GetItem(int index) 
         {
 			return null;
 		}
 
 		public readonly int Length;
 
-        public IEnumerator<StyleSheet> GetEnumerator()
+        public virtual IEnumerator<StyleSheet> GetEnumerator()
         {
             return null;
         }

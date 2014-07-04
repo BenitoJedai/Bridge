@@ -25,7 +25,7 @@ namespace Bridge.Html5
         /// Determines the device's current location and gives back a Position object with the data.
         /// </summary>
         /// <param name="success">A callback function that takes a Position object as its sole input parameter.</param>
-        public void GetCurrentPosition(Action<GeolocationPosition> success)
+        public virtual void GetCurrentPosition(Action<GeolocationPosition> success)
         {
         }
 
@@ -34,7 +34,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="success">A callback function that takes a Position object as its sole input parameter.</param>
         /// <param name="error">An optional callback function that takes a PositionError object as its sole input parameter.</param>
-        public void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error)
+        public virtual void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error)
         {
         }
 
@@ -44,7 +44,7 @@ namespace Bridge.Html5
         /// <param name="success">A callback function that takes a Position object as its sole input parameter.</param>
         /// <param name="error">An optional callback function that takes a PositionError object as its sole input parameter.</param>
         /// <param name="options">An optional PositionOptions object.</param>
-        public void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error, GeolocationPositionOptions options)
+        public virtual void GetCurrentPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error, GeolocationPositionOptions options)
         {
         }
 
@@ -53,7 +53,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="success">A callback function that takes a Position object as an input parameter.</param>
         /// <returns>This method returns a watch ID value than can be used to unregister the handler by passing it to the Geolocation.clearWatch() method.</returns>
-        public object WatchPosition(Action<GeolocationPosition> success)
+        public virtual object WatchPosition(Action<GeolocationPosition> success)
         {
             return null;
         }
@@ -64,7 +64,7 @@ namespace Bridge.Html5
         /// <param name="success">A callback function that takes a Position object as an input parameter.</param>
         /// <param name="error">An optional callback function that takes a PositionError object as an input parameter.</param>
         /// <returns>This method returns a watch ID value than can be used to unregister the handler by passing it to the Geolocation.clearWatch() method.</returns>
-        public object WatchPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error)
+        public virtual object WatchPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error)
         {
             return null;
         }
@@ -76,7 +76,7 @@ namespace Bridge.Html5
         /// <param name="error">An optional callback function that takes a PositionError object as an input parameter.</param>
         /// <param name="options">An optional PositionOptions object.</param>
         /// <returns>This method returns a watch ID value than can be used to unregister the handler by passing it to the Geolocation.clearWatch() method.</returns>
-        public object WatchPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error, GeolocationPositionOptions options)
+        public virtual object WatchPosition(Action<GeolocationPosition> success, Action<GeolocationPositionError> error, GeolocationPositionOptions options)
         {
             return null;
         }
@@ -85,7 +85,7 @@ namespace Bridge.Html5
         /// Removes the particular handler previously installed using watchPosition().
         /// </summary>
         /// <param name="id">The ID number returned by the Geolocation.watchPosition() method when installing the handler you wish to remove.</param>
-        public void ClearWatch(object id)
+        public virtual void ClearWatch(object id)
         {
         }
     }

@@ -20,7 +20,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public Node this[int index] 
+		public virtual Node this[int index] 
         {
 			get 
             {
@@ -33,7 +33,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Node this[string name]
+        public virtual Node this[string name]
         {
             get
             {
@@ -46,7 +46,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Node GetNamedItem(string name)
+        public virtual Node GetNamedItem(string name)
         {
             return null;
         }
@@ -56,7 +56,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public Node SetNamedItem(Node node)
+        public virtual Node SetNamedItem(Node node)
         {
             return null;
         }
@@ -66,7 +66,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Node RemoveNamedItem(string name)
+        public virtual Node RemoveNamedItem(string name)
         {
             return null;
         }
@@ -77,7 +77,7 @@ namespace Bridge.Html5
         /// <param name="index"></param>
         /// <returns></returns>
         [Name("item")]
-        public Node GetItem(int index)
+        public virtual Node GetItem(int index)
         {
             return null;
         }
@@ -88,7 +88,7 @@ namespace Bridge.Html5
         /// <param name="namespaceURI"></param>
         /// <param name="localName"></param>
         /// <returns></returns>
-        public Node GetNamedItemNS(string namespaceURI, string localName)
+        public virtual Node GetNamedItemNS(string namespaceURI, string localName)
         {
             return null;
         }
@@ -98,7 +98,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public Node SetNamedItemNS(Node node)
+        public virtual Node SetNamedItemNS(Node node)
         {
             return null;
         }
@@ -109,7 +109,7 @@ namespace Bridge.Html5
         /// <param name="namespaceURI"></param>
         /// <param name="localName"></param>
         /// <returns></returns>
-        public Node RemoveNamedItemNS(string namespaceURI, string localName)
+        public virtual Node RemoveNamedItemNS(string namespaceURI, string localName)
         {
             return null;
         }
@@ -119,7 +119,7 @@ namespace Bridge.Html5
         /// </summary>
         public readonly int Length;
 
-        public IEnumerator<Node> GetEnumerator()
+        public virtual IEnumerator<Node> GetEnumerator()
         {
             return null;
         }

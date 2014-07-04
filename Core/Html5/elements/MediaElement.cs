@@ -164,7 +164,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">The media type</param>
         /// <returns>The string representing that the specified type may be played or not</returns>
-        public string CanPlayType(string type)
+        public virtual string CanPlayType(string type)
         {
             return null;
         }
@@ -173,28 +173,28 @@ namespace Bridge.Html5
         /// Directly seek to the given time.
         /// </summary>
         /// <param name="time">The time to seek</param>
-        public void FastSeek(double time)
+        public virtual void FastSeek(double time)
         {
         }
 
         /// <summary>
         /// Begins loading the media content from the server.
         /// </summary>
-        public void Load()
+        public virtual void Load()
         {
         }
 
         /// <summary>
         /// Pauses the media playback.
         /// </summary>
-        public void Pause()
+        public virtual void Pause()
         {
         }
 
         /// <summary>
         /// Begins playback of the media. If you have changed the src attribute of the media element since the page was loaded, you must call load() before play(), otherwise the original media plays again.
         /// </summary>
-        public void Play()
+        public virtual void Play()
         {
         }
     }
@@ -217,7 +217,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index">The range number to return the starting time for.</param>
         /// <returns>Returns the time offset at which a specified time range begins.</returns>
-        public double Start(int index)
+        public virtual double Start(int index)
         {
             return 0;
         }
@@ -228,7 +228,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index">The range number to return the ending time for.</param>
         /// <returns>Returns the time offset at which a specified time range ends.</returns>
-        public double End(int index)
+        public virtual double End(int index)
         {
             return 0;
         }

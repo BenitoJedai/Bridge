@@ -120,7 +120,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="keyArg">A string identifying the modifier key whose value you wish to determine. This may be an implementation-defined value or one of: "Alt", "AltGraph", "CapsLock", "Control", "Fn", "Meta", "NumLock", "ScrollLock", "Shift", "SymbolLock", or "OS". Note that IE9 uses "Scroll" for "ScrollLock" and "Win" for "OS". If you use these older draft's name, Gecko's getModifierState() always returns false.</param>
         /// <returns>true if the specified modifier key is engaged; otherwise false.</returns>
-        public bool GetModifierState(string keyArg)
+        public virtual bool GetModifierState(string keyArg)
         {
             return false;
         }
@@ -143,7 +143,7 @@ namespace Bridge.Html5
         /// <param name="metaKey">whether or not meta key was depressed during the Event.</param>
         /// <param name="button">the Event's mouse event.button.</param>
         /// <param name="relatedTarget">the Event's related EventTarget. Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.</param>
-        public void InitMouseEvent(string type, bool canBubble, bool cancelable, WindowInstance view, int detail, int screenX, int screenY, int clientX, int clientY, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, short button, Element relatedTarget)
+        public virtual void InitMouseEvent(string type, bool canBubble, bool cancelable, WindowInstance view, int detail, int screenX, int screenY, int clientX, int clientY, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, short button, Element relatedTarget)
         {
         }
     }
