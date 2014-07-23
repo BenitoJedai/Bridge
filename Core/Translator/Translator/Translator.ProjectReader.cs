@@ -20,18 +20,28 @@ namespace Bridge.NET
         }
 
         protected virtual void BuildAssemblyLocation(XmlDocument doc, XmlNamespaceManager manager)
-        {
-            var outputPath = this.GetOutputPath(doc, manager);
-            
-            if (string.IsNullOrEmpty(outputPath))
+        {            
+            if (this.AssemblyLocation == null || this.AssemblyLocation.Length == 0)
             {
-                outputPath = this.GetOutputPath(doc, manager, "Release");
-            }
+                this.Configuration = this.Configuration ?? "Debug";
+                var outputPath = this.GetOutputPath(doc, manager, this.Configuration);
 
-            this.AssemblyLocation = Path.Combine(outputPath, this.GetAssemblyName(doc, manager) + ".dll");
+                if (string.IsNullOrEmpty(outputPath))
+                {
+                    outputPath = this.GetOutputPath(doc, manager, "Release");
+                }
+
+                this.AssemblyLocation = Path.Combine(outputPath, this.GetAssemblyName(doc, manager) + ".dll");
+
+                if (!File.Exists(this.AssemblyLocation))
+                {
+                    outputPath = this.GetOutputPath(doc, manager, "Release");
+                    this.AssemblyLocation = Path.Combine(outputPath, this.GetAssemblyName(doc, manager) + ".dll");
+                }
+            }
         }
 
-        protected virtual string GetOutputPath(XmlDocument doc, XmlNamespaceManager manager, string configuration = "Debug")
+        protected virtual string GetOutputPath(XmlDocument doc, XmlNamespaceManager manager, string configuration)
         {
             var nodes = doc.SelectNodes("//my:PropertyGroup[contains(@Condition,'" + configuration + "')]/my:OutputPath", manager);
 

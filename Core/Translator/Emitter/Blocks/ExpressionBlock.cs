@@ -26,10 +26,20 @@ namespace Bridge.NET
             }
 
             var oldSemiColon = this.Emitter.EnableSemicolon;
+            
+            List<Expression> awaiters = null;
+            if (this.Emitter.IsAsync)
+            {
+                var awaitSearch = new AwaitSearchVisitor();
+                this.ExpressionStatement.Expression.AcceptVisitor(awaitSearch);
+                awaiters = awaitSearch.GetAwaitExpressions();
+            }
+            bool isAwaiter = this.ExpressionStatement.Expression is UnaryOperatorExpression && ((UnaryOperatorExpression)this.ExpressionStatement.Expression).Operator == UnaryOperatorType.Await;
+
 
             this.ExpressionStatement.Expression.AcceptVisitor(this.Emitter);
 
-            if (this.Emitter.EnableSemicolon)
+            if (this.Emitter.EnableSemicolon && !isAwaiter)
             {
                 this.WriteSemiColon(true);
             }

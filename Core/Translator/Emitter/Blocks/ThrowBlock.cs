@@ -20,10 +20,18 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.WriteThrow();
+            var oldValue = this.Emitter.ReplaceAwaiterByVar;
+            if (this.Emitter.IsAsync)
+            {                
+                this.WriteAwaiters(this.ThrowStatement.Expression);
+                this.Emitter.ReplaceAwaiterByVar = true;
+            }
+            
+            this.WriteThrow();            
             this.ThrowStatement.Expression.AcceptVisitor(this.Emitter);
             this.WriteSemiColon();
             this.WriteNewLine();
+            this.Emitter.ReplaceAwaiterByVar = oldValue;
         }
     }
 }

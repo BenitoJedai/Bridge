@@ -17,6 +17,6 @@ namespace Bridge.NET
         {
             new EmitBlock(this).Emit();
             return this.TransformOutputs();
-        }                        
+        }        
     }
 }

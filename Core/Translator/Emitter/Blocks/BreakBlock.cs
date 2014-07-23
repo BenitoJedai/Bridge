@@ -20,7 +20,20 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.Write("break");
+            if (this.Emitter.JumpStatements != null)
+            {
+                this.Write("$step = ");
+                this.Emitter.JumpStatements.Add(new JumpInfo(this.Emitter.Output, this.Emitter.Output.Length, true));
+
+                this.WriteSemiColon();
+                this.WriteNewLine();
+                this.Write("continue");
+            }
+            else
+            {
+                this.Write("break");
+            }
+
             this.WriteSemiColon();
             this.WriteNewLine();
         }

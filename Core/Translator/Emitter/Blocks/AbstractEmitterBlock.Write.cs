@@ -150,9 +150,12 @@ namespace Bridge.NET
             this.Write("new ");
         }
 
-        protected virtual void WriteVar()
+        protected virtual void WriteVar(bool ignoreAsync = false)
         {
-            this.Write("var ");
+            if (!this.Emitter.IsAsync || ignoreAsync)
+            {
+                this.Write("var ");
+            }
         }
 
         protected virtual void WriteIf()
@@ -340,6 +343,218 @@ namespace Bridge.NET
                 this.WriteComma(true);
                 this.Emitter.Comma = false;
             }
+        }
+
+        protected WriterInfo SaveWriter()
+        {
+            /*if (this.Emitter.LastSavedWriter != null && this.Emitter.LastSavedWriter.Output == this.Emitter.Output)
+            {
+                this.Emitter.LastSavedWriter.IsNewLine = this.Emitter.IsNewLine;
+                this.Emitter.LastSavedWriter.Level = this.Emitter.Level;
+                this.Emitter.LastSavedWriter.Comma = this.Emitter.Comma;
+                return this.Emitter.LastSavedWriter;
+            }*/
+            
+            var info = new WriterInfo { 
+                Output = this.Emitter.Output,
+                IsNewLine = this.Emitter.IsNewLine,
+                Level = this.Emitter.Level,
+                Comma = this.Emitter.Comma
+            };
+
+            this.Emitter.LastSavedWriter = info;
+
+            return info;
+        }
+
+        protected bool RestoreWriter(WriterInfo writer)
+        {
+            if (this.Emitter.Output != writer.Output)
+            {
+                this.Emitter.Output = writer.Output;
+                this.Emitter.IsNewLine = writer.IsNewLine;
+                this.Emitter.Level = writer.Level;
+                this.Emitter.Comma = writer.Comma;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected StringBuilder NewWriter()
+        {
+            this.Emitter.Output = new StringBuilder();
+            this.Emitter.IsNewLine = false;
+            this.Emitter.Level = 0;
+            this.Emitter.Comma = false;
+
+            return this.Emitter.Output;
+        }
+
+
+        public int GetNumberOfEmptyLinesAtEnd()
+        {
+            return AbstractEmitterBlock.GetNumberOfEmptyLinesAtEnd(this.Emitter.Output);
+        }
+
+        public static int GetNumberOfEmptyLinesAtEnd(StringBuilder buffer)
+        {
+            int count = 0;
+            bool lastNewLineFound = false;
+            int i = buffer.Length - 1;
+            var charArray = buffer.ToString().ToCharArray();
+
+            while (i >= 0)
+            {
+                char c = charArray[i];
+                if (!Char.IsWhiteSpace(c))
+                {
+                    return count;
+                }
+
+                if (c == '\n')
+                {
+                    if (!lastNewLineFound) 
+                    {
+                        lastNewLineFound = true;
+                    }
+                    else
+                    {
+                        count++; ;
+                    }                        
+                }
+                i--;
+            }
+
+            return count;
+        }
+
+        public bool IsOnlyWhitespaceOnPenultimateLine(bool lastTwoLines = true)
+        {
+            return AbstractEmitterBlock.IsOnlyWhitespaceOnPenultimateLine(this.Emitter.Output, lastTwoLines);
+        }
+
+        public static bool IsOnlyWhitespaceOnPenultimateLine(StringBuilder buffer, bool lastTwoLines = true)
+        {
+            int i = buffer.Length - 1;
+            var charArray = buffer.ToString().ToCharArray();
+
+            while (i >= 0)
+            {
+                char c = charArray[i];
+                if (!Char.IsWhiteSpace(c))
+                {
+                    return false;
+                }
+
+                if (c == '\n')
+                {
+                    if (lastTwoLines)
+                    {
+                        lastTwoLines = false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                i--;
+            }
+
+            return true;
+        }
+
+        public void RemovePenultimateEmptyLines(bool withLast = false)
+        {
+            AbstractMethodBlock.RemovePenultimateEmptyLines(this.Emitter.Output, withLast);
+        }
+
+        public static StringBuilder RemovePenultimateEmptyLines(StringBuilder buffer, bool withLast = false)
+        {
+            if (buffer.Length != 0)
+            {
+                int length = buffer.Length;
+                int i = length - 1;
+                var charArray = buffer.ToString().ToCharArray();
+                int start = -1;
+                int end = -1;
+                bool firstCR = true;
+
+                while (Char.IsWhiteSpace(charArray[i]) && (i > -1))
+                {
+                    if (charArray[i] == '\n')
+                    {
+                        if (firstCR)
+                        {
+                            firstCR = false;
+                            end = i;
+
+                            if (withLast)
+                            {
+                                start = i;
+                            }                            
+                        }
+                        else
+                        {                            
+                            start = i + 1;
+                        }
+                    }
+
+                    i--;
+                }
+
+                if (start > -1 && end > -1)
+                {
+                    buffer.Remove(start, end - start + 1);
+                }
+            }
+            return buffer;
+        }
+
+        public static bool IsReturnLast(string str)
+        {
+            str = str.TrimEnd();
+            return str.EndsWith("return;");
+        }
+
+        public static bool IsContinueLast(string str)
+        {
+            str = str.TrimEnd();
+            return str.EndsWith("continue;");
+        }
+
+        public static bool IsJumpStatementLast(string str)
+        {
+            str = str.TrimEnd();
+            return str.EndsWith("continue;") || str.EndsWith("return;") || str.EndsWith("break;");
+        }
+    }
+
+    public class WriterInfo
+    {
+        public StringBuilder Output
+        {
+            get;
+            set;
+        }
+
+        public bool IsNewLine
+        {
+            get;
+            set;
+        }
+
+        public int Level
+        {
+            get;
+            set;
+        }
+
+        public bool Comma
+        {
+            get;
+            set;
         }
     }
 }

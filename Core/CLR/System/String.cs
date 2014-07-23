@@ -1,4 +1,5 @@
 ﻿using Bridge.CLR;
+using System.Text.RegularExpressions;
 
 namespace System
 {
@@ -226,9 +227,9 @@ namespace System
         /// <summary>
         /// The match() method retrieves the matches when matching a string against a regular expression.
         /// </summary>
-        /// <param name="regexp">A regular expression object. If a non-RegExp object obj is passed, it is implicitly converted to a RegExp by using new RegExp(obj).</param>
+        /// <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
         /// <returns></returns>
-        public string[] Match(RegExp regexp) 
+        public string[] Match(Regex Regex) 
         { 
             return null; 
         }
@@ -236,59 +237,59 @@ namespace System
         /// <summary>
         /// The match() method retrieves the matches when matching a string against a regular expression.
         /// </summary>
-        /// <param name="regexp">A regular expression object. If a non-RegExp object obj is passed, it is implicitly converted to a RegExp by using new RegExp(obj).</param>
+        /// <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
         /// <returns></returns>
-        public string[] Match(string regexp) 
+        public string[] Match(string Regex) 
         { 
             return null; 
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
-        /// <param name="regexp">A RegExp object. The match is replaced by the return value of parameter #2.</param>
+        /// <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
         /// <param name="newSubStr">The String that replaces the substring received from parameter #1. A number of special replacement patterns are supported; see the "Specifying a string as a parameter" section below.</param>
         /// <returns></returns>
-        public string Replace(RegExp regexp, string newSubStr) 
+        public string Replace(Regex Regex, string newSubStr) 
         { 
             return null; 
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
-        /// <param name="regexp">A RegExp object. The match is replaced by the return value of parameter #2.</param>
+        /// <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public string Replace(RegExp regexp, Func<string, string> callback) 
+        public string Replace(Regex Regex, Func<string, string> callback) 
         { 
             return null; 
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
-        /// <param name="regexp">A RegExp object. The match is replaced by the return value of parameter #2.</param>
+        /// <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public string Replace(RegExp regexp, Func<string, int, string> callback) 
+        public string Replace(Regex Regex, Func<string, int, string> callback) 
         { 
             return null; 
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
-        /// <param name="regexp">A RegExp object. The match is replaced by the return value of parameter #2.</param>
+        /// <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public string Replace(RegExp regexp, Func<string, int, string, string> callback) 
+        public string Replace(Regex Regex, Func<string, int, string, string> callback) 
         { 
             return null; 
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
         /// <param name="substr">A String that is to be replaced by newSubStr.</param>
         /// <param name="newSubStr">The String that replaces the substring received from parameter #1. A number of special replacement patterns are supported; see the "Specifying a string as a parameter" section below.</param>
@@ -299,7 +300,7 @@ namespace System
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
         /// <param name="substr">A String that is to be replaced by newSubStr.</param>
         /// <param name="callback"></param>
@@ -310,7 +311,7 @@ namespace System
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
         /// <param name="substr">A String that is to be replaced by newSubStr.</param>
         /// <param name="callback"></param>
@@ -321,7 +322,7 @@ namespace System
         }
 
         /// <summary>
-        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
         /// </summary>
         /// <param name="substr">A String that is to be replaced by newSubStr.</param>
         /// <param name="callback"></param>
@@ -334,9 +335,9 @@ namespace System
         /// <summary>
         /// The search() method executes a search for a match between a regular expression and this String object.
         /// </summary>
-        /// <param name="regexp">A regular expression object. If a non-RegExp object obj is passed, it is implicitly converted to a RegExp by using new RegExp(obj).</param>
+        /// <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
         /// <returns></returns>
-        public int Search(RegExp regexp) 
+        public int Search(Regex Regex) 
         { 
             return 0; 
         }
@@ -344,9 +345,9 @@ namespace System
         /// <summary>
         /// The search() method executes a search for a match between a regular expression and this String object.
         /// </summary>
-        /// <param name="regexp">A regular expression object. If a non-RegExp object obj is passed, it is implicitly converted to a RegExp by using new RegExp(obj).</param>
+        /// <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
         /// <returns></returns>
-        public int Search(string regexp) 
+        public int Search(string Regex) 
         { 
             return 0; 
         }
@@ -387,7 +388,7 @@ namespace System
         /// </summary>
         /// <param name="separator">Specifies the character(s) to use for separating the string. The separator is treated as a string or a regular expression. If separator is omitted, the array returned contains one element consisting of the entire string. If separator is an empty string, str is converted to an array of characters.</param>
         /// <returns></returns>
-        public string[] Split(RegExp separator) 
+        public string[] Split(Regex separator) 
         { 
             return null; 
         }
@@ -409,7 +410,7 @@ namespace System
         /// <param name="separator">Specifies the character(s) to use for separating the string. The separator is treated as a string or a regular expression. If separator is omitted, the array returned contains one element consisting of the entire string. If separator is an empty string, str is converted to an array of characters.</param>
         /// <param name="limit">Integer specifying a limit on the number of splits to be found. The split method still splits on every match of separator, but it truncates the returned array to at most limit elements.</param>
         /// <returns></returns>
-        public string[] Split(RegExp separator, int limit) 
+        public string[] Split(Regex separator, int limit) 
         { 
             return null; 
         }

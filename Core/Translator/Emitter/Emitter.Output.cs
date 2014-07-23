@@ -30,7 +30,7 @@ namespace Bridge.NET
 
                 if (this.AssemblyInfo.OutputDir.IsNotEmpty())
                 {
-                    fileName = Path.Combine(this.AssemblyInfo.OutputDir, fileName);
+                    //fileName = Path.Combine(this.AssemblyInfo.OutputDir, fileName);
                 }
 
                 result.Add(fileName, output.NonModuletOutput.ToString());

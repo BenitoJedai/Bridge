@@ -39,7 +39,7 @@ namespace Bridge.NET
         protected virtual IList<Expression> GetExpressionsByKey(IEnumerable<NamedParamExpression> expressions, string key)
         {
 
-            if (Regex.IsMatch(key, "\\d+"))
+            if (Regex.IsMatch(key, "^\\d+$"))
             {
                 var list = new List<Expression>();
                 list.Add(expressions.Skip(int.Parse(key)).First().Expression);

@@ -55,6 +55,15 @@ namespace Bridge.NET
         protected void VisitInvocationExpression()
         {
             InvocationExpression invocationExpression = this.InvocationExpression;
+            var oldValue = this.Emitter.ReplaceAwaiterByVar;
+            var oldAsyncExpressionHandling = this.Emitter.AsyncExpressionHandling;
+
+            if (this.Emitter.IsAsync && !this.Emitter.AsyncExpressionHandling)
+            {
+                this.WriteAwaiters(invocationExpression);
+                this.Emitter.ReplaceAwaiterByVar = true;
+                this.Emitter.AsyncExpressionHandling = true;
+            }            
 
             Tuple<bool, bool, string> inlineInfo = this.Emitter.GetInlineCode(invocationExpression);
             var argsInfo = new ArgumentsInfo(this.Emitter, invocationExpression);
@@ -88,6 +97,9 @@ namespace Bridge.NET
                             this.Emitter.EnableSemicolon = false;
                             this.WriteNewLine();
                         }
+
+                        this.Emitter.ReplaceAwaiterByVar = oldValue;
+                        this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                         return;
                     }
                 }
@@ -102,7 +114,8 @@ namespace Bridge.NET
                         this.WriteDot();
                     }
                     new InlineArgumentsBlock(this.Emitter, argsInfo, inlineScript).Emit();
-
+                    this.Emitter.ReplaceAwaiterByVar = oldValue;
+                    this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                     return;
                 }
             }
@@ -131,6 +144,8 @@ namespace Bridge.NET
                         if (this.IsEmptyPartialInvoking(csharpInvocation))
                         {
                             this.Emitter.SkipSemiColon = true;
+                            this.Emitter.ReplaceAwaiterByVar = oldValue;
+                            this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                             return;
                         }
                     }
@@ -141,6 +156,8 @@ namespace Bridge.NET
                         if (this.IsEmptyPartialInvoking(invocationResult))
                         {
                             this.Emitter.SkipSemiColon = true;
+                            this.Emitter.ReplaceAwaiterByVar = oldValue;
+                            this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                             return;
                         }
                     }
@@ -182,6 +199,8 @@ namespace Bridge.NET
                                 this.WriteCloseParentheses();
                             }
 
+                            this.Emitter.ReplaceAwaiterByVar = oldValue;
+                            this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                             return;
                         }
                     }
@@ -255,6 +274,8 @@ namespace Bridge.NET
                 if (this.IsEmptyPartialInvoking(this.Emitter.Resolver.ResolveNode(invocationExpression.Target, this.Emitter) as InvocationResolveResult))
                 {
                     this.Emitter.SkipSemiColon = true;
+                    this.Emitter.ReplaceAwaiterByVar = oldValue;
+                    this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                     return;
                 }
 
@@ -277,6 +298,9 @@ namespace Bridge.NET
                     this.WriteCloseParentheses();
                 }
             }
+
+            this.Emitter.ReplaceAwaiterByVar = oldValue;
+            this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
         }        
     }
 }

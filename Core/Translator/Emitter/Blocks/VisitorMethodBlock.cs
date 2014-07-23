@@ -2,6 +2,7 @@
 using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -54,7 +55,14 @@ namespace Bridge.NET
 
             if (script == null)
             {
-                methodDeclaration.Body.AcceptVisitor(this.Emitter);
+                if (methodDeclaration.HasModifier(Modifiers.Async))
+                {
+                    new AsyncBlock(this.Emitter, methodDeclaration).Emit();
+                }
+                else
+                {
+                    methodDeclaration.Body.AcceptVisitor(this.Emitter);
+                }
             }
             else
             {

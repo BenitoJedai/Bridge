@@ -27,16 +27,50 @@ namespace Bridge.NET
         {
             ReturnStatement returnStatement = this.ReturnStatement;
 
-            this.WriteReturn(false);
-
-            if (!returnStatement.Expression.IsNull)
+            if (this.Emitter.IsAsync)
             {
-                this.WriteSpace();
-                returnStatement.Expression.AcceptVisitor(this.Emitter);
-            }
+                if (this.Emitter.AsyncBlock != null && this.NoValueableSiblings(returnStatement))
+                {
+                    this.Emitter.AsyncBlock.ReturnIsLast = true;
+                }
 
-            this.WriteSemiColon();
-            this.WriteNewLine();
+                if (this.Emitter.AsyncBlock != null && this.Emitter.AsyncBlock.IsTaskReturn)
+                {
+                    this.WriteAwaiters(returnStatement.Expression);
+                    
+                    this.Write("$returnTask.setResult(");
+                    if (!returnStatement.Expression.IsNull)
+                    {
+                        var oldValue = this.Emitter.ReplaceAwaiterByVar;
+                        this.Emitter.ReplaceAwaiterByVar = true;
+                        returnStatement.Expression.AcceptVisitor(this.Emitter);
+                        this.Emitter.ReplaceAwaiterByVar = oldValue;
+                    }
+                    else
+                    {
+                        this.Write("null");
+                    }
+                    this.Write(");");
+
+                    this.WriteNewLine();
+                }
+
+                this.WriteReturn(false);
+                this.WriteSemiColon();
+                this.WriteNewLine();
+            }
+            else
+            {
+                this.WriteReturn(false);
+
+                if (!returnStatement.Expression.IsNull)
+                {
+                    this.WriteSpace();
+                    returnStatement.Expression.AcceptVisitor(this.Emitter);
+                }
+                this.WriteSemiColon();
+                this.WriteNewLine();
+            }            
         }
     }
 }

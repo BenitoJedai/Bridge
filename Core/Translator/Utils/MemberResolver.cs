@@ -45,7 +45,7 @@ namespace Bridge.NET
                 
                 if (this.CanFreeze)
                 {
-                    syntaxTree.Freeze();
+                    //syntaxTree.Freeze();
                 }
                 
                 unresolvedFiles[i] = syntaxTree.ToTypeSystem();
@@ -72,7 +72,7 @@ namespace Bridge.NET
 
             if (this.CanFreeze)
             {
-                syntaxTree.Freeze();
+                //syntaxTree.Freeze();
             }
             
             var result = this.resolver.Resolve(node);

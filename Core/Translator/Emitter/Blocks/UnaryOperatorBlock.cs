@@ -61,9 +61,33 @@ namespace Bridge.NET
                     unaryOperatorExpression.Expression.AcceptVisitor(this.Emitter);
                     this.Write("++");
                     break;
+                case UnaryOperatorType.Await:
+                    if (this.Emitter.ReplaceAwaiterByVar)
+                    {
+                        var index = System.Array.IndexOf(this.Emitter.AsyncBlock.AwaitExpressions, unaryOperatorExpression.Expression) + 1;
+                        this.Write("$taskResult" + index);
+                    }
+                    else
+                    {
+                        var oldValue = this.Emitter.ReplaceAwaiterByVar;
+                        var oldAsyncExpressionHandling = this.Emitter.AsyncExpressionHandling;
+
+                        if (this.Emitter.IsAsync && !this.Emitter.AsyncExpressionHandling)
+                        {
+                            this.WriteAwaiters(unaryOperatorExpression.Expression);
+                            this.Emitter.ReplaceAwaiterByVar = true;
+                            this.Emitter.AsyncExpressionHandling = true;
+                        }   
+
+                        this.WriteAwaiter(unaryOperatorExpression.Expression);
+
+                        this.Emitter.ReplaceAwaiterByVar = oldValue;
+                        this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
+                    }
+                    break;
                 default:
                     throw this.Emitter.CreateException(unaryOperatorExpression, "Unsupported unary operator: " + unaryOperatorExpression.Operator.ToString());
             }
-        }        
+        }           
     }
 }

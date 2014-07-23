@@ -14,12 +14,14 @@ namespace System.Threading.Tasks
 
         public bool IsCompleted
         {
+            [Name("isCompleted")]
             get
             {
                 return false;
             }
         }
 
+        [Name("continueWith")]
 		public void OnCompleted(Action continuation) 
         {
         }
@@ -39,12 +41,14 @@ namespace System.Threading.Tasks
 
         public bool IsCompleted
         {
+            [Name("isCompleted")]
             get
             {
                 return false;
             }
         }
 
+        [Name("continueWith")]
 		public void OnCompleted(Action continuation) 
         {
         }

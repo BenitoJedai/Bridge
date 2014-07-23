@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -20,7 +21,16 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.VisitForeachStatement();
+            var awaiters = this.Emitter.IsAsync ? this.GetAwaiters(this.ForeachStatement) : null;
+
+            if (awaiters != null && awaiters.Length > 0)
+            {
+                this.VisitAsyncForeachStatement();
+            }
+            else
+            {
+                this.VisitForeachStatement();
+            }
         }
 
         protected virtual string GetNextIteratorName()
@@ -36,7 +46,132 @@ namespace Bridge.NET
             return result;
         }
 
-        protected void VisitForeachStatement()
+        protected void VisitAsyncForeachStatement()
+        {
+            ForeachStatement foreachStatement = this.ForeachStatement;
+
+            if (foreachStatement.EmbeddedStatement is EmptyStatement)
+            {
+                return;
+            }
+
+            var oldValue = this.Emitter.ReplaceAwaiterByVar;
+            var jumpStatements = this.Emitter.JumpStatements;
+            this.Emitter.JumpStatements = new List<JumpInfo>();
+            this.WriteAwaiters(foreachStatement.InExpression);
+
+            bool containsAwaits = false;
+            var awaiters = this.GetAwaiters(foreachStatement.EmbeddedStatement);
+
+            if (awaiters != null && awaiters.Length > 0)
+            {
+                containsAwaits = true;
+            }
+
+            this.Emitter.ReplaceAwaiterByVar = true;
+
+            if (!containsAwaits)
+            {
+                this.VisitForeachStatement(oldValue);
+                return;
+            }
+
+            var iteratorName = this.GetNextIteratorName();
+            this.AddLocal(iteratorName, AstType.Null);
+
+            this.WriteVar();
+            this.Write(iteratorName, " = ", Emitter.ROOT);
+            this.WriteDot();
+            this.Write(Emitter.ENUMERATOR);
+
+            this.WriteOpenParentheses();
+            foreachStatement.InExpression.AcceptVisitor(this.Emitter);
+            this.Emitter.ReplaceAwaiterByVar = oldValue;
+            this.WriteCloseParentheses();
+            this.WriteSemiColon();
+            this.WriteNewLine();
+            this.Write("$step = " + this.Emitter.AsyncBlock.Step + ";");
+            this.WriteNewLine();
+            this.Write("continue;");
+            this.WriteNewLine();
+
+            AsyncStep conditionStep = this.Emitter.AsyncBlock.AddAsyncStep();
+
+            this.WriteIf();
+            this.WriteOpenParentheses();
+            this.Write(iteratorName);
+            this.WriteDot();
+            this.Write(Emitter.HAS_NEXT);
+            this.WriteOpenCloseParentheses();
+            this.WriteCloseParentheses();
+            this.WriteSpace();
+            this.BeginBlock();
+
+            this.WriteVar();
+            this.Write(foreachStatement.VariableName, " = ", iteratorName);
+
+            this.WriteDot();
+            this.Write(Emitter.NEXT);
+
+            this.WriteOpenCloseParentheses();
+            this.WriteSemiColon();
+            this.WriteNewLine();
+
+            this.PushLocals();
+            this.AddLocal(foreachStatement.VariableName, foreachStatement.VariableType);
+
+            BlockStatement block = foreachStatement.EmbeddedStatement as BlockStatement;
+
+            var writer = this.SaveWriter();
+            this.Emitter.IgnoreBlock = foreachStatement.EmbeddedStatement;
+            var startCount = this.Emitter.AsyncBlock.Steps.Count;
+
+            if (block != null)
+            {
+                block.AcceptChildren(this.Emitter);
+            }
+            else
+            {
+                foreachStatement.EmbeddedStatement.AcceptVisitor(this.Emitter);
+            }
+
+            AsyncStep loopStep = null;
+            if (this.Emitter.AsyncBlock.Steps.Count > startCount)
+            {
+                loopStep = this.Emitter.AsyncBlock.Steps.Last();
+                loopStep.JumpToStep = conditionStep.Step;
+            }
+            this.RestoreWriter(writer);
+
+            if (!AbstractEmitterBlock.IsJumpStatementLast(this.Emitter.Output.ToString()))
+            {
+                this.Write("$step = " + conditionStep.Step + ";");
+                this.WriteNewLine();
+                this.Write("continue;");
+                this.WriteNewLine();
+            }
+
+            this.PopLocals();
+
+            this.WriteNewLine();
+            this.EndBlock();
+            this.WriteNewLine();
+
+            var nextStep = this.Emitter.AsyncBlock.AddAsyncStep();
+            conditionStep.JumpToStep = nextStep.Step;
+
+            if (this.Emitter.JumpStatements.Count > 0)
+            {
+                foreach (var jump in this.Emitter.JumpStatements)
+                {
+                    jump.Output.Insert(jump.Position, jump.Break ? nextStep.Step : conditionStep.Step);
+                }
+            }
+
+            this.Emitter.JumpStatements = jumpStatements;
+        }
+
+        protected void VisitForeachStatement(bool? replaceAwaiterByVar = null)
         {
             ForeachStatement foreachStatement = this.ForeachStatement;
 
@@ -79,9 +214,14 @@ namespace Bridge.NET
             this.WriteNewLine();
 
             this.PushLocals();
-            this.Emitter.Locals.Add(foreachStatement.VariableName, foreachStatement.VariableType);
+            this.AddLocal(foreachStatement.VariableName, foreachStatement.VariableType);
 
             BlockStatement block = foreachStatement.EmbeddedStatement as BlockStatement;
+            
+            if (replaceAwaiterByVar.HasValue)
+            {
+                this.Emitter.ReplaceAwaiterByVar = replaceAwaiterByVar.Value;
+            }
 
             if (block != null)
             {

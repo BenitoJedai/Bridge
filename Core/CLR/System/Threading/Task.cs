@@ -16,11 +16,36 @@ namespace System.Threading.Tasks
         {
 		}
 
+        [Name("error")]
         public readonly Exception Exception;
 
-        public readonly bool IsCanceled;
-        public readonly bool IsCompleted;
-        public readonly bool IsFaulted;
+        public bool IsCanceled
+        {
+            [Name("isCanceled")]
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsCompleted
+        {
+            [Name("isCompleted")]
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsFaulted
+        {
+            [Name("isFaulted")]
+            get
+            {
+                return false;
+            }
+        }
+
         public readonly TaskStatus Status;
 
 		public Task ContinueWith(Action<Task> continuationAction) 
@@ -36,7 +61,7 @@ namespace System.Threading.Tasks
 		public void Start() 
         {
 		}
-
+        
 		public TaskAwaiter GetAwaiter() 
         {
 			return null;
@@ -45,6 +70,22 @@ namespace System.Threading.Tasks
 		public void Dispose() 
         {
 		}
+
+        public void SetCanceled()
+        {
+        }
+
+        public void SetError(IEnumerable<Exception> exceptions)
+        {
+        }
+
+        public void SetError(Exception exception)
+        {
+        }
+
+        public void Complete(object result = null)
+        {
+        }
 
 		public static Task Delay(int millisecondDelay) 
         {
@@ -139,7 +180,8 @@ namespace System.Threading.Tasks
 
     [Ignore]
     [Name("Bridge.Task")]
-	public class Task<TResult> : Task {
+	public class Task<TResult> : Task 
+    {
 		
         public Task(Func<TResult> function) : base(() => {}) 
         {
@@ -151,6 +193,7 @@ namespace System.Threading.Tasks
 
 		public TResult Result 
         { 
+            [Name("getResult")]
             get 
             { 
                 return default(TResult); 
@@ -160,16 +203,20 @@ namespace System.Threading.Tasks
 		public Task ContinueWith(Action<Task<TResult>> continuationAction) 
         {
 			return null;
-		}
-
-		public new TaskAwaiter<TResult> GetAwaiter() 
-        {
-			return null;
-		}
+		}       
 
 		public Task<TNewResult> ContinueWith<TNewResult>(Func<Task<TResult>, TNewResult> continuationFunction) 
         {
 			return null;
 		}
+
+        public new TaskAwaiter<TResult> GetAwaiter()
+        {
+            return null;
+        }
+
+        public void SetResult(TResult result)
+        {
+        }
 	}
 }

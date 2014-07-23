@@ -250,5 +250,53 @@ namespace Bridge.NET
             get;
             set;
         }
+
+        public bool IsAsync 
+        { 
+            get; 
+            set; 
+        }
+
+        public List<string> AsyncVariables
+        {
+            get;
+            set;
+        }
+
+        public AsyncBlock AsyncBlock
+        {
+            get;
+            set;
+        }
+
+        public bool ReplaceAwaiterByVar
+        {
+            get;
+            set;
+        }
+
+        public bool AsyncExpressionHandling
+        {
+            get;
+            set;
+        }
+
+        public AstNode IgnoreBlock 
+        { 
+            get; 
+            set; 
+        }
+
+        public WriterInfo LastSavedWriter
+        {
+            get;
+            set;
+        }
+
+        public List<JumpInfo> JumpStatements
+        {
+            get;
+            set;
+        }
     }
 }
