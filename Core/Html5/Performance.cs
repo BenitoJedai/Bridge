@@ -17,7 +17,7 @@ namespace Bridge.Html5
         /// Returns a DOMHighResTimeStamp representing the amount of miliseconds elapsed since the start of the navigation, as give by PerformanceTiming.navigationStart to the call of the method.
         /// </summary>
         /// <returns></returns>
-        public int Now()
+        public virtual int Now()
         {
             return 0;
         }

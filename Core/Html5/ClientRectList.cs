@@ -20,7 +20,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public ClientRect this[int index] 
+		public virtual ClientRect this[int index] 
         {
 			get 
             {
@@ -34,7 +34,7 @@ namespace Bridge.Html5
         /// <param name="index"></param>
         /// <returns></returns>
 		[Name("item")]
-        public ClientRect GetItem(int index) 
+        public virtual ClientRect GetItem(int index) 
         {
 			return null;
 		}
@@ -44,7 +44,7 @@ namespace Bridge.Html5
         /// </summary>
         public readonly int Length;
 
-        public IEnumerator<ClientRect> GetEnumerator()
+        public virtual IEnumerator<ClientRect> GetEnumerator()
         {
             return null;
         }

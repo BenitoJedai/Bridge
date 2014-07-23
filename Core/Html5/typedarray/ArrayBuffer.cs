@@ -27,7 +27,7 @@ namespace Bridge.Html5
 		/// </summary>
         /// <param name="begin">Byte index to start slicing.</param>
         /// <returns>A new ArrayBuffer object.</returns>
-		public ArrayBuffer Slice(long begin) 
+		public virtual ArrayBuffer Slice(long begin) 
         {
 			return null;
 		}
@@ -38,7 +38,7 @@ namespace Bridge.Html5
         /// <param name="begin">Byte index to start slicing.</param>
         /// <param name="end">Byte index to end slicing. If end is unspecified, the new ArrayBuffer contains all bytes from begin to the end of this ArrayBuffer.</param>
         /// <returns>A new ArrayBuffer object.</returns>
-		public ArrayBuffer Slice(long begin, long end) 
+		public virtual ArrayBuffer Slice(long begin, long end) 
         {
 			return null;
 		}

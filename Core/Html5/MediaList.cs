@@ -15,7 +15,7 @@ namespace Bridge.Html5
         {
 		}
 
-		public string this[int index] 
+		public virtual string this[int index] 
         {
 			get
             {
@@ -23,16 +23,16 @@ namespace Bridge.Html5
 			}
 		}
 
-		public void AppendMedium(string newMedium) 
+		public virtual void AppendMedium(string newMedium) 
         {
 		}
 
-		public void DeleteMedium(string oldMedium) 
+		public virtual void DeleteMedium(string oldMedium) 
         {
 		}		
 
         [Name("item")]
-		public string GetItem(int index) 
+		public virtual string GetItem(int index) 
         {
 			return null;
 		}
@@ -41,7 +41,7 @@ namespace Bridge.Html5
         		
 		public string MediaText;
         
-        public IEnumerator<string> GetEnumerator()
+        public virtual IEnumerator<string> GetEnumerator()
         {
             return null;
         }

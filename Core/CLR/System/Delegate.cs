@@ -12,17 +12,17 @@ namespace System
         { 
         }
 
-        public object Apply(object thisArg) 
+        public virtual object Apply(object thisArg) 
         { 
             return null; 
         }
 
-        public object Apply(object thisArg, Array args) 
+        public virtual object Apply(object thisArg, Array args) 
         { 
             return null; 
         }
 
-        public object Call(object thisArg, params object[] args) 
+        public virtual object Call(object thisArg, params object[] args) 
         { 
             return null; 
         }

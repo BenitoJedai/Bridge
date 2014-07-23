@@ -95,7 +95,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="keyArg">A string identifying the modifier key whose value you wish to determine. This may be an implementation-defined value or one of: "Alt", "AltGraph", "CapsLock", "Control", "Fn", "Meta", "NumLock", "ScrollLock", "Shift", "SymbolLock", or "OS". Note that IE9 uses "Scroll" for "ScrollLock" and "Win" for "OS". If you use these older draft's name, Gecko's getModifierState() always returns false.</param>
         /// <returns>true if the specified modifier key is engaged; otherwise false.</returns>
-        public bool GetModifierState(string keyArg)
+        public virtual bool GetModifierState(string keyArg)
         {
             return false;
         }
@@ -113,7 +113,7 @@ namespace Bridge.Html5
         /// <param name="metaKey">bool True if the Virtual Key to be generated is a combination of the Meta key and other keys</param>
         /// <param name="keyCode">unsigned long the virtual key code value of the key which was depressed, otherwise zero</param>
         /// <param name="charCode">unsigned long the Unicode character associated with the depressed key otherwise zero</param>
-        public void InitKeyEvent(string type, bool bubbles, bool cancelable, WindowInstance view, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, int keyCode, int charCode)
+        public virtual void InitKeyEvent(string type, bool bubbles, bool cancelable, WindowInstance view, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, int keyCode, int charCode)
         {
         }
 

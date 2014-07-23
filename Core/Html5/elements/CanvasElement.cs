@@ -31,7 +31,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="contextId">The context's id</param>
         /// <returns>A drawing context. A CanvasRenderingContext2D or a WebGLRenderingContext object.</returns>
-        public Any<CanvasRenderingContext2D, WebGLRenderingContext> GetContext(string contextId) 
+        public virtual Any<CanvasRenderingContext2D, WebGLRenderingContext> GetContext(string contextId) 
         {
             return null;
         }
@@ -44,7 +44,7 @@ namespace Bridge.Html5
         /// If the requested type is image/jpeg or image/webp, then the second argument, if it is between 0.0 and 1.0, is treated as indicating image quality; if the second argument is anything else, the default value for image quality is used. Other arguments are ignored.
         /// </summary>
         /// <returns>URL containing a representation of the image</returns>
-        public string ToDataURL() 
+        public virtual string ToDataURL() 
         {
             return null;
         }
@@ -58,7 +58,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">The format. Defaults to PNG.</param>
         /// <returns>URL containing a representation of the image</returns>
-        public string ToDataURL(string type) 
+        public virtual string ToDataURL(string type) 
         {
             return null;
         }
@@ -73,7 +73,7 @@ namespace Bridge.Html5
         /// <param name="type">The format. Defaults to PNG.</param>
         /// /// <param name="args">Any additional parameters</param>
         /// <returns>URL containing a representation of the image</returns>
-        public string ToDataURL(string type, params object[] args) 
+        public virtual string ToDataURL(string type, params object[] args) 
         {
             return null;
         }

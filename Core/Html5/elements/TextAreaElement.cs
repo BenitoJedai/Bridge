@@ -120,7 +120,7 @@ namespace Bridge.Html5
         /// Returns false if the button is a candidate for constraint validation, and it does not satisfy its constraints. In this case, it also fires an invalid event at the control. It returns true if the control is not a candidate for constraint validation, or if it satisfies its constraints.
         /// </summary>
         /// <returns></returns>
-        public bool CheckValidity()
+        public virtual bool CheckValidity()
         {
             return false;
         }
@@ -128,7 +128,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Selects the contents of the control.
         /// </summary>
-        public void Select()
+        public virtual void Select()
         {
         }
 
@@ -136,7 +136,7 @@ namespace Bridge.Html5
         /// Sets a custom validity message for the element. If this message is not the empty string, then the element is suffering from a custom validity error, and does not validate.
         /// </summary>
         /// <param name="error"></param>
-        public void SetCustomValidity(string error)
+        public virtual void SetCustomValidity(string error)
         {
         }
 
@@ -145,7 +145,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        public void SetSelectionRange(int start, int end)
+        public virtual void SetSelectionRange(int start, int end)
         {
         }
 
@@ -155,7 +155,7 @@ namespace Bridge.Html5
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <param name="direction"></param>
-        public void SetSelectionRange(int start, int end, string direction)
+        public virtual void SetSelectionRange(int start, int end, string direction)
         {
         }
 
@@ -163,7 +163,7 @@ namespace Bridge.Html5
         /// Replaces a range of text with the new text. Supported input types: text, search, url, tel, password.
         /// </summary>
         /// <param name="replacement"></param>
-        public void SetRangeText(string replacement)
+        public virtual void SetRangeText(string replacement)
         {
         }
 
@@ -173,7 +173,7 @@ namespace Bridge.Html5
         /// <param name="replacement"></param>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        public void SetRangeText(string replacement, int start, int end)
+        public virtual void SetRangeText(string replacement, int start, int end)
         {
         }
 
@@ -184,7 +184,7 @@ namespace Bridge.Html5
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <param name="selectMode"></param>
-        public void SetRangeText(string replacement, int start, int end, string selectMode)
+        public virtual void SetRangeText(string replacement, int start, int end, string selectMode)
         {
         }
 

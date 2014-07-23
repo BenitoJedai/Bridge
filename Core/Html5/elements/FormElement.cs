@@ -75,7 +75,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Returns true if all controls that are subject to constraint validation satisfy their constraints, or false if some controls do not satisfy their constraints. Fires an event named invalid at any control that does not satisfy its constraints; such controls are considered invalid if the event is not canceled.
         /// </summary>
-        public bool CheckValidity()
+        public virtual bool CheckValidity()
         {
             return false;
         }
@@ -83,14 +83,14 @@ namespace Bridge.Html5
         /// <summary>
         /// Submits the form to the server.
         /// </summary>
-        public void Submit()
+        public virtual void Submit()
         {
         }
 
         /// <summary>
         /// Resets the forms to its initial state.
         /// </summary>
-        public void Reset()
+        public virtual void Reset()
         {
         }
 
@@ -99,7 +99,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Element this[int index]
+        public virtual Element this[int index]
         {
             get
             {
@@ -112,7 +112,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">The name to match the Elements' name and id</param>
         /// <returns>An Element or an HTMLCollection</returns>
-        public Any<Element, HTMLCollection> this[string name]
+        public virtual Any<Element, HTMLCollection> this[string name]
         {
             get
             {
@@ -126,7 +126,7 @@ namespace Bridge.Html5
         /// <param name="index"></param>
         /// <returns></returns>
         [Name("item")]
-        public Element GetItem(int index)
+        public virtual Element GetItem(int index)
         {
             return null;
         }
@@ -136,12 +136,12 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">The name to match the Elements' name and id</param>
         /// <returns>An Element or an HTMLCollection</returns>
-        public Any<Element, HTMLCollection> NamedItem(string name)
+        public virtual Any<Element, HTMLCollection> NamedItem(string name)
         {
             return null;
         }
 
-        public IEnumerator<Element> GetEnumerator()
+        public virtual IEnumerator<Element> GetEnumerator()
         {
             return null;
         }

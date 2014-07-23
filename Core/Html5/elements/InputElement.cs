@@ -242,7 +242,7 @@ namespace Bridge.Html5
         /// a number
         /// null if conversion is not possible
         /// </summary>
-        public double? ValueAsNumber;
+        public double ValueAsNumber;
 
         /// <summary>
         /// Reflects the width HTML attribute, which defines the width of the image displayed for the button, if the value of type is image.
@@ -257,7 +257,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Removes focus from input; keystrokes will subsequently go nowhere.
         /// </summary>
-        public void Blur()
+        public virtual void Blur()
         {
         }
 
@@ -265,7 +265,7 @@ namespace Bridge.Html5
         /// Returns false if the element is a candidate for constraint validation, and it does not satisfy its constraints. In this case, it also fires an invalid event at the element. It returns true if the element is not a candidate for constraint validation, or if it satisfies its constraints.
         /// </summary>
         /// <returns></returns>
-        public bool CheckValidity()
+        public virtual bool CheckValidity()
         {
             return false;
         }
@@ -273,21 +273,21 @@ namespace Bridge.Html5
         /// <summary>
         /// Simulates a click on the element.
         /// </summary>
-        public void Click()
+        public virtual void Click()
         {
         }
 
         /// <summary>
         /// Focus on input; keystrokes will subsequently go to this element.
         /// </summary>
-        public void Focus()
+        public virtual void Focus()
         {
         }
 
         /// <summary>
         /// Selects the input text in the element, and focuses it so the user can subsequently replace the whole entry.
         /// </summary>
-        public void Select()
+        public virtual void Select()
         {
         }
 
@@ -295,7 +295,7 @@ namespace Bridge.Html5
         /// Sets a custom validity message for the element. If this message is not the empty string, then the element is suffering from a custom validity error, and does not validate.
         /// </summary>
         /// <param name="error">The custom validity message</param>
-        public void SetCustomValidity(string error)
+        public virtual void SetCustomValidity(string error)
         {
         }
 
@@ -304,7 +304,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        public void SetSelectionRange(int start, int end)
+        public virtual void SetSelectionRange(int start, int end)
         {
         }
 
@@ -314,7 +314,7 @@ namespace Bridge.Html5
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <param name="direction"></param>
-        public void SetSelectionRange(int start, int end, string direction)
+        public virtual void SetSelectionRange(int start, int end, string direction)
         {
         }
 
@@ -322,7 +322,7 @@ namespace Bridge.Html5
         /// Replaces a range of text with the new text. Supported input types: text, search, url, tel, password.
         /// </summary>
         /// <param name="replacement"></param>
-        public void SetRangeText(string replacement)
+        public virtual void SetRangeText(string replacement)
         {
         }
 
@@ -332,7 +332,7 @@ namespace Bridge.Html5
         /// <param name="replacement"></param>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        public void SetRangeText(string replacement, int start, int end)
+        public virtual void SetRangeText(string replacement, int start, int end)
         {
         }
 
@@ -343,7 +343,7 @@ namespace Bridge.Html5
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <param name="selectMode"></param>
-        public void SetRangeText(string replacement, int start, int end, string selectMode)
+        public virtual void SetRangeText(string replacement, int start, int end, string selectMode)
         {
         }
 
@@ -354,7 +354,7 @@ namespace Bridge.Html5
         /// if the value cannot be converted to a number.
         /// if the resulting value is above the max or below the min. 
         /// </summary>
-        public void StepDown()
+        public virtual void StepDown()
         {
         }
 
@@ -365,7 +365,7 @@ namespace Bridge.Html5
         /// if the value cannot be converted to a number.
         /// if the resulting value is above the max or below the min. 
         /// </summary>
-        public void StepDown(int n)
+        public virtual void StepDown(int n)
         {
         }
 
@@ -376,7 +376,7 @@ namespace Bridge.Html5
         /// if the value cannot be converted to a number.
         /// if the resulting value is above the max or below the min.
         /// </summary>
-        public void StepUp()
+        public virtual void StepUp()
         {
         }
 
@@ -387,7 +387,7 @@ namespace Bridge.Html5
         /// if the value cannot be converted to a number.
         /// if the resulting value is above the max or below the min.
         /// </summary>
-        public void StepUp(int n)
+        public virtual void StepUp(int n)
         {
         }
     }

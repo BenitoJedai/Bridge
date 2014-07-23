@@ -30,7 +30,7 @@ namespace Bridge.Html5
         /// Removes the cell at the given position in the section. If the given position is greater (or equal as it starts at zero) than the amount of rows in the section, or is smaller than 0, it raises a DOMException with the IndexSizeError value.
         /// </summary>
         /// <param name="index">The position of the row to delete</param>
-        public void DeleteRow(int index)
+        public virtual void DeleteRow(int index)
         {
         }
 
@@ -41,7 +41,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index">The possition of a new row to insert</param>
         /// <returns>Returns a TableRowElement object that represents a new row added to a table element.</returns>
-        public TableRowElement InsertRow(int index = -1) // update docs
+        public virtual TableRowElement InsertRow(int index = -1) // update docs
         {
             return null;
         }

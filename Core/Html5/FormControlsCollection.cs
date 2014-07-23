@@ -19,7 +19,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-		public Any<ElementList, Element> this[string name] 
+		public virtual Any<ElementList, Element> this[string name] 
         {
 			get 
             {
@@ -32,7 +32,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Any<ElementList, Element> NamedItem(string name)
+        public virtual Any<ElementList, Element> NamedItem(string name)
         {
 			return null;
 		}

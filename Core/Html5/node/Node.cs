@@ -85,7 +85,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="child">child is the node to append underneath element. Also returned.</param>
         /// <returns></returns>
-        public Node AppendChild(Node child)
+        public virtual Node AppendChild(Node child)
         {
             return null;
         }
@@ -94,7 +94,7 @@ namespace Bridge.Html5
         /// Returns a duplicate of the node on which this method was called.
         /// </summary>
         /// <returns>The new node that will be a clone of this node</returns>
-        public Node CloneNode()
+        public virtual Node CloneNode()
         {
             return null;
         }
@@ -104,7 +104,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="deep">true if the children of the node should also be cloned, or false to clone only the specified node.</param>
         /// <returns>The new node that will be a clone of this node</returns>
-        public Node CloneNode(bool deep)
+        public virtual Node CloneNode(bool deep)
         {            
             return null;
         }
@@ -114,7 +114,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="node">is the node that's being compared against.</param>
         /// <returns>The return value is computed as the relationship that otherNode has with node.</returns>
-        public DocumentPosition CompareDocumentPosition(Node node)
+        public virtual DocumentPosition CompareDocumentPosition(Node node)
         {
             return default(DocumentPosition);
         }
@@ -124,7 +124,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="node">is the node that's being compared against.</param>
         /// <returns>The return value is true if otherNode is a descendant of node, or node itself. Otherwise the return value is false.</returns>
-        public bool Contains(Node node)
+        public virtual bool Contains(Node node)
         {
             return false;
         }
@@ -133,7 +133,7 @@ namespace Bridge.Html5
         ///  returns a Boolean value indicating whether the current Node has child nodes or not.
         /// </summary>
         /// <returns>Boolean value indicating whether the current Node has child nodes or not</returns>
-        public bool HasChildNodes()
+        public virtual bool HasChildNodes()
         {
             return false;
         }
@@ -144,7 +144,7 @@ namespace Bridge.Html5
         /// <param name="newElement">The node to insert.</param>
         /// <param name="referenceElement">The node before which newElement is inserted.</param>
         /// <returns>The node being inserted, that is newElement</returns>
-        public Node InsertBefore(Node newElement, Node referenceElement)
+        public virtual Node InsertBefore(Node newElement, Node referenceElement)
         {
             return null;
         }
@@ -154,7 +154,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="namespaceURI">string representing the namespace against which the element will be checked.</param>
         /// <returns>holds the return value true or false.</returns>
-        public bool IsDefaultNamespace(string namespaceURI)
+        public virtual bool IsDefaultNamespace(string namespaceURI)
         {
             return false;
         }
@@ -164,7 +164,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="node">The node to compare equality with.</param>
         /// <returns></returns>
-        public bool IsEqualNode(Node node)
+        public virtual bool IsEqualNode(Node node)
         {
             return false;
         }
@@ -172,7 +172,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Clean up all the text nodes under this element (merge adjacent, remove empty).
         /// </summary>
-        public void Normalize()
+        public virtual void Normalize()
         {
         }
 
@@ -181,7 +181,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="child">child node to be removed from the DOM.</param>
         /// <returns>Reference to the removed child node</returns>
-        public Node RemoveChild(Node child)
+        public virtual Node RemoveChild(Node child)
         {
             return null;
         }
@@ -192,7 +192,7 @@ namespace Bridge.Html5
         /// <param name="newChild">new node to replace oldChild. If it already exists in the DOM, it is first removed.</param>
         /// <param name="oldChild">the existing child to be replaced.</param>
         /// <returns>the replaced node. This is the same node as oldChild.</returns>
-        public Node ReplaceChild(Node newChild, Node oldChild)
+        public virtual Node ReplaceChild(Node newChild, Node oldChild)
         {
             return null;
         }        

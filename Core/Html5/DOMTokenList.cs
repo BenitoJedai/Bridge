@@ -20,7 +20,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public string this[int index] 
+		public virtual string this[int index] 
         {
 			get 
             {
@@ -34,7 +34,7 @@ namespace Bridge.Html5
         /// <param name="index"></param>
         /// <returns></returns>
         [Name("item")]
-        public string GetItem(int index)
+        public virtual string GetItem(int index)
         {
             return null;
         }
@@ -44,7 +44,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public bool Contains(string token)
+        public virtual bool Contains(string token)
         {
             return false;
         }
@@ -53,7 +53,7 @@ namespace Bridge.Html5
         /// adds token to the underlying string
         /// </summary>
         /// <param name="token"></param>
-		public void Add(string token) 
+		public virtual void Add(string token) 
         {
 		}
 
@@ -61,7 +61,7 @@ namespace Bridge.Html5
         /// Remove token from the underlying string
         /// </summary>
         /// <param name="token"></param>
-		public void Remove(string token) 
+		public virtual void Remove(string token) 
         {
 		}
 
@@ -70,7 +70,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-		public bool Toggle(string token) 
+		public virtual bool Toggle(string token) 
         {
 			return false;
 		}
@@ -81,14 +81,14 @@ namespace Bridge.Html5
         /// <param name="token"></param>
         /// <param name="force"></param>
         /// <returns></returns>
-		public bool Toggle(string token, bool force) 
+		public virtual bool Toggle(string token, bool force) 
         {
 			return false;
 		}
 
         public readonly int Length;
 
-        public IEnumerator<string> GetEnumerator()
+        public virtual IEnumerator<string> GetEnumerator()
         {
             return null;
         }

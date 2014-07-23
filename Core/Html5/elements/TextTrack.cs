@@ -44,7 +44,7 @@ namespace Bridge.Html5
         /// Add a cue to the list of cues
         /// </summary>
         /// <param name="cue">The cue to add</param>
-        public void AddCue(TextTrackCue cue)
+        public virtual void AddCue(TextTrackCue cue)
         {
         }
 
@@ -52,7 +52,7 @@ namespace Bridge.Html5
         /// Remove a cue from the list of cues
         /// </summary>
         /// <param name="cue"></param>
-        public void RemoveCue(TextTrackCue cue)
+        public virtual void RemoveCue(TextTrackCue cue)
         {
         }
     }
@@ -72,7 +72,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index">The index of a TextTrack</param>
         /// <returns>The TextTrack instance</returns>
-        public TextTrack this[int index]
+        public virtual TextTrack this[int index]
         {
             get
             {
@@ -80,7 +80,7 @@ namespace Bridge.Html5
             }
         }
 
-        public IEnumerator<TextTrack> GetEnumerator()
+        public virtual IEnumerator<TextTrack> GetEnumerator()
         {
             return null;
         }
@@ -182,7 +182,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Returns the TextTrackCue text (caption) as a document fragment consisting of HTML elements and other DOM nodes.
         /// </summary>
-        public string GetCueAsHTML()
+        public virtual string GetCueAsHTML()
         {
             return null;
         }
@@ -203,7 +203,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="id">The id of the TextTrackCue</param>
         /// <returns>The TextTrackCue instance</returns>
-        public TextTrackCue GetCueById(string id)
+        public virtual TextTrackCue GetCueById(string id)
         {
             return null;
         }
@@ -214,12 +214,12 @@ namespace Bridge.Html5
         /// <param name="index">The index of the TextTrackCue</param>
         /// <returns>The TextTrackCue instance</returns>
         [Name("item")]
-        public TextTrackCue GetItem(int index)
+        public virtual TextTrackCue GetItem(int index)
         {
             return null;
         }
 
-        public IEnumerator<TextTrackCue> GetEnumerator()
+        public virtual IEnumerator<TextTrackCue> GetEnumerator()
         {
             return null;
         }

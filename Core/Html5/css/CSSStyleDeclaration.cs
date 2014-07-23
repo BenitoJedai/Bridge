@@ -1365,7 +1365,7 @@ namespace Bridge.Html5
         /// </summary>
         public string ZIndex;
 
-        public IEnumerator<string> GetEnumerator()
+        public virtual IEnumerator<string> GetEnumerator()
         {
             return null;
         }
@@ -1375,7 +1375,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public string GetPropertyPriority(string property)
+        public virtual string GetPropertyPriority(string property)
         {
             return null;
         }
@@ -1385,7 +1385,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public string GetPropertyValue(string property)
+        public virtual string GetPropertyValue(string property)
         {
             return null;
         }
@@ -1395,7 +1395,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public string Item(int index)
+        public virtual string Item(int index)
         {
             return null;
         }
@@ -1403,7 +1403,7 @@ namespace Bridge.Html5
         /// <summary>
         /// 
         /// </summary>
-        public CSSRule ParentRule
+        public virtual CSSRule ParentRule
         {
             get
             {
@@ -1416,7 +1416,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public string RemoveProperty(string property)
+        public virtual string RemoveProperty(string property)
         {
             return null;
         }
@@ -1426,7 +1426,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="property"></param>
         /// <param name="value"></param>
-        public void SetProperty(string property, string value)
+        public virtual void SetProperty(string property, string value)
         {
         }
 
@@ -1436,7 +1436,7 @@ namespace Bridge.Html5
         /// <param name="property"></param>
         /// <param name="value"></param>
         /// <param name="priority"></param>
-        public void SetProperty(string property, string value, string priority)
+        public virtual void SetProperty(string property, string value, string priority)
         {
         }
     }

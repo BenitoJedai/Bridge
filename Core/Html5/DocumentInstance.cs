@@ -620,7 +620,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="externalNode">the node from another document to be adopted.</param>
         /// <returns>the adopted node that can be used in the current document. The new node's parentNode is null, since it has not yet been inserted into the document tree.</returns>
-        public Node AdoptNode(Node externalNode)
+        public virtual Node AdoptNode(Node externalNode)
         {
             return null;
         }
@@ -631,7 +631,7 @@ namespace Bridge.Html5
         /// <param name="x">Horizontal point on the page at where to determine the caret position.</param>
         /// <param name="y">Vertical point on the page at where to determine the caret position.</param>
         /// <returns>A CaretPosition. Null, if x or y are negative or greater than the viewport.</returns>
-        public CaretPosition CaretPositionFromPoint(double x, double y)
+        public virtual CaretPosition CaretPositionFromPoint(double x, double y)
         {
             return null;
         }
@@ -642,7 +642,7 @@ namespace Bridge.Html5
         /// <param name="x">Horizontal point on the page at where to determine the caret position.</param>
         /// <param name="y">Vertical point on the page at where to determine the caret position.</param>
         /// <returns>A Range. Null, if x or y are negative or greater than the viewport.</returns>
-        public Range CaretRangeFromPoint(double x, double y)
+        public virtual Range CaretRangeFromPoint(double x, double y)
         {
             return null;
         }
@@ -652,7 +652,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">name is a string containing the name of the attribute.</param>
         /// <returns>an attribute node</returns>
-        public Attr CreateAttribute(string name)
+        public virtual Attr CreateAttribute(string name)
         {
             return null;
         }
@@ -663,7 +663,7 @@ namespace Bridge.Html5
         /// <param name="namespace"></param>
         /// <param name="name">name is a string containing the name of the attribute.</param>
         /// <returns>an attribute node</returns>
-        public Attr CreateAttributeNS(string @namespace, string name)
+        public virtual Attr CreateAttributeNS(string @namespace, string name)
         {
             return null;
         }
@@ -673,7 +673,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="data">string containing the data to be added to the CDATA Section.</param>
         /// <returns>CDATA Section node.</returns>
-        public CDATASection CreateCDATASection(string data)
+        public virtual CDATASection CreateCDATASection(string data)
         {
             return null;
         }
@@ -683,7 +683,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="comment    ">string containing the data to be added to the Comment.</param>
         /// <returns>Comment node.</returns>
-        public Comment CreateComment(string comment)
+        public virtual Comment CreateComment(string comment)
         {
             return null;
         }
@@ -692,7 +692,7 @@ namespace Bridge.Html5
         /// Creates a new document fragment.
         /// </summary>
         /// <returns></returns>
-        public DocumentFragment CreateDocumentFragment()
+        public virtual DocumentFragment CreateDocumentFragment()
         {
             return null;
         }
@@ -704,7 +704,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="tagName">tagName is a string that specifies the type of element to be created. The nodeName of the created element is initialized with the value of tagName. Don't use qualified names (like "html:a") with this method.</param>
         /// <returns>created element object</returns>
-        public Element CreateElement(string tagName)
+        public virtual Element CreateElement(string tagName)
         {
             return null;
         }
@@ -716,7 +716,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="tagName">tagName is a string that specifies the type of element to be created. The nodeName of the created element is initialized with the value of tagName. Don't use qualified names (like "html:a") with this method.</param>
         /// <returns>created element object</returns>
-        public T CreateElement<T>(string tagName) where T:Element
+        public virtual T CreateElement<T>(string tagName) where T:Element
         {
             return null;
         }
@@ -727,7 +727,7 @@ namespace Bridge.Html5
         /// <param name="namespaceURI"> a string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. (see section below for "Valid Namespace URI's")</param>
         /// <param name="qualifiedName">a string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName</param>
         /// <returns>the created element.</returns>
-        public Element CreateElementNS(string namespaceURI, string qualifiedName)
+        public virtual Element CreateElementNS(string namespaceURI, string qualifiedName)
         {
             return null;
         }
@@ -738,7 +738,7 @@ namespace Bridge.Html5
         /// <param name="namespaceURI"> a string that specifies the namespace URI to associate with the element. The namespaceURI property of the created element is initialized with the value of namespaceURI. (see section below for "Valid Namespace URI's")</param>
         /// <param name="qualifiedName">a string that specifies the type of element to be created. The nodeName property of the created element is initialized with the value of qualifiedName</param>
         /// <returns>the created element.</returns>
-        public T CreateElementNS<T>(string namespaceURI, string qualifiedName) where T:Element
+        public virtual T CreateElementNS<T>(string namespaceURI, string qualifiedName) where T:Element
         {
             return null;
         }
@@ -748,7 +748,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">type is a string that represents the type of event to be created. Possible event types include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".</param>
         /// <returns>the created Event object.</returns>
-        public Event CreateEvent(string type)
+        public virtual Event CreateEvent(string type)
         {
             return null;
         }
@@ -758,7 +758,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">type is a string that represents the type of event to be created. Possible event types include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".</param>
         /// <returns>the created Event object.</returns>
-        public T CreateEvent<T>(string type) where T:Event
+        public virtual T CreateEvent<T>(string type) where T:Event
         {
             return null;
         }
@@ -768,7 +768,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="root">The root node at which to begin the NodeIterator's traversal.</param>
         /// <returns></returns>
-        public NodeIterator CreateNodeIterator(Node root)
+        public virtual NodeIterator CreateNodeIterator(Node root)
         {
             return null;
         }
@@ -779,7 +779,7 @@ namespace Bridge.Html5
         /// <param name="root">The root node at which to begin the NodeIterator's traversal.</param>
         /// <param name="whatToShow">Bitwise OR'd list of Filter specification constants from the NodeFilter DOM interface, indicating which nodes to iterate over.</param>
         /// <returns></returns>
-        public NodeIterator CreateNodeIterator(Node root, NodeFilter whatToShow)
+        public virtual NodeIterator CreateNodeIterator(Node root, NodeFilter whatToShow)
         {
             return null;
         }
@@ -791,7 +791,7 @@ namespace Bridge.Html5
         /// <param name="whatToShow">Bitwise OR'd list of Filter specification constants from the NodeFilter DOM interface, indicating which nodes to iterate over.</param>
         /// <param name="filter">An object implementing the NodeFilter interface; its acceptNode() method will be called for each node in the subtree based at root which is accepted as included by the whatToShow flag to determine whether or not to include it in the list of iterable nodes (a simple callback function may also be used instead). The method should return one of NodeFilter.FILTER_ACCEPT, NodeFilter.FILTER_REJECT, or NodeFilter.FILTER_SKIP.</param>
         /// <returns></returns>
-        public NodeIterator CreateNodeIterator(Node root, NodeFilter whatToShow, INodeFilter filter)
+        public virtual NodeIterator CreateNodeIterator(Node root, NodeFilter whatToShow, INodeFilter filter)
         {
             return null;
         }
@@ -802,7 +802,7 @@ namespace Bridge.Html5
         /// <param name="target"> refers to the target part of the processing instruction node</param>
         /// <param name="data">string containing the data to be added to the data within the node.</param>
         /// <returns></returns>
-        public ProcessingInstruction CreateProcessingInstruction(string target, string data)
+        public virtual ProcessingInstruction CreateProcessingInstruction(string target, string data)
         {
             return null;
         }
@@ -811,7 +811,7 @@ namespace Bridge.Html5
         /// Returns a new Range object.
         /// </summary>
         /// <returns></returns>
-        public Range CreateRange()
+        public virtual Range CreateRange()
         {
             return null;
         }
@@ -821,7 +821,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="data">string containing the data to be put in the text node.</param>
         /// <returns></returns>
-        public Text CreateTextNode(string data)
+        public virtual Text CreateTextNode(string data)
         {
             return null;
         }
@@ -831,7 +831,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="root">Is the root Node of this TreeWalker traversal. Typically this will be an element owned by the document.</param>
         /// <returns></returns>
-        public TreeWalker CreateTreeWalker(Node root)
+        public virtual TreeWalker CreateTreeWalker(Node root)
         {
             return null;
         }
@@ -842,7 +842,7 @@ namespace Bridge.Html5
         /// <param name="root">Is the root Node of this TreeWalker traversal. Typically this will be an element owned by the document.</param>
         /// <param name="whatToShow">Is an optionale unsigned long representing a bitmask created by combining the constant properties of NodeFilter. It is a convenient way of filtering for certain types of node. It defaults to 0xFFFFFFFF representing the SHOW_ALL constant.</param>
         /// <returns></returns>
-        public TreeWalker CreateTreeWalker(Node root, NodeFilter whatToShow)
+        public virtual TreeWalker CreateTreeWalker(Node root, NodeFilter whatToShow)
         {
             return null;
         }
@@ -854,7 +854,7 @@ namespace Bridge.Html5
         /// <param name="whatToShow">Is an optionale unsigned long representing a bitmask created by combining the constant properties of NodeFilter. It is a convenient way of filtering for certain types of node. It defaults to 0xFFFFFFFF representing the SHOW_ALL constant.</param>
         /// <param name="filter">Is an optional NodeFilter, that is an object with a method acceptNode, which is called by the TreeWalker to determine whether or not to accept a node that has passed the whatToShow check.</param>
         /// <returns></returns>
-        public TreeWalker CreateTreeWalker(Node root, NodeFilter whatToShow, INodeFilter filter)
+        public virtual TreeWalker CreateTreeWalker(Node root, NodeFilter whatToShow, INodeFilter filter)
         {
             return null;
         }
@@ -865,7 +865,7 @@ namespace Bridge.Html5
         /// <param name="x">x and y specify the coordinates to check, in CSS pixels relative to the upper-left corner of the document's containing window or frame.</param>
         /// <param name="y">x and y specify the coordinates to check, in CSS pixels relative to the upper-left corner of the document's containing window or frame.</param>
         /// <returns></returns>
-        public Element ElementFromPoint(int x, int y)
+        public virtual Element ElementFromPoint(int x, int y)
         {
             return null;
         }
@@ -874,7 +874,7 @@ namespace Bridge.Html5
         /// Enables the style sheets matching the specified name in the current style sheet set, and disables all other style sheets (except those without a title, which are always enabled).
         /// </summary>
         /// <param name="name">The name of the style sheets to enable. All style sheets with a title that match this name will be enabled, while all others that have a title will be disabled. Specify an empty string for the name parameter to disable all alternate and preferred style sheets (but not the persistent style sheets; that is, those with no title attribute).</param>
-        public void EnableStyleSheetsForSet(string name)
+        public virtual void EnableStyleSheetsForSet(string name)
         {
         }
 
@@ -882,7 +882,7 @@ namespace Bridge.Html5
         /// The exitPointerLock asynchronously releases a pointer lock previously requested through Element.requestPointerLock.
         /// To track the success or failure of the request, it is necessary to listen for the pointerlockchange and pointerlockerror events.
         /// </summary>
-        public void ExitPointerLock()
+        public virtual void ExitPointerLock()
         {
         }
 
@@ -891,7 +891,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="names">string representing the list of class names to match; class names are separated by whitespace</param>
         /// <returns>HTMLCollection of found elements.</returns>
-        public HTMLCollection GetElementsByClassName(string names)
+        public virtual HTMLCollection GetElementsByClassName(string names)
         {
             return null;
         }
@@ -901,7 +901,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">a string representing the name of the elements. The special string "*" represents all elements.</param>
         /// <returns> a live HTMLCollection of found elements in the order they appear in the tree.</returns>
-        public HTMLCollection GetElementsByTagName(string name)
+        public virtual HTMLCollection GetElementsByTagName(string name)
         {
             return null;
         }
@@ -912,7 +912,7 @@ namespace Bridge.Html5
         /// <param name="namespace"> the namespace URI of elements to look for.</param>
         /// <param name="name"> the local name of elements to look for or the special value "*", which matches all elements</param>
         /// <returns>live NodeList of found elements in the order they appear in the tree.</returns>
-        public HTMLCollection GetElementsByTagNameNS(string @namespace, string name)
+        public virtual HTMLCollection GetElementsByTagNameNS(string @namespace, string name)
         {
             return null;
         }
@@ -922,7 +922,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="externalNode">The node from another document to be imported.</param>
         /// <returns>The new node that is imported into the document. The new node's parentNode is null, since it has not yet been inserted into the document tree.</returns>
-        public Node ImportNode(Node externalNode)
+        public virtual Node ImportNode(Node externalNode)
         {
             return null;
         }
@@ -933,7 +933,7 @@ namespace Bridge.Html5
         /// <param name="externalNode">The node from another document to be imported.</param>
         /// <param name="deep">A boolean, indicating whether the descendants of the imported node need to be imported.</param>
         /// <returns>The new node that is imported into the document. The new node's parentNode is null, since it has not yet been inserted into the document tree.</returns>
-        public Node ImportNode(Node externalNode, bool deep)
+        public virtual Node ImportNode(Node externalNode, bool deep)
         {
             return null;
         }
@@ -941,7 +941,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Releases mouse capture if it's currently enabled on an element within this document. Enabling mouse capture on an element is done by calling element.setCapture().
         /// </summary>
-        public void ReleaseCapture()
+        public virtual void ReleaseCapture()
         {
         }
 
@@ -950,7 +950,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="id">id is a case-sensitive string representing the unique ID of the element being sought.</param>
         /// <returns>element is a reference to an Element object, or null if an element with the specified ID is not in the document.</returns>
-        public Element GetElementById(string id)
+        public virtual Element GetElementById(string id)
         {
             return null;
         }
@@ -960,7 +960,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="id">id is a case-sensitive string representing the unique ID of the element being sought.</param>
         /// <returns>element is a reference to an Element object, or null if an element with the specified ID is not in the document.</returns>
-        public T GetElementById<T>(string id) where T:Element
+        public virtual T GetElementById<T>(string id) where T:Element
         {
             return null;
         }
@@ -970,7 +970,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="selectors">selectors is a string containing one or more CSS selectors separated by commas.</param>
         /// <returns></returns>
-        public Element QuerySelector(string selectors)
+        public virtual Element QuerySelector(string selectors)
         {
             return null;
         }
@@ -980,7 +980,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="selectors">selectors is a string containing one or more CSS selectors separated by commas.</param>
         /// <returns></returns>
-        public T QuerySelector<T>(string selectors) where T:Element
+        public virtual T QuerySelector<T>(string selectors) where T:Element
         {
             return null;
         }
@@ -990,7 +990,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="selectors">selectors is a string containing one or more CSS selectors separated by commas.</param>
         /// <returns></returns>
-        public ElementList QuerySelectorAll(string selectors)
+        public virtual ElementList QuerySelectorAll(string selectors)
         {
             return null;
         }
@@ -998,7 +998,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Closes a document stream for writing.
         /// </summary>
-        public void Close()
+        public virtual void Close()
         {
         }
 
@@ -1007,7 +1007,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="commandName">the name of the command</param>
         /// <returns></returns>
-        public bool ExecCommand(string commandName)
+        public virtual bool ExecCommand(string commandName)
         {
             return false;
         }
@@ -1018,7 +1018,7 @@ namespace Bridge.Html5
         /// <param name="commandName">the name of the command</param>
         /// <param name="showDefaultUI">whether the default user interface should be shown. This is not implemented in Mozilla.</param>
         /// <returns></returns>
-        public bool ExecCommand(string commandName, bool showDefaultUI)
+        public virtual bool ExecCommand(string commandName, bool showDefaultUI)
         {
             return false;
         }
@@ -1030,7 +1030,7 @@ namespace Bridge.Html5
         /// <param name="showDefaultUI">whether the default user interface should be shown. This is not implemented in Mozilla.</param>
         /// <param name="valueArgument">some commands (such as insertimage) require an extra value argument (the image's url). Pass an argument of null if no argument is needed.</param>
         /// <returns></returns>
-        public bool ExecCommand(string commandName, bool showDefaultUI, string valueArgument)
+        public virtual bool ExecCommand(string commandName, bool showDefaultUI, string valueArgument)
         {
             return false;
         }
@@ -1040,7 +1040,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="name">name is the value of the name attribute of the element.</param>
         /// <returns>elements is an HTMLCollection of elements.</returns>
-        public ElementList GetElementsByName(string name)
+        public virtual ElementList GetElementsByName(string name)
         {
             return null;
         }
@@ -1049,7 +1049,7 @@ namespace Bridge.Html5
         /// The DOM getSelection() method is available on the Window and Document interfaces.
         /// </summary>
         /// <returns></returns>
-        public Selection GetSelection()
+        public virtual Selection GetSelection()
         {
             return null;
         }
@@ -1058,7 +1058,7 @@ namespace Bridge.Html5
         /// Returns a Boolean value indicating whether the document or any element inside the document has focus. This method can be used to determine whether the active element in a document has focus.
         /// </summary>
         /// <returns>false if the active element in the document has no focus; true if the active element in the document has focus.</returns>
-        public bool HasFocus()
+        public virtual bool HasFocus()
         {
             return false;
         }
@@ -1067,7 +1067,7 @@ namespace Bridge.Html5
         /// Opens a document stream for writing.
         /// </summary>
         /// <returns></returns>
-        public DocumentInstance Open()
+        public virtual DocumentInstance Open()
         {
             return null;
         }
@@ -1077,7 +1077,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public bool QueryCommandEnabled(string command)
+        public virtual bool QueryCommandEnabled(string command)
         {
             return false;
         }
@@ -1087,7 +1087,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public bool QueryCommandIndeterm(string command)
+        public virtual bool QueryCommandIndeterm(string command)
         {
             return false;
         }
@@ -1097,7 +1097,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public bool QueryCommandState(string command)
+        public virtual bool QueryCommandState(string command)
         {
             return false;
         }
@@ -1107,7 +1107,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="command">The command for which to determine support.</param>
         /// <returns></returns>
-        public bool QueryCommandSupported(string command)
+        public virtual bool QueryCommandSupported(string command)
         {
             return false;
         }
@@ -1117,7 +1117,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public string QueryCommandValue(string command)
+        public virtual string QueryCommandValue(string command)
         {
             return null;
         }
@@ -1126,7 +1126,7 @@ namespace Bridge.Html5
         /// Writes a string of text to a document stream opened by document.open().
         /// </summary>
         /// <param name="markup">markup is a string containing the text to be written to the document.</param>
-        public void Write(string markup)
+        public virtual void Write(string markup)
         {
         }
 
@@ -1134,7 +1134,7 @@ namespace Bridge.Html5
         /// Writes a string of text followed by a newline character to a document.
         /// </summary>
         /// <param name="line">line is string containing a line of text.</param>
-        public void Writeln(string line)
+        public virtual void Writeln(string line)
         {
         }
     }

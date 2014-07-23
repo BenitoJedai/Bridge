@@ -48,7 +48,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="index">The zero-based index of the range to return. A negative number or a number greater than or equal to rangeCount will result in an error.</param>
         /// <returns>The range object that will be returned.</returns>
-        public Range GetRangeAt(int index)
+        public virtual Range GetRangeAt(int index)
         {
             return null;
         }
@@ -58,7 +58,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="parentNode">The caret location will be within this node.</param>
         /// <param name="offset">0 - Collapses the selection from the anchor to the beginning of parentNode's text. 1 - Collapses the selection from the anchor to the end of parentNode's text.</param>
-        public void Collapse(Node parentNode, byte offset)
+        public virtual void Collapse(Node parentNode, byte offset)
         {
         }
 
@@ -67,7 +67,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="parentNode">The node within which the focus will be moved.</param>
         /// <param name="offset">The offset position within parentNode where the focus will be moved to.</param>
-        public void Extend(Node parentNode, byte offset)
+        public virtual void Extend(Node parentNode, byte offset)
         {
         }
 
@@ -77,21 +77,21 @@ namespace Bridge.Html5
         /// <param name="alter">The type of change to apply. Specify "move" to move the current cursor position or "extend" to extend the current selection.</param>
         /// <param name="direction">The direction in which to adjust the current selection. You can specify "forward" or "backward" to adjust in the appropriate direction based on the language at the selection point. If you want to adjust in a specific direction, you can specify "left" or "right".</param>
         /// <param name="granularity">The distance to adjust the current selection or cursor position. </param>
-        public void Modify(SelectionAlter alter, SelectionDirection direction, SelectionGranularity granularity)
+        public virtual void Modify(SelectionAlter alter, SelectionDirection direction, SelectionGranularity granularity)
         {
         }
 
         /// <summary>
         /// Collapses the selection to the start of the first range in the selection.  If the content of the selection is focused and editable, the caret will blink there.
         /// </summary>
-        public void CollapseToStart()
+        public virtual void CollapseToStart()
         {
         }
 
         /// <summary>
         /// Collapses the selection to the end of the last range in the selection.  If the content the selection is in is focused and editable, the caret will blink there.
         /// </summary>
-        public void CollapseToEnd()
+        public virtual void CollapseToEnd()
         {
         }
 
@@ -99,7 +99,7 @@ namespace Bridge.Html5
         /// Adds all the children of the specified node to the selection. Previous selection is lost.
         /// </summary>
         /// <param name="parentNode">All children of parentNode will be selected. parentNode itself is not part of the selection.</param>
-        public void SelectAllChildren(Node parentNode)
+        public virtual void SelectAllChildren(Node parentNode)
         {
         }
 
@@ -107,7 +107,7 @@ namespace Bridge.Html5
         /// Adds a Range to a Selection.
         /// </summary>
         /// <param name="range">A Range object that will be added to the Selection.</param>
-        public void AddRange(Range range)
+        public virtual void AddRange(Range range)
         {
         }
 
@@ -115,21 +115,21 @@ namespace Bridge.Html5
         /// Removes a range from the selection.
         /// </summary>
         /// <param name="range">A range object that will be removed to the selection.</param>
-        public void RemoveRange(Range range)
+        public virtual void RemoveRange(Range range)
         {
         }
 
         /// <summary>
         /// Removes all ranges from the selection, leaving the anchorNode and focusNode properties equal to null and leaving nothing selected.
         /// </summary>
-        public void RemoveAllRanges()
+        public virtual void RemoveAllRanges()
         {
         }
 
         /// <summary>
         /// Deletes the actual text being represented by a selection object from the document's DOM.
         /// </summary>
-        public void DeleteFromDocument()
+        public virtual void DeleteFromDocument()
         {
         }
 
@@ -137,7 +137,7 @@ namespace Bridge.Html5
         /// Modifies the cursor Bidi level after a change in keyboard direction.
         /// </summary>
         /// <param name="langRTL">true if the new language is right-to-left or false if the new language is left-to-right.</param>
-        public void SelectionLanguageChange(bool langRTL)
+        public virtual void SelectionLanguageChange(bool langRTL)
         {
         }
 
@@ -147,7 +147,7 @@ namespace Bridge.Html5
         /// <param name="node">The node that is being looked for whether it is part of the selection</param>
         /// <param name="partlyContained">When true , containsNode returns true when a part of the node is part of the selection. When false , containsNode only returns true when the entire node is part of the selection.</param>
         /// <returns></returns>
-        public bool ContainsNode(Node node, bool partlyContained)
+        public virtual bool ContainsNode(Node node, bool partlyContained)
         {
             return false;
         }

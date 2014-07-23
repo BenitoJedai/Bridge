@@ -427,7 +427,7 @@ namespace System.Runtime.CompilerServices
             } 
         }
 
-        public virtual T BindDelegate<T>(CallSite<T> site, object[] args) where T : class
+        public T BindDelegate<T>(CallSite<T> site, object[] args) where T : class
         {
             return null;
         }

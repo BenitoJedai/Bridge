@@ -80,7 +80,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Cancels the event if it is cancelable, without stopping further propagation of the event.
         /// </summary>
-        public void PreventDefault()
+        public virtual void PreventDefault()
         {
         }
 
@@ -88,14 +88,14 @@ namespace Bridge.Html5
         /// Prevents other listeners of the same event to be called.
         /// If several listeners are attached to the same element for the same event type, they are called in order in which they have been added. If during one such call, event.stopImmediatePropagation() is called, no remaining listeners will be called.
         /// </summary>
-        public void StopImmediatePropagation()
+        public virtual void StopImmediatePropagation()
         {
         }
 
         /// <summary>
         /// Prevents further propagation of the current event.
         /// </summary>
-        public void StopPropagation()
+        public virtual void StopPropagation()
         {
         }
     }
