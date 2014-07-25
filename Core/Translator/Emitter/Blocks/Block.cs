@@ -11,12 +11,29 @@ namespace Bridge.NET
         {
             this.Emitter = emitter;
             this.BlockStatement = blockStatement;
+
+            if (this.Emitter.IgnoreBlock == blockStatement)
+            {
+                this.NoBraces = true;
+            }
         }
 
         public BlockStatement BlockStatement 
         { 
             get; 
             set; 
+        }
+
+        protected bool AddEndBlock
+        {
+            get;
+            set;
+        }
+
+        public bool NoBraces
+        {
+            get;
+            set;
         }
 
         public override void Emit()
@@ -27,6 +44,11 @@ namespace Bridge.NET
         protected virtual bool KeepLineAfterBlock(BlockStatement block)
         {
             var parent = block.Parent;
+
+            if (this.NoBraces)
+            {
+                return true;
+            }
 
             if (parent is AnonymousMethodExpression)
             {
@@ -60,19 +82,24 @@ namespace Bridge.NET
 
         public void EmitBlock()
         {
-            var addEndBlock = this.Emitter.InjectMethodDetectors && this.BlockStatement.Children.ToList().Count > 0;
-            this.PushLocals();
-            this.BeginBlock();
+            this.BeginEmitBlock();
+            this.DoEmitBlock();
+            this.EndEmitBlock();
+        }
 
-            if (this.Emitter.InjectMethodDetectors)
-            {
-                new InjectMethodDetectorBlock(this.Emitter, this.BlockStatement).Emit();
-            }
-
+        public void DoEmitBlock()
+        {
             this.BlockStatement.Children.ToList().ForEach(child => child.AcceptVisitor(this.Emitter));
-            this.EndBlock();
+        }
 
-            if (addEndBlock)
+        public void EndEmitBlock()
+        {
+            if (!this.Emitter.IsAsync || (!this.NoBraces && this.BlockStatement.Parent != this.Emitter.AsyncBlock.Node))
+            {
+                this.EndBlock();
+            }            
+
+            if (this.AddEndBlock)
             {
                 this.WriteNewLine();
                 this.EndBlock();
@@ -84,6 +111,22 @@ namespace Bridge.NET
             }
 
             this.PopLocals();
+        }
+
+        public void BeginEmitBlock()
+        {
+            this.AddEndBlock = this.Emitter.InjectMethodDetectors && this.BlockStatement.Children.ToList().Count > 0;
+            this.PushLocals();
+
+            if (!this.Emitter.IsAsync || (!this.NoBraces && this.BlockStatement.Parent != this.Emitter.AsyncBlock.Node))
+            {
+                this.BeginBlock();
+            }            
+
+            if (this.Emitter.InjectMethodDetectors)
+            {
+                new InjectMethodDetectorBlock(this.Emitter, this.BlockStatement).Emit();
+            }
         }        
     }
 }

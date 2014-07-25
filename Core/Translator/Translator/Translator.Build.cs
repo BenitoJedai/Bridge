@@ -21,7 +21,7 @@ namespace Bridge.NET
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32NT:
-                    return String.Format(" \"{0}\" /t:Rebuild /p:Configuation=Debug", Location);
+                    return String.Format(" \"{0}\" /t:Rebuild /p:Configuation={1}", Location, this.Configuration);
                 default:
                     throw Bridge.NET.Exception.Create("Unsupported platform - {0}", Environment.OSVersion.Platform);
             }

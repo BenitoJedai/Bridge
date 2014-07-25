@@ -3,6 +3,7 @@ using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -59,7 +60,7 @@ namespace Bridge.NET
             return builder.ToString();
         }
 
-        public virtual void SaveToFile(string path)
+        public virtual void SaveToFile(string outputDir, string defaultFileName)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -69,7 +70,10 @@ namespace Bridge.NET
                 builder.AppendLine(code);
             }
 
+            string keyPath = this.Outputs.First().Key;
+            string path = Path.Combine(outputDir, keyPath.Replace(AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
             var file = new System.IO.FileInfo(path);
+
             file.Directory.Create();
             File.WriteAllText(file.FullName, builder.ToString(), System.Text.UTF8Encoding.UTF8);
         }
@@ -81,9 +85,9 @@ namespace Bridge.NET
                 string fileName = item.Key;
                 string code = item.Value;
 
-                if (fileName == AssemblyInfo.DEFAULT_FILENAME)
+                if (fileName.Contains(AssemblyInfo.DEFAULT_FILENAME))
                 {
-                    fileName = defaultFileName;
+                    fileName = fileName.Replace(AssemblyInfo.DEFAULT_FILENAME, defaultFileName);
                 }
 
                 if (!Path.HasExtension(fileName))

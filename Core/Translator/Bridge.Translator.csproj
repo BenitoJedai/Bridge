@@ -80,6 +80,7 @@
     <Compile Include="Emitter\Blocks\AssignmentBlock.cs" />
     <Compile Include="Emitter\Blocks\ArrayInitializerBlock.cs" />
     <Compile Include="Emitter\Blocks\AnonymousTypeCreateBlock.cs" />
+    <Compile Include="Emitter\Blocks\AsyncBlock.cs" />
     <Compile Include="Emitter\Blocks\EmitBlock.cs" />
     <Compile Include="Emitter\Blocks\NullReferenceBlock.cs" />
     <Compile Include="Emitter\Blocks\DefaultValueBlock.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Emitter\Blocks\AbstractEmitterBlock.Write.cs" />
     <Compile Include="Emitter\Emitter.Log.cs" />
     <Compile Include="Emitter\EmitterOutput.cs" />
+    <Compile Include="Utils\AwaitSearchVisitor.cs" />
     <Compile Include="Utils\AssemblyInfo.cs" />
     <Compile Include="Utils\ILog.cs" />
     <Compile Include="Utils\MemberResolver.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Translator\Translator.Build.cs" />
     <Compile Include="Translator\Translator.ProjectReader.cs" />
     <Compile Include="Translator\Translator.Properties.cs" />
+    <Compile Include="Utils\JumpInfo.cs" />
     <Compile Include="Utils\TypeInfo.cs" />
     <Compile Include="Inspector\Visitor.Exception.cs" />
     <Compile Include="Translator\Translator.cs" />

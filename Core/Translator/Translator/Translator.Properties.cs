@@ -6,7 +6,7 @@ namespace Bridge.NET
 {
     public partial class Translator
     {
-        protected AssemblyInfo AssemblyInfo
+        public AssemblyInfo AssemblyInfo
         {
             get;
             set;
@@ -42,6 +42,12 @@ namespace Bridge.NET
             protected set; 
         }
 
+        public string Configuration
+        {
+            get;
+            set;
+        }
+
         private bool changeCase = true;
 
         public bool ChangeCase
@@ -56,7 +62,7 @@ namespace Bridge.NET
             }
         }
 
-        private string msbuildVersion="3.5";
+        private string msbuildVersion = "4.0.30319";
 
         public string MSBuildVersion
         {

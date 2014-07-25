@@ -16,35 +16,76 @@ namespace System.Threading.Tasks
         {
 		}
 
+        [Name("error")]
         public readonly Exception Exception;
 
-        public readonly bool IsCanceled;
-        public readonly bool IsCompleted;
-        public readonly bool IsFaulted;
+        public bool IsCanceled
+        {
+            [Name("isCanceled")]
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsCompleted
+        {
+            [Name("isCompleted")]
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsFaulted
+        {
+            [Name("isFaulted")]
+            get
+            {
+                return false;
+            }
+        }
+
         public readonly TaskStatus Status;
 
-		public virtual Task ContinueWith(Action<Task> continuationAction) 
+		public Task ContinueWith(Action<Task> continuationAction) 
         {
 			return null;
 		}
 
-		public virtual Task<TResult> ContinueWith<TResult>(Func<Task, TResult> continuationFunction) 
+		public Task<TResult> ContinueWith<TResult>(Func<Task, TResult> continuationFunction) 
         {
 			return null;
 		}
 
-		public virtual void Start() 
+		public void Start() 
         {
 		}
-
-		public virtual TaskAwaiter GetAwaiter() 
+        
+		public TaskAwaiter GetAwaiter() 
         {
 			return null;
 		}
 
-		public virtual void Dispose() 
+		public void Dispose() 
         {
 		}
+
+        public void SetCanceled()
+        {
+        }
+
+        public void SetError(IEnumerable<Exception> exceptions)
+        {
+        }
+
+        public void SetError(Exception exception)
+        {
+        }
+
+        public void Complete(object result = null)
+        {
+        }
 
 		public static Task Delay(int millisecondDelay) 
         {
@@ -139,7 +180,8 @@ namespace System.Threading.Tasks
 
     [Ignore]
     [Name("Bridge.Task")]
-	public class Task<TResult> : Task {
+	public class Task<TResult> : Task 
+    {
 		
         public Task(Func<TResult> function) : base(() => {}) 
         {
@@ -149,27 +191,32 @@ namespace System.Threading.Tasks
         {
 		}
 
-		public virtual TResult Result 
+		public TResult Result 
         { 
+            [Name("getResult")]
             get 
             { 
                 return default(TResult); 
             } 
         }
 
-		public virtual Task ContinueWith(Action<Task<TResult>> continuationAction) 
+		public Task ContinueWith(Action<Task<TResult>> continuationAction) 
+        {
+			return null;
+		}       
+
+		public Task<TNewResult> ContinueWith<TNewResult>(Func<Task<TResult>, TNewResult> continuationFunction) 
         {
 			return null;
 		}
 
-		public virtual new TaskAwaiter<TResult> GetAwaiter() 
+        public new TaskAwaiter<TResult> GetAwaiter()
         {
-			return null;
-		}
+            return null;
+        }
 
-		public virtual Task<TNewResult> ContinueWith<TNewResult>(Func<Task<TResult>, TNewResult> continuationFunction) 
+        public void SetResult(TResult result)
         {
-			return null;
-		}
+        }
 	}
 }

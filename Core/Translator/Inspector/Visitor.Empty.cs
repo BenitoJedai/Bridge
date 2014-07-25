@@ -3,7 +3,12 @@
 namespace Bridge.NET
 {
     public abstract partial class Visitor : IAstVisitor 
-    {       
+    {
+        public virtual void VisitAttributeSection(AttributeSection attributeSection)
+        {
+            //throw this.CreateException(attributeSection);
+        }
+
         public virtual void VisitCSharpTokenNode(CSharpTokenNode cSharpTokenNode)
         {
             //throw this.CreateException(cSharpTokenNode);

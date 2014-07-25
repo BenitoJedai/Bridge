@@ -30,7 +30,19 @@ namespace Bridge.NET
 
         protected virtual void AddLocals(IEnumerable<ParameterDeclaration> declarations)
         {
-            declarations.ToList().ForEach(item => this.Emitter.Locals.Add(item.Name, item.Type));
-        }        
+            declarations.ToList().ForEach(item =>
+            {
+                this.AddLocal(item.Name, item.Type);
+            });
+        }
+
+        protected void AddLocal(string name, AstType type)
+        {
+            this.Emitter.Locals.Add(name, type);
+            if (this.Emitter.IsAsync)
+            {
+                this.Emitter.AsyncVariables.Add(name);
+            }
+        }
     }
 }

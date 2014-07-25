@@ -9,7 +9,7 @@ using System.Text;
 namespace Bridge.NET
 {
     public abstract class AbstractMethodBlock : AbstractEmitterBlock
-    {
+    {        
         protected string GetOverloadName(MethodDefinition methodDef)
         {
             var name = this.Emitter.GetMethodName(methodDef);

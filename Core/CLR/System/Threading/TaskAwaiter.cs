@@ -12,19 +12,21 @@ namespace System.Threading.Tasks
         {
         }
 
-        public virtual bool IsCompleted
+        public bool IsCompleted
         {
+            [Name("isCompleted")]
             get
             {
                 return false;
             }
         }
 
-		public virtual void OnCompleted(Action continuation) 
+        [Name("continueWith")]
+		public void OnCompleted(Action continuation) 
         {
         }
 
-		public virtual void GetResult() 
+		public void GetResult() 
         {
         }
 	}
@@ -37,19 +39,21 @@ namespace System.Threading.Tasks
         {
         }
 
-        public virtual bool IsCompleted
+        public bool IsCompleted
         {
+            [Name("isCompleted")]
             get
             {
                 return false;
             }
         }
 
-		public virtual void OnCompleted(Action continuation) 
+        [Name("continueWith")]
+		public void OnCompleted(Action continuation) 
         {
         }
 
-		public virtual TResult GetResult() 
+		public TResult GetResult() 
         { 
             return default(TResult); 
         }

@@ -310,6 +310,26 @@ namespace System.Runtime.Versioning
 
 namespace System.Runtime.CompilerServices
 {
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
+    public sealed class DecimalConstantAttribute : Attribute
+    {
+        public DecimalConstantAttribute(byte scale, byte sign, int hi, int mid, int low)
+        {
+        }
+
+        public DecimalConstantAttribute(byte scale, byte sign, uint hi, uint mid, uint low)
+        {
+        }
+
+        public decimal Value
+        {
+            get
+            {
+                return 0m;
+            }
+        }
+    }
+
     [Ignore]
     public static class RuntimeHelpers
     {

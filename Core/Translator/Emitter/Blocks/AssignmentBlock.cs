@@ -33,6 +33,11 @@ namespace Bridge.NET
             bool isEvent = false;
             var initCount = this.Emitter.Writers.Count;
 
+            var asyncExpressionHandling = this.Emitter.AsyncExpressionHandling;
+
+            this.WriteAwaiters(assignmentExpression.Left);
+            this.WriteAwaiters(assignmentExpression.Right);
+
             if (assignmentExpression.Operator == AssignmentOperatorType.Add ||
                 assignmentExpression.Operator == AssignmentOperatorType.Subtract)
             {
@@ -63,7 +68,12 @@ namespace Bridge.NET
 
             this.Emitter.IsAssignment = true;
             this.Emitter.AssignmentType = assignmentExpression.Operator;
+            var oldValue = this.Emitter.ReplaceAwaiterByVar;
+            this.Emitter.ReplaceAwaiterByVar = true;
+
             assignmentExpression.Left.AcceptVisitor(this.Emitter);
+
+            this.Emitter.ReplaceAwaiterByVar = oldValue;
             this.Emitter.AssignmentType = AssignmentOperatorType.Any;
             this.Emitter.IsAssignment = false;
 
@@ -124,7 +134,13 @@ namespace Bridge.NET
                 this.WriteComma();
             }
 
+            oldValue = this.Emitter.ReplaceAwaiterByVar;
+            this.Emitter.ReplaceAwaiterByVar = true;
+
             assignmentExpression.Right.AcceptVisitor(this.Emitter);
+
+            this.Emitter.ReplaceAwaiterByVar = oldValue;
+            this.Emitter.AsyncExpressionHandling = asyncExpressionHandling;
 
             if (this.Emitter.Writers.Count > initCount)
             {

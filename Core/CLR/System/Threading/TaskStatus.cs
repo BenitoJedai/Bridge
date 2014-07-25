@@ -5,6 +5,8 @@ using Bridge.CLR;
 namespace System.Threading.Tasks 
 {    
     [Ignore]
+    [Enum(Emit.Name)]
+    [Namespace("Bridge")]
     public enum TaskStatus
     {
         /// <summary> 

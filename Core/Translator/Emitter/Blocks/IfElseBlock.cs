@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -18,6 +19,12 @@ namespace Bridge.NET
             set; 
         }
 
+        public List<AsyncStep> EmittedAsyncSteps
+        {
+            get;
+            set;
+        }
+
         public override void Emit()
         {
             this.VisitIfElseStatement();
@@ -26,19 +33,116 @@ namespace Bridge.NET
         protected void VisitIfElseStatement()
         {
             IfElseStatement ifElseStatement = this.IfElseStatement;
+
+            this.WriteAwaiters(ifElseStatement.Condition);
+
             this.WriteIf();
             this.WriteOpenParentheses();
 
+            var oldValue = this.Emitter.ReplaceAwaiterByVar;
+            this.Emitter.ReplaceAwaiterByVar = true;
             ifElseStatement.Condition.AcceptVisitor(this.Emitter);
+            this.Emitter.ReplaceAwaiterByVar = oldValue;
 
             this.WriteCloseParentheses();
-            this.EmitBlockOrIndentedLine(ifElseStatement.TrueStatement);
 
-            if (ifElseStatement.FalseStatement != null && !ifElseStatement.FalseStatement.IsNull)
+            int startCount = 0;
+            int elseCount = 0;
+            AsyncStep trueStep = null;
+            AsyncStep elseStep = null;
+
+            if (this.Emitter.IsAsync)
             {
-                this.WriteElse();
-                this.EmitBlockOrIndentedLine(ifElseStatement.FalseStatement);
+                startCount = this.Emitter.AsyncBlock.Steps.Count;
+
+                this.EmittedAsyncSteps = this.Emitter.AsyncBlock.EmittedAsyncSteps;
+                this.Emitter.AsyncBlock.EmittedAsyncSteps = new List<AsyncStep>();
+                
+                this.Emitter.IgnoreBlock = ifElseStatement.TrueStatement;
+                this.WriteSpace();
+                this.BeginBlock();
+                var writer = this.SaveWriter();
+                ifElseStatement.TrueStatement.AcceptVisitor(this.Emitter);
+
+                if (this.Emitter.AsyncBlock.Steps.Count > startCount)
+                {
+                    trueStep = this.Emitter.AsyncBlock.Steps.Last();
+                }
+
+                if (this.RestoreWriter(writer) && !this.IsOnlyWhitespaceOnPenultimateLine(true))
+                {
+                    this.WriteNewLine();
+                }
+                this.EndBlock();
+                this.WriteSpace();
+
+                elseCount = this.Emitter.AsyncBlock.Steps.Count;
             }
+            else
+            {
+                this.EmitBlockOrIndentedLine(ifElseStatement.TrueStatement);                
+            }
+            
+            if (ifElseStatement.FalseStatement != null && !ifElseStatement.FalseStatement.IsNull)
+            {             
+                this.WriteElse();
+                if (this.Emitter.IsAsync)
+                {                    
+                    this.Emitter.IgnoreBlock = ifElseStatement.FalseStatement;
+                    this.WriteSpace();
+                    this.BeginBlock();
+                    var writer = this.SaveWriter();
+                    ifElseStatement.FalseStatement.AcceptVisitor(this.Emitter);
+
+                    if (this.Emitter.AsyncBlock.Steps.Count > elseCount)
+                    {
+                        elseStep = this.Emitter.AsyncBlock.Steps.Last();
+                    }
+
+                    if (this.RestoreWriter(writer) && !this.IsOnlyWhitespaceOnPenultimateLine(true))
+                    {
+                        this.WriteNewLine();
+                    }
+                    this.EndBlock();
+                    this.WriteSpace();
+                }
+                else
+                {
+                    this.EmitBlockOrIndentedLine(ifElseStatement.FalseStatement);
+                }
+            }
+
+            if (this.Emitter.IsAsync && this.Emitter.AsyncBlock.Steps.Count > startCount)
+            {
+                if (this.Emitter.AsyncBlock.Steps.Count <= elseCount && !AbstractEmitterBlock.IsJumpStatementLast(this.Emitter.Output.ToString()))
+                {
+                    this.WriteNewLine();
+                    this.Write("$step = " + this.Emitter.AsyncBlock.Step + ";");
+                    this.WriteNewLine();
+                    this.Write("continue;");                    
+                }
+
+                var nextStep = this.Emitter.AsyncBlock.AddAsyncStep();
+
+                if (trueStep != null)
+                {
+                    trueStep.JumpToStep = nextStep.Step;
+                }
+
+                if (elseStep != null)
+                {
+                    elseStep.JumpToStep = nextStep.Step;
+                }
+            }
+            else if (this.Emitter.IsAsync)
+            {
+                this.WriteNewLine();
+            }
+
+            if (this.Emitter.IsAsync)
+            {
+                this.Emitter.AsyncBlock.EmittedAsyncSteps = this.EmittedAsyncSteps;
+            }            
         }
     }
 }

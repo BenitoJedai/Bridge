@@ -14,22 +14,28 @@ namespace Bridge.NET
     public class LambdaBlock : AbstractMethodBlock
     {
         public LambdaBlock(Emitter emitter, LambdaExpression lambdaExpression) 
-            : this(emitter, lambdaExpression.Parameters, lambdaExpression.Body, lambdaExpression)
-        {
+            : this(emitter, lambdaExpression.Parameters, lambdaExpression.Body, lambdaExpression, lambdaExpression.IsAsync)
+        {            
         }
 
         public LambdaBlock(Emitter emitter, AnonymousMethodExpression anonymousMethodExpression)
-            : this(emitter, anonymousMethodExpression.Parameters, anonymousMethodExpression.Body, anonymousMethodExpression)
+            : this(emitter, anonymousMethodExpression.Parameters, anonymousMethodExpression.Body, anonymousMethodExpression, anonymousMethodExpression.IsAsync)
         {
-            this.Emitter = emitter;
         }
 
-        public LambdaBlock(Emitter emitter, IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context)
+        public LambdaBlock(Emitter emitter, IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context, bool isAsync)
         {
             this.Emitter = emitter;
             this.Parameters = parameters;
             this.Body = body;
             this.Context = context;
+            this.IsAsync = isAsync;
+        }
+
+        public bool IsAsync
+        {
+            get;
+            set;
         }
 
         public IEnumerable<ParameterDeclaration> Parameters 
@@ -52,7 +58,7 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.EmitLambda(this.Parameters, this.Body, this.Context);
+            this.EmitLambda(this.Parameters, this.Body, this.Context);            
         }
 
         protected virtual void EmitLambda(IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context)
@@ -70,20 +76,34 @@ namespace Bridge.NET
             this.EmitMethodParameters(parameters, context);
             this.WriteSpace();
 
-            if (!block)
+            if (!block && !this.IsAsync)
             {
                 this.WriteOpenBrace();
                 this.WriteSpace();
             }
 
-            if (body.Parent is LambdaExpression && !block)
-            {
+            if (body.Parent is LambdaExpression && !block && !this.IsAsync)
+            {                
                 this.WriteReturn(true);
             }
 
-            body.AcceptVisitor(this.Emitter);
+            if (this.IsAsync)
+            {
+                if (context is LambdaExpression)
+                {
+                    new AsyncBlock(this.Emitter, (LambdaExpression)context).Emit();
+                }
+                else
+                {
+                    new AsyncBlock(this.Emitter, (AnonymousMethodExpression)context).Emit();
+                }                
+            }
+            else
+            {
+                body.AcceptVisitor(this.Emitter);
+            }
 
-            if (!block)
+            if (!block && !this.IsAsync)
             {
                 this.WriteSpace();
                 this.WriteCloseBrace();
