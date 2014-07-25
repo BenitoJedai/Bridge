@@ -150,7 +150,7 @@ namespace Bridge.NET
             {
                 foreach (var jump in this.Emitter.JumpStatements)
                 {
-                    jump.Output.Insert(jump.Position, jump.Break ? nextStep.Step : conditionStep.Step);                    
+                    jump.Output.Insert(jump.Position, jump.Break ? nextStep.Step : iteratorsStep.Step);                    
                 }
             }
 
