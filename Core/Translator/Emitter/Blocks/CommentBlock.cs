@@ -47,6 +47,10 @@ namespace Bridge.NET
             if (comment.CommentType == CommentType.MultiLine && injection.Success)
             {
                 string code = removeStars.Replace(injection.Groups[1].Value, "$1");
+                if (code.EndsWith("@"))
+                {
+                    code = code.Substring(0, code.Length - 1);
+                }
                 this.Write(code);
                 this.WriteNewLine();
             }
