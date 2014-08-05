@@ -29,11 +29,6 @@ namespace Bridge.NET
 
             if (this.Emitter.IsAsync)
             {
-                if (this.Emitter.AsyncBlock != null && this.NoValueableSiblings(returnStatement))
-                {
-                    this.Emitter.AsyncBlock.ReturnIsLast = true;
-                }
-
                 if (this.Emitter.AsyncBlock != null && this.Emitter.AsyncBlock.IsTaskReturn)
                 {
                     this.WriteAwaiters(returnStatement.Expression);

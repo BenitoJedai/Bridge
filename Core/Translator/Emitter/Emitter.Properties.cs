@@ -298,5 +298,11 @@ namespace Bridge.NET
             get;
             set;
         }
+
+        public SwitchStatement AsyncSwitch
+        {
+            get;
+            set;
+        }
     }
 }

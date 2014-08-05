@@ -151,12 +151,6 @@ namespace Bridge.NET
             set;
         }
 
-        public bool ReturnIsLast
-        {
-            get;
-            set;
-        }
-
         public List<AsyncTryInfo> TryInfos
         {
             get;
@@ -463,7 +457,7 @@ namespace Bridge.NET
                     this.WriteNewLine();
                     this.Write("continue;");
                 }
-                else if (i == (this.Steps.Count - 1) && !this.ReturnIsLast)
+                else if (i == (this.Steps.Count - 1) && !AbstractEmitterBlock.IsReturnLast(output))
                 {
                     if (addNewLine)
                     {
