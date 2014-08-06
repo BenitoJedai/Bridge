@@ -48,6 +48,10 @@ Bridge.Class.extend('Bridge.Task', {
                 errors = [],
                 i;
 
+            if (!Bridge.isArray(tasks)) {
+                tasks = Array.prototype.slice.call(arguments, 0);
+            }
+
             if (tasks.length === 0) {
                 task.setResult([]);
                 return task;
@@ -90,6 +94,10 @@ Bridge.Class.extend('Bridge.Task', {
         },
 
         whenAny : function (tasks) {
+            if (!Bridge.isArray(tasks)) {
+                tasks = Array.prototype.slice.call(arguments, 0);
+            }
+
             if (!tasks.length) {
                 throw new Error('At least one task is required');
             }
