@@ -56,9 +56,50 @@ namespace Bridge.NET
             set; 
         }
 
+        protected bool PreviousIsAync
+        {
+            get;
+            set;
+        }
+
+        protected List<string> PreviousAsyncVariables
+        {
+            get;
+            set;
+        }
+
+        protected AsyncBlock PreviousAsyncBlock
+        {
+            get;
+            set;
+        }
+
+        public bool ReplaceAwaiterByVar
+        {
+            get;
+            set;
+        }
+
         public override void Emit()
         {
-            this.EmitLambda(this.Parameters, this.Body, this.Context);            
+            this.PreviousIsAync = this.Emitter.IsAsync;
+            this.Emitter.IsAsync = this.IsAsync;
+
+            this.PreviousAsyncVariables = this.Emitter.AsyncVariables;
+            this.Emitter.AsyncVariables = null;
+
+            this.PreviousAsyncBlock = this.Emitter.AsyncBlock;
+            this.Emitter.AsyncBlock = null;
+
+            this.ReplaceAwaiterByVar = this.Emitter.ReplaceAwaiterByVar;
+            this.Emitter.ReplaceAwaiterByVar = false;
+
+            this.EmitLambda(this.Parameters, this.Body, this.Context);
+
+            this.Emitter.IsAsync = this.PreviousIsAync;
+            this.Emitter.AsyncVariables = this.PreviousAsyncVariables;
+            this.Emitter.AsyncBlock = this.PreviousAsyncBlock;
+            this.Emitter.ReplaceAwaiterByVar = this.ReplaceAwaiterByVar;
         }
 
         protected virtual void EmitLambda(IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context)

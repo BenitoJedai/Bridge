@@ -224,14 +224,19 @@ namespace Bridge.NET
         {
             var resolveResult = this.Emitter.Resolver.ResolveNode(expression, this.Emitter);
 
+            IType type;
             if (resolveResult is InvocationResolveResult)
             {
-                var type = ((InvocationResolveResult)resolveResult).Member.ReturnType;
+                type = ((InvocationResolveResult)resolveResult).Member.ReturnType;
+            }
+            else
+            {
+                type = resolveResult.Type;
+            }
 
-                if (type.Name == "Task" && type.Namespace == "System.Threading.Tasks" && type.TypeParameterCount > 0)
-                {
-                    return true;
-                }
+            if (type.Name == "Task" && type.Namespace == "System.Threading.Tasks" && type.TypeParameterCount > 0)
+            {
+                return true;
             }
 
             return false;
