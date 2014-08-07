@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\Bridge.CLR.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
