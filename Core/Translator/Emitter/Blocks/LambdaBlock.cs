@@ -104,8 +104,24 @@ namespace Bridge.NET
 
         protected virtual void EmitLambda(IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context)
         {
+            AsyncBlock asyncBlock = null;
             this.PushLocals();
+            if (this.IsAsync)
+            {
+                if (context is LambdaExpression)
+                {
+                    asyncBlock = new AsyncBlock(this.Emitter, (LambdaExpression)context);
+                }
+                else
+                {
+                    asyncBlock = new AsyncBlock(this.Emitter, (AnonymousMethodExpression)context);
+                }
+
+                asyncBlock.InitAsyncBlock();
+            }
+            
             this.AddLocals(parameters);
+            
 
             bool block = body is BlockStatement;            
             this.Write("");
@@ -130,14 +146,7 @@ namespace Bridge.NET
 
             if (this.IsAsync)
             {
-                if (context is LambdaExpression)
-                {
-                    new AsyncBlock(this.Emitter, (LambdaExpression)context).Emit();
-                }
-                else
-                {
-                    new AsyncBlock(this.Emitter, (AnonymousMethodExpression)context).Emit();
-                }                
+                asyncBlock.Emit(true);
             }
             else
             {
