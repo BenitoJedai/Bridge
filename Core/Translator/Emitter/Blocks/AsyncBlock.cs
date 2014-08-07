@@ -157,7 +157,7 @@ namespace Bridge.NET
             set;
         }
 
-        protected void InitAsyncBlock()
+        public void InitAsyncBlock()
         {
             this.PreviousIsAync = this.Emitter.IsAsync;
             this.Emitter.IsAsync = true;
@@ -252,7 +252,15 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.InitAsyncBlock();
+            this.Emit(false);
+        }
+
+        public void Emit(bool skipInit)
+        {
+            if (!skipInit)
+            {
+                this.InitAsyncBlock();
+            }
             this.EmitAsyncBlock();
             this.FinishAsyncBlock();
         }       
