@@ -28,7 +28,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Is a double value returning  the current value; if the progress bar is an indeterminate progress bar, it returns 0.
         /// </summary>
-        public new double Value;
+        public double Value;
 
         /// <summary>
         /// Returns NodeList containing the list of <label> elements that are labels for this element.

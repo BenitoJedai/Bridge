@@ -77,7 +77,7 @@ namespace Bridge.Html5
         /// For mouse events, such as click, dblclick, mousedown, or mouseup, the detail property indicates how many times the mouse has been clicked in the same location for this event.
         /// For a dblclick event the value of detail is always 2.
         /// </summary>
-        public readonly int Detail;
+        public new readonly int Detail;
 
         /// <summary>
         /// Indicates whether the "meta" key was pressed when the event fired.
@@ -175,7 +175,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Returns additional numerical information about the event, depending on the type of event. 
         /// </summary>
-        public int Detail;
+        public new int Detail;
         
         /// <summary>
         /// The secondary target for the event, if there is one.

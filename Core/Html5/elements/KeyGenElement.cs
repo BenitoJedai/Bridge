@@ -75,7 +75,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Removes focus from input; keystrokes will subsequently go nowhere.
         /// </summary>
-        public virtual void Blur()
+        public new virtual void Blur()
         {
         }
 

@@ -57,19 +57,19 @@ namespace Bridge.Html5
         /// Exposes the window.onblur event handler to call when the window loses focus. Note: This handler is triggered when the event reaches the window, not the body element. Use addEventListener() to attach an event listener to the body element.
         /// </summary>
         [Name("onblur")]
-        public Action<Event> OnBlur;
+        public new Action<Event> OnBlur;
 
         /// <summary>
         /// Exposes the window.onerror event handler to call when the document fails to load properly. Note: This handler is triggered when the event reaches the window, not the body element. Use addEventListener() to attach an event listener to the body element.   
         /// </summary>
         [Name("onerror")]
-        public Action<Event> OnError;
+        public new Action<Event> OnError;
 
         /// <summary>
         /// Exposes the window.onfocus event handler to call when the window gains focus. Note: This handler is triggered when the event reaches the window, not the body element. Use addEventListener() to attach an event listener to the body element.   
         /// </summary>
         [Name("onfocus")]
-        public Action<Event> OnFocus;
+        public new Action<Event> OnFocus;
 
         /// <summary>
         /// Reflects the onhashchange HTML attribute value for a function to call when the fragment identifier in the address of the document changes.
@@ -81,7 +81,7 @@ namespace Bridge.Html5
         /// Exposes the window.onload event handler to call when the window gains focus. Note: This handler is triggered when the event reaches the window, not the body element. Use addEventListener() to attach an event listener to the body element.
         /// </summary>
         [Name("onload")]
-        public Action<Event> OnLoad;
+        public new Action<Event> OnLoad;
 
         /// <summary>
         /// Reflects the onmessage HTML attribute value for a function to call when the document receives a message.

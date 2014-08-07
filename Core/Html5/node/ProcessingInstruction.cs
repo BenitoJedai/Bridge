@@ -23,6 +23,6 @@ namespace Bridge.Html5
         /// <summary>
         /// first non-whitespace character after target and before ?&gt;
         /// </summary>
-        public readonly string Data;
+        public new readonly string Data;
     }
 }

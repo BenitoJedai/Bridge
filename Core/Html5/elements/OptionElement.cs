@@ -53,6 +53,6 @@ namespace Bridge.Html5
         /// <summary>
         /// Reflects the value of the value HTML attribute, if it exists; otherwise reflects value of the Node.textContent property.
         /// </summary>
-        public new string Value;
+        public string Value;
     }
 }
