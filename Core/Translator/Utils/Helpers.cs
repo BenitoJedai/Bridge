@@ -208,9 +208,12 @@ namespace Bridge.NET
             {
                 TypeDefinition baseTypeDefinition = null;
 
-                try 
-                { 
-                    baseTypeDefinition = thisTypeDefinition.BaseType.Resolve(); 
+                try
+                {
+                    if (thisTypeDefinition.BaseType.Scope == typeDefinition.Scope)
+                    {
+                        baseTypeDefinition = thisTypeDefinition.BaseType.Resolve();
+                    }
                 }
                 catch { }
 
@@ -234,8 +237,11 @@ namespace Bridge.NET
                 TypeDefinition interfaceDefinition = null;
                 
                 try 
-                { 
-                    interfaceDefinition = interfaceReference.Resolve(); 
+                {
+                    if (thisTypeDefinition.BaseType.Scope == interfaceTypeDefinition.Scope)
+                    {
+                        interfaceDefinition = interfaceReference.Resolve();
+                    }
                 }
                 catch { }
 
