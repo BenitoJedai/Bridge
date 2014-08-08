@@ -28,7 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Bridge.Html5.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Bridge.Html5.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ajax\AjaxReadyState.cs" />
@@ -278,6 +278,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\assemblies\BridgeNoTask.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)Bridge.Html5.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetDir)Bridge.Html5.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Bridge.Html5.xml" "$(SolutionDir)assemblies"</PostBuildEvent>
   </PropertyGroup>
 </Project>

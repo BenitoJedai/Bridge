@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\Bridge.CLR.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Bridge.CLR.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
@@ -119,7 +119,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Bridge.CLR.xml" "$(SolutionDir)assemblies"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

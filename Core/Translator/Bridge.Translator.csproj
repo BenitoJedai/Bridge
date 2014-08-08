@@ -31,7 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\Bridge.Translator.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Bridge.Translator.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxMin">
@@ -178,7 +178,8 @@ copy /Y "$(TargetDir)Mono.Cecil.Mdb.dll" "$(SolutionDir)assemblies"
 copy /Y "$(TargetDir)Mono.Cecil.Pdb.dll" "$(SolutionDir)assemblies"
 copy /Y "$(TargetDir)Mono.Cecil.Rocks.dll" "$(SolutionDir)assemblies"
 copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Bridge.Translator.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+copy /Y "$(TargetDir)Bridge.Translator.dll" "$(SolutionDir)assemblies"
+copy /Y "$(TargetDir)Bridge.Translator.xml" "$(SolutionDir)assemblies"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
