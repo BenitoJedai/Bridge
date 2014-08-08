@@ -23,6 +23,6 @@ namespace Bridge.Html5
         /// <summary>
         /// Indicates the ordinal position of the list element inside a given <ol>. It reflects the value attribute of the HTML <li> element, and can be smaller than 0. If the <li> element is not a child of an <ol> element, the property has no meaning.
         /// </summary>
-        public new int Value;
+        public int Value;
     }
 }

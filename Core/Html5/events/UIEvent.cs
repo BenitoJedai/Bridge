@@ -36,7 +36,7 @@ namespace Bridge.Html5
         /// Event.AT_TARGET = 2
         /// Event.BUBBLING_PHASE = 3
         /// </summary>
-        public readonly int EventPhase;
+        public new readonly int EventPhase;
         
         /// <summary>
         /// Returns the horizontal coordinate of the event relative to the current layer.

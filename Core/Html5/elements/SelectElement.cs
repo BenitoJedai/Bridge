@@ -102,7 +102,7 @@ namespace Bridge.Html5
         /// <summary>
         /// The value of this form control, that is, of the first selected option.
         /// </summary>
-        public new string Value;
+        public string Value;
 
         /// <summary>
         /// Indicates whether the button is a candidate for constraint validation. It is false if any conditions bar it from constraint validation. Read only.

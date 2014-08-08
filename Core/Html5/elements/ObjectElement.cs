@@ -49,7 +49,7 @@ namespace Bridge.Html5
         /// <summary>
         /// The position of the element in the tabbing navigation order for the current document.
         /// </summary>
-        public int TabIndex;
+        public new int TabIndex;
         
         /// <summary>
         /// Reflects the type HTML attribute, specifying the MIME type of the resource.

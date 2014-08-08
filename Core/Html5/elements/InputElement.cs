@@ -204,7 +204,7 @@ namespace Bridge.Html5
         /// <summary>
         /// The position of the element in the tabbing navigation order for the current document.
         /// </summary>
-        public int TabIndex;
+        public new int TabIndex;
 
         /// <summary>
         /// Reflects the type HTML attribute, indicating the type of control to display.
@@ -257,7 +257,7 @@ namespace Bridge.Html5
         /// <summary>
         /// Removes focus from input; keystrokes will subsequently go nowhere.
         /// </summary>
-        public virtual void Blur()
+        public new virtual void Blur()
         {
         }
 
@@ -273,14 +273,14 @@ namespace Bridge.Html5
         /// <summary>
         /// Simulates a click on the element.
         /// </summary>
-        public virtual void Click()
+        public new virtual void Click()
         {
         }
 
         /// <summary>
         /// Focus on input; keystrokes will subsequently go to this element.
         /// </summary>
-        public virtual void Focus()
+        public new virtual void Focus()
         {
         }
 
