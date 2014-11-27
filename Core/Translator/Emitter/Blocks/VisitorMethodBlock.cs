@@ -29,6 +29,7 @@ namespace Bridge.NET
         {
             this.EnsureComma();
             this.ResetLocals();
+            var prevMap = this.BuildLocalsMap(methodDeclaration.Body);
             this.AddLocals(methodDeclaration.Parameters);
 
             if (this.Emitter.MethodsGroup != null)
@@ -45,6 +46,17 @@ namespace Bridge.NET
             }
 
             this.WriteColon();
+
+            if (methodDeclaration.TypeParameters.Count > 0)
+            {
+                this.WriteFunction();
+                this.EmitTypeParameters(methodDeclaration.TypeParameters, methodDeclaration);
+                this.WriteSpace();
+                this.BeginBlock();
+                this.WriteReturn(true);
+            }
+
+
             this.WriteFunction();
 
             this.EmitMethodParameters(methodDeclaration.Parameters, methodDeclaration);
@@ -77,6 +89,13 @@ namespace Bridge.NET
                 this.EndBlock();
             }
 
+            if (methodDeclaration.TypeParameters.Count > 0)
+            {
+                this.WriteNewLine();
+                this.EndBlock();
+            }
+
+            this.ClearLocalsMap(prevMap);
             this.Emitter.Comma = true;
         }                  
     }

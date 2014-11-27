@@ -33,6 +33,16 @@ namespace Bridge.NET
             declarations.ToList().ForEach(item =>
             {
                 this.AddLocal(item.Name, item.Type);
+
+                if (item.ParameterModifier == ParameterModifier.Out || item.ParameterModifier == ParameterModifier.Ref)
+                {
+                    var name = item.Name.StartsWith(Emitter.FIX_ARGUMENT_NAME) ? item.Name.Substring(Emitter.FIX_ARGUMENT_NAME.Length) : item.Name;
+                    
+                    if (!this.Emitter.LocalsMap.ContainsKey(name))
+                    {
+                        this.Emitter.LocalsMap.Add(name, name + ".v");
+                    }
+                }
             });
         }
 
@@ -43,6 +53,28 @@ namespace Bridge.NET
             {
                 this.Emitter.AsyncVariables.Add(name);
             }
+        }
+
+        protected virtual Dictionary<string, string> BuildLocalsMap(AstNode statement)
+        {
+            var visitor = new ReferenceArgumentVisitor();
+            statement.AcceptVisitor(visitor);
+            var prevMap = this.Emitter.LocalsMap;
+            this.Emitter.LocalsMap = new Dictionary<string, string>();
+            foreach (IdentifierExpression expr in visitor.DirectionExpression)
+            {
+                if (!this.Emitter.LocalsMap.ContainsKey(expr.Identifier))
+                {
+                    this.Emitter.LocalsMap.Add(expr.Identifier, expr.Identifier + ".v");
+                }
+            }
+
+            return prevMap;
+        }
+
+        protected virtual void ClearLocalsMap(Dictionary<string, string> prevMap = null)
+        {
+            this.Emitter.LocalsMap = prevMap;
         }
     }
 }

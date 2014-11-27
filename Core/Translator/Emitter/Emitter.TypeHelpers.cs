@@ -6,6 +6,7 @@ using Ext.Net.Utilities;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
+using ICSharpCode.NRefactory.Semantics;
 
 namespace Bridge.NET
 {
@@ -62,7 +63,7 @@ namespace Bridge.NET
         public virtual TypeDefinition GetTypeDefinition(AstType reference)
         {
             string name = Helpers.GetScriptName(reference, true);
-            name = this.ResolveType(name);
+            name = this.ResolveType(name, reference);            
 
             return this.TypeDefinitions[name];
         }
@@ -243,5 +244,22 @@ namespace Bridge.NET
         {
             return this.ResolveNamespaceOrType(id, false);
         }
+
+        public virtual string ResolveType(string id, AstNode type)
+        {
+            var name = this.ResolveNamespaceOrType(id, false);
+
+            if (name.IsEmpty())
+            {
+                var resolveResult = this.Resolver.ResolveNode(type, this) as TypeResolveResult;
+
+                if (resolveResult != null)
+                {
+                    name = resolveResult.Type.FullName;
+                }
+            }
+
+            return name;
+        }        
     }
 }

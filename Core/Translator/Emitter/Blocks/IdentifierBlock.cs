@@ -108,7 +108,14 @@ namespace Bridge.NET
 
             if (this.Emitter.Locals != null && this.Emitter.Locals.ContainsKey(id))
             {
-                this.Write(id);
+                if (this.Emitter.LocalsMap != null && this.Emitter.LocalsMap.ContainsKey(id) && !(identifierExpression.Parent is DirectionExpression))
+                {
+                    this.Write(this.Emitter.LocalsMap[id]);
+                }
+                else
+                {
+                    this.Write(id);
+                }
 
                 return;
             }

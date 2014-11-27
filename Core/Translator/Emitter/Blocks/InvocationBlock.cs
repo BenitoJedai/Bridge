@@ -67,7 +67,7 @@ namespace Bridge.NET
 
             Tuple<bool, bool, string> inlineInfo = this.Emitter.GetInlineCode(invocationExpression);
             var argsInfo = new ArgumentsInfo(this.Emitter, invocationExpression);
-
+            
             var argsExpressions = argsInfo.ArgumentsExpressions;
             var paramsArg = argsInfo.ParamsExpression;
             var argsCount = argsExpressions.Count();
@@ -118,7 +118,7 @@ namespace Bridge.NET
                     this.Emitter.AsyncExpressionHandling = oldAsyncExpressionHandling;
                     return;
                 }
-            }
+            }            
 
             MemberReferenceExpression targetMember = invocationExpression.Target as MemberReferenceExpression;
             if (targetMember != null)
@@ -183,8 +183,17 @@ namespace Bridge.NET
                             else
                             {
                                 string name = this.Emitter.ShortenTypeName(Helpers.ReplaceSpecialChars(resolvedMethod.DeclaringType.FullName)) + "." + this.Emitter.GetEntityName(resolvedMethod);
+                                var isIgnoreClass = this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition);
 
                                 this.Write(name);
+
+                                if (!isIgnoreClass && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
+                                {
+                                    this.WriteOpenParentheses();
+                                    new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
+                                    this.WriteCloseParentheses();
+                                }
+
                                 this.WriteOpenParentheses();
 
                                 this.WriteThisExtension(invocationExpression.Target);
@@ -208,7 +217,7 @@ namespace Bridge.NET
             }
 
             if (targetMember != null && targetMember.Target is BaseReferenceExpression)
-            {
+            {                
                 var baseType = this.Emitter.GetBaseMethodOwnerTypeDefinition(targetMember.MemberName, targetMember.TypeArguments.Count);
                 var method = invocationExpression.GetParent<MethodDeclaration>();
 
@@ -219,7 +228,8 @@ namespace Bridge.NET
                     currentMethod = method.Name;
                 }
 
-                if (this.Emitter.Validator.IsIgnoreType(baseType))
+                bool isIgnore = this.Emitter.Validator.IsIgnoreType(baseType);
+                if (isIgnore)
                 {
                     throw this.Emitter.CreateException(targetMember.Target, "Cannot call base method, because parent class code is ignored");
                 }
@@ -232,6 +242,14 @@ namespace Bridge.NET
                     this.WriteThis();
                     this.WriteDot();
                     this.Write("base");
+
+                    if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
+                    {
+                        this.WriteOpenParentheses();
+                        new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
+                        this.WriteCloseParentheses();
+                    }
+
                     this.WriteOpenParentheses();
                 }
                 else
@@ -248,7 +266,15 @@ namespace Bridge.NET
                         this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
                     }
 
+                    if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
+                    {
+                        this.WriteOpenParentheses();
+                        new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
+                        this.WriteCloseParentheses();
+                    }
+
                     this.WriteDot();
+
                     this.Write("call");
                     this.WriteOpenParentheses();
 
@@ -271,7 +297,10 @@ namespace Bridge.NET
             }
             else
             {
-                if (this.IsEmptyPartialInvoking(this.Emitter.Resolver.ResolveNode(invocationExpression.Target, this.Emitter) as InvocationResolveResult))
+                var targetResolveResult = this.Emitter.Resolver.ResolveNode(invocationExpression.Target, this.Emitter);
+                var invocationResolveResult = targetResolveResult as InvocationResolveResult;
+
+                if (this.IsEmptyPartialInvoking(invocationResolveResult))
                 {
                     this.Emitter.SkipSemiColon = true;
                     this.Emitter.ReplaceAwaiterByVar = oldValue;
@@ -293,7 +322,21 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    this.WriteOpenParentheses();
+                    var isIgnore = false;
+
+                    if(invocationResolveResult != null && this.Emitter.Validator.IsIgnoreType(invocationResolveResult.Member.DeclaringTypeDefinition))
+                    {
+                        isIgnore = true;
+                    }
+
+                    if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
+                    {
+                        this.WriteOpenParentheses();
+                        new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
+                        this.WriteCloseParentheses();
+                    }
+
+                    this.WriteOpenParentheses();                    
                     new ExpressionListBlock(this.Emitter, argsExpressions, paramsArg).Emit();
                     this.WriteCloseParentheses();
                 }

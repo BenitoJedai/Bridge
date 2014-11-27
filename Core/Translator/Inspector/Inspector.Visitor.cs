@@ -43,10 +43,13 @@ namespace Bridge.NET
         }
 
         public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
-        {
+        {            
             if (this.CurrentType != null)
             {
-                throw this.CreateException(typeDeclaration, "Nested types are not supported");
+                //throw this.CreateException(typeDeclaration, "Nested types are not supported");
+                this.NestedTypes = this.NestedTypes ?? new List<Tuple<TypeDeclaration, TypeInfo>>();
+                this.NestedTypes.Add(new Tuple<TypeDeclaration, TypeInfo>(typeDeclaration, this.CurrentType));
+                return;
             }
 
             if (this.HasIgnore(typeDeclaration))
@@ -62,6 +65,7 @@ namespace Bridge.NET
             {
                 this.CurrentType = new TypeInfo()
                 {
+                    ParentType = this.ParentType,
                     Name = Helpers.GetScriptName(typeDeclaration, false),
                     GenericName = Helpers.GetScriptName(typeDeclaration, true),
                     ClassType = typeDeclaration.ClassType,
@@ -88,6 +92,18 @@ namespace Bridge.NET
             }
 
             this.CurrentType = null;
+
+            while (this.NestedTypes != null && this.NestedTypes.Count > 0)
+            {
+                var types = this.NestedTypes;
+                this.NestedTypes = null;
+                foreach (var nestedType in types)
+                {
+                    this.ParentType = nestedType.Item2;
+                    this.VisitTypeDeclaration(nestedType.Item1);
+                    this.ParentType = null;
+                }
+            }
         }
 
         public override void VisitFieldDeclaration(FieldDeclaration fieldDeclaration)

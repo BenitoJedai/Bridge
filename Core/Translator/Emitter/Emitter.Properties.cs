@@ -57,6 +57,12 @@ namespace Bridge.NET
             set; 
         }
 
+        public Dictionary<string, string> LocalsMap
+        {
+            get;
+            set;
+        }
+
         public Stack<Dictionary<string, AstType>> LocalsStack 
         { 
             get; 

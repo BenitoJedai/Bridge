@@ -158,6 +158,7 @@ namespace Bridge.NET
             {
                 this.EnsureComma();
                 this.ResetLocals();
+                var prevMap = this.BuildLocalsMap(ctor.Body);
                 this.AddLocals(ctor.Parameters);
 
                 var ctorName = "$init";
@@ -243,6 +244,7 @@ namespace Bridge.NET
 
                 this.EndBlock();
                 this.Emitter.Comma = true;
+                this.ClearLocalsMap(prevMap);
             }
         }
 

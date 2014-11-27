@@ -181,7 +181,7 @@ namespace Bridge.NET
             }
 
             string typeName = parts.Count < 2
-                ? this.TypeInfo.FullName
+                ? this.TypeInfo.GenericFullName
                 : this.ResolveType(String.Join(".", parts.ToArray(), 0, parts.Count - 1));
 
             if (String.IsNullOrEmpty(typeName))

@@ -61,6 +61,27 @@ namespace Bridge.NET
             this.WriteCloseParentheses();
         }
 
+        protected virtual void EmitTypeParameters(IEnumerable<TypeParameterDeclaration> declarations, AstNode context)
+        {
+            this.WriteOpenParentheses();
+            bool needComma = false;
+
+            foreach (var p in declarations)
+            {
+                this.Emitter.Validator.CheckIdentifier(p.Name, context);
+
+                if (needComma)
+                {
+                    this.WriteComma();
+                }
+
+                needComma = true;
+                this.Write(p.Name.Replace(Emitter.FIX_ARGUMENT_NAME, ""));
+            }
+
+            this.WriteCloseParentheses();
+        }
+
         protected virtual MethodDefinition FindMethodDefinitionInGroup(IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group)
         {
             var args = new List<ParameterDeclaration>(parameters);
@@ -88,7 +109,7 @@ namespace Bridge.NET
                             var isArray = type.ToString().Contains("[]");
 
                             var typeName = isArray ? type.ToString().Replace("[]", "") : type.ToString();
-                            var name = this.Emitter.ResolveType(typeName);
+                            var name = this.Emitter.ResolveType(typeName, type);
 
                             var typeDef = this.Emitter.TypeDefinitions[name];
 

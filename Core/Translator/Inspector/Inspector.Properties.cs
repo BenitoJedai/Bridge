@@ -26,6 +26,12 @@ namespace Bridge.NET
             set; 
         }
 
+        protected TypeInfo ParentType
+        {
+            get;
+            set;
+        }
+
         public HashSet<string> Usings
         {
             get;
@@ -39,6 +45,12 @@ namespace Bridge.NET
         }
 
         public MemberResolver Resolver
+        {
+            get;
+            set;
+        }
+
+        public List<Tuple<TypeDeclaration, TypeInfo>> NestedTypes
         {
             get;
             set;

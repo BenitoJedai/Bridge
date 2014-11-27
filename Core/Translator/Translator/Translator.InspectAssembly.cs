@@ -38,7 +38,12 @@ namespace Bridge.NET
 
         protected virtual void ReadTypes(AssemblyDefinition assembly)
         {
-            foreach (TypeDefinition type in assembly.MainModule.Types)
+            this.AddNestedTypes(assembly.MainModule.Types);
+        }
+
+        protected virtual void AddNestedTypes(IEnumerable<TypeDefinition> types)
+        {
+            foreach (TypeDefinition type in types)
             {
                 if (type.FullName.Contains("<"))
                 {
@@ -47,6 +52,11 @@ namespace Bridge.NET
 
                 this.Validator.CheckType(type, this);
                 this.TypeDefinitions.Add(Helpers.GetTypeMapKey(type), type);
+
+                if (type.HasNestedTypes)
+                {
+                    this.AddNestedTypes(type.NestedTypes);
+                }
             }
         }
 

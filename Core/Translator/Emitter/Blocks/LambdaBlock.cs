@@ -119,7 +119,8 @@ namespace Bridge.NET
 
                 asyncBlock.InitAsyncBlock();
             }
-            
+
+            var prevMap = this.BuildLocalsMap(body);
             this.AddLocals(parameters);
             
 
@@ -166,6 +167,7 @@ namespace Bridge.NET
             }
 
             this.PopLocals();
+            this.ClearLocalsMap(prevMap);
         }
     }
 }

@@ -269,5 +269,10 @@ namespace Bridge.NET
         {
             new NullReferenceBlock(this, nullReferenceExpression).Emit();
         }
+
+        public override void VisitDirectionExpression(DirectionExpression directionExpression)
+        {
+            directionExpression.Expression.AcceptVisitor(this);
+        }
     }
 }

@@ -27,31 +27,33 @@ namespace Bridge.NET
         protected virtual void EmitTypeReference()
         {
             AstType astType = this.Type;
+            this.Write(TypeBlock.TranslateTypeReference(astType, this.Emitter));
+        }
+
+        public static string TranslateTypeReference(AstType astType, Emitter emitter)
+        {
             var composedType = astType as ComposedType;
 
             if (composedType != null && composedType.ArraySpecifiers != null && composedType.ArraySpecifiers.Count > 0)
             {
-                this.Write("Array");
+                return "Array";
             }
-            else
+
+            var simpleType = astType as SimpleType;
+
+            if (simpleType != null && simpleType.Identifier == "dynamic")
             {
-                var simpleType = astType as SimpleType;
-
-                if (simpleType != null && simpleType.Identifier == "dynamic")
-                {
-                    this.Write("Object");
-                    return;
-                }
-
-                string type = this.Emitter.ResolveType(Helpers.GetScriptName(astType, true));
-
-                if (String.IsNullOrEmpty(type))
-                {
-                    throw this.Emitter.CreateException(astType, "Cannot resolve type " + astType.ToString());
-                }
-
-                this.Write(Ext.Net.Utilities.StringUtils.LeftOfRightmostOf(this.Emitter.ShortenTypeName(type), "$"));
+                return "Object";
             }
-        }    
+
+            string type = emitter.ResolveType(Helpers.GetScriptName(astType, true), astType);
+
+            if (String.IsNullOrEmpty(type))
+            {
+                throw emitter.CreateException(astType, "Cannot resolve type " + astType.ToString());
+            }
+
+            return Ext.Net.Utilities.StringUtils.LeftOfRightmostOf(emitter.ShortenTypeName(type), "$");
+        }
     }
 }

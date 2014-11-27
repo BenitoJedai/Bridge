@@ -58,6 +58,32 @@ namespace Bridge.NET
             set; 
         }
 
+        public string ParentName
+        {
+            get
+            {
+                if (this.ParentType == null)
+                {
+                    return this.Name;
+                }
+
+                return this.ParentType.Name + "." + this.Name;
+            }
+        }
+
+        public string ParentGenericName
+        {
+            get
+            {
+                if (this.ParentType == null)
+                {
+                    return this.GenericName;
+                }
+
+                return (this.ParentType.GenericName ?? this.ParentType.Name) + "." + this.GenericName;
+            }
+        }
+
         public HashSet<string> Usings 
         { 
             get; 
@@ -155,9 +181,9 @@ namespace Bridge.NET
             {
                 if (String.IsNullOrEmpty(this.Namespace))
                 {
-                    return this.Name;
+                    return this.ParentName;
                 }
-                return this.Namespace + "." + this.Name;
+                return this.Namespace + "." + this.ParentName;
             }
         }
 
@@ -167,9 +193,9 @@ namespace Bridge.NET
             {
                 if (String.IsNullOrEmpty(this.Namespace))
                 {
-                    return this.GenericName;
+                    return this.ParentGenericName;
                 }
-                return this.Namespace + "." + this.GenericName;
+                return this.Namespace + "." + this.ParentGenericName;
             }
         }
 
@@ -207,6 +233,12 @@ namespace Bridge.NET
         }
 
         public List<ModuleDependency> Dependencies
+        {
+            get;
+            set;
+        }
+
+        public TypeInfo ParentType
         {
             get;
             set;

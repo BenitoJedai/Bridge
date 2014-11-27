@@ -173,7 +173,7 @@ namespace Bridge.NET
             {
                 if (!clause.Type.IsNull)
                 {
-                    if (this.Emitter.ResolveType(clause.Type.ToString()) != "System.Exception")
+                    if (this.Emitter.ResolveType(clause.Type.ToString(), clause.Type) != "System.Exception")
                     {
                         throw this.Emitter.CreateException(clause, "Only System.Exception type is allowed in catch clauses");
                     }

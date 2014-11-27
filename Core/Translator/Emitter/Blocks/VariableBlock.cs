@@ -48,6 +48,13 @@ namespace Bridge.NET
                     needVar = false;
                 }
 
+                bool isReferenceLocal = false;
+
+                if (this.Emitter.LocalsMap != null && this.Emitter.LocalsMap.ContainsKey(variable.Name))
+                {
+                    isReferenceLocal = this.Emitter.LocalsMap[variable.Name].EndsWith(".v");
+                }
+
                 this.WriteAwaiters(variable.Initializer);
 
                 if (!this.Emitter.IsAsync || !variable.Initializer.IsNull)
@@ -73,10 +80,21 @@ namespace Bridge.NET
                 {
                     addSemicolon = true;
                     this.Write(" = ");
+
+                    if (isReferenceLocal)
+                    {
+                        this.Write("{ v : ");
+                    }
+
                     var oldValue = this.Emitter.ReplaceAwaiterByVar;
                     this.Emitter.ReplaceAwaiterByVar = true;
                     variable.Initializer.AcceptVisitor(this.Emitter);
                     this.Emitter.ReplaceAwaiterByVar = oldValue;
+
+                    if (isReferenceLocal)
+                    {
+                        this.Write(" }");
+                    }
                 }
             }
 

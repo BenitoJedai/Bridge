@@ -83,6 +83,7 @@
     <Compile Include="Emitter\Blocks\AnonymousTypeCreateBlock.cs" />
     <Compile Include="Emitter\Blocks\AsyncBlock.cs" />
     <Compile Include="Emitter\Blocks\EmitBlock.cs" />
+    <Compile Include="Emitter\Blocks\TypeExpressionListBlock.cs" />
     <Compile Include="Emitter\Blocks\NullReferenceBlock.cs" />
     <Compile Include="Emitter\Blocks\DefaultValueBlock.cs" />
     <Compile Include="Emitter\Blocks\EventDeclarationBlock.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Emitter\Blocks\AbstractEmitterBlock.Write.cs" />
     <Compile Include="Emitter\Emitter.Log.cs" />
     <Compile Include="Emitter\EmitterOutput.cs" />
+    <Compile Include="Utils\ReferenceArgumentVisitor.cs" />
     <Compile Include="Utils\AwaitSearchVisitor.cs" />
     <Compile Include="Utils\AssemblyInfo.cs" />
     <Compile Include="Utils\ILog.cs" />

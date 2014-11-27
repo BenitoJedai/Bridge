@@ -39,10 +39,12 @@ namespace Bridge.NET
                 return;
             }
 
+            /*
             if (type.IsNested)
             {
                 Exception.Throw("Nested types are not supported: {0}", type);
             }
+            */
 
             this.CheckConstructors(type, translator);
             this.CheckFields(type, translator);
@@ -287,13 +289,13 @@ namespace Bridge.NET
 
         public virtual void CheckMethodArguments(MethodDefinition method) 
         {
-            foreach(ParameterDefinition param in method.Parameters) 
+            /*foreach(ParameterDefinition param in method.Parameters) 
             {
                 if (param.ParameterType is ByReferenceType)
                 {
                     Exception.Throw("Reference parameters are not supported: {0}", method);
                 }
-            }
+            }*/
         }
 
         public virtual void CheckDuplicateNames(IDictionary<string, TypeDefinition> allTypes) 

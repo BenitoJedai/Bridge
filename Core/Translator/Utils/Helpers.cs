@@ -169,7 +169,7 @@ namespace Bridge.NET
 
         public static string GetTypeMapKey(TypeInfo info) 
         {
-            return (!string.IsNullOrEmpty(info.Namespace) ? (info.Namespace + ".") : "") + (!string.IsNullOrEmpty(info.GenericName) ? info.GenericName : info.FullName);
+            return !string.IsNullOrEmpty(info.GenericName) ? info.GenericFullName : info.FullName;
         }
 
         public static string GetTypeMapKey(TypeReference type) 
