@@ -10,6 +10,44 @@
 // @source resources/Core.js
 
 Bridge = {
+    ns: function (ns, scope) {
+        var nsParts = ns.split('.');
+
+        if (!scope) {
+            scope = window;
+        }
+
+        for (i = 0; i < nsParts.length; i++) {
+            if (typeof scope[nsParts[i]] == 'undefined') {
+                scope[nsParts[i]] = {};
+            }
+
+            scope = scope[nsParts[i]];
+        }
+
+        return scope;
+    },
+
+    getDefaultValue : function (type) {
+        if (Bridge.isFunction(type.getDefaultValue)) {
+            return type.getDefaultValue();
+        }
+        else if (type === Boolean) {
+            return false;
+        }
+        else if (type === Date) {
+            return new Date(0);
+        }
+        else if (type === Number) {
+            return 0;
+        }
+        return null;
+    },
+
+    getTypeName: function (type) {
+        return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
+    },
+
     is : function (obj, type) {
 	  if (typeof type == "string") {
         type = Bridge.unroll(type);
@@ -63,10 +101,6 @@ Bridge = {
 
 	  return result;
 	},
-
-	getTypeName : function(type) {	  
-	   return type.$name || '[native Object]';	  
-	},
 	
 	apply : function (obj, values) {
 	  var names = Bridge.getPropertyNames(values, false);
@@ -74,7 +108,7 @@ Bridge = {
 	  for (var i = 0; i < names.length; i++) {
 	    var name = names[i];
 
-	    if (typeof obj[name] == "function") {
+	    if (typeof obj[name] == "function" && typeof values[name] != "function") {
 	      obj[name](values[name]);
 	    }
 	    else {
@@ -98,7 +132,12 @@ Bridge = {
 	            Bridge.merge(toValue, value);
 	        }
 	        else {
-	            to[key] = value;
+	            if (typeof to[key] == "function" && typeof value != "function") {
+	                to[key](value);
+	            }
+	            else {
+	                to[key] = value;
+	            }	            
 	        }
 	    }
 
@@ -362,155 +401,181 @@ Bridge.hasValue = Bridge.nullable.hasValue;
 // @source resources/Class.js
 
 
+
 // Inspired by base2 and Prototype
 (function () {
-  var initializing = false,
-	    fnTest = /xyz/.test(function () { xyz; }) ? /\bbase\b/ : /.*/;
+    var initializing = false,
+          fnTest = /xyz/.test(function () { xyz; }) ? /\bbase\b/ : /.*/;
 
-  // The base Class implementation (does nothing)
-  Bridge.Class = function () { };
+    // The base Class implementation (does nothing)
+    Bridge.Class = function () { };
+    Bridge.Class.cache = {};
 
-  // Create a new Class that inherits from this class
-  Bridge.Class.extend = function (className, prop) {
-    var extend = prop.$extend,
-		statics = prop.$statics,
-		base = extend ? extend[0].prototype : this.prototype,
-		prototype,
-		nameParts,
-		scope = prop.$scope || window,
-		i,
-		name;
+    // Create a new Class that inherits from this class
+    Bridge.Class.extend = function (className, prop) {
+        var extend = prop.$extend,
+            statics = prop.$statics,
+            base = extend ? extend[0].prototype : this.prototype,
+            prototype,
+            nameParts,
+            scope = prop.$scope || window,
+            i,
+            name;
 
-    delete prop.$extend;
-    delete prop.$statics;
+        delete prop.$extend;
+        delete prop.$statics;
 
-    // Instantiate a base class (but only create the instance,
-    // don't run the init constructor)
-    initializing = true;
-    prototype = extend ? new extend[0]() : new Object();
-    initializing = false;
+        // Instantiate a base class (but only create the instance,
+        // don't run the init constructor)
+        initializing = true;
+        prototype = extend ? new extend[0]() : new Object();
+        initializing = false;
 
-    if (!prop.$multipleCtors && !prop.$init) {        
-        prop.$init = extend ? function () {
-            this.base();
-        } : function () { };
-    }
-
-    if (!prop.$multipleCtors && !prop.$init) {
-        prop.$init = extend ? function () {
-            this.base();
-        } : function () { };
-    }
-
-    if (!prop.$initMembers) {
-        prop.$initMembers = extend ? function () {
-            this.base();
-        } : function () { };
-    }
-
-    // Copy the properties over onto the new prototype
-    for (name in prop) {
-      // Check if we're overwriting an existing function
-      prototype[name] = typeof prop[name] == 'function' &&
-        typeof base[name] == 'function' && fnTest.test(prop[name]) ?
-        (function (name, fn) {
-          return function () {
-            var tmp = this.base;
-
-            // Add a new .base() method that is the same method
-            // but on the super-class
-            this.base = base[name];
-
-            // The method only need to be bound temporarily, so we
-            // remove it when we're done executing
-            var ret = fn.apply(this, arguments);
-
-            this.base = tmp;
-
-            return ret;
-          };
-        })(name, prop[name]) :
-        prop[name];
-    }
-
-    prototype.$$name = className;
-
-    // The dummy class constructor
-    function Class() {
-      if (!(this instanceof Class)) {
-        var args = Array.prototype.slice.call(arguments, 0),
-            object = Object.create(Class.prototype),
-            result = Class.apply(object, args);
-
-        return typeof result === 'object' ? result : object;
-      }
-
-      // All construction is actually done in the init method
-      if (!initializing) {
-        if (this.$initMembers) {
-            this.$initMembers();
+        if (!prop.$multipleCtors && !prop.$init) {
+            prop.$init = extend ? function () {
+                this.base();
+            } : function () { };
         }
 
-        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
-          this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+        if (!prop.$multipleCtors && !prop.$init) {
+            prop.$init = extend ? function () {
+                this.base();
+            } : function () { };
         }
-        else if (this.$ctorDetector) {
-          this.$ctorDetector.apply(this, arguments);
+
+        if (!prop.$initMembers) {
+            prop.$initMembers = extend ? function () {
+                this.base();
+            } : function () { };
         }
-        else if (this.$init) {
-          this.$init.apply(this, arguments);
+
+        // Copy the properties over onto the new prototype
+        for (name in prop) {
+            // Check if we're overwriting an existing function
+            prototype[name] = typeof prop[name] == 'function' &&
+              typeof base[name] == 'function' && fnTest.test(prop[name]) ?
+              (function (name, fn) {
+                  return function () {
+                      var tmp = this.base;
+
+                      // Add a new .base() method that is the same method
+                      // but on the super-class
+                      this.base = base[name];
+
+                      // The method only need to be bound temporarily, so we
+                      // remove it when we're done executing
+                      var ret = fn.apply(this, arguments);
+
+                      this.base = tmp;
+
+                      return ret;
+                  };
+              })(name, prop[name]) :
+              prop[name];
         }
-      }
-    }
 
-    // Populate our constructed prototype object
-    Class.prototype = prototype;
+        prototype.$$name = className;
 
-    // Enforce the constructor to be what we expect
-    Class.prototype.constructor = Class;
+        // The dummy class constructor
+        function Class() {
+            if (!(this instanceof Class)) {
+                var args = Array.prototype.slice.call(arguments, 0),
+                    object = Object.create(Class.prototype),
+                    result = Class.apply(object, args);
 
-    Class.$$name = className;
+                return typeof result === 'object' ? result : object;
+            }
 
-    if (statics) {
-      for (name in statics) {
-        Class[name] = statics[name];
-      }
-    }
+            // All construction is actually done in the init method
+            if (!initializing) {
+                if (this.$initMembers) {
+                    this.$initMembers();
+                }
 
-    nameParts = className.split('.');
+                if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
+                    this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+                }
+                else if (this.$ctorDetector) {
+                    this.$ctorDetector.apply(this, arguments);
+                }
+                else if (this.$init) {
+                    this.$init.apply(this, arguments);
+                }
+            }
+        }
 
-    for (i = 0; i < (nameParts.length - 1) ; i++) {
-      if (typeof scope[nameParts[i]] == 'undefined') {
-        scope[nameParts[i]] = {};
-      }
+        // Populate our constructed prototype object
+        Class.prototype = prototype;
 
-      scope = scope[nameParts[i]];
-    }
+        // Enforce the constructor to be what we expect
+        Class.prototype.constructor = Class;
 
-    scope[nameParts[nameParts.length - 1]] = Class;
+        Class.$$name = className;
 
-    if (!extend) {
-      extend = [Object];
-    }
+        if (statics) {
+            for (name in statics) {
+                Class[name] = statics[name];
+            }
+        }
 
-    Class.$$extend = extend;
+        scope = Bridge.Class.set(scope, className, Class);
 
-    for (i = 0; i < extend.length; i++) {
-      scope = extend[i];
+        if (!extend) {
+            extend = [Object];
+        }
 
-      if (!scope.$$inheritors) {
-        scope.$$inheritors = [];
-      }
+        Class.$$extend = extend;
 
-      scope.$$inheritors.push(Class);
-    }
+        for (i = 0; i < extend.length; i++) {
+            scope = extend[i];
 
-    if (Class.$init) {
-      Class.$init.call(Class);
-    }
+            if (!scope.$$inheritors) {
+                scope.$$inheritors = [];
+            }
 
-    return Class;
-  };
+            scope.$$inheritors.push(Class);
+        }
+
+        if (Class.$init) {
+            Class.$init.call(Class);
+        }
+
+        return Class;
+    };
+
+    Bridge.Class.set = function (scope, className, cls) {
+        var nameParts = className.split('.');
+
+        for (i = 0; i < (nameParts.length - 1) ; i++) {
+            if (typeof scope[nameParts[i]] == 'undefined') {
+                scope[nameParts[i]] = {};
+            }
+
+            scope = scope[nameParts[i]];
+        }
+
+        scope[nameParts[nameParts.length - 1]] = cls;
+
+        return scope;
+    };
+
+    Bridge.Class.genericName = function () {
+        var name = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+            name += '$' + Bridge.getTypeName(arguments[i]);
+        }
+        return name;
+    };
+
+    Bridge.Class.generic = function (className, scope, fn) {
+        if (!fn) {
+            fn = scope;
+            scope = window;
+        }
+
+        Bridge.Class.set(scope, className, fn);
+        return fn;
+    };
 })();
 
 // @source resources/Browser.js
@@ -1108,7 +1173,7 @@ Bridge.Class.extend('Bridge.Task', {
                 task.setResult(value);
             };
 	
-            args = args.push(callback);
+            args.push(callback);
 
             target[method].apply(target, args);
             return task;
@@ -1129,8 +1194,28 @@ Bridge.Class.extend('Bridge.Task', {
             return task;
         },
 
+        fromCallbackOptions: function (target, method, name) {
+            var task = new Bridge.Task(),
+                args = Array.prototype.slice.call(arguments, 3),
+                callback;
+
+            callback = function (value) {
+                task.setResult(value);
+            };
+
+            args[0] = args[0] || {};
+            args[0][name] = callback;
+
+            target[method].apply(target, args);
+            return task;
+        },
+
         fromPromise : function (promise, handler) {
             var task = new Bridge.Task();
+
+            if (!promise.then) {
+                promise = promise.promise();
+            }
 
             promise.then(function() {
                 task.setResult(handler ? handler.apply(null, arguments) : arguments);

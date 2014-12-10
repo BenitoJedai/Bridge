@@ -134,7 +134,7 @@ Bridge.Class.extend('Bridge.Task', {
                 task.setResult(value);
             };
 	
-            args = args.push(callback);
+            args.push(callback);
 
             target[method].apply(target, args);
             return task;
@@ -155,8 +155,28 @@ Bridge.Class.extend('Bridge.Task', {
             return task;
         },
 
+        fromCallbackOptions: function (target, method, name) {
+            var task = new Bridge.Task(),
+                args = Array.prototype.slice.call(arguments, 3),
+                callback;
+
+            callback = function (value) {
+                task.setResult(value);
+            };
+
+            args[0] = args[0] || {};
+            args[0][name] = callback;
+
+            target[method].apply(target, args);
+            return task;
+        },
+
         fromPromise : function (promise, handler) {
             var task = new Bridge.Task();
+
+            if (!promise.then) {
+                promise = promise.promise();
+            }
 
             promise.then(function() {
                 task.setResult(handler ? handler.apply(null, arguments) : arguments);

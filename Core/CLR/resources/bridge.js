@@ -7,7 +7,14 @@
  */
 
 
-Bridge={is:function(obj,type){if(typeof type=="string"){type=Bridge.unroll(type);}
+Bridge={ns:function(ns,scope){var nsParts=ns.split('.');if(!scope){scope=window;}
+for(i=0;i<nsParts.length;i++){if(typeof scope[nsParts[i]]=='undefined'){scope[nsParts[i]]={};}
+scope=scope[nsParts[i]];}
+return scope;},getDefaultValue:function(type){if(Bridge.isFunction(type.getDefaultValue)){return type.getDefaultValue();}
+else if(type===Boolean){return false;}
+else if(type===Date){return new Date(0);}
+else if(type===Number){return 0;}
+return null;},getTypeName:function(type){return type.$$name||(type.toString().match(/^\s*function\s*([^\s(]+)/)||[])[1]||"Object";},is:function(obj,type){if(typeof type=="string"){type=Bridge.unroll(type);}
 if(obj==null){return false;}
 if(Bridge.isFunction(type.$is)){return type.$is(obj);}
 if(Bridge.isFunction(type.instanceOf)){return type.instanceOf(obj);}
@@ -16,10 +23,11 @@ if(Bridge.isArray(obj)&&type==Bridge.IEnumerable){return true;}
 if(!type.$$inheritors){return false;}
 var inheritors=type.$$inheritors;for(var i=0;i<inheritors.length;i++){if(Bridge.is(obj,inheritors[i])){return true;}}
 return false;},as:function(obj,type){return Bridge.is(obj,type)?obj:null;},cast:function(obj,type){var result=Bridge.as(obj,type);if(result==null){throw Error('Unable to cast type '+Bridge.getTypeName(obj.constructor)+' to type '+Bridge.getTypeName(type));}
-return result;},getTypeName:function(type){return type.$name||'[native Object]';},apply:function(obj,values){var names=Bridge.getPropertyNames(values,false);for(var i=0;i<names.length;i++){var name=names[i];if(typeof obj[name]=="function"){obj[name](values[name]);}
+return result;},apply:function(obj,values){var names=Bridge.getPropertyNames(values,false);for(var i=0;i<names.length;i++){var name=names[i];if(typeof obj[name]=="function"&&typeof values[name]!="function"){obj[name](values[name]);}
 else{obj[name]=values[name];}}
 return obj;},merge:function(to,from){var object,key,value,toValue;for(key in from){value=from[key];if(value&&value.constructor===Object){toValue=to[key];Bridge.merge(toValue,value);}
-else{to[key]=value;}}
+else{if(typeof to[key]=="function"&&typeof value!="function"){to[key](value);}
+else{to[key]=value;}}}
 return to;},getEnumerator:function(obj){if(obj&&obj.getEnumerator){return obj.getEnumerator();}
 if((Object.prototype.toString.call(obj)==='[object Array]')||(obj&&Bridge.isDefined(obj.length))){return new Bridge.ArrayEnumerator(obj);}
 throw Error('Cannot create enumerator');},getPropertyNames:function(obj,includeFunctions){var names=[],name;for(name in obj){if(includeFunctions||typeof obj[name]!=='function'){names.push(name);}}
@@ -48,7 +56,7 @@ result.reverse();return Bridge.fn.$build(result);}}};
 Bridge.nullable={hasValue:function(obj){return(obj!==null)&&(obj!==undefined);},getValue:function(obj){if(!Bridge.nullable.hasValue(obj)){throw Error("Nullable instance doesn't have a value.");}
 return obj;},getValueOrDefault:function(obj,defValue){return Bridge.nullable.hasValue(obj)?obj:defValue;}};Bridge.hasValue=Bridge.nullable.hasValue;
 
-(function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;if(!prop.$multipleCtors&&!prop.$init){prop.$init=extend?function(){this.base();}:function(){};}
+(function(){var initializing=false,fnTest=/xyz/.test(function(){xyz;})?/\bbase\b/:/.*/;Bridge.Class=function(){};Bridge.Class.cache={};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;if(!prop.$multipleCtors&&!prop.$init){prop.$init=extend?function(){this.base();}:function(){};}
 if(!prop.$multipleCtors&&!prop.$init){prop.$init=extend?function(){this.base();}:function(){};}
 if(!prop.$initMembers){prop.$initMembers=extend?function(){this.base();}:function(){};}
 for(name in prop){prototype[name]=typeof prop[name]=='function'&&typeof base[name]=='function'&&fnTest.test(prop[name])?(function(name,fn){return function(){var tmp=this.base;this.base=base[name];var ret=fn.apply(this,arguments);this.base=tmp;return ret;};})(name,prop[name]):prop[name];}
@@ -58,13 +66,15 @@ if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=='string'&&Bridg
 else if(this.$ctorDetector){this.$ctorDetector.apply(this,arguments);}
 else if(this.$init){this.$init.apply(this,arguments);}}}
 Class.prototype=prototype;Class.prototype.constructor=Class;Class.$$name=className;if(statics){for(name in statics){Class[name]=statics[name];}}
-nameParts=className.split('.');for(i=0;i<(nameParts.length-1);i++){if(typeof scope[nameParts[i]]=='undefined'){scope[nameParts[i]]={};}
-scope=scope[nameParts[i]];}
-scope[nameParts[nameParts.length-1]]=Class;if(!extend){extend=[Object];}
+scope=Bridge.Class.set(scope,className,Class);if(!extend){extend=[Object];}
 Class.$$extend=extend;for(i=0;i<extend.length;i++){scope=extend[i];if(!scope.$$inheritors){scope.$$inheritors=[];}
 scope.$$inheritors.push(Class);}
 if(Class.$init){Class.$init.call(Class);}
-return Class;};})();
+return Class;};Bridge.Class.set=function(scope,className,cls){var nameParts=className.split('.');for(i=0;i<(nameParts.length-1);i++){if(typeof scope[nameParts[i]]=='undefined'){scope[nameParts[i]]={};}
+scope=scope[nameParts[i]];}
+scope[nameParts[nameParts.length-1]]=cls;return scope;};Bridge.Class.genericName=function(){var name=arguments[0];for(var i=1;i<arguments.length;i++){name+='$'+Bridge.getTypeName(arguments[i]);}
+return name;};Bridge.Class.generic=function(className,scope,fn){if(!fn){fn=scope;scope=window;}
+Bridge.Class.set(scope,className,fn);return fn;};})();
 
 (function(){var check=function(regex){return regex.test(navigator.userAgent);},isStrict=document.compatMode=='CSS1Compat',version=function(is,regex){var m;return(is&&(m=regex.exec(navigator.userAgent)))?parseFloat(m[1]):0;},docMode=document.documentMode,isOpera=check(/opera/),isOpera10_5=isOpera&&check(/version\/10\.5/),isChrome=check(/\bchrome\b/),isWebKit=check(/webkit/),isSafari=!isChrome&&check(/safari/),isSafari2=isSafari&&check(/applewebkit\/4/),isSafari3=isSafari&&check(/version\/3/),isSafari4=isSafari&&check(/version\/4/),isSafari5_0=isSafari&&check(/version\/5\.0/),isSafari5=isSafari&&check(/version\/5/),isIE=!isOpera&&(check(/msie/)||check(/trident/)),isIE7=isIE&&((check(/msie 7/)&&docMode!=8&&docMode!=9&&docMode!=10)||docMode==7),isIE8=isIE&&((check(/msie 8/)&&docMode!=7&&docMode!=9&&docMode!=10)||docMode==8),isIE9=isIE&&((check(/msie 9/)&&docMode!=7&&docMode!=8&&docMode!=10)||docMode==9),isIE10=isIE&&((check(/msie 10/)&&docMode!=7&&docMode!=8&&docMode!=9)||docMode==10),isIE11=isIE&&((check(/trident\/7\.0/)&&docMode!=7&&docMode!=8&&docMode!=9&&docMode!=10)||docMode==11),isIE6=isIE&&check(/msie 6/),isGecko=!isWebKit&&!isIE&&check(/gecko/),isGecko3=isGecko&&check(/rv:1\.9/),isGecko4=isGecko&&check(/rv:2\.0/),isGecko5=isGecko&&check(/rv:5\./),isGecko10=isGecko&&check(/rv:10\./),isFF3_0=isGecko3&&check(/rv:1\.9\.0/),isFF3_5=isGecko3&&check(/rv:1\.9\.1/),isFF3_6=isGecko3&&check(/rv:1\.9\.2/),isWindows=check(/windows|win32/),isMac=check(/macintosh|mac os x/),isLinux=check(/linux/),scrollbarSize=null,chromeVersion=version(true,/\bchrome\/(\d+\.\d+)/),firefoxVersion=version(true,/\bfirefox\/(\d+\.\d+)/),ieVersion=version(isIE,/msie (\d+\.\d+)/),operaVersion=version(isOpera,/version\/(\d+\.\d+)/),safariVersion=version(isSafari,/version\/(\d+\.\d+)/),webKitVersion=version(isWebKit,/webkit\/(\d+\.\d+)/),isSecure=/^https/i.test(window.location.protocol),isiPhone=/iPhone/i.test(navigator.platform),isiPod=/iPod/i.test(navigator.platform),isiPad=/iPad/i.test(navigator.userAgent),isBlackberry=/Blackberry/i.test(navigator.userAgent),isAndroid=/Android/i.test(navigator.userAgent),isDesktop=isMac||isWindows||(isLinux&&!isAndroid),isTablet=isiPad,isPhone=!isDesktop&&!isTablet;Bridge.apply(Bridge,{isStrict:isStrict,isIEQuirks:isIE&&(!isStrict&&(isIE6||isIE7||isIE8||isIE9)),isOpera:isOpera,isOpera10_5:isOpera10_5,isWebKit:isWebKit,isChrome:isChrome,isSafari:isSafari,isSafari3:isSafari3,isSafari4:isSafari4,isSafari5:isSafari5,isSafari5_0:isSafari5_0,isSafari2:isSafari2,isIE:isIE,isIE6:isIE6,isIE7:isIE7,isIE7m:isIE6||isIE7,isIE7p:isIE&&!isIE6,isIE8:isIE8,isIE8m:isIE6||isIE7||isIE8,isIE8p:isIE&&!(isIE6||isIE7),isIE9:isIE9,isIE9m:isIE6||isIE7||isIE8||isIE9,isIE9p:isIE&&!(isIE6||isIE7||isIE8),isIE10:isIE10,isIE10m:isIE6||isIE7||isIE8||isIE9||isIE10,isIE10p:isIE&&!(isIE6||isIE7||isIE8||isIE9),isIE11:isIE11,isIE11m:isIE6||isIE7||isIE8||isIE9||isIE10||isIE11,isIE11p:isIE&&!(isIE6||isIE7||isIE8||isIE9||isIE10),isGecko:isGecko,isGecko3:isGecko3,isGecko4:isGecko4,isGecko5:isGecko5,isGecko10:isGecko10,isFF3_0:isFF3_0,isFF3_5:isFF3_5,isFF3_6:isFF3_6,isFF4:4<=firefoxVersion&&firefoxVersion<5,isFF5:5<=firefoxVersion&&firefoxVersion<6,isFF10:10<=firefoxVersion&&firefoxVersion<11,isLinux:isLinux,isWindows:isWindows,isMac:isMac,chromeVersion:chromeVersion,firefoxVersion:firefoxVersion,ieVersion:ieVersion,operaVersion:operaVersion,safariVersion:safariVersion,webKitVersion:webKitVersion,isSecure:isSecure,isiPhone:isiPhone,isiPod:isiPod,isiPad:isiPad,isBlackberry:isBlackberry,isAndroid:isAndroid,isDesktop:isDesktop,isTablet:isTablet,isPhone:isPhone,iOS:isiPhone||isiPad||isiPod,standalone:!!window.navigator.standalone});})();
 
@@ -102,7 +112,8 @@ else{task.setResult(result);}}});}
 return task;},whenAny:function(tasks){if(!Bridge.isArray(tasks)){tasks=Array.prototype.slice.call(arguments,0);}
 if(!tasks.length){throw new Error('At least one task is required');}
 var task=new Bridge.Task(),i;for(i=0;i<tasks.length;i++){tasks[i].continueWith(function(t){switch(t.status){case Bridge.TaskStatus.ranToCompletion:task.complete(t);break;case Bridge.TaskStatus.canceled:task.cancel();break;case Bridge.TaskStatus.faulted:task.fail(t.error);break;default:throw new Error('Invalid task status: '+t.status);}});}
-return task;},fromCallback:function(target,method){var task=new Bridge.Task(),args=Array.prototype.slice.call(arguments,2),callback;callback=function(value){task.setResult(value);};args=args.push(callback);target[method].apply(target,args);return task;},fromCallbackResult:function(target,method,resultHandler){var task=new Bridge.Task(),args=Array.prototype.slice.call(arguments,3),callback;callback=function(value){task.setResult(value);};resultHandler(args,callback);target[method].apply(target,args);return task;},fromPromise:function(promise,handler){var task=new Bridge.Task();promise.then(function(){task.setResult(handler?handler.apply(null,arguments):arguments);},function(){task.setError(new Error(Array.prototype.slice.call(arguments,0)));});return task;}},continueWith:function(continuationAction){var task=new Bridge.Task(),me=this,fn=function(){try{task.setResult(continuationAction(me));}
+return task;},fromCallback:function(target,method){var task=new Bridge.Task(),args=Array.prototype.slice.call(arguments,2),callback;callback=function(value){task.setResult(value);};args.push(callback);target[method].apply(target,args);return task;},fromCallbackResult:function(target,method,resultHandler){var task=new Bridge.Task(),args=Array.prototype.slice.call(arguments,3),callback;callback=function(value){task.setResult(value);};resultHandler(args,callback);target[method].apply(target,args);return task;},fromCallbackOptions:function(target,method,name){var task=new Bridge.Task(),args=Array.prototype.slice.call(arguments,3),callback;callback=function(value){task.setResult(value);};args[0]=args[0]||{};args[0][name]=callback;target[method].apply(target,args);return task;},fromPromise:function(promise,handler){var task=new Bridge.Task();if(!promise.then){promise=promise.promise();}
+promise.then(function(){task.setResult(handler?handler.apply(null,arguments):arguments);},function(){task.setError(new Error(Array.prototype.slice.call(arguments,0)));});return task;}},continueWith:function(continuationAction){var task=new Bridge.Task(),me=this,fn=function(){try{task.setResult(continuationAction(me));}
 catch(e){task.setError(e);}};if(this.isCompleted()){setTimeout(fn,0);}
 else{this.callbacks.push(fn);}
 return task;},start:function(){if(this.status!==Bridge.TaskStatus.created){throw new Error('Task was already started.');}

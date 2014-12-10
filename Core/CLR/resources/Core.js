@@ -2,6 +2,44 @@
 // @source resources/Core.js
 
 Bridge = {
+    ns: function (ns, scope) {
+        var nsParts = ns.split('.');
+
+        if (!scope) {
+            scope = window;
+        }
+
+        for (i = 0; i < nsParts.length; i++) {
+            if (typeof scope[nsParts[i]] == 'undefined') {
+                scope[nsParts[i]] = {};
+            }
+
+            scope = scope[nsParts[i]];
+        }
+
+        return scope;
+    },
+
+    getDefaultValue : function (type) {
+        if (Bridge.isFunction(type.getDefaultValue)) {
+            return type.getDefaultValue();
+        }
+        else if (type === Boolean) {
+            return false;
+        }
+        else if (type === Date) {
+            return new Date(0);
+        }
+        else if (type === Number) {
+            return 0;
+        }
+        return null;
+    },
+
+    getTypeName: function (type) {
+        return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
+    },
+
     is : function (obj, type) {
 	  if (typeof type == "string") {
         type = Bridge.unroll(type);
@@ -55,10 +93,6 @@ Bridge = {
 
 	  return result;
 	},
-
-	getTypeName : function(type) {	  
-	   return type.$name || '[native Object]';	  
-	},
 	
 	apply : function (obj, values) {
 	  var names = Bridge.getPropertyNames(values, false);
@@ -66,7 +100,7 @@ Bridge = {
 	  for (var i = 0; i < names.length; i++) {
 	    var name = names[i];
 
-	    if (typeof obj[name] == "function") {
+	    if (typeof obj[name] == "function" && typeof values[name] != "function") {
 	      obj[name](values[name]);
 	    }
 	    else {
@@ -90,7 +124,12 @@ Bridge = {
 	            Bridge.merge(toValue, value);
 	        }
 	        else {
-	            to[key] = value;
+	            if (typeof to[key] == "function" && typeof value != "function") {
+	                to[key](value);
+	            }
+	            else {
+	                to[key] = value;
+	            }	            
 	        }
 	    }
 
