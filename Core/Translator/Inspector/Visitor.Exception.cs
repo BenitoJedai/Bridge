@@ -192,14 +192,6 @@ namespace Bridge.NET
 			}
         }
 
-        public virtual void VisitConstraint(Constraint constraint)
-        {
-            if (this.ThrowException)
-			{
-				throw this.CreateException(constraint);
-			}
-        }
-
         public virtual void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
         {
             if (this.ThrowException)
@@ -867,6 +859,14 @@ namespace Bridge.NET
 			{
 				throw this.CreateException(yieldReturnStatement);
 			}
-        }        
+        }
+
+        public virtual void VisitErrorNode(AstNode errorNode)
+        {
+            if (this.ThrowException)
+            {
+                throw this.CreateException(errorNode);
+            }
+        }
     }
 }

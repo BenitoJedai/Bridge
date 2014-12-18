@@ -3,7 +3,7 @@ using Bridge.CLR;
 namespace System.Collections.Generic 
 {
     [Ignore]
-    [Name("Object")]
+    [Namespace("Bridge")]
     public sealed class KeyValuePair<TKey, TValue> 
     {
         internal KeyValuePair() 

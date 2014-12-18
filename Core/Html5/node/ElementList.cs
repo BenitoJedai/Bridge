@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Bridge.CLR;
+using System.Collections;
 
 namespace Bridge.Html5
 {
@@ -45,6 +46,11 @@ namespace Bridge.Html5
         public readonly int Length;
 
         public virtual IEnumerator<Element> GetEnumerator()
+        {
+            return null;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return null;
         }

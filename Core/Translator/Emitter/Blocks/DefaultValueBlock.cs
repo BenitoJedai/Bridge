@@ -20,7 +20,16 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.Write("null");
+            var resolveResult = this.Emitter.Resolver.ResolveNode(DefaultValueExpression.Type, this.Emitter);
+
+            if (!resolveResult.IsError && resolveResult.Type.IsReferenceType.HasValue && resolveResult.Type.IsReferenceType.Value)
+            {
+                this.Write("null");
+            }
+            else
+            {
+                this.Write("Bridge.getDefaultValue(" + DefaultValueExpression.Type.ToString() + ")");
+            }
         }
     }
 }

@@ -336,11 +336,11 @@ namespace Bridge.NET
             return value.Replace("\n", "\n" + indent);
         }
 
-        protected virtual void EnsureComma()
+        protected virtual void EnsureComma(bool newLine = true)
         {
             if (this.Emitter.Comma)
             {
-                this.WriteComma(true);
+                this.WriteComma(newLine);
                 this.Emitter.Comma = false;
             }
         }

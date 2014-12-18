@@ -3,7 +3,7 @@ using Bridge.CLR;
 namespace System.Collections.Generic 
 {
     [Ignore]
-    [Name("Bridge.List")]
+    [Namespace("Bridge")]
     public sealed class List<T> : ICollection<T> 
     {
         public List() 
@@ -59,6 +59,11 @@ namespace System.Collections.Generic
         public bool Contains(T item) 
         {
             return false;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return null;
         }
 
         public IEnumerator<T> GetEnumerator() 

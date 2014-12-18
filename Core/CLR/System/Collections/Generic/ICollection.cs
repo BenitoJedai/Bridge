@@ -3,7 +3,7 @@ using Bridge.CLR;
 namespace System.Collections.Generic 
 {
     [Ignore]
-    [Name("Bridge.ICollection")]
+    [Namespace("Bridge")]
     public interface ICollection<T> : IEnumerable<T> 
     {
         int Count 
@@ -11,7 +11,9 @@ namespace System.Collections.Generic
             get;
         }
 
-        T Get(int index);
-        void Set(int index, T value);
+        void Add(T item);
+        void Clear();
+        bool Contains(T item);
+        bool Remove(T item);
     }
 }

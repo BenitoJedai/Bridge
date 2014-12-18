@@ -11,7 +11,19 @@ namespace Bridge.NET
             this.Expressions = expressions;
         }
 
+        public TypeExpressionListBlock(Emitter emitter, IEnumerable<AstType> types)
+        {
+            this.Emitter = emitter;
+            this.Types = types;
+        }
+
         public IEnumerable<TypeParamExpression> Expressions
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<AstType> Types
         {
             get;
             set;
@@ -19,7 +31,14 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.EmitExpressionList(this.Expressions);
+            if (this.Expressions != null)
+            {
+                this.EmitExpressionList(this.Expressions);
+            }
+            else if (this.Types != null)
+            {
+                this.EmitExpressionList(this.Types);
+            }
         }
 
         protected virtual void EmitExpressionList(IEnumerable<TypeParamExpression> expressions)
@@ -35,6 +54,22 @@ namespace Bridge.NET
 
                 needComma = true;
                 this.Write(TypeBlock.TranslateTypeReference(expr.AstType, this.Emitter));
+            }
+        }
+
+        protected virtual void EmitExpressionList(IEnumerable<AstType> types)
+        {
+            bool needComma = false;
+
+            foreach (var type in types)
+            {
+                if (needComma)
+                {
+                    this.WriteComma();
+                }
+
+                needComma = true;
+                this.Write(TypeBlock.TranslateTypeReference(type, this.Emitter));
             }
         }
     }

@@ -147,6 +147,15 @@ namespace ICSharpCode.NRefactory.CSharp
 					needsIndent = true;
 					isAtStartOfLine = true;
 					break;
+				case CommentType.MultiLineDocumentation:
+					textWriter.Write("/**");
+					textWriter.Write(content);
+					textWriter.Write("*/");
+					column += 3;
+					UpdateEndLocation(content, ref line, ref column);
+					column += 2;
+					isAtStartOfLine = false;
+					break;
 				default:
 					textWriter.Write(content);
 					column += content.Length;
@@ -321,7 +330,11 @@ namespace ICSharpCode.NRefactory.CSharp
 			}
 		}
 		
-		static string ConvertCharLiteral(char ch)
+		/// <summary>
+		/// Gets the escape sequence for the specified character within a char literal.
+		/// Does not include the single quotes surrounding the char literal.
+		/// </summary>
+		public static string ConvertCharLiteral(char ch)
 		{
 			if (ch == '\'') {
 				return "\\'";
@@ -333,7 +346,7 @@ namespace ICSharpCode.NRefactory.CSharp
 		/// Gets the escape sequence for the specified character.
 		/// </summary>
 		/// <remarks>This method does not convert ' or ".</remarks>
-		public static string ConvertChar(char ch)
+		static string ConvertChar(char ch)
 		{
 			switch (ch) {
 				case '\\':

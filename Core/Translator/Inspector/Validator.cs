@@ -179,17 +179,18 @@ namespace Bridge.NET
             if (nsAtrr != null && nsAtrr.ConstructorArguments.Count > 0)
             {
                 var arg = nsAtrr.ConstructorArguments[0];
+                name = Bridge.NET.Helpers.ReplaceSpecialChars(type.Name);
 
                 if (arg.Value is bool && !((bool)arg.Value))
                 {
-                    return type.Name;
+                    return name;
                 }
                 
                 if (arg.Value is string) 
                 {
                     string ns = arg.Value.ToString();
 
-                    return (!string.IsNullOrWhiteSpace(ns) ? (ns + ".") : "") + type.Name;
+                    return (!string.IsNullOrWhiteSpace(ns) ? (ns + ".") : "") + name;
                 }
             }
 

@@ -64,5 +64,8 @@ namespace Bridge.NET
         {
             //throw this.CreateException(newLineNode);
         }
+        public virtual void VisitConstraint(Constraint constraint)
+        {            
+        }
     }
 }

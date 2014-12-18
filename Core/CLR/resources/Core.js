@@ -20,6 +20,40 @@ Bridge = {
         return scope;
     },
 
+    getHashCode : function (value) {
+        if (Bridge.isEmpty(value, true)) {
+            throw new Error('HashCode cannot be calculated for empty value');
+        }
+
+        if (Bridge.isFunction(value.getHashCode)) {
+            return value.getHashCode();
+        }
+
+        if (Bridge.isBoolean(value)) {
+            return obj ? 1 : 0;
+        }
+
+        if (Bridge.isDate(value)) {
+            return value.valueOf() & 0xFFFFFFFF;
+        }
+
+        if (Bridge.isNumber(value)) {            
+            value = value.toExponential();
+            return parseInt(value.substr(0, value.indexOf('e')).replace('.', ''), 10) & 0xFFFFFFFF;
+        }        
+
+        if (Bridge.isString(value)) {
+            var hash = 0,
+                i;
+            for (i = 0; i < value.length; i++) {
+                hash = (((hash << 5) - hash) + value.charCodeAt(i)) & 0xFFFFFFFF;
+            }
+            return hash;
+        }
+        
+        return value.$$hashCode || (value.$$hashCode = (Math.random() * 0x100000000) | 0);
+    },
+
     getDefaultValue : function (type) {
         if (Bridge.isFunction(type.getDefaultValue)) {
             return type.getDefaultValue();
@@ -114,22 +148,37 @@ Bridge = {
 	merge: function (to, from) {
 	    var object,
             key,
+			i,
             value,
-            toValue;
+            toValue,
+			fn;
 
-	    for (key in from) {
-	        value = from[key];
-	        if (value && value.constructor === Object) {
-	            toValue = to[key];
-	            Bridge.merge(toValue, value);
+	    if (Bridge.isArray(from) && Bridge.isFunction(to.add || to.push)) {
+	        fn = Bridge.isArray(to) ? to.push : to.add;
+
+	        for (i = 0; i < from.length; i++) {
+	            fn.apply(to, from[i]);
 	        }
-	        else {
+	    }
+	    else {
+	        for (key in from) {
+	            value = from[key];
+
 	            if (typeof to[key] == "function" && typeof value != "function") {
-	                to[key](value);
+	                if (key.match(/^\s*get[A-Z]/)) {
+	                    Bridge.merge(to[key](), value);
+	                }
+	                else {
+	                    to[key](value);
+	                }
+	            }
+	            else if (value && value.constructor === Object) {
+	                toValue = to[key];
+	                Bridge.merge(toValue, value);
 	            }
 	            else {
 	                to[key] = value;
-	            }	            
+	            }
 	        }
 	    }
 
@@ -162,14 +211,18 @@ Bridge = {
 	    return names;
 	},
 
-	isDefined: function (value) {
-	    return typeof value !== 'undefined';
+	isDefined: function (value, noNull) {
+	    return typeof value !== 'undefined' && (noNull ? value != null : true);
+	},
+
+	isEmpty: function (value, allowEmpty) {
+	    return (value == null) || (!allowEmpty ? value === '' : false) || ((!allowEmpty && Bridge.isArray(value)) ? value.length === 0 : false);
 	},
 
 	toArray: function (ienumerable) {
 	    var i,
 	        item,
-          len,
+            len,
 	        result = [];
 
 	    if (Bridge.isArray(ienumerable)) {
@@ -180,8 +233,8 @@ Bridge = {
 	    else {
 	      i = Bridge.getEnumerator(ienumerable);
 
-	      while (i.hasNext()) {
-	        item = i.next();
+	      while (i.moveNext()) {
+	        item = i.getCurrent();
 	        result.push(item);
 	      }
 	    }	    
@@ -203,6 +256,18 @@ Bridge = {
 
   isNull: function (value) {
     return (value === null) || (value === undefined);
+  },
+
+  isBoolean: function (value) {
+      return typeof value === 'boolean';
+  },
+
+  isNumber: function (value) {
+      return typeof value === 'number' && isFinite(value);
+  },
+
+  isString: function (value) {
+      return typeof value === 'string';
   },
 
   unroll: function (value) {

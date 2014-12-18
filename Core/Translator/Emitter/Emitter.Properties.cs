@@ -18,8 +18,8 @@ namespace Bridge.NET
         public const string AS = "as";
         public const string IS = "is";
         public const string ENUMERATOR = "getEnumerator";
-        public const string HAS_NEXT = "hasNext";
-        public const string NEXT = "next";
+        public const string MOVE_NEXT = "moveNext";
+        public const string GET_CURRENT = "getCurrent";
         public const string APPLY_OBJECT = "apply";
         public const string MERGE_OBJECT = "merge";
         public const string FIX_ARGUMENT_NAME = "__autofix__";

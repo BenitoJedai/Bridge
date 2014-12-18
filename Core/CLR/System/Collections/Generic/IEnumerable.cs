@@ -3,9 +3,9 @@ using Bridge.CLR;
 namespace System.Collections.Generic 
 {
     [Ignore]
-    [Name("Bridge.IEnumerable")]
-    public interface IEnumerable<T> 
+    [Namespace("Bridge")]
+    public interface IEnumerable<T> : IEnumerable
     {
-        IEnumerator<T> GetEnumerator();
+        new IEnumerator<T> GetEnumerator();
     }
 }

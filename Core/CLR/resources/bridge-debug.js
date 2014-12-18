@@ -28,6 +28,40 @@ Bridge = {
         return scope;
     },
 
+    getHashCode : function (value) {
+        if (Bridge.isEmpty(value, true)) {
+            throw new Error('HashCode cannot be calculated for empty value');
+        }
+
+        if (Bridge.isFunction(value.getHashCode)) {
+            return value.getHashCode();
+        }
+
+        if (Bridge.isBoolean(value)) {
+            return obj ? 1 : 0;
+        }
+
+        if (Bridge.isDate(value)) {
+            return value.valueOf() & 0xFFFFFFFF;
+        }
+
+        if (Bridge.isNumber(value)) {            
+            value = value.toExponential();
+            return parseInt(value.substr(0, value.indexOf('e')).replace('.', ''), 10) & 0xFFFFFFFF;
+        }        
+
+        if (Bridge.isString(value)) {
+            var hash = 0,
+                i;
+            for (i = 0; i < value.length; i++) {
+                hash = (((hash << 5) - hash) + value.charCodeAt(i)) & 0xFFFFFFFF;
+            }
+            return hash;
+        }
+        
+        return value.$$hashCode || (value.$$hashCode = (Math.random() * 0x100000000) | 0);
+    },
+
     getDefaultValue : function (type) {
         if (Bridge.isFunction(type.getDefaultValue)) {
             return type.getDefaultValue();
@@ -122,22 +156,37 @@ Bridge = {
 	merge: function (to, from) {
 	    var object,
             key,
+			i,
             value,
-            toValue;
+            toValue,
+			fn;
 
-	    for (key in from) {
-	        value = from[key];
-	        if (value && value.constructor === Object) {
-	            toValue = to[key];
-	            Bridge.merge(toValue, value);
+	    if (Bridge.isArray(from) && Bridge.isFunction(to.add || to.push)) {
+	        fn = Bridge.isArray(to) ? to.push : to.add;
+
+	        for (i = 0; i < from.length; i++) {
+	            fn.apply(to, from[i]);
 	        }
-	        else {
+	    }
+	    else {
+	        for (key in from) {
+	            value = from[key];
+
 	            if (typeof to[key] == "function" && typeof value != "function") {
-	                to[key](value);
+	                if (key.match(/^\s*get[A-Z]/)) {
+	                    Bridge.merge(to[key](), value);
+	                }
+	                else {
+	                    to[key](value);
+	                }
+	            }
+	            else if (value && value.constructor === Object) {
+	                toValue = to[key];
+	                Bridge.merge(toValue, value);
 	            }
 	            else {
 	                to[key] = value;
-	            }	            
+	            }
 	        }
 	    }
 
@@ -170,14 +219,18 @@ Bridge = {
 	    return names;
 	},
 
-	isDefined: function (value) {
-	    return typeof value !== 'undefined';
+	isDefined: function (value, noNull) {
+	    return typeof value !== 'undefined' && (noNull ? value != null : true);
+	},
+
+	isEmpty: function (value, allowEmpty) {
+	    return (value == null) || (!allowEmpty ? value === '' : false) || ((!allowEmpty && Bridge.isArray(value)) ? value.length === 0 : false);
 	},
 
 	toArray: function (ienumerable) {
 	    var i,
 	        item,
-          len,
+            len,
 	        result = [];
 
 	    if (Bridge.isArray(ienumerable)) {
@@ -188,8 +241,8 @@ Bridge = {
 	    else {
 	      i = Bridge.getEnumerator(ienumerable);
 
-	      while (i.hasNext()) {
-	        item = i.next();
+	      while (i.moveNext()) {
+	        item = i.getCurrent();
 	        result.push(item);
 	      }
 	    }	    
@@ -211,6 +264,18 @@ Bridge = {
 
   isNull: function (value) {
     return (value === null) || (value === undefined);
+  },
+
+  isBoolean: function (value) {
+      return typeof value === 'boolean';
+  },
+
+  isNumber: function (value) {
+      return typeof value === 'number' && isFinite(value);
+  },
+
+  isString: function (value) {
+      return typeof value === 'string';
   },
 
   unroll: function (value) {
@@ -702,341 +767,544 @@ Bridge.hasValue = Bridge.nullable.hasValue;
     standalone: !!window.navigator.standalone
   });
 })();
-
-// @source resources/Collections.js
-
 Bridge.Class.extend('Bridge.IEnumerable', {});
 Bridge.Class.extend('Bridge.IEnumerator', {});
+Bridge.Class.extend('Bridge.IEqualityComparer', {});
 
-Bridge.Class.extend('Bridge.Dictionary', {
-  $extend: [Bridge.IEnumerable],
-
-  $init: function (obj) {
-    if (Object.prototype.toString.call(obj) === '[object Object]') {
-      this.entries = obj;
-      this.count = Bridge.getPropertyNames(this.entries).length;
-    }
-    else if (Bridge.is(obj, Bridge.Dictionary)) {
-      this.entries = {};
-      this.count = 0;
-
-      for (var key in obj) {
-        this.entries[key] = obj[key];
-        this.count++;
-      }
-    }
-    else {
-      this.entries = {};
-      this.count = 0;
-    }
-  },
-
-  getKeys: function () {
-    return Bridge.getPropertyNames(this.entries, false);
-  },
-
-  getValues: function () {
-    var keys = this.getKeys(),
-        result = [];
-
-    for (var i = 0; i < keys.length; i++) {
-      result.push(this.entries[keys[i]]);
-    }
-
-    return result;
-  },
-
-  clear: function () {
-    this.entries = {};
-    this.count = 0;
-  },
-
-  containsKey: function (key) {
-    return Bridge.isDefined(this.entries[key]);
-  },
-
-  containsValue: function (value) {
-    var keys = this.getKeys();
-
-    for (var i = 0; i < keys.length; i++) {
-      if (value === this.entries[keys[i]]) {
-        return true;
-      }
-    }
-
-    return false;
-  },
-
-  get: function (key) {
-    if (!this.containsKey(key)) {
-      throw new Error('Key not found: ' + key);
-    }
-
-    return this.entries[key];
-  },
-
-  set: function (key, value) {
-    if (!this.containsKey(key)) {
-      this.count++;
-    }
-
-    this.entries[key] = value;
-  },
-
-  add: function (key, value) {
-    if (!this.containsKey(key)) {
-      this.count++;
-      this.entries[key] = value;
-    }
-    else {
-      throw new Error('Key already exists: ' + key);
-    }
-  },
-
-  remove: function (key) {
-    if (this.containsKey(key)) {
-      this.count--;
-    }
-
-    delete this.entries[key];
-  },
-
-  getCount: function () {
-    return this.count;
-  },
-
-  getEnumerator: function () {
-    return new Bridge.DictionaryEnumerator(this.entries);
-  }
+Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IEnumerator$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IEnumerator]
+    }));
 });
 
-Bridge.Class.extend('Bridge.ICollection', {
-  $extend: [Bridge.IEnumerable]
+Bridge.Class.generic('Bridge.IEnumerable$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IEnumerable$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IEnumerable]
+    }));
 });
 
-Bridge.Class.extend('Bridge.List', {
-  $extend: [Bridge.ICollection],
-  $init: function (obj) {
-    if (Object.prototype.toString.call(obj) === '[object Array]') {
-      this.items = obj;
-    }
-    else if (Bridge.is(obj, Bridge.IEnumerable)) {
-      this.items = Bridge.toArray(obj);
-    }
-    else {
-      this.items = [];
-    }
-  },
-
-  checkIndex: function (index) {
-    if (index < 0 || index > (this.items.length - 1)) {
-      throw new Error('Index out of range');
-    }
-  },
-
-  getCount: function () {
-    return this.items.length;
-  },
-
-  get: function (index) {
-    this.checkIndex(index);
-
-    return this.items[index];
-  },
-
-  set: function (index, value) {
-    this.checkIndex(index);
-    this.items[index] = value;
-  },
-
-  add: function (value) {
-    this.items.push(value);
-  },
-
-  addRange: function (items) {
-    var array = Bridge.toArray(items),
-        i,
-        len;
-
-    for (i = 0, len = array.length; i < len; ++i) {
-      this.items.push(array[i]);
-    }
-  },
-
-  clear: function () {
-    this.items = [];
-  },
-
-  indexOf: function (item, startIndex) {
-    var i;
-
-    if (!Bridge.isDefined(startIndex)) {
-      startIndex = 0;
-    }
-
-    if (startIndex != 0) {
-      this.checkIndex(index);
-    }
-
-    for (i = startIndex; i < this.items.length; i++) {
-      if (item === this.items[i]) {
-        return i;
-      }
-    }
-
-    return -1;
-  },
-
-  contains: function (item) {
-    return this.indexOf(item) > -1;
-  },
-
-  getEnumerator: function () {
-    return new Bridge.ArrayEnumerator(this.items);
-  },
-
-  getRange: function (index, count) {
-    if (!Bridge.isDefined(index)) {
-      index = 0;
-    }
-
-    if (!Bridge.isDefined(count)) {
-      count = this.items.length;
-    }
-
-    if (index != 0) {
-      this.checkIndex(index);
-    }
-
-    this.checkIndex(index + count - 1);
-
-    var result = [],
-        i;
-
-    for (i = index; i < count; i++) {
-      result.push(this.items[i]);
-    }
-
-    return result;
-  },
-
-  insert: function (index, item) {
-    if (index != 0) {
-      this.checkIndex(index);
-    }
-
-
-    if (Bridge.isArray(item)) {
-      for (var i = 0; i < item.length; i++) {
-        this.insert(index++, item[i]);
-      }
-    }
-    else {
-      this.items.splice(index, 0, item);
-    }
-  },
-
-  join: function (delimeter) {
-    return this.items.join(delimeter);
-  },
-
-  lastIndexOf: function (item, fromIndex) {
-    if (!Bridge.isDefined(fromIndex)) {
-      fromIndex = this.items.length - 1;
-    }
-
-    if (fromIndex != 0) {
-      this.checkIndex(fromIndex);
-    }
-
-    for (var i = fromIndex; i >= 0; i--) {
-      if (item === this.items[i]) {
-        return i;
-      }
-    }
-
-    return -1;
-  },
-
-  remove: function (item) {
-    var index = this.indexOf(item);
-
-    this.checkIndex(index);
-    this.items.splice(index, 1);
-  },
-
-  removeAt: function (index) {
-    this.checkIndex(index);
-    this.items.splice(index, 1);
-  },
-
-  removeRange: function (index, count) {
-    this.checkIndex(index);
-    this.items.splice(index, count);
-  },
-
-  reverse: function () {
-    this.items.reverse();
-  },
-
-  slice: function (start, end) {
-    this.items.slice(start, end);
-  },
-
-  sort: function (comparison) {
-    this.items.sort(comparison);
-  },
-
-  splice: function (start, count, items) {
-    this.items.splice(start, count, items);
-  },
-
-  unshift: function () {
-    this.items.unshift();
-  },
-
-  toArray: function () {
-    return Bridge.toArray(this);
-  }
+Bridge.Class.generic('Bridge.ICollection$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.ICollection$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IEnumerable$1(T)]
+    }));
 });
 
+Bridge.Class.generic('Bridge.IEqualityComparer$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IEqualityComparer$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IEqualityComparer]
+    }));
+});
+
+Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
+    var $$name = Bridge.Class.genericName('Bridge.IDictionary$2', TKey, TValue);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IEnumerable$1(Bridge.KeyValuePair$2(TKey, TValue))],
+    }));
+});
+
+Bridge.Class.extend("Bridge.CustomEnumerator", {
+    $extend: [Bridge.IEnumerator],
+
+    $init: function (moveNext, getCurrent, reset, dispose, scope) {
+        this.$moveNext = moveNext;
+        this.$getCurrent = getCurrent;
+        this.$dispose = dispose;
+        this.$reset = reset;
+        this.scope = scope;
+    },
+
+    moveNext: function () {
+        try {
+            return this.$moveNext.call(this.scope);
+        }
+        catch (ex) {
+            this.dispose.call(this.scope);
+            throw ex;
+        }
+    },
+
+    getCurrent: function () {
+        return this.$getCurrent.call(this.scope);
+    },
+
+    reset: function () {
+        if (this.$reset) {
+            this.$reset.call(this.scope);
+        }
+    },
+
+    dispose: function () {
+        if (this.$dispose)
+            this.$dispose.call(this.scope);
+    }
+});
 
 Bridge.Class.extend('Bridge.ArrayEnumerator', {
-  $init: function (array) {
-    this.array = array;
-    this.index = 0;
-  },
+    $init: function (array) {
+        this.array = array;
+        this.reset();
+    },
 
-  hasNext: function () {
-    return this.index < this.array.length;
-  },
+    moveNext: function () {
+        this.index++;
+        return this.index < this.array.length;
+    },
 
-  next: function () {
-    return this.array[this.index++];
-  }
+    getCurrent: function () {
+        return this.array[this.index];
+    },
+
+    reset: function () {
+        this.index = -1;
+    }
+});
+Bridge.Class.generic('Bridge.EqualityComparer$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.EqualityComparer$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IEqualityComparer$1(T)],
+
+        equals: function (x, y) {
+            if (!Bridge.isDefined(x, true)) {
+                return !Bridge.isDefined(y, true);
+            }
+            else {
+                return Bridge.isDefined(y, true) ? Bridge.equals(x, y) : false;
+            }
+        },
+
+        getHashCode: function (obj) {
+            return Bridge.isDefined(obj, true) ? Bridge.getHashCode(obj) : 0;
+        }
+    }));
 });
 
-Bridge.Class.extend('Bridge.DictionaryEnumerator', {
-  $init: function (entries) {
-    this.entries = entries;
-    this.keys = Bridge.getPropertyNames(this.entries, false);
-    this.index = 0;
-  },
-
-  hasNext: function () {
-    return this.index < this.keys.length;
-  },
-
-  next: function () {
-    var index = this.index++,
-        key = this.keys[index];
-
-    return {
-      key: key,
-      value: this.entries[key]
-    };
-  }
+Bridge.EqualityComparer$1.default = new Bridge.EqualityComparer$1(Object)();
+Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
+    var $$name = Bridge.Class.genericName('Bridge.KeyValuePair$2', TKey, TValue);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $init: function (key, value) {
+            this.key = key;
+            this.value = value;
+        }
+    }));
 });
+
+Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
+    var $$name = Bridge.Class.genericName('Bridge.Dictionary$2', TKey, TValue);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.IDictionary$2(TKey, TValue)],
+
+        $init: function (obj, comparer) {
+            this.comparer = comparer || Bridge.EqualityComparer$1.default;
+            this.clear();
+
+            if (Bridge.is(obj, Bridge.Dictionary$2(TKey, TValue))) {
+                var e = Bridge.getEnumerator(obj),
+                    c;
+
+                while (e.moveNext()) {
+                    c = e.getCurrent();
+                    this.add(c.key, c.value);
+                }
+            }
+            else if (Object.prototype.toString.call(obj) === '[object Object]') {
+                var names = Bridge.getPropertyNames(obj),
+                    name;
+                for (var i = 0; i < names.length; i++) {
+                    name = names[i];
+                    this.add(name, obj[name]);
+                }
+            }  
+        },
+
+        getKeys: function () {
+            return new Bridge.DictionaryCollection$1(TKey)(this, true);
+        },
+
+        getValues: function () {
+            return new Bridge.DictionaryCollection$1(TKey)(this, false);
+        },
+
+        clear: function () {
+            this.entries = {};
+            this.count = 0;
+        },
+
+        findEntry : function (key) {
+            var hash = this.comparer.getHashCode(key),
+                entries,
+                i;
+
+            if (Bridge.isDefined(this.entries[hash])) {
+                entries = this.entries[hash];
+                for (i = 0; i < entries.length; i++) {
+                    if (this.comparer.equals(entries[i].key, key)) {
+                        return entries[i];
+                    }
+                }
+            }
+        },
+
+        containsKey: function (key) {
+            return !!this.findEntry(key);
+        },
+
+        containsValue: function (value) {
+            var e, i;
+
+            for (e in this.entries) {
+                if (this.entries.hasOwnProperty(e)) {
+                    var entries = this.entries[e];
+                    for (i = 0; i < entries.length; i++) {
+                        if (this.comparer.equals(entries[i].value, value)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        },
+
+        get: function (key) {
+            var entry = this.findEntry(key);
+
+            if (!entry) {
+                throw new Error('Key not found: ' + key);
+            }
+
+            return entry.value;
+        },
+
+        set: function (key, value, add) {
+            var entry = this.findEntry(key),
+                hash;
+
+            if (entry) {
+                if (add) {
+                    throw new Error('Key already exists: ' + key);
+                }
+
+                entry.value = value;
+                return;
+            }
+
+            hash = this.comparer.getHashCode(key);
+            entry = new Bridge.KeyValuePair$2(TKey, TValue)(key, value);
+
+            if (this.entries[hash]) {
+                this.entries[hash].push(entry);
+            }
+            else {
+                this.entries[hash] = [entry];
+            }            
+
+            this.count++;
+        },
+
+        add: function (key, value) {
+            this.set(key, value, true);
+        },
+
+        remove: function (key) {
+            var hash = this.comparer.getHashCode(key),
+                entries,
+                i;
+
+            if (!this.entries[hash]) {
+                return false;
+            }
+
+            entries = this.entries[hash];
+            for (i = 0; i < entries.length; i++) {
+                if (this.comparer.equals(entries[i].key, key)) {
+                    entries.splice(i, 1);
+                    if (entries.length == 0) {
+                        delete this.entries[hash];
+                    }
+                    this.count--;
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        getCount: function () {
+            return this.count;
+        },
+
+        getComparer: function () {
+            return this.comparer;
+        },
+
+        tryGetValue: function (key, value) {
+            var entry = this.findEntry(key);
+            value.v = entry ? entry.value : Bridge.getDefaultValue(TValue);
+            return !!entry;
+        },
+
+        getCustomEnumerator: function (fn) {
+            var hashes = Bridge.getPropertyNames(this.entries),
+                hashIndex = -1,
+                keyIndex;
+
+            return new Bridge.CustomEnumerator(function () {
+                if (hashIndex < 0 || keyIndex >= (this.entries[hashes[hashIndex]].length - 1)) {
+                    keyIndex = -1;
+                    hashIndex++;
+                }
+                if (hashIndex >= hashes.length) {
+                    return false;
+                }
+                    
+                keyIndex++;
+                return true;
+            }, function () {
+                return fn(this.entries[hashes[hashIndex]][keyIndex]);
+            }, function () {
+                hashIndex = -1;
+            }, null, this);
+        },
+
+        getEnumerator: function () {
+            return new Bridge.DictionaryEnumerator(this.entries);
+        }
+    }));
+});
+
+Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.DictionaryCollection$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.ICollection$1(T)],
+
+        $init: function (dictionary, keys) {
+            this.dictionary = dictionary;
+            this.keys = keys;
+        },
+
+        getCount: function () {
+            return this.dictionary.getCount();
+        },
+
+        getEnumerator: function () {
+            return this.dictionary.getCustomEnumerator(this.keys ? function (e) {
+                return e.key;
+            } : function (e) {
+                return e.value;
+            });
+        },
+
+        contains: function (value) {
+            return this.keys ? this.dictionary.containsKey(value) : this.dictionary.containsValue(value);
+        },
+
+        add: function (v) {
+            throw Error('Not supported operation');
+        },
+        
+        clear: function () {
+            throw Error('Not supported operation');
+        },
+
+        remove: function () {
+            throw Error('Not supported operation');
+        }
+    }));
+});
+Bridge.Class.generic('Bridge.List$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.List$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+        $extend: [Bridge.ICollection$1(T)],
+        $init: function (obj) {
+            if (Object.prototype.toString.call(obj) === '[object Array]') {
+                this.items = obj;
+            }
+            else if (Bridge.is(obj, Bridge.IEnumerable)) {
+                this.items = Bridge.toArray(obj);
+            }
+            else {
+                this.items = [];
+            }
+        },
+
+        checkIndex: function (index) {
+            if (index < 0 || index > (this.items.length - 1)) {
+                throw new Error('Index out of range');
+            }
+        },
+
+        getCount: function () {
+            return this.items.length;
+        },
+
+        get: function (index) {
+            this.checkIndex(index);
+
+            return this.items[index];
+        },
+
+        set: function (index, value) {
+            this.checkIndex(index);
+            this.items[index] = value;
+        },
+
+        add: function (value) {
+            this.items.push(value);
+        },
+
+        addRange: function (items) {
+            var array = Bridge.toArray(items),
+                i,
+                len;
+
+            for (i = 0, len = array.length; i < len; ++i) {
+                this.items.push(array[i]);
+            }
+        },
+
+        clear: function () {
+            this.items = [];
+        },
+
+        indexOf: function (item, startIndex) {
+            var i;
+
+            if (!Bridge.isDefined(startIndex)) {
+                startIndex = 0;
+            }
+
+            if (startIndex != 0) {
+                this.checkIndex(index);
+            }
+
+            for (i = startIndex; i < this.items.length; i++) {
+                if (item === this.items[i]) {
+                    return i;
+                }
+            }
+
+            return -1;
+        },
+
+        contains: function (item) {
+            return this.indexOf(item) > -1;
+        },
+
+        getEnumerator: function () {
+            return new Bridge.ArrayEnumerator(this.items);
+        },
+
+        getRange: function (index, count) {
+            if (!Bridge.isDefined(index)) {
+                index = 0;
+            }
+
+            if (!Bridge.isDefined(count)) {
+                count = this.items.length;
+            }
+
+            if (index != 0) {
+                this.checkIndex(index);
+            }
+
+            this.checkIndex(index + count - 1);
+
+            var result = [],
+                i;
+
+            for (i = index; i < count; i++) {
+                result.push(this.items[i]);
+            }
+
+            return result;
+        },
+
+        insert: function (index, item) {
+            if (index != 0) {
+                this.checkIndex(index);
+            }
+
+
+            if (Bridge.isArray(item)) {
+                for (var i = 0; i < item.length; i++) {
+                    this.insert(index++, item[i]);
+                }
+            }
+            else {
+                this.items.splice(index, 0, item);
+            }
+        },
+
+        join: function (delimeter) {
+            return this.items.join(delimeter);
+        },
+
+        lastIndexOf: function (item, fromIndex) {
+            if (!Bridge.isDefined(fromIndex)) {
+                fromIndex = this.items.length - 1;
+            }
+
+            if (fromIndex != 0) {
+                this.checkIndex(fromIndex);
+            }
+
+            for (var i = fromIndex; i >= 0; i--) {
+                if (item === this.items[i]) {
+                    return i;
+                }
+            }
+
+            return -1;
+        },
+
+        remove: function (item) {
+            var index = this.indexOf(item);
+
+            this.checkIndex(index);
+            this.items.splice(index, 1);
+        },
+
+        removeAt: function (index) {
+            this.checkIndex(index);
+            this.items.splice(index, 1);
+        },
+
+        removeRange: function (index, count) {
+            this.checkIndex(index);
+            this.items.splice(index, count);
+        },
+
+        reverse: function () {
+            this.items.reverse();
+        },
+
+        slice: function (start, end) {
+            this.items.slice(start, end);
+        },
+
+        sort: function (comparison) {
+            this.items.sort(comparison);
+        },
+
+        splice: function (start, count, items) {
+            this.items.splice(start, count, items);
+        },
+
+        unshift: function () {
+            this.items.unshift();
+        },
+
+        toArray: function () {
+            return Bridge.toArray(this);
+        }
+    }));
+});
+
 
 // @source resources/Task.js
 

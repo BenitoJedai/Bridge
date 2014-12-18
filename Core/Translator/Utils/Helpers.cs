@@ -140,12 +140,26 @@ namespace Bridge.NET
 
         public static string GetScriptFullName(IType type)
         {
-            return Helpers.ReplaceSpecialChars(type.FullName);
+            var name = Helpers.ReplaceSpecialChars(type.FullName);
+
+            if (type.TypeParameterCount > 0)
+            {
+                name += "$" + type.TypeParameterCount;
+            }
+
+            return name;
         }
 
         public static string GetScriptFullName(TypeDefinition type) 
         {
-            return Helpers.ReplaceSpecialChars(type.FullName);
+            var name = Helpers.ReplaceSpecialChars(type.FullName);
+
+            /*if (type.GenericParameters.Count > 0)
+            {
+                name += "$" + type.GenericParameters.Count;
+            }*/
+
+            return name;
         }
 
         public static string GetScriptFullName(TypeReference type) 
@@ -156,8 +170,14 @@ namespace Bridge.NET
             {
                 builder.Append('.');
             }
-            
-            builder.Append(Helpers.ReplaceSpecialChars(type.Name));
+
+            var name = type.Name;
+            builder.Append(Helpers.ReplaceSpecialChars(name));
+
+            if (type.GenericParameters.Count > 0)
+            {
+                builder.Append("$" + type.GenericParameters.Count);
+            }
             
             return builder.ToString();
         }

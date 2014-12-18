@@ -3,8 +3,8 @@ using Bridge.CLR;
 namespace System.Collections.Generic 
 {
     [Ignore]
-    [Name("Bridge.Dictionary")]
-    public sealed class Dictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>> 
+    [Namespace("Bridge")]
+    public sealed class Dictionary<TKey, TValue> : IDictionary<TKey, TValue> 
     {
         public Dictionary() 
         {
@@ -12,6 +12,23 @@ namespace System.Collections.Generic
 
         public Dictionary(object obj) 
         {
+        }
+
+        public Dictionary(object obj, IEqualityComparer<TKey> comparer)
+        {
+        }
+
+        [Template("new Bridge.Dictionary$2({TKey}, {TValue})(null, {comparer})")]
+        public Dictionary(IEqualityComparer<TKey> comparer)
+        {
+        }
+
+        public IEqualityComparer<TKey> Comparer 
+        { 
+            get 
+            { 
+                return null; 
+            } 
         }
 
         public int Count
@@ -83,8 +100,20 @@ namespace System.Collections.Generic
             return null;
         }
 
-        public void Remove(TKey key) 
+        IEnumerator IEnumerable.GetEnumerator()
         {
-        }        
+            return null;
+        }
+
+        public bool Remove(TKey key) 
+        {
+            return false;
+        }
+
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            value = default(TValue);
+            return false;
+        }
     }
 }

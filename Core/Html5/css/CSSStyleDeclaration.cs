@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Bridge.CLR;
+using System.Collections;
 
 namespace Bridge.Html5
 {
@@ -1438,6 +1439,11 @@ namespace Bridge.Html5
         /// <param name="priority"></param>
         public virtual void SetProperty(string property, string value, string priority)
         {
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return null;
         }
     }
 }

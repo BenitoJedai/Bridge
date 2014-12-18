@@ -3,7 +3,12 @@
   <file name="Core.js" />
   <file name="Nullable.js" />
   <file name="Class.js" />
-  <file name="Collections.js" />
+  <file name="collections/Interfaces.js" path="collections" />
+  <file name="collections/CustomEnumerator.js" path="collections" />
+  <file name="collections/ArrayEnumerator.js" path="collections" />
+  <file name="collections/EqualityComparer.js" path="collections" />
+  <file name="collections/Dictionary.js" path="collections" />
+  <file name="collections/List.js" path="collections" />
   <file name="Browser.js" />
   <file name="Task.js" />
   <target name="Bridge.NET" file="$output\bridge.js" debug="True" shorthand="False" shorthand-list="YAHOO.util.Dom.setStyle&#xD;&#xA;YAHOO.util.Dom.getStyle&#xD;&#xA;YAHOO.util.Dom.getRegion&#xD;&#xA;YAHOO.util.Dom.getViewportHeight&#xD;&#xA;YAHOO.util.Dom.getViewportWidth&#xD;&#xA;YAHOO.util.Dom.get&#xD;&#xA;YAHOO.util.Dom.getXY&#xD;&#xA;YAHOO.util.Dom.setXY&#xD;&#xA;YAHOO.util.CustomEvent&#xD;&#xA;YAHOO.util.Event.addListener&#xD;&#xA;YAHOO.util.Event.getEvent&#xD;&#xA;YAHOO.util.Event.getTarget&#xD;&#xA;YAHOO.util.Event.preventDefault&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Event.stopPropagation&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Anim&#xD;&#xA;YAHOO.util.Motion&#xD;&#xA;YAHOO.util.Connect.asyncRequest&#xD;&#xA;YAHOO.util.Connect.setForm&#xD;&#xA;YAHOO.util.Dom&#xD;&#xA;YAHOO.util.Event">
@@ -11,7 +16,12 @@
     <include name="Nullable.js" />
     <include name="Class.js" />
     <include name="Browser.js" />
-    <include name="Collections.js" />
+    <include name="collections/Interfaces.js" />
+    <include name="collections/CustomEnumerator.js" />
+    <include name="collections/ArrayEnumerator.js" />
+    <include name="collections/EqualityComparer.js" />
+    <include name="collections/Dictionary.js" />
+    <include name="collections/List.js" />
     <include name="Task.js" />
   </target>
 </project>

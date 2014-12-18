@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bridge.CLR;
+using System.Collections;
 
 namespace Bridge.Html5
 {
     /// <summary>
     /// Represents a text track.
     /// </summary>
+    [Ignore]
     public class TextTrack
     {
         /// <summary>
@@ -60,6 +62,7 @@ namespace Bridge.Html5
     /// <summary>
     /// Represents the available text tracks for the the audio/video.
     /// </summary>
+    [Ignore]
     public class TextTrackList : IEnumerable<TextTrack>
     {
         /// <summary>
@@ -81,6 +84,11 @@ namespace Bridge.Html5
         }
 
         public virtual IEnumerator<TextTrack> GetEnumerator()
+        {
+            return null;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return null;
         }
@@ -147,6 +155,7 @@ namespace Bridge.Html5
     /// <summary>
     /// The TextTrackCue object represents the individual cues, and provides methods and properties to access the data and events to act on changes to cue state. 
     /// </summary>
+    [Ignore]
     public class TextTrackCue // TODO: events?
     {
         /// <summary>
@@ -191,6 +200,7 @@ namespace Bridge.Html5
     /// <summary>
     /// TextTrackCueList represents a dynamically updating list of text track cues. 
     /// </summary>
+    [Ignore]
     public class TextTrackCueList : IEnumerable<TextTrackCue>
     {
         /// <summary>
@@ -220,6 +230,11 @@ namespace Bridge.Html5
         }
 
         public virtual IEnumerator<TextTrackCue> GetEnumerator()
+        {
+            return null;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return null;
         }

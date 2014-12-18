@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using ICSharpCode.NRefactory.Semantics;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace Bridge.NET
 {
@@ -63,7 +64,30 @@ namespace Bridge.NET
         public virtual TypeDefinition GetTypeDefinition(AstType reference)
         {
             string name = Helpers.GetScriptName(reference, true);
-            name = this.ResolveType(name, reference);            
+            name = this.ResolveType(name, reference);
+
+            if (name.IsEmpty() || !this.TypeDefinitions.ContainsKey(name))
+            {
+                var resolveResult = this.Resolver.ResolveNode(reference, this) as TypeResolveResult;
+
+                if (resolveResult != null)
+                {
+                    var type = resolveResult.Type as DefaultTypeParameter;
+
+                    if (type != null && type.EffectiveBaseClass != null)
+                    {
+                        name = Helpers.GetScriptFullName(type.EffectiveBaseClass);
+                        name = this.ResolveType(name, reference);
+
+                        if (this.TypeDefinitions.ContainsKey(name))
+                        {
+                            return this.TypeDefinitions[name];
+                        }
+                    }
+                }
+
+                throw new Exception("Type cannot be resolved: " + reference.ToString());
+            }
 
             return this.TypeDefinitions[name];
         }

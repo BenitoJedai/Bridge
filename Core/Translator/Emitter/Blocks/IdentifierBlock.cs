@@ -318,15 +318,35 @@ namespace Bridge.NET
                 this.WriteOpenParentheses();
             }
             else
-            {
+            {                
                 if (!string.IsNullOrWhiteSpace(inlineCode))
                 {
                     this.Write(inlineCode);
                 }
                 else if (isResolved)
                 {
-                    this.WriteTarget(memberResult);
-                    this.Write(this.Emitter.GetEntityName(memberResult.Member));
+                    if (resolveResult is TypeResolveResult)
+                    {
+                        var typeResolveResult = (TypeResolveResult)resolveResult;
+
+                        this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(typeResolveResult.Type)));
+
+                        if (typeResolveResult.Type.TypeParameterCount > 0)
+                        {
+                            this.WriteOpenParentheses();
+                            new TypeExpressionListBlock(this.Emitter, this.IdentifierExpression.TypeArguments).Emit();                            
+                            this.WriteCloseParentheses();
+                        }
+                        else
+                        {
+                            this.WriteDot();
+                        }
+                    }
+                    else
+                    {
+                        this.WriteTarget(memberResult);
+                        this.Write(this.Emitter.GetEntityName(memberResult.Member));
+                    }
                 }
                 else
                 {

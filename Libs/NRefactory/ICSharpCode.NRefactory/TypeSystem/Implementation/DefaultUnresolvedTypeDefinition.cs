@@ -27,7 +27,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 	/// Represents an unresolved type definition.
 	/// </summary>
 	[Serializable]
-	public partial class DefaultUnresolvedTypeDefinition : AbstractUnresolvedEntity, IUnresolvedTypeDefinition
+	public class DefaultUnresolvedTypeDefinition : AbstractUnresolvedEntity, IUnresolvedTypeDefinition
 	{
 		TypeKind kind = TypeKind.Class;
 		string namespaceName;
@@ -220,7 +220,32 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				return Members.OfType<IUnresolvedEvent> ();
 			}
 		}
+		
+		
+		public IType Resolve(ITypeResolveContext context)
+		{
+			if (context == null)
+				throw new ArgumentNullException("context");
+			if (context.CurrentAssembly == null)
+				throw new ArgumentException("An ITypeDefinition cannot be resolved in a context without a current assembly.");
+			IType resolvedType = context.CurrentAssembly.GetTypeDefinition(this.FullTypeName);
 
+            if (resolvedType == null)
+            {
+                var compilation = context.Compilation;
+                foreach (var asm in compilation.Assemblies)
+                {
+                    resolvedType = asm.GetTypeDefinition(this.FullTypeName);
+                    if (resolvedType != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+		    return resolvedType ?? (IType)new UnknownType(this.Namespace, this.Name, this.TypeParameters.Count);
+		}
+		
 		public virtual ITypeResolveContext CreateResolveContext(ITypeResolveContext parentContext)
 		{
 			return parentContext;

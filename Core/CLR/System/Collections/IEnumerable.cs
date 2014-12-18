@@ -3,7 +3,7 @@ using Bridge.CLR;
 namespace System.Collections 
 {
     [Ignore]
-    [Name("Bridge.IEnumerable")]
+    [Namespace("Bridge")]
     public interface IEnumerable 
     {
         IEnumerator GetEnumerator();

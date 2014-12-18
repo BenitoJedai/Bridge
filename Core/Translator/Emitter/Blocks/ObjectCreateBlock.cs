@@ -55,6 +55,15 @@ namespace Bridge.NET
             var customCtor = this.Emitter.Validator.GetCustomConstructor(type) ?? "";
             var hasInitializer = !objectCreateExpression.Initializer.IsNull && objectCreateExpression.Initializer.Elements.Count > 0;
 
+
+            bool isCollectionInitializer = false;
+            AstNodeCollection<Expression> elements = null;
+            if (hasInitializer)
+            {
+                elements = objectCreateExpression.Initializer.Elements;
+                isCollectionInitializer = elements.Count > 0 && elements.First() is ArrayInitializerExpression;
+            }
+
             if (inlineCode == null && Regex.Match(customCtor, @"\s*\{\s*\}\s*").Success)
             {
                 this.WriteOpenBrace();
@@ -116,19 +125,28 @@ namespace Bridge.NET
 
                 if (hasInitializer)
                 {
-                    this.WriteComma();
-
-                    this.BeginBlock();
-
-                    var elements = objectCreateExpression.Initializer.Elements;
+                    this.WriteComma();                    
+                    
                     bool needComma = false;
+                    
+                    if (isCollectionInitializer)
+                    {
+                        this.Write("[");
+                    }
+                    else
+                    {
+                        this.BeginBlock();
+                    }
 
                     foreach (Expression item in elements)
                     {
                         if (needComma)
                         {
                             this.WriteComma();
-                            this.WriteNewLine();
+                            if (!isCollectionInitializer)
+                            {
+                                this.WriteNewLine();
+                            }
                         }
 
                         needComma = true;
@@ -143,10 +161,31 @@ namespace Bridge.NET
                             var namedArgumentExpression = (NamedArgumentExpression)item;
                             new NameBlock(this.Emitter, namedArgumentExpression.Name, namedArgumentExpression, namedArgumentExpression.Expression).Emit();
                         }
+                        else if (item is ArrayInitializerExpression)
+                        {
+                            var arrayInitializer = (ArrayInitializerExpression)item;
+                            this.Write("[");
+                            foreach (var el in arrayInitializer.Elements)
+                            {
+                                this.EnsureComma(false);
+                                el.AcceptVisitor(this.Emitter);
+                                this.Emitter.Comma = true;
+                            }
+                            this.Write("]");
+                            this.Emitter.Comma = false;
+                        }
                     }
 
-                    this.WriteNewLine();
-                    this.EndBlock();
+                    if (isCollectionInitializer)
+                    {
+                        this.Write("]");
+                    }
+                    else
+                    {
+                        this.WriteNewLine();
+                        this.EndBlock();
+                    }                   
+ 
                     this.WriteSpace();
                     this.WriteCloseParentheses();
                 }

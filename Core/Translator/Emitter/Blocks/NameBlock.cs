@@ -60,7 +60,14 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    this.Write((isProperty ? "set" : "") + (isProperty ? name : lowerCaseName));
+                    if (expression is ArrayInitializerExpression)
+                    {
+                        this.Write((isProperty ? "get" : "") + (isProperty ? name : lowerCaseName));                        
+                    }
+                    else
+                    {
+                        this.Write((isProperty ? "set" : "") + (isProperty ? name : lowerCaseName));
+                    }                    
                 }
             }
             else

@@ -2,6 +2,7 @@
 using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -53,7 +54,49 @@ namespace Bridge.NET
                 throw emitter.CreateException(astType, "Cannot resolve type " + astType.ToString());
             }
 
-            return Ext.Net.Utilities.StringUtils.LeftOfRightmostOf(emitter.ShortenTypeName(type), "$");
+            //return Ext.Net.Utilities.StringUtils.LeftOfRightmostOf(emitter.ShortenTypeName(type), "$");
+            var name = type;
+            if (emitter.TypeDefinitions.ContainsKey(name))
+            {
+                name = emitter.ShortenTypeName(type);
+            }
+            
+
+            if (simpleType != null && simpleType.TypeArguments.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder(name);
+                bool needComma = false;
+                sb.Append("(");
+                foreach (var typeArg in simpleType.TypeArguments)
+                {
+                    if (needComma)
+                    {
+                        sb.Append(",");
+                    }
+
+                    needComma = true;
+                    sb.Append(TypeBlock.TranslateTypeReference(typeArg, emitter));
+                }
+                sb.Append(")");
+                name = sb.ToString();
+            }
+
+            return name;
+        }
+
+        public static string GetTypeName(IType type, Emitter emitter)
+        {
+            if (type.Kind == TypeKind.Array)
+            {
+                return "Array";
+            }
+
+            if (type.Kind == TypeKind.Dynamic)
+            {
+                return "Object";
+            }
+
+            return emitter.ShortenTypeName(Helpers.GetScriptFullName(type));
         }
     }
 }

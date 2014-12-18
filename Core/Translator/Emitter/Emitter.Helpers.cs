@@ -476,7 +476,17 @@ namespace Bridge.NET
 
         public virtual string GetOverloadNameInvocationResolveResult(InvocationResolveResult invocationResult)
         {
-            var typeDef = invocationResult.Member.DeclaringType as DefaultResolvedTypeDefinition;
+            var typeDef = invocationResult.Member.DeclaringType as ITypeDefinition;
+
+            if (typeDef == null)
+            {
+                var paramType = invocationResult.Member.DeclaringType as ParameterizedType;
+
+                if (paramType != null)
+                {
+                    typeDef = paramType.GetDefinition();
+                }
+            }            
 
             if (!this.Validator.IsIgnoreType(typeDef) && invocationResult.Member.DeclaringTypeDefinition.Methods.Count(m => m.Name == invocationResult.Member.Name) > 1)
             {

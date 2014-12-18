@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -20,11 +21,29 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.BeginBlock();
             var elements = this.ArrayInitializerExpression.Elements;
+            var isCollectionInitializer = elements.Count > 0 && elements.First() is ArrayInitializerExpression;
+
+            if (isCollectionInitializer || this.ArrayInitializerExpression.IsSingleElement)
+            {
+                this.Write("[");
+            }
+            else
+            {
+                this.BeginBlock();
+            }
+            
             new ExpressionListBlock(this.Emitter, elements, null).Emit();
-            this.WriteNewLine();
-            this.EndBlock();
+
+            if (isCollectionInitializer || this.ArrayInitializerExpression.IsSingleElement)
+            {
+                this.Write("]");
+            }
+            else
+            {
+                this.WriteNewLine();
+                this.EndBlock();
+            }
         }
     }
 }

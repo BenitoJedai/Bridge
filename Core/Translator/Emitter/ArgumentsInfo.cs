@@ -5,6 +5,7 @@ using ICSharpCode.NRefactory.Semantics;
 using System.Collections.Generic;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.CSharp.Resolver;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace Bridge.NET
 {
@@ -135,7 +136,17 @@ namespace Bridge.NET
             if (simpleType != null)
             {
                 AstNodeCollection<AstType> typedArguments = simpleType.TypeArguments;
-                var typeParams = this.ResolveResult.Member.DeclaringTypeDefinition.TypeParameters;
+                IList<ITypeParameter> typeParams = null;
+
+                if (this.ResolveResult.Member.DeclaringTypeDefinition != null)
+                {
+                    typeParams = this.ResolveResult.Member.DeclaringTypeDefinition.TypeParameters;
+                }
+                else if (this.ResolveResult.Member is SpecializedMethod)
+                {
+                    typeParams = ((SpecializedMethod)this.ResolveResult.Member).TypeParameters;
+                }
+
                 this.TypeArguments = new TypeParamExpression[typedArguments.Count];
                 var list = typedArguments.ToList();
                 for (int i = 0; i < list.Count; i++)

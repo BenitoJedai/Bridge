@@ -886,7 +886,7 @@ namespace ICSharpCode.NRefactory.CSharp.Completion
 									string parameterDefinition = AddDelegateHandlers(
 										wrapper,
 										delegateType,
-										optDelegateName: GuessEventHandlerMethodName(curTokenIndex)
+										optDelegateName: GuessEventHandlerMethodName(curTokenIndex, (currentType == null) ? null : currentType.Name)
 									);
 								}
 
@@ -1942,7 +1942,6 @@ namespace ICSharpCode.NRefactory.CSharp.Completion
 					if (!lookup.IsAccessible(type, false))
 						continue;
 					IType addType = typePred != null ? typePred(type) : type;
-
 					if (onlyAddConstructors && addType != null) {
 						if (!addType.GetConstructors().Any(c => lookup.IsAccessible(c, true)))
 							continue;
@@ -2126,8 +2125,14 @@ namespace ICSharpCode.NRefactory.CSharp.Completion
 						if (parent is VariableInitializer) {
 							parent = parent.Parent;
 						}
-						if (parent is VariableDeclarationStatement) {
-							var resolved = ResolveExpression(parent);
+						var varDecl = parent as VariableDeclarationStatement;
+						if (varDecl != null) {
+							ExpressionResolveResult resolved;
+							if (varDecl.Type.IsVar()) {
+								resolved = null;
+							} else {
+								resolved = ResolveExpression(parent);
+							}
 							if (resolved != null) {
 								isAsType = resolved.Result.Type;
 							}
@@ -2584,10 +2589,49 @@ namespace ICSharpCode.NRefactory.CSharp.Completion
 			}
 		}
 
-		public string GuessEventHandlerMethodName(int tokenIndex)
+		public string GuessEventHandlerMethodName(int tokenIndex, string surroundingTypeName)
 		{
+			var names = new List<string>();
+			
+			string eventName = GetPreviousToken(ref tokenIndex, false);
 			string result = GetPreviousToken(ref tokenIndex, false);
-			return "Handle" + result;
+			if (result != ".") {
+				if (surroundingTypeName == null) {
+					eventName = "Handle" + eventName;
+				} else {
+					names.Add(surroundingTypeName);
+				}
+			}
+			while (result == ".") {
+				result = GetPreviousToken(ref tokenIndex, false);
+				if (result == "this") {
+					if (names.Count == 0) {
+						if (surroundingTypeName == null) {
+							eventName = "Handle" + eventName;
+						} else {
+							names.Add(surroundingTypeName);
+						}
+					}
+				} else if (result != null) {
+					string trimmedName = result.Trim();
+					if (trimmedName.Length == 0) {
+						break;
+					}
+					names.Insert(0, trimmedName);
+				}
+				result = GetPreviousToken(ref tokenIndex, false);
+			}
+			if (!string.IsNullOrEmpty(eventName)) {
+				names.Add(eventName);
+			}
+			result = String.Join("_", names.ToArray());
+			foreach (char ch in result) {
+				if (!char.IsLetterOrDigit(ch) && ch != '_') {
+					result = "";
+					break;
+				}
+			}
+			return result;
 		}
 
 		bool MatchDelegate(IType delegateType, IMethod method)
