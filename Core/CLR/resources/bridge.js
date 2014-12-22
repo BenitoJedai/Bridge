@@ -10,7 +10,7 @@
 Bridge={ns:function(ns,scope){var nsParts=ns.split('.');if(!scope){scope=window;}
 for(i=0;i<nsParts.length;i++){if(typeof scope[nsParts[i]]=='undefined'){scope[nsParts[i]]={};}
 scope=scope[nsParts[i]];}
-return scope;},on:function(elem,event,fn){function listenHandler(e){var ret=fn.apply(this,arguments);if(ret===false){e.stopPropagation();e.preventDefault();}
+return scope;},on:function(event,elem,fn){function listenHandler(e){var ret=fn.apply(this,arguments);if(ret===false){e.stopPropagation();e.preventDefault();}
 return(ret);}
 function attachHandler(){var ret=fn.call(elem,window.event);if(ret===false){window.event.returnValue=false;window.event.cancelBubble=true;}
 return(ret);}

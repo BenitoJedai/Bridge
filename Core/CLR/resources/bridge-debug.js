@@ -28,7 +28,7 @@ Bridge = {
         return scope;
     },
 
-    on : function (elem, event, fn) {
+    on: function (event, elem, fn) {
         function listenHandler(e) {
             var ret = fn.apply(this, arguments);
             if (ret === false) {
