@@ -187,8 +187,7 @@ copy /Y "$(TargetDir)Mono.Cecil.Mdb.dll" "$(SolutionDir)assemblies"
 copy /Y "$(TargetDir)Mono.Cecil.Pdb.dll" "$(SolutionDir)assemblies"
 copy /Y "$(TargetDir)Mono.Cecil.Rocks.dll" "$(SolutionDir)assemblies"
 copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Bridge.Translator.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Bridge.Translator.xml" "$(SolutionDir)assemblies"</PostBuildEvent>
+copy /Y "$(TargetDir)Bridge.Translator.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

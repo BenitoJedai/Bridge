@@ -10,7 +10,12 @@
 Bridge={ns:function(ns,scope){var nsParts=ns.split('.');if(!scope){scope=window;}
 for(i=0;i<nsParts.length;i++){if(typeof scope[nsParts[i]]=='undefined'){scope[nsParts[i]]={};}
 scope=scope[nsParts[i]];}
-return scope;},getHashCode:function(value){if(Bridge.isEmpty(value,true)){throw new Error('HashCode cannot be calculated for empty value');}
+return scope;},on:function(elem,event,fn){function listenHandler(e){var ret=fn.apply(this,arguments);if(ret===false){e.stopPropagation();e.preventDefault();}
+return(ret);}
+function attachHandler(){var ret=fn.call(elem,window.event);if(ret===false){window.event.returnValue=false;window.event.cancelBubble=true;}
+return(ret);}
+if(elem.addEventListener){elem.addEventListener(event,listenHandler,false);}
+else{elem.attachEvent("on"+event,attachHandler);}},getHashCode:function(value){if(Bridge.isEmpty(value,true)){throw new Error('HashCode cannot be calculated for empty value');}
 if(Bridge.isFunction(value.getHashCode)){return value.getHashCode();}
 if(Bridge.isBoolean(value)){return obj?1:0;}
 if(Bridge.isDate(value)){return value.valueOf()&0xFFFFFFFF;}

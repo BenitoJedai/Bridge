@@ -20,6 +20,33 @@ Bridge = {
         return scope;
     },
 
+    on : function (elem, event, fn) {
+        function listenHandler(e) {
+            var ret = fn.apply(this, arguments);
+            if (ret === false) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            return(ret);
+        }
+
+        function attachHandler() {            
+            var ret = fn.call(elem, window.event);   
+            if (ret === false) {
+                window.event.returnValue = false;
+                window.event.cancelBubble = true;
+            }
+            return(ret);
+        }
+
+        if (elem.addEventListener) {
+            elem.addEventListener(event, listenHandler, false);
+        }
+        else {
+            elem.attachEvent("on" + event, attachHandler);
+        }
+    },
+
     getHashCode : function (value) {
         if (Bridge.isEmpty(value, true)) {
             throw new Error('HashCode cannot be calculated for empty value');

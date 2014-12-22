@@ -22,7 +22,9 @@ namespace Bridge.NET
         public override void Emit()
         {
             var elements = this.ArrayInitializerExpression.Elements;
-            var isCollectionInitializer = elements.Count > 0 && elements.First() is ArrayInitializerExpression;
+            var first = elements.Count > 0 ? elements.First() : null;
+            var isCollectionInitializer = first is ArrayInitializerExpression;
+            var isObjectInitializer = first is NamedExpression || first is NamedArgumentExpression;
 
             if (isCollectionInitializer || this.ArrayInitializerExpression.IsSingleElement)
             {

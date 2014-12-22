@@ -132,6 +132,8 @@ namespace Bridge.NET
                     if (isCollectionInitializer)
                     {
                         this.Write("[");
+                        this.WriteNewLine();
+                        this.Indent();
                     }
                     else
                     {
@@ -143,10 +145,7 @@ namespace Bridge.NET
                         if (needComma)
                         {
                             this.WriteComma();
-                            if (!isCollectionInitializer)
-                            {
-                                this.WriteNewLine();
-                            }
+                            this.WriteNewLine();
                         }
 
                         needComma = true;
@@ -176,13 +175,14 @@ namespace Bridge.NET
                         }
                     }
 
+                    this.WriteNewLine();
                     if (isCollectionInitializer)
                     {
+                        this.Outdent();
                         this.Write("]");
                     }
                     else
-                    {
-                        this.WriteNewLine();
+                    {                        
                         this.EndBlock();
                     }                   
  

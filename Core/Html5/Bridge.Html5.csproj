@@ -44,6 +44,7 @@
     <Compile Include="CompatMode.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="Elements\ElementType.cs" />
+    <Compile Include="Events\EventAttributes.cs" />
     <Compile Include="JSON.cs" />
     <Compile Include="CSS\AlignContent.cs" />
     <Compile Include="CSS\AlignItems.cs" />
