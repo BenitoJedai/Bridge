@@ -49,7 +49,7 @@ namespace Bridge.NET
         protected void AddLocal(string name, AstType type)
         {
             this.Emitter.Locals.Add(name, type);
-            if (this.Emitter.IsAsync)
+            if (this.Emitter.IsAsync && !this.Emitter.AsyncVariables.Contains(name))
             {
                 this.Emitter.AsyncVariables.Add(name);
             }

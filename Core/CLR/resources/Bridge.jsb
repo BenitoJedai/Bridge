@@ -3,6 +3,7 @@
   <file name="Core.js" />
   <file name="Nullable.js" />
   <file name="Class.js" />
+  <file name="Exception.js" />
   <file name="collections/Interfaces.js" path="collections" />
   <file name="collections/CustomEnumerator.js" path="collections" />
   <file name="collections/ArrayEnumerator.js" path="collections" />
@@ -15,6 +16,7 @@
     <include name="Core.js" />
     <include name="Nullable.js" />
     <include name="Class.js" />
+    <include name="Exception.js" />
     <include name="Browser.js" />
     <include name="collections/Interfaces.js" />
     <include name="collections/CustomEnumerator.js" />

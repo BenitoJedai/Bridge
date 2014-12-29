@@ -293,6 +293,12 @@ namespace Bridge.NET
             set; 
         }
 
+        public AstNode NoBraceBlock
+        {
+            get;
+            set;
+        }
+
         public WriterInfo LastSavedWriter
         {
             get;

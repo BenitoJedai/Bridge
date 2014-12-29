@@ -72,7 +72,7 @@ Bridge.Class.extend('Bridge.Task', {
                             errors.push(t.error);                                
                             break;
                         default:
-                            throw new Error('Invalid task status: ' + t.status);
+                            throw new Bridge.InvalidOperationException('Invalid task status: ' + t.status);
                     }
 
                     executing--;
@@ -99,7 +99,7 @@ Bridge.Class.extend('Bridge.Task', {
             }
 
             if (!tasks.length) {
-                throw new Error('At least one task is required');
+                throw new Bridge.ArgumentException('At least one task is required');
             }
 
             var task = new Bridge.Task(),
@@ -117,7 +117,7 @@ Bridge.Class.extend('Bridge.Task', {
                             task.fail(t.error);
                             break;
                         default:
-                            throw new Error('Invalid task status: ' + t.status);
+                            throw new Bridge.InvalidOperationException('Invalid task status: ' + t.status);
                     }
                 });
             }

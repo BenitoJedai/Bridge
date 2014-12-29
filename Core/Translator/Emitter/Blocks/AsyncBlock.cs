@@ -4,6 +4,7 @@ using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -358,6 +359,8 @@ namespace Bridge.NET
                 this.EndBlock();
                 this.Write(" catch($e1) ");
                 this.BeginBlock();
+                this.Write("$e1 = Bridge.Exception.create($e1);");
+                this.WriteNewLine();
                 this.InjectCatchHandlers();                
 
                 this.WriteNewLine();
@@ -379,18 +382,71 @@ namespace Bridge.NET
                 this.Write(string.Format("$step >= {0} && $step <= {1}", info.StartStep, info.EndStep));
                 this.WriteCloseParentheses(true);
                 this.BeginBlock();
+                var firstClause = true;
 
-                if (!string.IsNullOrWhiteSpace(info.VarName))
+                for (int i = 0; i < info.CatchBlocks.Count; i++)
                 {
-                    this.Write(info.VarName + " = $e1;");                    
-                }
-                else
-                {
-                    this.Write("$e = $e1;");                    
+                    var clause = info.CatchBlocks[i];
+                    var varName = clause.Item1;
+                    var exceptionType = clause.Item2;
+                    var step = clause.Item3;
+
+                    if (info.CatchBlocks.Count == 1 && exceptionType == "Bridge.Exception")
+                    {
+                        if (!string.IsNullOrEmpty(varName))
+                        {
+                            this.Write(varName + " = $e1;");
+                        }
+                        else
+                        {
+                            this.Write("$e = $e1;");
+                        }
+
+                        this.WriteNewLine();
+                        this.Write("$step = " + step + ";");
+                    }
+                    else
+                    {
+                        var isBaseException = exceptionType == "Bridge.Exception";
+
+                        if (!firstClause)
+                        {
+                            this.WriteSpace();
+                            this.WriteElse();
+                        }
+
+                        if (!isBaseException)
+                        {
+                            this.WriteIf();
+                            this.WriteOpenParentheses();
+                            this.Write("Bridge.is($e1, " + exceptionType + ")");
+                            this.WriteCloseParentheses();
+                            this.WriteSpace();
+                        }
+
+                        firstClause = false;
+
+                        this.BeginBlock();
+
+                        if (!string.IsNullOrEmpty(varName))
+                        {
+                            this.Write(varName + " = $e1;");
+                        }
+                        else
+                        {
+                            this.Write("$e = $e1;");
+                        }
+
+                        this.WriteNewLine();
+                        this.Write("$step = " + step + ";");
+
+                        this.WriteNewLine();
+                        this.EndBlock();
+                         
+                    }
                 }
 
-                this.WriteNewLine();
-                this.Write("$step = " + info.JumpToStep + ";");
+                
                 this.WriteNewLine();
                 this.Write("setTimeout($asyncBody, 0);");
                 this.WriteNewLine();
@@ -399,6 +455,26 @@ namespace Bridge.NET
                 this.WriteNewLine();
                 this.EndBlock();
                 this.WriteNewLine();
+
+                if (info.FinallyStep > 0)
+                {
+                    this.WriteIf();
+                    this.WriteOpenParentheses(true);
+                    this.Write(string.Format("$step >= {0} && $step <= {1}", info.StartStep, info.CatchBlocks.Count > 0 ? info.CatchBlocks.Last().Item3 : info.EndStep));
+                    this.WriteCloseParentheses(true);
+                    this.BeginBlock();
+
+                    this.Write("$step = " + info.FinallyStep + ";");
+
+                    this.WriteNewLine();
+                    this.Write("setTimeout($asyncBody, 0);");
+                    this.WriteNewLine();
+                    this.Write("return;");
+
+                    this.WriteNewLine();
+                    this.EndBlock();
+                    this.WriteNewLine();
+                }
             }
 
             if (this.IsTaskReturn)
@@ -407,7 +483,7 @@ namespace Bridge.NET
             }
             else
             {
-                this.Write("throw $e;");
+                this.Write("throw $e1;");
             }
         }
 

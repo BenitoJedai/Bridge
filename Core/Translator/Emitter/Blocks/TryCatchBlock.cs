@@ -3,6 +3,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ext.Net.Utilities;
 
 namespace Bridge.NET
 {
@@ -37,7 +38,6 @@ namespace Bridge.NET
         protected void VisitAsyncTryCatchStatement()
         {
             TryCatchStatement tryCatchStatement = this.TryCatchStatement;
-            this.Validate();
 
             this.Emitter.AsyncBlock.Steps.Last().JumpToStep = this.Emitter.AsyncBlock.Step;
 
@@ -64,7 +64,7 @@ namespace Bridge.NET
                     varName = "$e";                    
                 }
 
-                tryInfo.VarName = varName;
+                tryInfo.CatchBlocks.Add(new Tuple<string, string, int>(varName, TypeBlock.TranslateTypeReference(clause.Type, this.Emitter), catchStep.Step));
 
                 if (!this.Emitter.Locals.ContainsKey(varName))
                 {
@@ -101,7 +101,10 @@ namespace Bridge.NET
             }
 
             var nextStep = this.Emitter.AsyncBlock.AddAsyncStep();
-            tryInfo.JumpToStep = catchSteps.Count > 0 ? catchSteps.First().Step : finalyStep.Step;
+            if (finalyStep != null)
+            {
+                tryInfo.FinallyStep = finalyStep.Step;
+            }
 
             if (finalyStep != null)
             {
@@ -120,13 +123,43 @@ namespace Bridge.NET
 
         protected void VisitTryCatchStatement()
         {
-            TryCatchStatement tryCatchStatement = this.TryCatchStatement;
+            this.EmitTryBlock();
 
-            this.Validate();
+            if (this.TryCatchStatement.CatchClauses.Count > 1)
+            {
+                this.EmitMultipleCatchBlock();
+            }
+            else
+            {
+                this.EmitSingleCatchBlock();
+            }
+
+            this.EmitFinallyBlock();
+        }
+
+        protected virtual void EmitTryBlock()
+        {
+            TryCatchStatement tryCatchStatement = this.TryCatchStatement;
 
             this.WriteTry();
 
             tryCatchStatement.TryBlock.AcceptVisitor(this.Emitter);
+        }
+
+        protected virtual void EmitFinallyBlock()
+        {
+            TryCatchStatement tryCatchStatement = this.TryCatchStatement;
+
+            if (!tryCatchStatement.FinallyBlock.IsNull)
+            {
+                this.WriteFinally();
+                tryCatchStatement.FinallyBlock.AcceptVisitor(this.Emitter);
+            }
+        }
+
+        protected virtual void EmitSingleCatchBlock()
+        {
+            TryCatchStatement tryCatchStatement = this.TryCatchStatement;
 
             foreach (var clause in tryCatchStatement.CatchClauses)
             {
@@ -147,17 +180,83 @@ namespace Bridge.NET
                 this.WriteOpenParentheses();
                 this.Write(varName);
                 this.WriteCloseParentheses();
+                this.WriteSpace();
 
                 clause.Body.AcceptVisitor(this.Emitter);
 
                 this.PopLocals();
             }
+        }
 
-            if (!tryCatchStatement.FinallyBlock.IsNull)
+        protected virtual void EmitMultipleCatchBlock()
+        {
+            TryCatchStatement tryCatchStatement = this.TryCatchStatement;
+
+            this.WriteCatch();
+            this.WriteOpenParentheses();
+            this.Write("$e");
+            this.WriteCloseParentheses();
+            this.WriteSpace();
+            this.BeginBlock();
+            this.Write("$e = Bridge.Exception.create($e);");
+            this.WriteNewLine();
+
+            this.WriteVar(true);
+            var catchVars = new Dictionary<string, string>();
+            foreach (var clause in tryCatchStatement.CatchClauses)
             {
-                this.WriteFinally();
-                tryCatchStatement.FinallyBlock.AcceptVisitor(this.Emitter);
+                if (clause.VariableName.IsNotEmpty() && !catchVars.ContainsKey(clause.VariableName))
+                {
+                    this.EnsureComma(false);
+                    catchVars.Add(clause.VariableName, clause.VariableName);
+                    this.Write(clause.VariableName);
+                    this.Emitter.Comma = true;
+                }                
             }
+
+            this.Emitter.Comma = false;
+            this.WriteSemiColon(true);
+
+            var firstClause = true;
+            foreach (var clause in tryCatchStatement.CatchClauses)
+            {
+                var exceptionType = TypeBlock.TranslateTypeReference(clause.Type, this.Emitter);
+                var isBaseException = exceptionType == "Bridge.Exception";
+
+                if (!firstClause)
+                {
+                    this.WriteElse();
+                }
+
+                if (!isBaseException)
+                {
+                    this.WriteIf();
+                    this.WriteOpenParentheses();
+                    this.Write("Bridge.is($e, " + exceptionType + ")");
+                    this.WriteCloseParentheses();
+                    this.WriteSpace();
+                }
+
+                firstClause = false;
+                
+                this.PushLocals();
+                this.BeginBlock();
+                if (clause.VariableName.IsNotEmpty()){
+                    this.Write(clause.VariableName + " = $e;");
+                    this.WriteNewLine();
+                }                
+
+                this.Emitter.NoBraceBlock = clause.Body;
+                clause.Body.AcceptVisitor(this.Emitter);
+                this.Emitter.NoBraceBlock = null;
+                this.EndBlock();
+                this.WriteNewLine();
+
+                this.PopLocals();
+            }
+
+            this.EndBlock();
+            this.WriteNewLine();
         }
 
         protected void Validate()
@@ -196,16 +295,23 @@ namespace Bridge.NET
             set;
         }
 
-        public int JumpToStep
+        public int FinallyStep
         {
             get;
             set;
         }
 
-        public string VarName
+        private List<Tuple<string, string, int>> catchBlocks;
+        public List<Tuple<string, string, int>> CatchBlocks
         {
-            get;
-            set;
+            get
+            {
+                if (this.catchBlocks == null)
+                {
+                    this.catchBlocks = new List<Tuple<string, string, int>>();
+                }
+                return this.catchBlocks;
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
 
         checkIndex: function (index) {
             if (index < 0 || index > (this.items.length - 1)) {
-                throw new Error('Index out of range');
+                throw new Bridge.ArgumentOutOfRangeException('Index out of range');
             }
         },
 

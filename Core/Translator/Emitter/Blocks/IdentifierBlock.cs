@@ -342,10 +342,19 @@ namespace Bridge.NET
                             this.WriteDot();
                         }
                     }
-                    else
+                    else if (resolveResult is LocalResolveResult)
+                    {
+                        var localResolveResult = (LocalResolveResult)resolveResult;
+                        this.Write(localResolveResult.Variable.Name);
+                    }
+                    else if (memberResult != null)
                     {
                         this.WriteTarget(memberResult);
                         this.Write(this.Emitter.GetEntityName(memberResult.Member));
+                    }
+                    else
+                    {
+                        this.Write(resolveResult.ToString());
                     }
                 }
                 else

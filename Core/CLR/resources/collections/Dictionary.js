@@ -89,7 +89,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
             var entry = this.findEntry(key);
 
             if (!entry) {
-                throw new Error('Key not found: ' + key);
+                throw new Bridge.KeyNotFoundException('Key ' + key + ' does not exist.');
             }
 
             return entry.value;
@@ -101,7 +101,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
             if (entry) {
                 if (add) {
-                    throw new Error('Key already exists: ' + key);
+                    throw new Bridge.ArgumentException('Key ' + key + ' already exists.');
                 }
 
                 entry.value = value;
@@ -219,15 +219,15 @@ Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
         },
 
         add: function (v) {
-            throw Error('Not supported operation');
+            throw new Bridge.NotSupportedException();
         },
         
         clear: function () {
-            throw Error('Not supported operation');
+            throw new Bridge.NotSupportedException();
         },
 
         remove: function () {
-            throw Error('Not supported operation');
+            throw new Bridge.NotSupportedException();
         }
     }));
 });

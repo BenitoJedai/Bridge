@@ -49,7 +49,7 @@ Bridge = {
 
     getHashCode : function (value) {
         if (Bridge.isEmpty(value, true)) {
-            throw new Error('HashCode cannot be calculated for empty value');
+            throw new Bridge.InvalidOperationException('HashCode cannot be calculated for empty value');
         }
 
         if (Bridge.isFunction(value.getHashCode)) {
@@ -149,7 +149,7 @@ Bridge = {
 	  var result = Bridge.as(obj, type);
 
 	  if (result == null) {
-	    throw Error('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
+	      throw new Bridge.InvalidCastException('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
 	  }
 
 	  return result;
@@ -222,7 +222,7 @@ Bridge = {
 	      return new Bridge.ArrayEnumerator(obj);
 	    }
 	    
-	    throw Error('Cannot create enumerator');
+	    throw new Bridge.InvalidOperationException('Cannot create enumerator');
 	},
 
 	getPropertyNames : function(obj, includeFunctions) {

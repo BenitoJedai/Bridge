@@ -57,7 +57,7 @@ Bridge = {
 
     getHashCode : function (value) {
         if (Bridge.isEmpty(value, true)) {
-            throw new Error('HashCode cannot be calculated for empty value');
+            throw new Bridge.InvalidOperationException('HashCode cannot be calculated for empty value');
         }
 
         if (Bridge.isFunction(value.getHashCode)) {
@@ -157,7 +157,7 @@ Bridge = {
 	  var result = Bridge.as(obj, type);
 
 	  if (result == null) {
-	    throw Error('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
+	      throw new Bridge.InvalidCastException('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
 	  }
 
 	  return result;
@@ -230,7 +230,7 @@ Bridge = {
 	      return new Bridge.ArrayEnumerator(obj);
 	    }
 	    
-	    throw Error('Cannot create enumerator');
+	    throw new Bridge.InvalidOperationException('Cannot create enumerator');
 	},
 
 	getPropertyNames : function(obj, includeFunctions) {
@@ -478,7 +478,7 @@ Bridge.nullable = {
 
     getValue: function (obj) {
         if (!Bridge.nullable.hasValue(obj)) {
-            throw Error("Nullable instance doesn't have a value.");
+            throw new Brdige.InvalidOperationException("Nullable instance doesn't have a value.");
         }
         return obj;
     },
@@ -669,6 +669,181 @@ Bridge.hasValue = Bridge.nullable.hasValue;
         return fn;
     };
 })();
+
+// @source resources/Task.js
+
+Bridge.Class.extend('Bridge.Exception', {
+    $init: function (message, innerException) {
+        this.message = message;
+        this.innerException = innerException;
+        this.errorStack = new Error();
+        this.data = new Bridge.Dictionary$2(Object, Object)();
+    },
+
+    getMessage: function () {
+        return this.message;
+    },
+
+    getInnerException: function () {
+        return this.innerException;
+    },
+
+    getStackTrace: function () {
+        return this.errorStack.stack;
+    },
+
+    getData: function () {
+        return this.data;
+    },
+
+    $statics: {
+        create: function (error) {
+            if (Bridge.is(error, Bridge.Exception)) {
+                return error;
+            }
+
+            if (error instanceof TypeError) {                
+                return new Bridge.NullReferenceException(error.message, new Bridge.ErrorException(error));
+            }
+            else if (error instanceof RangeError) {
+                return new Bridge.ArgumentOutOfRangeException(null, error.message, new Bridge.ErrorException(error));
+            }
+            else if (error instanceof Error) {
+                return new Bridge.ErrorException(o);
+            }
+            else {
+                return new Bridge.Exception(error ? error.toString() : null);
+            }
+        }
+    }
+});
+
+Bridge.Class.extend('Bridge.ErrorException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (error) {
+        this.base(error.message);
+        this.errorStack = error;
+        this.error = error;
+    },
+
+    getError: function () {
+        return this.error;
+    }
+});
+
+Bridge.Class.extend('Bridge.ArgumentException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, paramName, innerException) {
+        this.base(message || "Value does not fall within the expected range.", innerException);
+        this.paramName = paramName;
+    },
+
+    getParamName: function () {
+        return this.paramName;
+    }
+});
+
+Bridge.Class.extend('Bridge.ArgumentNullException', {
+    $extend: [Bridge.ArgumentException],
+
+    $init: function (paramName, message, innerException) {
+        if (!message) {
+            message = 'Value cannot be null.';
+            if (paramName) {
+                message += '\nParameter name: ' + paramName;
+            }
+        }
+
+        this.base(message, paramName, innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
+    $extend: [Bridge.ArgumentException],
+
+    $init: function (paramName, message, innerException, actualValue) {
+        if (!message) {
+            message = 'Value is out of range.';
+            if (paramName) {
+                message += '\nParameter name: ' + paramName;
+            }
+        }
+
+        this.base(message, paramName, innerException);
+
+        this.actualValue = actualValue;
+    },
+
+    getActualValue: function () {
+        return this.actualValue;
+    }
+});
+
+Bridge.Class.extend('Bridge.KeyNotFoundException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "Key not found.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.DivideByZeroException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "Division by 0.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.FormatException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "Invalid format.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.InvalidCastException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "The cast is not valid.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.InvalidOperationException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "Operation is not valid due to the current state of the object.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.NotImplementedException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "The method or operation is not implemented.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.NotSupportedException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "Specified method is not supported.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.NullReferenceException', {
+    $extend: [Bridge.Exception],
+
+    $init: function (message, innerException) {
+        this.base(message || "Object is null.", innerException);
+    }
+});
 
 // @source resources/Browser.js
 
@@ -1001,7 +1176,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
             var entry = this.findEntry(key);
 
             if (!entry) {
-                throw new Error('Key not found: ' + key);
+                throw new Bridge.KeyNotFoundException('Key ' + key + ' does not exist.');
             }
 
             return entry.value;
@@ -1013,7 +1188,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
             if (entry) {
                 if (add) {
-                    throw new Error('Key already exists: ' + key);
+                    throw new Bridge.ArgumentException('Key ' + key + ' already exists.');
                 }
 
                 entry.value = value;
@@ -1131,15 +1306,15 @@ Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
         },
 
         add: function (v) {
-            throw Error('Not supported operation');
+            throw new Bridge.NotSupportedException();
         },
         
         clear: function () {
-            throw Error('Not supported operation');
+            throw new Bridge.NotSupportedException();
         },
 
         remove: function () {
-            throw Error('Not supported operation');
+            throw new Bridge.NotSupportedException();
         }
     }));
 });
@@ -1161,7 +1336,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
 
         checkIndex: function (index) {
             if (index < 0 || index > (this.items.length - 1)) {
-                throw new Error('Index out of range');
+                throw new Bridge.ArgumentOutOfRangeException('Index out of range');
             }
         },
 
@@ -1406,7 +1581,7 @@ Bridge.Class.extend('Bridge.Task', {
                             errors.push(t.error);                                
                             break;
                         default:
-                            throw new Error('Invalid task status: ' + t.status);
+                            throw new Bridge.InvalidOperationException('Invalid task status: ' + t.status);
                     }
 
                     executing--;
@@ -1433,7 +1608,7 @@ Bridge.Class.extend('Bridge.Task', {
             }
 
             if (!tasks.length) {
-                throw new Error('At least one task is required');
+                throw new Bridge.ArgumentException('At least one task is required');
             }
 
             var task = new Bridge.Task(),
@@ -1451,7 +1626,7 @@ Bridge.Class.extend('Bridge.Task', {
                             task.fail(t.error);
                             break;
                         default:
-                            throw new Error('Invalid task status: ' + t.status);
+                            throw new Bridge.InvalidOperationException('Invalid task status: ' + t.status);
                     }
                 });
             }
