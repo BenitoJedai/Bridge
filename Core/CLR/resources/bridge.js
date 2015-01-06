@@ -7,7 +7,7 @@
  */
 
 
-Bridge={ns:function(ns,scope){var nsParts=ns.split('.');if(!scope){scope=window;}
+Bridge={emptyFn:function(){},ns:function(ns,scope){var nsParts=ns.split('.');if(!scope){scope=window;}
 for(i=0;i<nsParts.length;i++){if(typeof scope[nsParts[i]]=='undefined'){scope[nsParts[i]]={};}
 scope=scope[nsParts[i]];}
 return scope;},on:function(event,elem,fn){function listenHandler(e){var ret=fn.apply(this,arguments);if(ret===false){e.stopPropagation();e.preventDefault();}
@@ -162,3 +162,13 @@ delete this.callbacks;},complete:function(result){if(this.isCompleted()){return 
 this.result=result;this.status=Bridge.TaskStatus.ranToCompletion;this.runCallbacks();return true;},fail:function(error){if(this.isCompleted()){return false;}
 this.error=error;this.status=Bridge.TaskStatus.faulted;this.runCallbacks();return true;},cancel:function(){if(this.isCompleted()){return false;}
 this.status=Bridge.TaskStatus.canceled;this.runCallbacks();return true;},isCanceled:function(){return this.status===Bridge.TaskStatus.canceled;},isCompleted:function(){return this.status==Bridge.TaskStatus.ranToCompletion||this.status==Bridge.TaskStatus.canceled||this.status==Bridge.TaskStatus.faulted;},isFaulted:function(){return this.status===Bridge.TaskStatus.faulted;},getResult:function(){switch(this.status){case Bridge.TaskStatus.ranToCompletion:return this.result;case Bridge.TaskStatus.canceled:throw new Error('Task was cancelled.');case Bridge.TaskStatus.faulted:throw this.error;default:throw new Error('Task is not yet completed.');}},setCanceled:function(){if(!this.cancel()){throw new Error('Task was already completed.');}},setResult:function(result){if(!this.complete(result)){throw new Error('Task was already completed.');}},setError:function(error){if(!this.fail(error)){throw new Error('Task was already completed.');}},dispose:function(){},getAwaiter:function(){return this;}});Bridge.Class.extend('Bridge.TaskStatus',{$statics:{created:0,waitingForActivation:1,waitingToRun:2,running:3,waitingForChildrenToComplete:4,ranToCompletion:5,canceled:6,faulted:7}});
+
+Bridge.Class.extend('Bridge.Attribute',{});
+
+Bridge.Class.extend('Bridge.AspectAttribute',{$extend:[Bridge.Attribute]});
+
+Bridge.Class.extend('Bridge.MethodAspectAttribute',{$extend:[Bridge.AspectAttribute],onEntry:Bridge.emptyFn,onExit:Bridge.emptyFn,onSuccess:Bridge.emptyFn,onException:Bridge.emptyFn,init:function(methodName,scope){this.methodName=methodName;this.scope=scope;this.targetMethod=this.scope[this.methodName];this.scope.$$aspects=this.scope.$$aspects||{};if(!this.scope.$$aspects[this.$$name]){this.scope.$$aspects[this.$$name]=[];}
+this.scope.$$aspects[this.$$name].push(this);this.removeExists();this.setAspect();},setAspect:function(){var me=this,fn=function(){var methodArgs={arguments:arguments,methodName:me.methodName,scope:me.scope,exception:null,rethrowException:true,cancelTargetInvocation:false};me.onEntry(methodArgs);try{if(!methodArgs.cancelTargetInvocation){methodArgs.returnValue=me.targetMethod.apply(me.scope,methodArgs.arguments);me.onSuccess(methodArgs);}}
+catch(e){methodArgs.exception=Bridge.Exception.create(e);me.onException(methodArgs);if(methodArgs.rethrowException){throw e;}}
+finally{me.onExit(methodArgs);}
+return methodArgs.returnValue;};this.scope[this.methodName]=fn;},removeExists:function(){var i,aspect,aspects=this.scope.$$aspects[this.$$name];for(i=aspects.length-1;i>=0;i--){aspect=aspects[i];if(aspect.methodName===this.methodName){this.scope[this.methodName]=aspect.targetMethod;aspects.splice(i,1);return;}}},remove:function(){var i,aspects=this.scope.$$aspects[this.$$name];this.scope[this.methodName]=this.targetMethod;for(i=aspects.length-1;i>=0;i--){if(aspects[i]===this){aspects.splice(i,1);return;}}}});

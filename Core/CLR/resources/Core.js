@@ -2,6 +2,8 @@
 // @source resources/Core.js
 
 Bridge = {
+    emptyFn: function () { },
+
     ns: function (ns, scope) {
         var nsParts = ns.split('.');
 

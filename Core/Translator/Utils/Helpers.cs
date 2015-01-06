@@ -222,7 +222,7 @@ namespace Bridge.NET
             return name + separator + paramCount;
         }
 
-        public static bool IsSubclassOf(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition)
+        public static bool IsSubclassOf(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition, Emitter emitter)
         {
             if (thisTypeDefinition.BaseType != null)
             {
@@ -232,20 +232,20 @@ namespace Bridge.NET
                 {
                     if (thisTypeDefinition.BaseType.Scope == typeDefinition.Scope)
                     {
-                        baseTypeDefinition = thisTypeDefinition.BaseType.Resolve();
+                        baseTypeDefinition = Helpers.ToTypeDefinition(thisTypeDefinition.BaseType, emitter);
                     }
                 }
                 catch { }
 
                 if (baseTypeDefinition != null)
                 {
-                    return (baseTypeDefinition == typeDefinition || IsSubclassOf(baseTypeDefinition, typeDefinition));
+                    return (baseTypeDefinition == typeDefinition || Helpers.IsSubclassOf(baseTypeDefinition, typeDefinition, emitter));
                 }
             }
             return false;
         }
 
-        public static bool IsImplementationOf(TypeDefinition thisTypeDefinition, TypeDefinition interfaceTypeDefinition)
+        public static bool IsImplementationOf(TypeDefinition thisTypeDefinition, TypeDefinition interfaceTypeDefinition, Emitter emitter)
         {
             foreach (TypeReference interfaceReference in thisTypeDefinition.Interfaces)
             {
@@ -260,12 +260,12 @@ namespace Bridge.NET
                 {
                     if (thisTypeDefinition.BaseType.Scope == interfaceTypeDefinition.Scope)
                     {
-                        interfaceDefinition = interfaceReference.Resolve();
+                        interfaceDefinition = Helpers.ToTypeDefinition(interfaceReference, emitter);
                     }
                 }
                 catch { }
 
-                if (interfaceDefinition != null && IsImplementationOf(interfaceDefinition, interfaceTypeDefinition))
+                if (interfaceDefinition != null && Helpers.IsImplementationOf(interfaceDefinition, interfaceTypeDefinition, emitter))
                 {
                     return true;
                 }
@@ -273,10 +273,29 @@ namespace Bridge.NET
             return false;
         }
 
-        public static bool IsAssignableFrom(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition)
+        public static bool IsAssignableFrom(TypeDefinition thisTypeDefinition, TypeDefinition typeDefinition, Emitter emitter)
         {
-            return (thisTypeDefinition == typeDefinition || (typeDefinition.IsClass && !typeDefinition.IsValueType && IsSubclassOf(typeDefinition, thisTypeDefinition))
-                || (typeDefinition.IsInterface && IsImplementationOf(typeDefinition, thisTypeDefinition)));
+            return (thisTypeDefinition == typeDefinition 
+                    || (typeDefinition.IsClass && !typeDefinition.IsValueType && Helpers.IsSubclassOf(typeDefinition, thisTypeDefinition, emitter))
+                    || (typeDefinition.IsInterface && Helpers.IsImplementationOf(typeDefinition, thisTypeDefinition, emitter)));
+        }
+
+        public static TypeDefinition ToTypeDefinition(TypeReference reference, Emitter emitter)
+        {
+            try
+            {
+                if (emitter.TypeDefinitions.ContainsKey(reference.FullName))
+                {
+                    return emitter.TypeDefinitions[reference.FullName];
+                }
+
+                return reference.Resolve();
+            }
+            catch
+            {
+            }
+
+            return null;
         }
     }
 }

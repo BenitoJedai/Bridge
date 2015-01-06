@@ -8,6 +8,7 @@ using Bridge.CLR;
 namespace System
 {
     [Ignore]
+    [Name("Bridge.Attribute")]
     public class Attribute
     {
         internal Attribute()

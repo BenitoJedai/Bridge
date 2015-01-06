@@ -18,6 +18,7 @@ namespace Bridge.NET
         public AssemblyInfo()
         {
             this.Dependencies = new List<ModuleDependency>();
+            this.Aspects = new AspectCollection();
         }
 
         public string FileName
@@ -58,6 +59,12 @@ namespace Bridge.NET
         }
 
         public List<ModuleDependency> Dependencies
+        {
+            get;
+            set;
+        }
+
+        public AspectCollection Aspects
         {
             get;
             set;

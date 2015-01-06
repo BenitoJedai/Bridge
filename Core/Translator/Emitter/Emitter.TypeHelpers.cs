@@ -32,28 +32,33 @@ namespace Bridge.NET
 
             var xTypeDefinition = this.TypeDefinitions[Helpers.GetTypeMapKey(x)];
             var yTypeDefinition = this.TypeDefinitions[Helpers.GetTypeMapKey(y)];
+            
 
-            if (Helpers.IsSubclassOf(xTypeDefinition, yTypeDefinition))
+            if (Helpers.IsSubclassOf(xTypeDefinition, yTypeDefinition, this))
             {
                 return 1;
             }
 
-            if (Helpers.IsSubclassOf(yTypeDefinition, xTypeDefinition))
+            if (Helpers.IsSubclassOf(yTypeDefinition, xTypeDefinition, this))
             {
                 return -1;
             }
 
-            if (xTypeDefinition.IsInterface && Helpers.IsImplementationOf(yTypeDefinition, xTypeDefinition))
+            if (xTypeDefinition.IsInterface && Helpers.IsImplementationOf(yTypeDefinition, xTypeDefinition, this))
             {
                 return -1;
             }
 
-            if (yTypeDefinition.IsInterface && Helpers.IsImplementationOf(xTypeDefinition, yTypeDefinition))
+            if (yTypeDefinition.IsInterface && Helpers.IsImplementationOf(xTypeDefinition, yTypeDefinition, this))
             {
                 return 1;
             }
 
-            return Comparer.Default.Compare(x.FullName, y.FullName);
+            var xPriority = this.GetSerializationPriority(xTypeDefinition);
+            var yPriority = this.GetSerializationPriority(yTypeDefinition);
+
+            return -xPriority.CompareTo(yPriority);
+            //return Comparer.Default.Compare(x.FullName, y.FullName);
         }
 
         public virtual TypeDefinition GetTypeDefinition()
@@ -284,6 +289,27 @@ namespace Bridge.NET
             }
 
             return name;
-        }        
+        }
+
+        public virtual int GetSerializationPriority(TypeDefinition type)
+        {
+            var attr = type.CustomAttributes.FirstOrDefault(a =>
+            {
+                return a.AttributeType.FullName == "Bridge.CLR.SerializationPriorityAttribute";
+            });
+
+            if (attr != null)
+            {
+                return System.Convert.ToInt32(attr.ConstructorArguments[0].Value);
+            }
+
+            var baseType = this.GetBaseTypeDefinition(type);
+            if (baseType != null)
+            {
+                return this.GetSerializationPriority(baseType);
+            }
+
+            return Int32.MinValue;
+        }
     }
 }
