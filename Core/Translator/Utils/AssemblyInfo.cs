@@ -19,6 +19,7 @@ namespace Bridge.NET
         {
             this.Dependencies = new List<ModuleDependency>();
             this.Aspects = new AspectCollection();
+            this.AspectTypeProperties = new Dictionary<string, Dictionary<string, object>>();
         }
 
         public string FileName
@@ -65,6 +66,12 @@ namespace Bridge.NET
         }
 
         public AspectCollection Aspects
+        {
+            get;
+            set;
+        }
+
+        public Dictionary<string, Dictionary<string, object>> AspectTypeProperties
         {
             get;
             set;

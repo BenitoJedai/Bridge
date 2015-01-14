@@ -3,6 +3,7 @@ using System.IO;
 using Mono.Cecil;
 using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
+using System;
 
 namespace Bridge.NET
 {
@@ -67,7 +68,8 @@ namespace Bridge.NET
             var references = new List<AssemblyDefinition>();            
             var assembly = this.LoadAssembly(this.AssemblyLocation, references);
             this.TypeDefinitions = new Dictionary<string, TypeDefinition>();
-
+            this.AssemblyDefinition = assembly;
+            
             if (assembly.Name.Name != Translator.CLR_ASSEMBLY)
             {
                 this.ReadTypes(assembly);
@@ -123,6 +125,34 @@ namespace Bridge.NET
                 }
                 
                 return syntaxTree;
+            }
+        }
+
+        protected virtual void InspectGlobalAspects(Emitter emitter)
+        {
+            if (this.AssemblyDefinition.HasCustomAttributes)
+            {
+                foreach (var attr in this.AssemblyDefinition.CustomAttributes)
+                {
+                    if (AspectHelpers.IsMulticastAspectAttribute(attr.AttributeType, emitter))
+                    {
+                        var globalAspects = this.AssemblyInfo.Aspects;
+
+                        List<AspectInfo> aspects;
+                        if (globalAspects.ContainsKey(AttributeTargets.Assembly))
+                        {
+                            aspects = globalAspects[AttributeTargets.Assembly];
+                        }
+                        else
+                        {
+                            aspects = new List<AspectInfo>();
+                            globalAspects.Add(AttributeTargets.Assembly, aspects);
+                        }
+
+                        AspectInfo aspect = AspectHelpers.GetAspectInfo(attr, emitter, AttributeTargets.Assembly, null);
+                        aspects.Add(aspect);                
+                    }
+                }
             }
         }
     }

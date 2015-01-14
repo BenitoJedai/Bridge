@@ -22,6 +22,12 @@ namespace Bridge.NET
             this.Ctors = new List<ConstructorDeclaration>();
         }
 
+        public TypeDeclaration TypeDeclaration
+        {
+            get;
+            set;
+        }
+
         public List<EventDeclaration> StaticEvents
         {
             get;

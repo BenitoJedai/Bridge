@@ -6,10 +6,16 @@ namespace Bridge.CLR
     /// 
     /// </summary>
     [Ignore]
-    [Name("Bridge.MultiAspectAttribute")]
-    public abstract class MulticastAspectAttribute : AspectAttribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public class MulticastOptionsAttribute : Attribute
     {
         public bool Exclude
+        {
+            get;
+            set;
+        }
+
+        public bool Multiple
         {
             get;
             set;

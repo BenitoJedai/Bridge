@@ -1,5 +1,5 @@
 ﻿Bridge.Class.extend('Bridge.MethodAspectAttribute', {
-    $extend: [Bridge.AspectAttribute],
+    $extend: [Bridge.MulticastAspectAttribute],
 
     onEntry: Bridge.emptyFn,
     onExit: Bridge.emptyFn,
@@ -11,39 +11,68 @@
         this.scope = scope;
         this.targetMethod = this.scope[this.methodName];
 
+        if (!this.runTimeValidate(methodName, scope)) {
+            return;
+        }
+
         this.scope.$$aspects = this.scope.$$aspects || {};
         if (!this.scope.$$aspects[this.$$name]) {
             this.scope.$$aspects[this.$$name] = [];
         }
         this.scope.$$aspects[this.$$name].push(this);
+        this.exceptionTypes = this.getExceptionsTypes(methodName, scope) || [];
 
-        this.removeExists();
-        this.setAspect();
+        this.$$setAspect();
     },
 
-    setAspect: function () {
+    $$setAspect: function () {
         var me = this,
             fn = function () {
                 var methodArgs = {
-                    arguments: arguments,
-                    methodName: me.methodName,
-                    scope: me.scope,
-                    exception: null,
-                    rethrowException: true,
-                    cancelTargetInvocation: false
-                };
+                        arguments: arguments,
+                        methodName: me.methodName,
+                        scope: me.scope,
+                        exception: null,
+                        flow: 0
+                    },                    
+                    catchException;
+
                 me.onEntry(methodArgs);
+
+                if (methodArgs.flow == 3) {
+                    return methodArgs.returnValue;
+                }
+
                 try {
-                    if (!methodArgs.cancelTargetInvocation) {
-                        methodArgs.returnValue = me.targetMethod.apply(me.scope, methodArgs.arguments);
-                        me.onSuccess(methodArgs);
+                    methodArgs.returnValue = me.targetMethod.apply(me.scope, methodArgs.arguments);
+                    me.onSuccess(methodArgs);
+
+                    if (methodArgs.flow == 3) {
+                        return methodArgs.returnValue;
                     }
                 }
                 catch (e) {
-                    methodArgs.exception = Bridge.Exception.create(e);
-                    me.onException(methodArgs);
+                    methodArgs.exception = Bridge.Exception.create(e);                    
 
-                    if (methodArgs.rethrowException) {
+                    catchException = me.exceptionTypes.length == 0;
+                    if (me.exceptionTypes.length > 0) {
+                        for (var i = 0; i < me.exceptionTypes.length; i++) {
+                            if (Bridge.is(methodArgs.exception, me.exceptionTypes[i])) {
+                                catchException = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (catchException) {
+                        me.onException(methodArgs);
+                    }                    
+
+                    if (methodArgs.flow == 3) {
+                        return methodArgs.returnValue;
+                    }
+
+                    if (methodArgs.flow == 2 && methodArgs.flow == 0) {
                         throw e;
                     }
                 }
@@ -55,21 +84,6 @@
             };
 
         this.scope[this.methodName] = fn;
-    },
-
-    removeExists : function () {
-        var i,
-            aspect,
-            aspects = this.scope.$$aspects[this.$$name];
-
-        for (i = aspects.length - 1; i >= 0; i--) {
-            aspect = aspects[i];
-            if (aspect.methodName === this.methodName) {
-                this.scope[this.methodName] = aspect.targetMethod;
-                aspects.splice(i, 1);
-                return;
-            }
-        }
     },
 
     remove: function () {
@@ -84,5 +98,13 @@
                 return;
             }
         }
+    },
+
+    getExceptionsTypes: function () {
+        return [];
+    },
+
+    runTimeValidate: function () {
+        return true;
     }
 });

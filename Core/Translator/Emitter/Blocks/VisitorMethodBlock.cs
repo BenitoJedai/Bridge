@@ -34,8 +34,8 @@ namespace Bridge.NET
 
             if (this.Emitter.MethodsGroup != null)
             {
-                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(methodDeclaration.Parameters, methodDeclaration.TypeParameters, this.Emitter.MethodsGroup);
-                string name = this.GetOverloadName(methodDef);
+                MethodDefinition methodDef = AbstractMethodBlock.FindMethodDefinitionInGroup(this.Emitter, methodDeclaration.Parameters, methodDeclaration.TypeParameters, this.Emitter.MethodsGroup);
+                string name = AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef);
                 this.EmitMethodDetector(this.Emitter.MethodsGroupBuilder, methodDef, name);
 
                 this.Write(name);

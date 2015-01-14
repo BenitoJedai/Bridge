@@ -32,11 +32,45 @@ namespace Bridge.NET
 
         public override void Emit()
         {
+            this.FindAspects(this.Emitter.GetTypeDefinition());
             this.EmitClassHeader();
             this.EmitStaticBlock();
             this.EmitInstantiableBlock();
             this.EmitClassEnd();    
         }        
+
+        protected virtual void FindAspects(TypeDefinition typeDef)
+        {
+            if (typeDef.HasCustomAttributes)
+            {
+                foreach (var attr in typeDef.CustomAttributes)
+                {
+                    if (AspectHelpers.IsAspectAttribute(attr.AttributeType, this.Emitter))
+                    {
+                        var globalAspects = this.Emitter.AssemblyInfo.Aspects;
+
+                        List<AspectInfo> aspects;
+                        if (globalAspects.ContainsKey(AttributeTargets.Class))
+                        {
+                            aspects = globalAspects[AttributeTargets.Class];
+                        }
+                        else
+                        {
+                            aspects = new List<AspectInfo>();
+                            globalAspects.Add(AttributeTargets.Class, aspects);
+                        }
+
+                        var info = AspectHelpers.GetAspectInfo(attr, this.Emitter, AttributeTargets.Class, typeDef.FullName);
+                        aspects.Add(info);
+                    }
+                }
+            }            
+
+            if (typeDef.BaseType != null)
+            {
+                this.FindAspects(Helpers.ToTypeDefinition(typeDef.BaseType, this.Emitter));
+            }            
+        }
 
         protected virtual void EmitClassHeader()
         {

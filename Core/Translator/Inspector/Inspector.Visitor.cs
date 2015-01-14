@@ -65,6 +65,7 @@ namespace Bridge.NET
             {
                 this.CurrentType = new TypeInfo()
                 {
+                    TypeDeclaration = typeDeclaration,
                     ParentType = this.ParentType,
                     Name = Helpers.GetScriptName(typeDeclaration, false),
                     GenericName = Helpers.GetScriptName(typeDeclaration, true),
@@ -288,20 +289,7 @@ namespace Bridge.NET
 
         public override void VisitAttributeSection(AttributeSection attributeSection)
         {
-            if (attributeSection.Parent is TypeDeclaration && attributeSection.AttributeTarget != "assembly")
-            {
-                foreach (var attr in attributeSection.Attributes)
-                {
-                    var name = attr.Type.ToString();
-                    var resolveResult = this.Resolver.ResolveNode(attr, null);
-                    var parentResult = this.Resolver.ResolveNode(attributeSection.Parent, null);
-
-                    var handled = this.ReadAspect(attr, name, resolveResult, AttributeTargets.Class, parentResult.Type.FullName);
-                }
-
-                return;
-            }            
-            else if (attributeSection.AttributeTarget != "assembly")
+            if (attributeSection.AttributeTarget != "assembly")
             {
                 return;
             }
@@ -311,7 +299,7 @@ namespace Bridge.NET
                 var name = attr.Type.ToString();
                 var resolveResult = this.Resolver.ResolveNode(attr, null);
 
-                var handled = this.ReadAspect(attr, name, resolveResult, AttributeTargets.Assembly, null) ||
+                var handled = //this.ReadAspect(attr, name, resolveResult, AttributeTargets.Assembly, null) ||
                               this.ReadModuleInfo(attr, name, resolveResult) ||
                               this.ReadFileNameInfo(attr, name, resolveResult) ||
                               this.ReadOutputDirInfo(attr, name, resolveResult) ||

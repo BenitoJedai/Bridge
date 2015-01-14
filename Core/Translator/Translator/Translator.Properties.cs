@@ -12,6 +12,12 @@ namespace Bridge.NET
             set;
         }
 
+        public AssemblyDefinition AssemblyDefinition
+        {
+            get;
+            set;
+        }
+
         public Action<string, string> Log
         {
             get;

@@ -284,10 +284,10 @@ namespace Bridge.NET
 
             foreach (var ctor in ctors)
             {
-                MethodDefinition methodDef = this.FindMethodDefinitionInGroup(ctor.Parameters, null, methodsDef);
+                MethodDefinition methodDef = AbstractMethodBlock.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef);
                 if (methodDef != null)
                 {
-                    string name = this.GetOverloadName(methodDef);
+                    string name = AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef);
                     this.EmitMethodDetector(detectorBuilders, methodDef, name);
                 }
                 else

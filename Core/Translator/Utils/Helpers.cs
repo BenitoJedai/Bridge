@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using System.Text;
 using ICSharpCode.NRefactory.TypeSystem;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -230,10 +231,7 @@ namespace Bridge.NET
 
                 try
                 {
-                    if (thisTypeDefinition.BaseType.Scope == typeDefinition.Scope)
-                    {
-                        baseTypeDefinition = Helpers.ToTypeDefinition(thisTypeDefinition.BaseType, emitter);
-                    }
+                    baseTypeDefinition = Helpers.ToTypeDefinition(thisTypeDefinition.BaseType, emitter);
                 }
                 catch { }
 
@@ -258,10 +256,7 @@ namespace Bridge.NET
                 
                 try 
                 {
-                    if (thisTypeDefinition.BaseType.Scope == interfaceTypeDefinition.Scope)
-                    {
-                        interfaceDefinition = Helpers.ToTypeDefinition(interfaceReference, emitter);
-                    }
+                    interfaceDefinition = Helpers.ToTypeDefinition(interfaceReference, emitter);
                 }
                 catch { }
 
@@ -296,6 +291,19 @@ namespace Bridge.NET
             }
 
             return null;
+        }
+
+        public static MethodDefinition GetMethodDefinition(Emitter emitter, MethodDeclaration methodDeclaration, TypeDefinition type)
+        {
+            var parameters = methodDeclaration.Parameters.ToList();
+            var methods = type.Methods.Where(m => m.Name == methodDeclaration.Name && m.Parameters.Count == parameters.Count && m.GenericParameters.Count == methodDeclaration.TypeParameters.Count).ToList();
+
+            if (methods.Count <= 1)
+            {
+                return methods.Count == 1 ? methods[0] : null;
+            }
+
+            return AbstractMethodBlock.FindMethodDefinitionInGroup(emitter, parameters, null, methods);
         }
     }
 }

@@ -32,7 +32,6 @@ namespace Bridge.NET
 
             this.InspectTypes(resolver);
             
-
             resolver.CanFreeze = true;
             var emitter = this.CreateEmitter();
             emitter.TypeInfoDefinitions = this.TypeInfoDefinitions;
@@ -42,6 +41,7 @@ namespace Bridge.NET
             emitter.References = references;
             emitter.SourceFiles = this.SourceFiles;
             emitter.Log = this.Log;
+            this.InspectGlobalAspects(emitter);
             this.Outputs = emitter.Emit();
 
             return this.Outputs;

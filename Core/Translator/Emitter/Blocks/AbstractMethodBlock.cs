@@ -10,10 +10,10 @@ namespace Bridge.NET
 {
     public abstract class AbstractMethodBlock : AbstractEmitterBlock
     {        
-        protected string GetOverloadName(MethodDefinition methodDef)
+        public static string GetOverloadName(Emitter emitter, MethodDefinition methodDef)
         {
-            var name = this.Emitter.GetMethodName(methodDef);
-            var attr = this.Emitter.GetAttribute(methodDef.CustomAttributes, Translator.CLR_ASSEMBLY + ".Name");
+            var name = emitter.GetMethodName(methodDef);
+            var attr = emitter.GetAttribute(methodDef.CustomAttributes, Translator.CLR_ASSEMBLY + ".Name");
 
             if (methodDef.IsConstructor)
             {
@@ -82,7 +82,7 @@ namespace Bridge.NET
             this.WriteCloseParentheses();
         }
 
-        protected virtual MethodDefinition FindMethodDefinitionInGroup(IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group)
+        public static MethodDefinition FindMethodDefinitionInGroup(Emitter emitter, IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group)
         {
             var args = new List<ParameterDeclaration>(parameters);
             var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
@@ -94,7 +94,7 @@ namespace Bridge.NET
                     for (int i = 0; i < method.Parameters.Count; i++)
                     {
                         var type = args[i].Type;
-                        var resolveResult = this.Emitter.Resolver.ResolveNode(type, this.Emitter);
+                        var resolveResult = emitter.Resolver.ResolveNode(type, emitter);
 
                         if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
                         {
@@ -109,9 +109,9 @@ namespace Bridge.NET
                             var isArray = type.ToString().Contains("[]");
 
                             var typeName = isArray ? type.ToString().Replace("[]", "") : type.ToString();
-                            var name = this.Emitter.ResolveType(typeName, type);
+                            var name = emitter.ResolveType(typeName, type);
 
-                            var typeDef = this.Emitter.TypeDefinitions[name];
+                            var typeDef = emitter.TypeDefinitions[name];
 
                             if ((typeDef.FullName + (isArray ? "[]" : "")) != method.Parameters[i].ParameterType.FullName)
                             {
