@@ -65,6 +65,8 @@
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\Aspect\AspectFlow.cs" />
+    <Compile Include="System\Aspect\TypeAspectAttribute.cs" />
+    <Compile Include="System\Aspect\PropertyAspectAttribute.cs" />
     <Compile Include="System\Aspect\MulticastOptionsAttribute.cs" />
     <Compile Include="System\Aspect\MulticastAspectAttribute.cs" />
     <Compile Include="System\Aspect\MethodAspectAttribute.cs" />
@@ -126,6 +128,8 @@
     <Compile Include="System\Tuple.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\aspect\TypeAspectAttribute.js" />
+    <Content Include="resources\aspect\PropertyAspectAttribute.js" />
     <Content Include="resources\Attribute.js" />
     <Content Include="resources\aspect\AspectAttribute.js" />
     <Content Include="resources\aspect\MethodAspectAttribute.js" />

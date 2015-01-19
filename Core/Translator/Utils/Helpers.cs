@@ -293,6 +293,11 @@ namespace Bridge.NET
             return null;
         }
 
+        public static PropertyDefinition GetPropertyDefinition(Emitter emitter, EntityDeclaration propertyDeclaration, TypeDefinition type)
+        {
+            return type.Properties.FirstOrDefault(p => p.Name == propertyDeclaration.Name);
+        }
+
         public static MethodDefinition GetMethodDefinition(Emitter emitter, MethodDeclaration methodDeclaration, TypeDefinition type)
         {
             var parameters = methodDeclaration.Parameters.ToList();

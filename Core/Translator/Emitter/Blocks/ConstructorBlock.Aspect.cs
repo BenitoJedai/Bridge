@@ -9,159 +9,23 @@ namespace Bridge.NET
 {
     public partial class ConstructorBlock
     {
-        protected virtual IEnumerable<string> GetAspects()
+        private IEnumerable<string> aspects;
+        public virtual IEnumerable<string> GetAspects()
         {
-            var methods = this.StaticBlock ? this.TypeInfo.StaticMethods : this.TypeInfo.InstanceMethods;
-            List<string> list = new List<string>();
-            var typeDef = this.Emitter.GetTypeDefinition();
-
-            foreach (var methodGroup in methods)
+            if (this.aspects != null)
             {
-                var isGroup = methodGroup.Value.Count > 1;
-
-                foreach (var method in methodGroup.Value)
-                {
-                    List<AspectInfo> aspectInfos = new List<AspectInfo>();
-                    var methodDef = Helpers.GetMethodDefinition(this.Emitter, method, typeDef);                    
-
-                    if (methodDef != null)
-                    {
-                        if (methodDef.CustomAttributes.Count > 0)
-                        {
-                            foreach (var attr in methodDef.CustomAttributes)
-                            {
-                                if (AspectHelpers.IsAspectAttribute(attr.AttributeType, this.Emitter))
-                                {
-                                    var name = isGroup ? AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef) : this.Emitter.GetEntityName(method);
-                                    var info = AspectHelpers.GetAspectInfo(attr, this.Emitter, AttributeTargets.Method, name);
-                                    aspectInfos.Add(info);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var attrSection in method.Attributes)
-                        {
-                            foreach (var attr in attrSection.Attributes)
-                            {
-                                var resolveResult = this.Emitter.Resolver.ResolveNode(attr, this.Emitter);
-
-                                if (resolveResult != null && AspectHelpers.IsAspectAttribute(resolveResult.Type))
-                                {
-                                    aspectInfos.Add(AspectHelpers.GetAspectInfo(this.Emitter, attr, resolveResult.Type, System.AttributeTargets.Method, this.Emitter.GetEntityName(method)));
-                                }
-                            }
-                        }
-                    }                    
-
-                    if (method.HasModifier(Modifiers.Override))
-                    {
-                        this.FindInheritedAspect(isGroup, this.Emitter.GetBaseTypeDefinition(), method, aspectInfos);
-                    }
-
-                    this.EmitMethodAspect(isGroup, list, aspectInfos, method);
-                }
+                return this.aspects;
             }
-            
-            return list;
+
+            var methods = this.GetMethodsAspects();
+            var properties = this.GetPropertiesAspects();
+            var types = this.GetTypeAspects();
+
+            this.aspects = types.Concat(methods).Concat(properties);
+            return this.aspects;
         }
 
-        protected virtual void EmitMethodAspect(bool isGroup, List<string> list, List<AspectInfo> aspectInfos, MethodDeclaration method)
-        {
-            var globalAspects = this.Emitter.AssemblyInfo.Aspects;
-            var excludeTypes = new List<string>();
-            var typeName = this.Emitter.GetTypeDefinition().FullName;
-
-            aspectInfos.Sort((a, b) =>
-            {
-                return a.Priority.CompareTo(b.Priority);
-            });
-
-            foreach (var info in aspectInfos)
-            {
-                var code = this.GetAspectCode(isGroup, info, method, excludeTypes);
-                if (code != null && code.Length > 0)
-                {
-                    list.Add(code);
-                }                   
-            }
-
-            var targetKeys = new AttributeTargets[] { AttributeTargets.Class, AttributeTargets.Assembly };
-
-            foreach (var aspectTarget in targetKeys)
-            {
-                if (!globalAspects.ContainsKey(aspectTarget))
-                {
-                    continue;
-                }
-
-                var aspects = globalAspects[aspectTarget];
-
-                aspects.Sort((a, b) =>
-                {
-                    return a.Priority.CompareTo(b.Priority);
-                });
-
-                foreach (var info in aspects)
-                {
-                    if (aspectTarget == AttributeTargets.Class && info.TargetName != typeName)
-                    {
-                        continue;
-                    }
-                        
-                    var code = this.GetAspectCode(isGroup, info, method, excludeTypes);
-                    if (code != null && code.Length > 0)
-                    {
-                        list.Add(code);
-                    }     
-                }
-
-                if (aspectTarget == AttributeTargets.Class)
-                {
-                    var inheritedAspects = new List<AspectInfo>();
-                    this.FindClassInheritedAspects(isGroup, this.Emitter.GetBaseTypeDefinition(), method, inheritedAspects);
-
-                    foreach (var info in inheritedAspects)
-                    {
-                        var code = this.GetAspectCode(isGroup, info, method, excludeTypes);
-                        if (code != null && code.Length > 0)
-                        {
-                            list.Add(code);
-                        }
-                    }
-                }
-            }
-        }
-
-        protected virtual void FindClassInheritedAspects(bool isGroup, TypeDefinition baseType, MethodDeclaration method, List<AspectInfo> aspectInfos)
-        {
-            if (baseType.CustomAttributes.Count > 0)
-            {
-                foreach (var attr in baseType.CustomAttributes)
-                {
-                    if (AspectHelpers.IsAspectAttribute(attr.AttributeType, this.Emitter))
-                    {
-                        var methodDef = Helpers.GetMethodDefinition(this.Emitter, method, baseType);
-                        var name = isGroup ? AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef) : this.Emitter.GetEntityName(method);
-                        var info = AspectHelpers.GetAspectInfo(attr, this.Emitter, AttributeTargets.Method, name);
-
-                        if (info.Inheritance == TranslatorMulticastInheritance.All || (info.Inheritance == TranslatorMulticastInheritance.Strict && method.HasModifier(Modifiers.Override)))
-                        {
-                            aspectInfos.Add(info);
-                        }
-                    }
-                }
-            }
-
-            baseType = this.Emitter.GetBaseTypeDefinition(baseType);
-            if (baseType != null)
-            {
-                this.FindClassInheritedAspects(isGroup, baseType, method, aspectInfos);
-            }
-        }
-
-        protected virtual string GetAspectCode(bool isGroup, AspectInfo aspect, MethodDeclaration method, List<string> excludeTypes)
+        protected virtual string GetAspectCode(bool isGroup, AspectInfo aspect, EntityDeclaration entity, List<string> excludeTypes)
         {
             if (excludeTypes.Contains(aspect.AspectType))
             {
@@ -175,9 +39,9 @@ namespace Bridge.NET
 
             string className = this.Emitter.TypeInfo.FullName;
 
-            if (AspectHelpers.MatchTargetAttributes(targetMembersAttributes, method) &&
+            if (AspectHelpers.MatchTargetAttributes(targetMembersAttributes, entity) &&
                 AspectHelpers.MatchTargetAttributes(targetTypesAttributes, this.Emitter.TypeInfo.TypeDeclaration) &&
-                AspectHelpers.MatchTarget(targetMembers, method.Name) &&
+                AspectHelpers.MatchTarget(targetMembers, entity.Name) &&
                 AspectHelpers.MatchTarget(targetTypes, className))
             {
                 var exclude = aspect.Exclude;
@@ -237,11 +101,11 @@ namespace Bridge.NET
                     propList = sb.ToString();
                 }
 
-                var name = isGroup ? null : this.Emitter.GetEntityName(method);
+                var name = isGroup ? null : entity is PropertyDeclaration ? entity.Name : this.Emitter.GetEntityName(entity);
                 if (isGroup)
                 {
                     var thisType = this.Emitter.GetTypeDefinition();
-                    var methodDef = Helpers.GetMethodDefinition(this.Emitter, method, thisType);
+                    var methodDef = Helpers.GetMethodDefinition(this.Emitter, (MethodDeclaration)entity, thisType);
                     name = AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef);
                 }
 
@@ -254,39 +118,6 @@ namespace Bridge.NET
             }
 
             return null;
-        }
-
-        protected virtual void FindInheritedAspect(bool isGroup, TypeDefinition baseType, MethodDeclaration method, List<AspectInfo> aspectInfos)
-        {
-            var methodDef = Helpers.GetMethodDefinition(this.Emitter, method, baseType);
-
-            if (methodDef != null && methodDef.CustomAttributes.Count > 0)
-            {
-                foreach (var attr in methodDef.CustomAttributes)
-                {
-                    if (AspectHelpers.IsAspectAttribute(attr.AttributeType, this.Emitter))
-                    {
-                        var name = isGroup ? AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef) : this.Emitter.GetEntityName(method);
-                        var info = AspectHelpers.GetAspectInfo(attr, this.Emitter, AttributeTargets.Method, name);
-
-                        if (info.Inheritance != TranslatorMulticastInheritance.None)
-                        {
-                            aspectInfos.Add(info);
-                        }
-                    }
-                }
-            }
-
-            if (methodDef != null && methodDef.IsVirtual && methodDef.IsNewSlot)
-            {
-                return;
-            }
-
-            baseType = this.Emitter.GetBaseTypeDefinition(baseType);
-            if (baseType != null)
-            {
-                this.FindInheritedAspect(isGroup, baseType, method, aspectInfos);
-            }
         }
     }
 }

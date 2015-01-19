@@ -20,7 +20,7 @@
             this.scope.$$aspects[this.$$name] = [];
         }
         this.scope.$$aspects[this.$$name].push(this);
-        this.exceptionTypes = this.getExceptionsTypes(methodName, scope) || [];
+        this.$$exceptionTypes = this.getExceptionsTypes(methodName, scope) || [];
 
         this.$$setAspect();
     },
@@ -45,19 +45,20 @@
 
                 try {
                     methodArgs.returnValue = me.targetMethod.apply(me.scope, methodArgs.arguments);
-                    me.onSuccess(methodArgs);
 
                     if (methodArgs.flow == 3) {
                         return methodArgs.returnValue;
                     }
+
+                    me.onSuccess(methodArgs);
                 }
                 catch (e) {
                     methodArgs.exception = Bridge.Exception.create(e);                    
 
-                    catchException = me.exceptionTypes.length == 0;
-                    if (me.exceptionTypes.length > 0) {
-                        for (var i = 0; i < me.exceptionTypes.length; i++) {
-                            if (Bridge.is(methodArgs.exception, me.exceptionTypes[i])) {
+                    catchException = me.$$exceptionTypes.length == 0;
+                    if (me.$$exceptionTypes.length > 0) {
+                        for (var i = 0; i < me.$$exceptionTypes.length; i++) {
+                            if (Bridge.is(methodArgs.exception, me.$$exceptionTypes[i])) {
                                 catchException = true;
                                 break;
                             }

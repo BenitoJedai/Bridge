@@ -169,11 +169,32 @@ Bridge.Class.extend('Bridge.AspectAttribute',{$extend:[Bridge.Attribute]});Bridg
 
 Bridge.Class.extend('Bridge.MethodAspectAttribute',{$extend:[Bridge.MulticastAspectAttribute],onEntry:Bridge.emptyFn,onExit:Bridge.emptyFn,onSuccess:Bridge.emptyFn,onException:Bridge.emptyFn,init:function(methodName,scope){this.methodName=methodName;this.scope=scope;this.targetMethod=this.scope[this.methodName];if(!this.runTimeValidate(methodName,scope)){return;}
 this.scope.$$aspects=this.scope.$$aspects||{};if(!this.scope.$$aspects[this.$$name]){this.scope.$$aspects[this.$$name]=[];}
-this.scope.$$aspects[this.$$name].push(this);this.exceptionTypes=this.getExceptionsTypes(methodName,scope)||[];this.$$setAspect();},$$setAspect:function(){var me=this,fn=function(){var methodArgs={arguments:arguments,methodName:me.methodName,scope:me.scope,exception:null,flow:0},catchException;me.onEntry(methodArgs);if(methodArgs.flow==3){return methodArgs.returnValue;}
-try{methodArgs.returnValue=me.targetMethod.apply(me.scope,methodArgs.arguments);me.onSuccess(methodArgs);if(methodArgs.flow==3){return methodArgs.returnValue;}}
-catch(e){methodArgs.exception=Bridge.Exception.create(e);catchException=me.exceptionTypes.length==0;if(me.exceptionTypes.length>0){for(var i=0;i<me.exceptionTypes.length;i++){if(Bridge.is(methodArgs.exception,me.exceptionTypes[i])){catchException=true;break;}}}
+this.scope.$$aspects[this.$$name].push(this);this.$$exceptionTypes=this.getExceptionsTypes(methodName,scope)||[];this.$$setAspect();},$$setAspect:function(){var me=this,fn=function(){var methodArgs={arguments:arguments,methodName:me.methodName,scope:me.scope,exception:null,flow:0},catchException;me.onEntry(methodArgs);if(methodArgs.flow==3){return methodArgs.returnValue;}
+try{methodArgs.returnValue=me.targetMethod.apply(me.scope,methodArgs.arguments);if(methodArgs.flow==3){return methodArgs.returnValue;}
+me.onSuccess(methodArgs);}
+catch(e){methodArgs.exception=Bridge.Exception.create(e);catchException=me.$$exceptionTypes.length==0;if(me.$$exceptionTypes.length>0){for(var i=0;i<me.$$exceptionTypes.length;i++){if(Bridge.is(methodArgs.exception,me.$$exceptionTypes[i])){catchException=true;break;}}}
 if(catchException){me.onException(methodArgs);}
 if(methodArgs.flow==3){return methodArgs.returnValue;}
 if(methodArgs.flow==2&&methodArgs.flow==0){throw e;}}
 finally{me.onExit(methodArgs);}
 return methodArgs.returnValue;};this.scope[this.methodName]=fn;},remove:function(){var i,aspects=this.scope.$$aspects[this.$$name];this.scope[this.methodName]=this.targetMethod;for(i=aspects.length-1;i>=0;i--){if(aspects[i]===this){aspects.splice(i,1);return;}}},getExceptionsTypes:function(){return[];},runTimeValidate:function(){return true;}});
+
+Bridge.Class.extend('Bridge.PropertyAspectAttribute',{$extend:[Bridge.MulticastAspectAttribute],onGetValue:Bridge.emptyFn,onSetValue:Bridge.emptyFn,onSuccess:Bridge.emptyFn,onException:Bridge.emptyFn,init:function(propertyName,scope){this.propertyName=propertyName;this.scope=scope;this.getter=this.scope["get"+this.propertyName];this.setter=this.scope["set"+this.propertyName];if(!this.runTimeValidate(propertyName,scope)){return;}
+this.scope.$$aspects=this.scope.$$aspects||{};if(!this.scope.$$aspects[this.$$name]){this.scope.$$aspects[this.$$name]=[];}
+this.scope.$$aspects[this.$$name].push(this);this.$$exceptionTypes=this.getExceptionsTypes(propertyName,scope)||[];this.$$setAspect();},$$setAspect:function(){var fn=function(me,isGetter){return function(value){var methodArgs={value:value,propertyName:me.propertyName,scope:me.scope,exception:null,flow:0,isGetter:isGetter},catchException;if(isGetter){me.onGetValue(methodArgs);}
+else{me.onSetValue(methodArgs);}
+if(methodArgs.flow==3){return isGetter?methodArgs.value:undefined;}
+try{if(isGetter){methodArgs.value=me.getter.call(me.scope);}
+else{me.setter.call(me.scope,methodArgs.value);}
+if(methodArgs.flow==3){return isGetter?methodArgs.value:undefined;}
+me.onSuccess(methodArgs);}
+catch(e){methodArgs.exception=Bridge.Exception.create(e);catchException=me.$$exceptionTypes.length==0;if(me.$$exceptionTypes.length>0){for(var i=0;i<me.$$exceptionTypes.length;i++){if(Bridge.is(methodArgs.exception,me.$$exceptionTypes[i])){catchException=true;break;}}}
+if(catchException){me.onException(methodArgs);}
+if(methodArgs.flow==3){return isGetter?methodArgs.value:undefined;}
+if(methodArgs.flow==2&&methodArgs.flow==0){throw e;}}
+return isGetter?methodArgs.value:undefined;}};if(this.getter){this.scope["get"+this.propertyName]=fn(this,true);}
+if(this.setter){this.scope["set"+this.propertyName]=fn(this,false);}},remove:function(){var i,aspects=this.scope.$$aspects[this.$$name];this.scope[this.propertyName]=this.getter;this.scope[this.propertyName]=this.setter;for(i=aspects.length-1;i>=0;i--){if(aspects[i]===this){aspects.splice(i,1);return;}}},getExceptionsTypes:function(){return[];},runTimeValidate:function(){return true;}});
+
+Bridge.Class.extend('Bridge.TypeAspectAttribute',{$extend:[Bridge.MulticastAspectAttribute],onInstance:Bridge.emptyFn,init:function(instance){this.instance=instance;this.typeName=instance.$$name;if(!this.runTimeValidate(instance)){return;}
+this.instance.$$aspects=this.instance.$$aspects||{};if(!this.instance.$$aspects[this.$$name]){this.instance.$$aspects[this.$$name]=[];}
+this.instance.$$aspects[this.$$name].push(this);this.$$setAspect();},$$setAspect:function(){this.onInstance({instance:this.instance});},runTimeValidate:function(){return true;}});

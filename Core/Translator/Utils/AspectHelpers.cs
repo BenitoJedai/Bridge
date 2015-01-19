@@ -140,6 +140,16 @@ namespace Bridge.NET
             return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.AspectAttribute");
         }
 
+        public static bool IsMethodAspectAttribute(IType type)
+        {
+            return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.MethodAspectAttribute");
+        }
+
+        public static bool IsPropertyAspectAttribute(IType type)
+        {
+            return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.PropertyAspectAttribute");
+        }
+
         public static bool IsAspectAttribute(TypeReference type, Emitter emitter)
         {
             return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.AspectAttribute"], emitter);
@@ -148,6 +158,26 @@ namespace Bridge.NET
         public static bool IsMulticastAspectAttribute(TypeReference type, Emitter emitter)
         {
             return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.MulticastAspectAttribute"], emitter);
+        }
+
+        public static bool IsMethodAspectAttribute(TypeReference type, Emitter emitter)
+        {
+            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.MethodAspectAttribute"], emitter);
+        }
+
+        public static bool IsTypeAspectAttribute(TypeReference type, Emitter emitter)
+        {
+            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.TypeAspectAttribute"], emitter);
+        }
+
+        public static bool IsPropertyAspectAttribute(TypeReference type, Emitter emitter)
+        {
+            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.PropertyAspectAttribute"], emitter);
+        }
+
+        public static bool IsTypeAttribute(TypeReference type, string name, Emitter emitter)
+        {
+            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions[name], emitter);
         }
 
         public static bool IsTypeAttribute(IType type, string name)

@@ -91,6 +91,9 @@
     <Compile Include="Emitter\Blocks\ArrayInitializerBlock.cs" />
     <Compile Include="Emitter\Blocks\AnonymousTypeCreateBlock.cs" />
     <Compile Include="Emitter\Blocks\AsyncBlock.cs" />
+    <Compile Include="Emitter\Blocks\ConstructorBlock.MethodAspect.cs" />
+    <Compile Include="Emitter\Blocks\ConstructorBlock.TypeAspect.cs" />
+    <Compile Include="Emitter\Blocks\ConstructorBlock.PropertyAspect.cs" />
     <Compile Include="Emitter\Blocks\ConstructorBlock.Aspect.cs" />
     <Compile Include="Emitter\Blocks\ConstructorBlock.Events.cs" />
     <Compile Include="Emitter\Blocks\EmitBlock.cs" />

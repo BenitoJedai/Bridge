@@ -32,7 +32,7 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            this.FindAspects(this.Emitter.GetTypeDefinition());
+            //this.FindAspects(this.Emitter.GetTypeDefinition());
             this.EmitClassHeader();
             this.EmitStaticBlock();
             this.EmitInstantiableBlock();
@@ -202,10 +202,11 @@ namespace Bridge.NET
 
         protected virtual void EmitInstantiableBlock()
         {
-            if (this.TypeInfo.HasInstantiable)
+            var ctorBlock = new ConstructorBlock(this.Emitter, this.TypeInfo, false);
+            if (this.TypeInfo.HasInstantiable || ctorBlock.GetAspects().Count() > 0)
             {
                 this.EnsureComma();
-                new ConstructorBlock(this.Emitter, this.TypeInfo, false).Emit();
+                ctorBlock.Emit();
                 new MethodBlock(this.Emitter, this.TypeInfo, false).Emit();
             }
             else

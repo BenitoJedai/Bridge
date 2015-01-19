@@ -11,21 +11,25 @@ namespace Bridge.CLR
     public abstract class MethodAspectAttribute : MulticastAspectAttribute
     {
         public const string Format = "new {0}({3}).init('{1}', {2});";
-        public const string MergeFormat = "Bridge.merge(new {0}({3}, {{{4}}}).init('{1}', {2});";
+        public const string MergeFormat = "Bridge.merge(new {0}({3}), {{{4}}}).init('{1}', {2});";
 
-        public virtual void OnEntry(MethodEventArgs eventArgs)
+        public readonly string MethodName;
+        public readonly object Scope;
+        public readonly Delegate TargetMethod;
+
+        public virtual void OnEntry(MethodAspectEventArgs eventArgs)
         {
         }
 
-        public virtual void OnExit(MethodEventArgs eventArgs)
+        public virtual void OnExit(MethodAspectEventArgs eventArgs)
         {
         }
 
-        public virtual void OnSuccess(MethodEventArgs eventArgs)
+        public virtual void OnSuccess(MethodAspectEventArgs eventArgs)
         {
         }
 
-        public virtual void OnException(MethodEventArgs eventArgs)
+        public virtual void OnException(MethodAspectEventArgs eventArgs)
         {
         }
 
@@ -48,7 +52,7 @@ namespace Bridge.CLR
         }
     }
 
-    public class MethodEventArgs
+    public class MethodAspectEventArgs
     {
         public readonly object[] Arguments;
 

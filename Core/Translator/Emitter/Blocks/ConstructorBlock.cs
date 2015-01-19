@@ -152,6 +152,11 @@ namespace Bridge.NET
         {            
             this.EmitInitMembers();
 
+            if (!this.TypeInfo.HasInstantiable)
+            {
+                return;
+            }
+
             this.EnsureComma();
 
             var baseType = this.Emitter.GetBaseTypeDefinition();

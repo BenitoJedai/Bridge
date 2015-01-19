@@ -24,7 +24,10 @@ namespace System
         }
 
         [Template("{this}")]
-        public readonly dynamic Instance;
+        public readonly dynamic This;
+
+        [Template("$$name")]
+        public readonly string ClassName;
 
         public virtual string ToString() 
         { 
@@ -60,6 +63,11 @@ namespace System
     [Ignore]
     public static class ObjectExtensions
     {
+        [Template("{obj}[{name}] = {args}")]
+        public static void AddMember(this object obj, string name, object member)
+        {
+        }
+
         [Template("Bridge.fn.call({obj}, {name}, {args})")]
         public static void CallFn(this object obj, string name, params object[] args)
         {

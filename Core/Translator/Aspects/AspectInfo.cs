@@ -112,6 +112,39 @@ namespace Bridge.NET
             set; 
         }
 
+        public bool IsMethodAspect(Emitter emitter)
+        {
+            string name = "Bridge.CLR.MethodAspectAttribute";
+            if (this.Type != null)
+            {
+                return AspectHelpers.IsTypeAttribute(this.Type, name);
+            }
+
+            return AspectHelpers.IsTypeAttribute(this.TypeReference, name, emitter);
+        }
+
+        public bool IsPropertyAspect(Emitter emitter)
+        {
+            string name = "Bridge.CLR.PropertyAspectAttribute";
+            if (this.Type != null)
+            {
+                return AspectHelpers.IsTypeAttribute(this.Type, name);
+            }
+
+            return AspectHelpers.IsTypeAttribute(this.TypeReference, name, emitter);
+        }
+
+        public bool IsTypeAspect(Emitter emitter)
+        {
+            string name = "Bridge.CLR.TypeAspectAttribute";
+            if (this.Type != null)
+            {
+                return AspectHelpers.IsTypeAttribute(this.Type, name);
+            }
+
+            return AspectHelpers.IsTypeAttribute(this.TypeReference, name, emitter);
+        }
+
         public T GetProperty<T>(string key, T defaultValue)
         {
             Dictionary<string, object> typeProperties = this.AssemblyInfo.AspectTypeProperties[this.AspectType];
