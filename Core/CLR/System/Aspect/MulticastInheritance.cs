@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bridge.CLR;
 
-namespace Bridge.CLR
+namespace Bridge.Aspects
 {
+    [Ignore]
     public class MulticastInheritance
     {
         public const int None = 0;

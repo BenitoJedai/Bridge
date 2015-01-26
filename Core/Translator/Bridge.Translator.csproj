@@ -80,8 +80,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aspects\Blocks\AbstractAspectBlock.cs" />
+    <Compile Include="Aspects\Blocks\ParameterAspectBlock.cs" />
+    <Compile Include="Aspects\Blocks\NotifyPropertyChangedAspectBlock.cs" />
+    <Compile Include="Aspects\Blocks\TypeAspectBlock.cs" />
+    <Compile Include="Aspects\Blocks\PropertyAspectBlock.cs" />
+    <Compile Include="Aspects\Blocks\MethodAspectBlock.cs" />
     <Compile Include="Aspects\MulticastAttributes.cs" />
     <Compile Include="Aspects\MulticastInheritance.cs" />
+    <Compile Include="Aspects\Translator.InspectAspects.cs" />
     <Compile Include="Emitter\ArgumentsInfo.cs" />
     <Compile Include="Emitter\Blocks\AbstractEmitterBlock.Locals.cs" />
     <Compile Include="Emitter\Blocks\AbstractMethodBlock.cs" />
@@ -91,10 +98,7 @@
     <Compile Include="Emitter\Blocks\ArrayInitializerBlock.cs" />
     <Compile Include="Emitter\Blocks\AnonymousTypeCreateBlock.cs" />
     <Compile Include="Emitter\Blocks\AsyncBlock.cs" />
-    <Compile Include="Emitter\Blocks\ConstructorBlock.MethodAspect.cs" />
-    <Compile Include="Emitter\Blocks\ConstructorBlock.TypeAspect.cs" />
-    <Compile Include="Emitter\Blocks\ConstructorBlock.PropertyAspect.cs" />
-    <Compile Include="Emitter\Blocks\ConstructorBlock.Aspect.cs" />
+    <Compile Include="Aspects\ConstructorBlock.Aspect.cs" />
     <Compile Include="Emitter\Blocks\ConstructorBlock.Events.cs" />
     <Compile Include="Emitter\Blocks\EmitBlock.cs" />
     <Compile Include="Emitter\Blocks\TypeExpressionListBlock.cs" />
@@ -152,7 +156,7 @@
     <Compile Include="Emitter\Emitter.Log.cs" />
     <Compile Include="Emitter\EmitterOutput.cs" />
     <Compile Include="Aspects\AspectInfo.cs" />
-    <Compile Include="Utils\AspectHelpers.cs" />
+    <Compile Include="Aspects\AspectHelpers.cs" />
     <Compile Include="Utils\ReferenceArgumentVisitor.cs" />
     <Compile Include="Utils\AwaitSearchVisitor.cs" />
     <Compile Include="Utils\AssemblyInfo.cs" />

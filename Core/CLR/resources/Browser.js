@@ -60,7 +60,7 @@
   isTablet = isiPad,
   isPhone = !isDesktop && !isTablet;
 
-  Bridge.apply(Bridge, {
+  Bridge.Browser = {
     isStrict: isStrict,
     isIEQuirks: isIE && (!isStrict && (isIE6 || isIE7 || isIE8 || isIE9)),
     isOpera: isOpera,
@@ -121,5 +121,5 @@
     isPhone: isPhone,
     iOS: isiPhone || isiPad || isiPod,
     standalone: !!window.navigator.standalone
-  });
+  };
 })();

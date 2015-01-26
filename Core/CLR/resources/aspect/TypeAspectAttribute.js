@@ -1,11 +1,13 @@
-﻿Bridge.Class.extend('Bridge.TypeAspectAttribute', {
-    $extend: [Bridge.MulticastAspectAttribute],
+﻿Bridge.Class.extend('Bridge.Aspects.TypeAspectAttribute', {
+    $extend: [Bridge.Aspects.MulticastAspectAttribute],
 
     onInstance: Bridge.emptyFn,
+    onAfterInstance: Bridge.emptyFn,
 
-    init: function (instance) {
+    init: function (instance, arguments) {
         this.instance = instance;
         this.typeName = instance.$$name;
+        this.arguments = arguments;
 
         if (!this.runTimeValidate(instance)) {
             return;
@@ -20,7 +22,21 @@
     },
 
     $$setAspect: function () {
-        this.onInstance({instance: this.instance});
+        var me = this;
+        this.$$targetInitCtor = this.instance.$$initCtor;
+        this.instance.$$initCtor = function () {
+            var args = {
+                instance: me.instance,
+                typeName: me.typeName,
+                arguments: arguments
+            };
+
+            me.onInstance(args);
+
+            me.$$targetInitCtor.apply(me.instance, args.arguments)
+
+            me.onAfterInstance(args);
+        };
     },
 
     runTimeValidate: function () {

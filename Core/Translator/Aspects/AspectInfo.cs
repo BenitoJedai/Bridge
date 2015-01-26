@@ -11,6 +11,7 @@ namespace Bridge.NET
         public AspectInfo(AssemblyInfo info)
         {
             this.Properties = new Dictionary<string, object>();
+            this.AdditionalInfo = new Dictionary<string, string>();
             this.ConstructorArguments = new List<object>();
             this.AssemblyInfo = info;
         }
@@ -22,6 +23,12 @@ namespace Bridge.NET
         }
 
         public Dictionary<string, object> Properties
+        {
+            get;
+            set;
+        }
+
+        public Dictionary<string, string> AdditionalInfo
         {
             get;
             set;
@@ -76,6 +83,12 @@ namespace Bridge.NET
             set;
         }
 
+        public string ClientType
+        {
+            get;
+            set;
+        }
+
         public string Format
         {
             get;
@@ -114,7 +127,7 @@ namespace Bridge.NET
 
         public bool IsMethodAspect(Emitter emitter)
         {
-            string name = "Bridge.CLR.MethodAspectAttribute";
+            string name = "Bridge.Aspects.MethodAspectAttribute";
             if (this.Type != null)
             {
                 return AspectHelpers.IsTypeAttribute(this.Type, name);
@@ -125,7 +138,7 @@ namespace Bridge.NET
 
         public bool IsPropertyAspect(Emitter emitter)
         {
-            string name = "Bridge.CLR.PropertyAspectAttribute";
+            string name = "Bridge.Aspects.PropertyAspectAttribute";
             if (this.Type != null)
             {
                 return AspectHelpers.IsTypeAttribute(this.Type, name);
@@ -136,7 +149,7 @@ namespace Bridge.NET
 
         public bool IsTypeAspect(Emitter emitter)
         {
-            string name = "Bridge.CLR.TypeAspectAttribute";
+            string name = "Bridge.Aspects.TypeAspectAttribute";
             if (this.Type != null)
             {
                 return AspectHelpers.IsTypeAttribute(this.Type, name);

@@ -1,6 +1,7 @@
 ﻿using System;
+using Bridge.CLR;
 
-namespace Bridge.CLR
+namespace Bridge.Aspects
 {
     /// <summary>
     /// 

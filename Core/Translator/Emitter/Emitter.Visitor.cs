@@ -274,5 +274,10 @@ namespace Bridge.NET
         {
             directionExpression.Expression.AcceptVisitor(this);
         }
+
+        public override void VisitNullNode(AstNode nullNode)
+        {
+            new NullReferenceBlock(this, nullNode).Emit();
+        }
     }
 }

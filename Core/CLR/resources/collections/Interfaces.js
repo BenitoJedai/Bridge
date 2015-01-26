@@ -1,6 +1,9 @@
 ﻿Bridge.Class.extend('Bridge.IEnumerable', {});
 Bridge.Class.extend('Bridge.IEnumerator', {});
 Bridge.Class.extend('Bridge.IEqualityComparer', {});
+Bridge.Class.extend('Bridge.ICollection', {
+    $extend: [Bridge.IEnumerable]
+});
 
 Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerator$1', T);

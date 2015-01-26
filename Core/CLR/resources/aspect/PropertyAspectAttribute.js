@@ -1,5 +1,5 @@
-﻿Bridge.Class.extend('Bridge.PropertyAspectAttribute', {
-    $extend: [Bridge.MulticastAspectAttribute],
+﻿Bridge.Class.extend('Bridge.Aspects.PropertyAspectAttribute', {
+    $extend: [Bridge.Aspects.MulticastAspectAttribute],
 
     onGetValue: Bridge.emptyFn,
     onSetValue: Bridge.emptyFn,
@@ -94,13 +94,17 @@
                 }
             };
 
+        this.$$initAccessors(fn);
+    },
+
+    $$initAccessors: function (fn) {
         if (this.getter) {
             this.scope["get" + this.propertyName] = fn(this, true);
         }
 
         if (this.setter) {
             this.scope["set" + this.propertyName] = fn(this, false);
-        }        
+        }
     },
 
     remove: function () {

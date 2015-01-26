@@ -6,13 +6,13 @@ namespace Bridge.NET
 {
     public class NullReferenceBlock : AbstractEmitterBlock
     {
-        public NullReferenceBlock(Emitter emitter, NullReferenceExpression nullReferenceExpression)
+        public NullReferenceBlock(Emitter emitter, AstNode nullNode)
         {
             this.Emitter = emitter;
-            this.NullReferenceExpression = nullReferenceExpression;
+            this.NullNode = nullNode;
         }
 
-        public NullReferenceExpression NullReferenceExpression 
+        public AstNode NullNode 
         { 
             get; 
             set; 

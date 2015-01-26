@@ -12,11 +12,15 @@
   <file name="collections/List.js" path="collections" />
   <file name="Browser.js" />
   <file name="Task.js" />
+  <file name="Validation.js" />
   <file name="Attribute.js" />
+  <file name="INotifyPropertyChanged.js" />
   <file name="aspect/AspectAttribute.js" path="aspect" />
   <file name="aspect/MethodAspectAttribute.js" path="aspect" />
   <file name="aspect/PropertyAspectAttribute.js" path="aspect" />
   <file name="aspect/TypeAspectAttribute.js" path="aspect" />
+  <file name="aspect/NotifyPropertyChangedAspectAttribute.js" path="aspect" />
+  <file name="aspect/ParameterAspectAttribute.js" path="aspect" />
   <target name="Bridge.NET" file="$output\bridge.js" debug="True" shorthand="False" shorthand-list="YAHOO.util.Dom.setStyle&#xD;&#xA;YAHOO.util.Dom.getStyle&#xD;&#xA;YAHOO.util.Dom.getRegion&#xD;&#xA;YAHOO.util.Dom.getViewportHeight&#xD;&#xA;YAHOO.util.Dom.getViewportWidth&#xD;&#xA;YAHOO.util.Dom.get&#xD;&#xA;YAHOO.util.Dom.getXY&#xD;&#xA;YAHOO.util.Dom.setXY&#xD;&#xA;YAHOO.util.CustomEvent&#xD;&#xA;YAHOO.util.Event.addListener&#xD;&#xA;YAHOO.util.Event.getEvent&#xD;&#xA;YAHOO.util.Event.getTarget&#xD;&#xA;YAHOO.util.Event.preventDefault&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Event.stopPropagation&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Anim&#xD;&#xA;YAHOO.util.Motion&#xD;&#xA;YAHOO.util.Connect.asyncRequest&#xD;&#xA;YAHOO.util.Connect.setForm&#xD;&#xA;YAHOO.util.Dom&#xD;&#xA;YAHOO.util.Event">
     <include name="Core.js" />
     <include name="Nullable.js" />
@@ -30,10 +34,14 @@
     <include name="collections/Dictionary.js" />
     <include name="collections/List.js" />
     <include name="Task.js" />
+    <include name="Validation.js" />
     <include name="Attribute.js" />
+    <include name="INotifyPropertyChanged.js" />
     <include name="aspect/AspectAttribute.js" />
     <include name="aspect/MethodAspectAttribute.js" />
     <include name="aspect/PropertyAspectAttribute.js" />
     <include name="aspect/TypeAspectAttribute.js" />
+    <include name="aspect/NotifyPropertyChangedAspectAttribute.js" />
+    <include name="aspect/ParameterAspectAttribute.js" />
   </target>
 </project>

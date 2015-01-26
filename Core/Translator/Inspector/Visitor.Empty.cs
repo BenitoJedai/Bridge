@@ -54,8 +54,7 @@ namespace Bridge.NET
             //throw this.CreateException(simpleType);
         }
 
-
-        public void VisitNullNode(AstNode nullNode)
+        public virtual void VisitNullNode(AstNode nullNode)
         {
             //throw this.CreateException(nullNode);
         }

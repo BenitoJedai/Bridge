@@ -18,16 +18,20 @@ namespace System
             } 
         }
 
-        public virtual T GetProperty<T>(string name)
-        {
-            return default(T);
-        }
+        //[Template("{this}")]
+        //public readonly dynamic This;
 
         [Template("{this}")]
-        public readonly dynamic This;
+        public virtual dynamic ToDynamic()
+        {
+            return null;
+        }
 
         [Template("$$name")]
-        public readonly string ClassName;
+        public virtual string GetClassName()
+        {
+            return null;
+        }
 
         public virtual string ToString() 
         { 

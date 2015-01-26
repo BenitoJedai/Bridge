@@ -1,29 +1,57 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
-using System.Collections.Generic;
-using System.Linq;
 using Mono.Cecil;
 using System;
-using System.Text;
+using System.Collections.Generic;
 
 namespace Bridge.NET
 {
-    public partial class ConstructorBlock
+    public class TypeAspectBlock : ConstructorAspectBlock
     {
-        protected virtual IEnumerable<string> GetTypeAspects()
+        public TypeAspectBlock(ConstructorBlock block) : base(block)
+        {
+        }
+
+        public override IEnumerable<string> GetAspects()
         {
             List<string> list = new List<string>();
-            this.EmitTypeAspect(list, this.Emitter.GetTypeDefinition());            
+            this.EmitTypeAspect(list, this.Emitter.GetTypeDefinition());
 
             return list;
         }
 
+        protected override string FormatAspect(AspectInfo aspect, EntityDeclaration entity, string argList, string propList)
+        {
+            var name = this.Emitter.GetEntityName(entity);
+            var typeName = aspect.ClientType ?? aspect.AspectType;
+
+            if (propList.Length > 0 && aspect.MergeFormat != null)
+            {
+                return string.Format(aspect.MergeFormat, typeName, name, "this", argList, propList);
+            }
+
+            return string.Format(aspect.Format, typeName, name, "this", argList);
+        }
+
         protected virtual void EmitTypeAspect(List<string> list, TypeDefinition type)
         {
+            var block = this.ConstructorBlock;
             var globalAspects = this.Emitter.AssemblyInfo.Aspects;
             var excludeTypes = new List<string>();
             var typeName = type.FullName;
-            
-            var targetKeys = new AttributeTargets[] { AttributeTargets.Class, AttributeTargets.Assembly };
+
+            var inheritedAspects = new List<AspectInfo>();
+            this.FindClassInheritedAspects(this.Emitter.GetTypeDefinition(), type, inheritedAspects);
+
+            foreach (var info in inheritedAspects)
+            {
+                var code = this.GetAspectCode(info, block.TypeInfo.TypeDeclaration, excludeTypes);
+                if (code != null && code.Length > 0)
+                {
+                    list.Add(code);
+                }
+            }
+
+            var targetKeys = new AttributeTargets[] { AttributeTargets.Assembly };
 
             foreach (var aspectTarget in targetKeys)
             {
@@ -38,33 +66,18 @@ namespace Bridge.NET
 
                     foreach (var info in aspects)
                     {
-                        if (aspectTarget == AttributeTargets.Class && info.TargetName != typeName || !info.IsTypeAspect(this.Emitter))
+                        if (!info.IsTypeAspect(this.Emitter))
                         {
                             continue;
                         }
 
-                        var code = this.GetAspectCode(false, info, this.TypeInfo.TypeDeclaration, excludeTypes);
+                        var code = this.GetAspectCode(info, block.TypeInfo.TypeDeclaration, excludeTypes);
                         if (code != null && code.Length > 0)
                         {
                             list.Add(code);
                         }
                     }
                 }                
-
-                if (aspectTarget == AttributeTargets.Class)
-                {
-                    var inheritedAspects = new List<AspectInfo>();
-                    this.FindClassInheritedAspects(this.Emitter.GetTypeDefinition(), type, inheritedAspects);
-
-                    foreach (var info in inheritedAspects)
-                    {
-                        var code = this.GetAspectCode(false, info, this.TypeInfo.TypeDeclaration, excludeTypes);
-                        if (code != null && code.Length > 0)
-                        {
-                            list.Add(code);
-                        }
-                    }
-                }
             }
         }
 

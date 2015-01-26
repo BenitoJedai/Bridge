@@ -1,7 +1,9 @@
 ﻿using System;
+using Bridge.CLR;
 
-namespace Bridge.CLR
+namespace Bridge.Aspects
 {
+    [Ignore]
     public enum AspectFlow
     {
         Default = 0,

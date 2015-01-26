@@ -1,12 +1,13 @@
 ﻿using System;
+using Bridge.CLR;
 
-namespace Bridge.CLR
+namespace Bridge.Aspects
 {
     /// <summary>
     /// 
     /// </summary>
     [Ignore]
-    [Name("Bridge.MultiAspectAttribute")]
+    [Name("Bridge.Aspects.MultiAspectAttribute")]
     public abstract class MulticastAspectAttribute : AspectAttribute
     {
         public bool Exclude

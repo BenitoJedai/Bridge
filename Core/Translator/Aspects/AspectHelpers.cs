@@ -20,7 +20,7 @@ namespace Bridge.NET
 
                 foreach (var attr in type.GetDefinition().Attributes)
                 {
-                    if (attr.AttributeType.FullName == "Bridge.CLR.MulticastOptionsAttribute")
+                    if (attr.AttributeType.FullName == "Bridge.Aspects.MulticastOptionsAttribute")
                     {
                         foreach (var arg in attr.NamedArguments)
                         {
@@ -43,7 +43,7 @@ namespace Bridge.NET
                 var attributes = Helpers.ToTypeDefinition(type, emitter).CustomAttributes;
                 foreach (var attr in attributes)
                 {
-                    if (attr.AttributeType.FullName == "Bridge.CLR.MulticastOptionsAttribute")
+                    if (attr.AttributeType.FullName == "Bridge.Aspects.MulticastOptionsAttribute")
                     {
                         foreach (var arg in attr.Properties)
                         {
@@ -115,6 +115,7 @@ namespace Bridge.NET
 
             aspect.Target = target;
             aspect.AspectType = type.FullName;
+            aspect.ClientType = emitter.Validator.GetCustomTypeName(Helpers.ToTypeDefinition(type, emitter));
             aspect.TypeReference = type;
             aspect.Format = AspectHelpers.GetAspectFormat(type, emitter, "Format");
             aspect.MergeFormat = AspectHelpers.GetAspectFormat(type, emitter, "MergeFormat");
@@ -132,52 +133,62 @@ namespace Bridge.NET
 
         public static bool IsMulticastAspectAttribute(IType type)
         {
-            return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.MulticastAspectAttribute");
+            return AspectHelpers.IsTypeAttribute(type, "Bridge.Aspects.MulticastAspectAttribute");
         }
 
         public static bool IsAspectAttribute(IType type)
         {
-            return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.AspectAttribute");
+            return AspectHelpers.IsTypeAttribute(type, "Bridge.Aspects.AspectAttribute");
         }
 
         public static bool IsMethodAspectAttribute(IType type)
         {
-            return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.MethodAspectAttribute");
+            return AspectHelpers.IsTypeAttribute(type, "Bridge.Aspects.AbstractMethodAspectAttribute");
         }
 
         public static bool IsPropertyAspectAttribute(IType type)
         {
-            return AspectHelpers.IsTypeAttribute(type, "Bridge.CLR.PropertyAspectAttribute");
+            return AspectHelpers.IsTypeAttribute(type, "Bridge.Aspects.PropertyAspectAttribute");
         }
 
         public static bool IsAspectAttribute(TypeReference type, Emitter emitter)
         {
-            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.AspectAttribute"], emitter);
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.AspectAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
         }
 
         public static bool IsMulticastAspectAttribute(TypeReference type, Emitter emitter)
         {
-            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.MulticastAspectAttribute"], emitter);
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.MulticastAspectAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
         }
 
         public static bool IsMethodAspectAttribute(TypeReference type, Emitter emitter)
         {
-            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.MethodAspectAttribute"], emitter);
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.AbstractMethodAspectAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
+        }
+
+        public static bool IsParameterAspectAttribute(TypeReference type, Emitter emitter)
+        {
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.ParameterAspectAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
         }
 
         public static bool IsTypeAspectAttribute(TypeReference type, Emitter emitter)
         {
-            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.TypeAspectAttribute"], emitter);
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.TypeAspectAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
+        }
+
+        public static bool IsNotifyPropertyChangedAspectAttribute(TypeReference type, Emitter emitter)
+        {
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.NotifyPropertyChangedAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
         }
 
         public static bool IsPropertyAspectAttribute(TypeReference type, Emitter emitter)
         {
-            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions["Bridge.CLR.PropertyAspectAttribute"], emitter);
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions["Bridge.Aspects.PropertyAspectAttribute"], Helpers.ToTypeDefinition(type, emitter), emitter);
         }
 
         public static bool IsTypeAttribute(TypeReference type, string name, Emitter emitter)
         {
-            return Helpers.IsSubclassOf(Helpers.ToTypeDefinition(type, emitter), emitter.TypeDefinitions[name], emitter);
+            return Helpers.IsAssignableFrom(emitter.TypeDefinitions[name], Helpers.ToTypeDefinition(type, emitter), emitter);
         }
 
         public static bool IsTypeAttribute(IType type, string name)

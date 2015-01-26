@@ -1,12 +1,13 @@
 ﻿using System;
+using Bridge.CLR;
 
-namespace Bridge.CLR
+namespace Bridge.Aspects
 {
     /// <summary>
     /// 
     /// </summary>
     [Ignore]
-    [Name("Bridge.PropertyAspectAttribute")]
+    [Name("Bridge.Aspects.PropertyAspectAttribute")]
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple=true)]
     public abstract class PropertyAspectAttribute : MulticastAspectAttribute
     {
@@ -15,8 +16,15 @@ namespace Bridge.CLR
 
         public readonly string PropertyName;
         public readonly object Scope;
-        public readonly Delegate Getter;
-        public readonly Delegate Setter;
+
+        public T Getter<T>()
+        {
+            return default(T);
+        }
+
+        public void Setter(object value)
+        {
+        }
 
         public virtual void OnGetValue(PropertyAspectEventArgs eventArgs)
         {
@@ -49,6 +57,8 @@ namespace Bridge.CLR
         }
     }
 
+    [Ignore]
+    [Name("Object")]
     public class PropertyAspectEventArgs
     {
         public readonly string PropertyName;

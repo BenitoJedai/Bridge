@@ -14,6 +14,17 @@
     // The base Class implementation (does nothing)
     Bridge.Class = function () { };
     Bridge.Class.cache = {};
+    Bridge.Class.initCtor = function () {
+        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
+            this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
+        }
+        else if (this.$ctorDetector) {
+            this.$ctorDetector.apply(this, arguments);
+        }
+        else if (this.$init) {
+            this.$init.apply(this, arguments);
+        }
+    };
 
     // Create a new Class that inherits from this class
     Bridge.Class.extend = function (className, prop) {
@@ -49,9 +60,11 @@
 
         if (!prop.$initMembers) {
             prop.$initMembers = extend ? function () {
-                this.base();
+                this.base.apply(this, arguments);
             } : function () { };
         }
+
+        prop.$$initCtor = Bridge.Class.initCtor;
 
         // Copy the properties over onto the new prototype
         for (name in prop) {
@@ -93,18 +106,10 @@
             // All construction is actually done in the init method
             if (!initializing) {
                 if (this.$initMembers) {
-                    this.$initMembers();
-                }
+                    this.$initMembers.apply(this, arguments);
+                }                
 
-                if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
-                    this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
-                }
-                else if (this.$ctorDetector) {
-                    this.$ctorDetector.apply(this, arguments);
-                }
-                else if (this.$init) {
-                    this.$init.apply(this, arguments);
-                }
+                this.$$initCtor.apply(this, arguments);
             }
         }
 

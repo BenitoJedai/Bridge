@@ -1,7 +1,7 @@
-﻿Bridge.Class.extend('Bridge.AspectAttribute', {
+﻿Bridge.Class.extend('Bridge.Aspects.AspectAttribute', {
     $extend: [Bridge.Attribute]
 });
 
-Bridge.Class.extend('Bridge.MulticastAspectAttribute', {
-    $extend: [Bridge.AspectAttribute]
+Bridge.Class.extend('Bridge.Aspects.MulticastAspectAttribute', {
+    $extend: [Bridge.Aspects.AspectAttribute]
 });
