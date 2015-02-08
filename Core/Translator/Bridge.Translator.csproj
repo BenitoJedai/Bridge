@@ -73,6 +73,7 @@
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -80,15 +81,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aspects\Blocks\AbstractAspectBlock.cs" />
-    <Compile Include="Aspects\Blocks\ParameterAspectBlock.cs" />
-    <Compile Include="Aspects\Blocks\NotifyPropertyChangedAspectBlock.cs" />
-    <Compile Include="Aspects\Blocks\TypeAspectBlock.cs" />
-    <Compile Include="Aspects\Blocks\PropertyAspectBlock.cs" />
-    <Compile Include="Aspects\Blocks\MethodAspectBlock.cs" />
-    <Compile Include="Aspects\MulticastAttributes.cs" />
-    <Compile Include="Aspects\MulticastInheritance.cs" />
-    <Compile Include="Aspects\Translator.InspectAspects.cs" />
     <Compile Include="Emitter\ArgumentsInfo.cs" />
     <Compile Include="Emitter\Blocks\AbstractEmitterBlock.Locals.cs" />
     <Compile Include="Emitter\Blocks\AbstractMethodBlock.cs" />
@@ -98,7 +90,6 @@
     <Compile Include="Emitter\Blocks\ArrayInitializerBlock.cs" />
     <Compile Include="Emitter\Blocks\AnonymousTypeCreateBlock.cs" />
     <Compile Include="Emitter\Blocks\AsyncBlock.cs" />
-    <Compile Include="Aspects\ConstructorBlock.Aspect.cs" />
     <Compile Include="Emitter\Blocks\ConstructorBlock.Events.cs" />
     <Compile Include="Emitter\Blocks\EmitBlock.cs" />
     <Compile Include="Emitter\Blocks\TypeExpressionListBlock.cs" />
@@ -155,17 +146,14 @@
     <Compile Include="Emitter\Blocks\AbstractEmitterBlock.Write.cs" />
     <Compile Include="Emitter\Emitter.Log.cs" />
     <Compile Include="Emitter\EmitterOutput.cs" />
-    <Compile Include="Aspects\AspectInfo.cs" />
-    <Compile Include="Aspects\AspectHelpers.cs" />
+    <Compile Include="Translator\Plugins.cs" />
     <Compile Include="Utils\ReferenceArgumentVisitor.cs" />
     <Compile Include="Utils\AwaitSearchVisitor.cs" />
     <Compile Include="Utils\AssemblyInfo.cs" />
-    <Compile Include="Utils\ILog.cs" />
     <Compile Include="Utils\MemberResolver.cs" />
     <Compile Include="Emitter\Emitter.Visitor.cs" />
     <Compile Include="Emitter\Emitter.Properties.cs" />
     <Compile Include="Utils\Exception.cs" />
-    <Compile Include="Utils\Helpers.cs" />
     <Compile Include="Emitter\Emitter.cs" />
     <Compile Include="Inspector\Inspector.Visitor.cs" />
     <Compile Include="Inspector\Inspector.Properties.cs" />
@@ -187,20 +175,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Plugin\Bridge.Plugin.csproj">
+      <Project>{52ae9e3e-6929-4720-ab7a-f9f22b9a8972}</Project>
+      <Name>Bridge.Plugin</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)AjaxMin.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Ext.Net.Utilities.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)ICSharpCode.NRefactory.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)ICSharpCode.NRefactory.CSharp.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)ICSharpCode.NRefactory.Cecil.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Mono.Cecil.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Mono.Cecil.Mdb.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Mono.Cecil.Pdb.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Mono.Cecil.Rocks.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Bridge.Translator.dll" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ExpressionBlock : AbstractEmitterBlock
     {
-        public ExpressionBlock(Emitter emitter, ExpressionStatement expressionStatement)
+        public ExpressionBlock(IEmitter emitter, ExpressionStatement expressionStatement)
         {
             this.Emitter = emitter;
             this.ExpressionStatement = expressionStatement;

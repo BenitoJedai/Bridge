@@ -279,7 +279,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\assemblies\BridgeNoTask.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)Bridge.Html5.dll" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Bridge.Html5.xml" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

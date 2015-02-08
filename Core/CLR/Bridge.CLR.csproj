@@ -64,20 +64,8 @@
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
     <Compile Include="System\Array.cs" />
-    <Compile Include="System\Aspect\AspectFlow.cs" />
-    <Compile Include="System\Aspect\AbstractMethodAspectAttribute.cs" />
-    <Compile Include="System\Aspect\MethodPatternAspects.cs" />
-    <Compile Include="System\Aspect\NotifyPropertyChangedAspectAttribute.cs" />
-    <Compile Include="System\Aspect\ParameterAspectAttribute.cs" />
-    <Compile Include="System\Aspect\TypeAspectAttribute.cs" />
-    <Compile Include="System\Aspect\PropertyAspectAttribute.cs" />
-    <Compile Include="System\Aspect\MulticastOptionsAttribute.cs" />
-    <Compile Include="System\Aspect\MulticastAspectAttribute.cs" />
-    <Compile Include="System\Aspect\MethodAspectAttribute.cs" />
-    <Compile Include="System\Aspect\AspectAttribute.cs" />
-    <Compile Include="System\Aspect\MulticastInheritance.cs" />
-    <Compile Include="System\Aspect\MulticastAttributes.cs" />
     <Compile Include="System\Boolean.cs" />
+    <Compile Include="System\UInt16.cs" />
     <Compile Include="System\Validation.cs" />
     <Compile Include="System\Browser.cs" />
     <Compile Include="System\Collections\Generic\Dictionary.cs">
@@ -134,15 +122,10 @@
     <Compile Include="System\TimeSpan.cs" />
     <Compile Include="System\Any.cs" />
     <Compile Include="System\Tuple.cs" />
+    <Compile Include="System\Void.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\aspect\ParameterAspectAttribute.js" />
-    <Content Include="resources\aspect\NotifyPropertyChangedAspectAttribute.js" />
-    <Content Include="resources\aspect\TypeAspectAttribute.js" />
-    <Content Include="resources\aspect\PropertyAspectAttribute.js" />
     <Content Include="resources\Attribute.js" />
-    <Content Include="resources\aspect\AspectAttribute.js" />
-    <Content Include="resources\aspect\MethodAspectAttribute.js" />
     <Content Include="resources\Browser.js" />
     <Content Include="resources\Class.js" />
     <Content Include="resources\collections\EqualityComparer.js" />
@@ -153,6 +136,8 @@
     <Content Include="resources\collections\Interfaces.js" />
     <Content Include="resources\Exception.js" />
     <Content Include="resources\INotifyPropertyChanged.js" />
+    <Content Include="resources\Integer.js" />
+    <Content Include="resources\Interfaces.js" />
     <Content Include="resources\Task.js" />
     <Content Include="resources\Nullable.js" />
     <Content Include="resources\Core.js" />
@@ -163,13 +148,10 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)assemblies"
-copy /Y "$(TargetDir)Bridge.CLR.xml" "$(SolutionDir)assemblies"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

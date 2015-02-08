@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using System;
@@ -10,7 +11,7 @@ namespace Bridge.NET
 {
     public class ObjectCreateBlock : AbstractObjectCreateBlock
     {
-        public ObjectCreateBlock(Emitter emitter, ObjectCreateExpression objectCreateExpression)
+        public ObjectCreateBlock(IEmitter emitter, ObjectCreateExpression objectCreateExpression)
         {
             this.Emitter = emitter;
             this.ObjectCreateExpression = objectCreateExpression;
@@ -85,9 +86,9 @@ namespace Bridge.NET
             {
                 if (hasInitializer)
                 {
-                    this.Write(Emitter.ROOT);
+                    this.Write(Bridge.NET.Emitter.ROOT);
                     this.WriteDot();
-                    this.Write(Emitter.MERGE_OBJECT);
+                    this.Write(Bridge.NET.Emitter.MERGE_OBJECT);
                     this.WriteOpenParentheses();
                 }
 

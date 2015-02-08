@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +9,19 @@ namespace Bridge.NET
 {
     public class SwitchBlock : AbstractEmitterBlock
     {
-        public SwitchBlock(Emitter emitter, SwitchStatement switchStatement)
+        public SwitchBlock(IEmitter emitter, SwitchStatement switchStatement)
         {
             this.Emitter = emitter;
             this.SwitchStatement = switchStatement;
         }
 
-        public SwitchBlock(Emitter emitter, SwitchSection switchSection)
+        public SwitchBlock(IEmitter emitter, SwitchSection switchSection)
         {
             this.Emitter = emitter;
             this.SwitchSection = switchSection;
         }
 
-        public SwitchBlock(Emitter emitter, CaseLabel caseLabel)
+        public SwitchBlock(IEmitter emitter, CaseLabel caseLabel)
         {
             this.Emitter = emitter;
             this.CaseLabel = caseLabel;
@@ -151,7 +152,7 @@ namespace Bridge.NET
             });
 
             var jumpStatements = this.Emitter.JumpStatements;
-            this.Emitter.JumpStatements = new List<JumpInfo>();
+            this.Emitter.JumpStatements = new List<IJumpInfo>();
             bool writeElse = false;
             var thisStep = this.Emitter.AsyncBlock.Steps.Last();
             foreach (var switchSection in list)
@@ -247,7 +248,7 @@ namespace Bridge.NET
             }
 
             int startCount = this.Emitter.AsyncBlock.Steps.Count;
-            AsyncStep thisStep = null;
+            IAsyncStep thisStep = null;
             this.WriteSpace();
             this.BeginBlock();
             var writer = this.SaveWriter();

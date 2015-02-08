@@ -1,17 +1,18 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using System.Collections.Generic;
 
 namespace Bridge.NET
 {
     public class TypeExpressionListBlock : AbstractEmitterBlock
     {
-        public TypeExpressionListBlock(Emitter emitter, IEnumerable<TypeParamExpression> expressions)
+        public TypeExpressionListBlock(IEmitter emitter, IEnumerable<TypeParamExpression> expressions)
         {
             this.Emitter = emitter;
             this.Expressions = expressions;
         }
 
-        public TypeExpressionListBlock(Emitter emitter, IEnumerable<AstType> types)
+        public TypeExpressionListBlock(IEmitter emitter, IEnumerable<AstType> types)
         {
             this.Emitter = emitter;
             this.Types = types;
@@ -53,7 +54,7 @@ namespace Bridge.NET
                 }
 
                 needComma = true;
-                this.Write(TypeBlock.TranslateTypeReference(expr.AstType, this.Emitter));
+                this.Write(Helpers.TranslateTypeReference(expr.AstType, this.Emitter));
             }
         }
 
@@ -69,7 +70,7 @@ namespace Bridge.NET
                 }
 
                 needComma = true;
-                this.Write(TypeBlock.TranslateTypeReference(type, this.Emitter));
+                this.Write(Helpers.TranslateTypeReference(type, this.Emitter));
             }
         }
     }

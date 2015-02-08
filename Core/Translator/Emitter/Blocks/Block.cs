@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class Block : AbstractEmitterBlock
     {
-        public Block(Emitter emitter, BlockStatement blockStatement)
+        public Block(IEmitter emitter, BlockStatement blockStatement)
         {
             this.Emitter = emitter;
             this.BlockStatement = blockStatement;

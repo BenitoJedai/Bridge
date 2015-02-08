@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class TryCatchBlock : AbstractEmitterBlock
     {
-        public TryCatchBlock(Emitter emitter, TryCatchStatement tryCatchStatement)
+        public TryCatchBlock(IEmitter emitter, TryCatchStatement tryCatchStatement)
         {
             this.Emitter = emitter;
             this.TryCatchStatement = tryCatchStatement;
@@ -50,7 +51,7 @@ namespace Bridge.NET
             tryStep = this.Emitter.AsyncBlock.Steps.Last();
             tryInfo.EndStep = tryStep.Step;
 
-            List<AsyncStep> catchSteps = new List<AsyncStep>();
+            List<IAsyncStep> catchSteps = new List<IAsyncStep>();
             foreach (var clause in tryCatchStatement.CatchClauses)
             {
                 var catchStep = this.Emitter.AsyncBlock.AddAsyncStep();
@@ -64,7 +65,7 @@ namespace Bridge.NET
                     varName = "$e";                    
                 }
 
-                tryInfo.CatchBlocks.Add(new Tuple<string, string, int>(varName, TypeBlock.TranslateTypeReference(clause.Type, this.Emitter), catchStep.Step));
+                tryInfo.CatchBlocks.Add(new Tuple<string, string, int>(varName, Helpers.TranslateTypeReference(clause.Type, this.Emitter), catchStep.Step));
 
                 if (!this.Emitter.Locals.ContainsKey(varName))
                 {
@@ -81,7 +82,7 @@ namespace Bridge.NET
                 this.AddLocal("$e", AstType.Null);
             }
 
-            AsyncStep finalyStep = null;
+            IAsyncStep finalyStep = null;
             if (!tryCatchStatement.FinallyBlock.IsNull)
             {
                 finalyStep = this.Emitter.AsyncBlock.AddAsyncStep();
@@ -220,7 +221,7 @@ namespace Bridge.NET
             var firstClause = true;
             foreach (var clause in tryCatchStatement.CatchClauses)
             {
-                var exceptionType = TypeBlock.TranslateTypeReference(clause.Type, this.Emitter);
+                var exceptionType = Helpers.TranslateTypeReference(clause.Type, this.Emitter);
                 var isBaseException = exceptionType == "Bridge.Exception";
 
                 if (!firstClause)
@@ -265,7 +266,7 @@ namespace Bridge.NET
 
             if (tryCatchStatement.CatchClauses.Count > 1)
             {
-                throw this.Emitter.CreateException(tryCatchStatement, "Multiple catch statements are not supported");
+                throw (Exception)this.Emitter.CreateException(tryCatchStatement, "Multiple catch statements are not supported");
             }
 
             foreach (var clause in tryCatchStatement.CatchClauses)
@@ -274,14 +275,14 @@ namespace Bridge.NET
                 {
                     if (this.Emitter.ResolveType(clause.Type.ToString(), clause.Type) != "System.Exception")
                     {
-                        throw this.Emitter.CreateException(clause, "Only System.Exception type is allowed in catch clauses");
+                        throw (Exception)this.Emitter.CreateException(clause, "Only System.Exception type is allowed in catch clauses");
                     }
                 }
             }
         }
     }
 
-    public class AsyncTryInfo
+    public class AsyncTryInfo : IAsyncTryInfo
     {
         public int StartStep
         {

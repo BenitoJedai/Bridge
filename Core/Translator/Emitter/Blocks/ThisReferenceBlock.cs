@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ThisReferenceBlock : AbstractEmitterBlock
     {
-        public ThisReferenceBlock(Emitter emitter, ThisReferenceExpression thisReferenceExpression)
+        public ThisReferenceBlock(IEmitter emitter, ThisReferenceExpression thisReferenceExpression)
         {
             this.Emitter = emitter;
             this.ThisReferenceExpression = thisReferenceExpression;

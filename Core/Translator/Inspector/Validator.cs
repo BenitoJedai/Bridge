@@ -7,10 +7,11 @@ using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.CSharp;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
-    public class Validator 
+    public class Validator : IValidator 
     {
         public virtual bool CanIgnoreType(TypeDefinition type) 
         {
@@ -32,7 +33,7 @@ namespace Bridge.NET
             return false;
         }
 
-        public virtual void CheckType(TypeDefinition type, Translator translator) 
+        public virtual void CheckType(TypeDefinition type, ITranslator translator) 
         {
             if (this.CanIgnoreType(type) && !this.IsObjectLiteral(type))
             {
@@ -63,7 +64,7 @@ namespace Bridge.NET
             return this.HasAttribute(type.CustomAttributes, ignoreAttr) || this.HasAttribute(type.CustomAttributes, objectLiteralAttr);
         }
 
-        protected internal virtual bool IsIgnoreType(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition typeDefinition)
+        public virtual bool IsIgnoreType(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition typeDefinition)
         {
             string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
             string objectLiteralAttr = Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute";
@@ -179,7 +180,7 @@ namespace Bridge.NET
             if (nsAtrr != null && nsAtrr.ConstructorArguments.Count > 0)
             {
                 var arg = nsAtrr.ConstructorArguments[0];
-                name = Bridge.NET.Helpers.ReplaceSpecialChars(type.Name);
+                name = Helpers.ReplaceSpecialChars(type.Name);
 
                 if (arg.Value is bool && !((bool)arg.Value))
                 {
@@ -219,7 +220,7 @@ namespace Bridge.NET
             return null;
         }
 
-        public virtual void CheckConstructors(TypeDefinition type, Translator translator) 
+        public virtual void CheckConstructors(TypeDefinition type, ITranslator translator) 
         {
             if (type.HasMethods) 
             {
@@ -231,7 +232,7 @@ namespace Bridge.NET
             }            
         }
 
-        public virtual void CheckFields(TypeDefinition type, Translator translator) 
+        public virtual void CheckFields(TypeDefinition type, ITranslator translator) 
         {
             if (this.IsObjectLiteral(type) && type.HasFields)
             {
@@ -245,7 +246,7 @@ namespace Bridge.NET
             }
         }
 
-        public virtual void CheckProperties(TypeDefinition type, Translator translator)
+        public virtual void CheckProperties(TypeDefinition type, ITranslator translator)
         {
             if (this.IsObjectLiteral(type) && type.HasProperties)
             {
@@ -259,7 +260,7 @@ namespace Bridge.NET
             }
         }
 
-        public virtual void CheckMethods(TypeDefinition type, Translator translator) 
+        public virtual void CheckMethods(TypeDefinition type, ITranslator translator) 
         {
             var methodsCount = 0;
             foreach(MethodDefinition method in type.Methods) 
@@ -422,7 +423,7 @@ namespace Bridge.NET
             return String.Join("$", list.ToArray());
         }
 
-        public virtual void CheckFileName(TypeDefinition type, Translator translator)
+        public virtual void CheckFileName(TypeDefinition type, ITranslator translator)
         {
             if (type.HasCustomAttributes)
             {
@@ -430,7 +431,7 @@ namespace Bridge.NET
 
                 if (attr != null)
                 {
-                    TypeInfo typeInfo = this.EnsureTypeInfo(type, translator);
+                    var typeInfo = this.EnsureTypeInfo(type, translator);
                     
                     var obj = this.GetAttributeArgumentValue(attr, 0);
 
@@ -442,7 +443,7 @@ namespace Bridge.NET
             }
         }        
 
-        public virtual void CheckModule(TypeDefinition type, Translator translator)
+        public virtual void CheckModule(TypeDefinition type, ITranslator translator)
         {
             if (type.HasCustomAttributes)
             {
@@ -450,7 +451,7 @@ namespace Bridge.NET
 
                 if (attr != null)
                 {
-                    TypeInfo typeInfo = this.EnsureTypeInfo(type, translator);
+                    var typeInfo = this.EnsureTypeInfo(type, translator);
 
                     if (attr.ConstructorArguments.Count > 0)
                     {
@@ -465,7 +466,7 @@ namespace Bridge.NET
             }
         }
 
-        public virtual void CheckModuleDependenies(TypeDefinition type, Translator translator)
+        public virtual void CheckModuleDependenies(TypeDefinition type, ITranslator translator)
         {
             if (type.HasCustomAttributes)
             {
@@ -473,7 +474,7 @@ namespace Bridge.NET
 
                 if (attr != null)
                 {
-                    TypeInfo typeInfo = this.EnsureTypeInfo(type, translator);
+                    var typeInfo = this.EnsureTypeInfo(type, translator);
 
                     if (attr.ConstructorArguments.Count > 0)
                     {
@@ -498,10 +499,10 @@ namespace Bridge.NET
             return attr.ConstructorArguments.Skip(0).Take(1).First().Value;
         }
 
-        protected virtual TypeInfo EnsureTypeInfo(TypeDefinition type, Translator translator)
+        protected virtual ITypeInfo EnsureTypeInfo(TypeDefinition type, ITranslator translator)
         {
             string key = Helpers.GetTypeMapKey(type);
-            TypeInfo typeInfo = null;
+            ITypeInfo typeInfo = null;
 
             if (translator.TypeInfoDefinitions.ContainsKey(key))
             {

@@ -329,6 +329,34 @@ Bridge = {
     return a === b;
   },
 
+  compare : function (a, b) {
+      if (!Bridge.isDefined(a, true)) {
+          throw new Bridge.NullReferenceException();
+      }
+      else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
+          return a < b ? -1 : (a > b ? 1 : 0);
+      }          
+      else if (Bridge.isDate(a)) {
+          return Bridge.compare(a.valueOf(), b.valueOf());
+      } 
+
+      return a.compareTo(b);
+  },
+
+  equalsT : function (a, b) {
+      if (!Bridge.isDefined(a, true)) {
+          throw new Bridge.NullReferenceException();
+      }
+      else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
+          return a === b;
+      }
+      else if (Bridge.isDate(a)) {
+          return a.valueOf() === b.valueOf();
+      }
+        
+      return a.equalsT(b);
+  },
+
   fn: {
     call: function (obj, fnName){
       var args = Array.prototype.slice.call(arguments, 2);

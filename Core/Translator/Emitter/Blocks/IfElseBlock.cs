@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class IfElseBlock : AbstractEmitterBlock
     {
-        public IfElseBlock(Emitter emitter, IfElseStatement ifElseStatement)
+        public IfElseBlock(IEmitter emitter, IfElseStatement ifElseStatement)
         {
             this.Emitter = emitter;
             this.IfElseStatement = ifElseStatement;
@@ -19,7 +20,7 @@ namespace Bridge.NET
             set; 
         }
 
-        public List<AsyncStep> EmittedAsyncSteps
+        public List<IAsyncStep> EmittedAsyncSteps
         {
             get;
             set;
@@ -48,15 +49,15 @@ namespace Bridge.NET
 
             int startCount = 0;
             int elseCount = 0;
-            AsyncStep trueStep = null;
-            AsyncStep elseStep = null;
+            IAsyncStep trueStep = null;
+            IAsyncStep elseStep = null;
 
             if (this.Emitter.IsAsync)
             {
                 startCount = this.Emitter.AsyncBlock.Steps.Count;
 
                 this.EmittedAsyncSteps = this.Emitter.AsyncBlock.EmittedAsyncSteps;
-                this.Emitter.AsyncBlock.EmittedAsyncSteps = new List<AsyncStep>();
+                this.Emitter.AsyncBlock.EmittedAsyncSteps = new List<IAsyncStep>();
                 
                 this.Emitter.IgnoreBlock = ifElseStatement.TrueStatement;
                 this.WriteSpace();

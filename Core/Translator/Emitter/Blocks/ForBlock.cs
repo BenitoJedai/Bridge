@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class ForBlock : AbstractEmitterBlock
     {
-        public ForBlock(Emitter emitter, ForStatement forStatement)
+        public ForBlock(IEmitter emitter, ForStatement forStatement)
         {
             this.Emitter = emitter;
             this.ForStatement = forStatement;
@@ -19,7 +20,7 @@ namespace Bridge.NET
             set; 
         }
 
-        public List<AsyncStep> EmittedAsyncSteps
+        public List<IAsyncStep> EmittedAsyncSteps
         {
             get;
             set;
@@ -44,7 +45,7 @@ namespace Bridge.NET
             ForStatement forStatement = this.ForStatement;
             var oldValue = this.Emitter.ReplaceAwaiterByVar;
             var jumpStatements = this.Emitter.JumpStatements;
-            this.Emitter.JumpStatements = new List<JumpInfo>();
+            this.Emitter.JumpStatements = new List<IJumpInfo>();
 
             this.PushLocals();
             
@@ -65,7 +66,7 @@ namespace Bridge.NET
             this.WriteNewLine();
             this.Write("continue;");            
             
-            AsyncStep conditionStep = this.Emitter.AsyncBlock.AddAsyncStep();
+            IAsyncStep conditionStep = this.Emitter.AsyncBlock.AddAsyncStep();
             this.WriteAwaiters(forStatement.Condition);
             this.Emitter.ReplaceAwaiterByVar = true;
             var lastConditionStep = this.Emitter.AsyncBlock.Steps.Last();
@@ -80,12 +81,12 @@ namespace Bridge.NET
             this.BeginBlock();
 
             this.EmittedAsyncSteps = this.Emitter.AsyncBlock.EmittedAsyncSteps;
-            this.Emitter.AsyncBlock.EmittedAsyncSteps = new List<AsyncStep>();
+            this.Emitter.AsyncBlock.EmittedAsyncSteps = new List<IAsyncStep>();
             var writer = this.SaveWriter();
             this.Emitter.IgnoreBlock = forStatement.EmbeddedStatement;
             var startCount = this.Emitter.AsyncBlock.Steps.Count;
             forStatement.EmbeddedStatement.AcceptVisitor(this.Emitter);
-            AsyncStep loopStep = null;
+            IAsyncStep loopStep = null;
             if (this.Emitter.AsyncBlock.Steps.Count > startCount)
             {
                 loopStep = this.Emitter.AsyncBlock.Steps.Last();
@@ -115,7 +116,7 @@ namespace Bridge.NET
                 this.Emitter.AsyncBlock.EmittedAsyncSteps = this.EmittedAsyncSteps;
             }
 
-            AsyncStep iteratorsStep = this.Emitter.AsyncBlock.AddAsyncStep();
+            IAsyncStep iteratorsStep = this.Emitter.AsyncBlock.AddAsyncStep();
 
             foreach (var item in forStatement.Iterators)
             {
@@ -163,7 +164,7 @@ namespace Bridge.NET
 
             if (forStatement.Initializers.Count > 1)
             {
-                throw this.Emitter.CreateException(forStatement, "Too many initializers");
+                throw (Exception)this.Emitter.CreateException(forStatement, "Too many initializers");
             }
 
             this.PushLocals();

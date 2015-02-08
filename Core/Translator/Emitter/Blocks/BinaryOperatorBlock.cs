@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Bridge.NET
 {
     public class BinaryOperatorBlock : AbstractEmitterBlock
     {
-        public BinaryOperatorBlock(Emitter emitter, BinaryOperatorExpression binaryOperatorExpression)
+        public BinaryOperatorBlock(IEmitter emitter, BinaryOperatorExpression binaryOperatorExpression)
         {
             this.Emitter = emitter;
             this.BinaryOperatorExpression = binaryOperatorExpression;
@@ -67,7 +68,7 @@ namespace Bridge.NET
                 if (this.Emitter.Validator.IsDelegateOrLambda(leftResolverResult) && this.Emitter.Validator.IsDelegateOrLambda(rightResolverResult))
                 {
                     delegateOperator = true;
-                    this.Write(Emitter.ROOT + "." + (add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE));
+                    this.Write(Bridge.NET.Emitter.ROOT + "." + (add ? Bridge.NET.Emitter.DELEGATE_COMBINE : Bridge.NET.Emitter.DELEGATE_REMOVE));
                     this.WriteOpenParentheses();
                 }
             }
@@ -135,7 +136,7 @@ namespace Bridge.NET
                         this.Write("-");
                         break;
                     default:
-                        throw this.Emitter.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
+                        throw (Exception)this.Emitter.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
                 }
             }
             else

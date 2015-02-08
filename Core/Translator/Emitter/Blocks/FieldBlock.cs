@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,14 +7,14 @@ namespace Bridge.NET
 {
     public class FieldBlock : AbstractEmitterBlock
     {
-        public FieldBlock(Emitter emitter, TypeInfo typeInfo, bool staticBlock)
+        public FieldBlock(IEmitter emitter, ITypeInfo typeInfo, bool staticBlock)
         {
             this.Emitter = emitter;
             this.TypeInfo = typeInfo;
             this.StaticBlock = staticBlock;
         }
 
-        public TypeInfo TypeInfo 
+        public ITypeInfo TypeInfo 
         { 
             get; 
             set; 

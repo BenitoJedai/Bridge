@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class EventBlock : AbstractEmitterBlock
     {
-        public EventBlock(Emitter emitter, IEnumerable<EventDeclaration> events)
+        public EventBlock(IEmitter emitter, IEnumerable<EventDeclaration> events)
         {
             this.Emitter = emitter;
             this.Events = events;

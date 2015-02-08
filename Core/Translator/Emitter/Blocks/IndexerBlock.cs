@@ -5,12 +5,13 @@ using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class IndexerBlock : AbstractEmitterBlock
     {
-        public IndexerBlock(Emitter emitter, IndexerExpression indexerExpression)
+        public IndexerBlock(IEmitter emitter, IndexerExpression indexerExpression)
         {
             this.Emitter = emitter;
             this.IndexerExpression = indexerExpression;
@@ -72,7 +73,7 @@ namespace Bridge.NET
             {
                 if (indexerExpression.Arguments.Count != 1)
                 {
-                    throw this.Emitter.CreateException(indexerExpression, "Only one index is supported");
+                    throw (Exception)this.Emitter.CreateException(indexerExpression, "Only one index is supported");
                 }
 
                 var index = indexerExpression.Arguments.First();

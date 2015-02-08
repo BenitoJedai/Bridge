@@ -8,12 +8,13 @@ using System.Text;
 using System.Collections.Generic;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public partial class Emitter
     {
-        public virtual int CompareTypeInfos(TypeInfo x, TypeInfo y)
+        public virtual int CompareTypeInfos(ITypeInfo x, ITypeInfo y)
         {
             if (x == y)
             {

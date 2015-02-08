@@ -11,7 +11,7 @@ namespace System
     [Name("Bridge.Attribute")]
     public class Attribute
     {
-        internal Attribute()
+        protected Attribute()
         {
         }
     }
@@ -41,6 +41,7 @@ namespace System
     }
 
     [Ignore]
+    [AttributeUsage(AttributeTargets.Class)]
     public class AttributeUsageAttribute : Attribute
     {
         public AttributeUsageAttribute(AttributeTargets validOn)

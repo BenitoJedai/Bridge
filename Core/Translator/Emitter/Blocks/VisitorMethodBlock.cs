@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Bridge.NET
 {
     public class VisitorMethodBlock : AbstractMethodBlock
     {
-        public VisitorMethodBlock(Emitter emitter, MethodDeclaration methodDeclaration)
+        public VisitorMethodBlock(IEmitter emitter, MethodDeclaration methodDeclaration)
         {
             this.Emitter = emitter;
             this.MethodDeclaration = methodDeclaration;
@@ -34,8 +35,8 @@ namespace Bridge.NET
 
             if (this.Emitter.MethodsGroup != null)
             {
-                MethodDefinition methodDef = AbstractMethodBlock.FindMethodDefinitionInGroup(this.Emitter, methodDeclaration.Parameters, methodDeclaration.TypeParameters, this.Emitter.MethodsGroup);
-                string name = AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef);
+                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, methodDeclaration.Parameters, methodDeclaration.TypeParameters, this.Emitter.MethodsGroup);
+                string name = Helpers.GetOverloadName(this.Emitter, methodDef);
                 this.EmitMethodDetector(this.Emitter.MethodsGroupBuilder, methodDef, name);
 
                 this.Write(name);

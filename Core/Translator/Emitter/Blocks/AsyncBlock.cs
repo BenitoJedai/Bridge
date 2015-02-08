@@ -5,24 +5,25 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
-    public class AsyncBlock : AbstractEmitterBlock
+    public class AsyncBlock : AbstractEmitterBlock, IAsyncBlock
     {
-        public AsyncBlock(Emitter emitter, MethodDeclaration methodDeclaration)
+        public AsyncBlock(IEmitter emitter, MethodDeclaration methodDeclaration)
         {
             this.Emitter = emitter;
             this.MethodDeclaration = methodDeclaration;
         }
 
-        public AsyncBlock(Emitter emitter, LambdaExpression lambdaExpression) 
+        public AsyncBlock(IEmitter emitter, LambdaExpression lambdaExpression) 
         {
             this.Emitter = emitter;
             this.LambdaExpression = lambdaExpression;
         }
 
-        public AsyncBlock(Emitter emitter, AnonymousMethodExpression anonymousMethodExpression)
+        public AsyncBlock(IEmitter emitter, AnonymousMethodExpression anonymousMethodExpression)
         {
             this.Emitter = emitter;
             this.AnonymousMethodExpression = anonymousMethodExpression;
@@ -104,7 +105,7 @@ namespace Bridge.NET
             set;
         }
 
-        protected AsyncBlock PreviousAsyncBlock
+        protected IAsyncBlock PreviousAsyncBlock
         {
             get;
             set;
@@ -134,13 +135,13 @@ namespace Bridge.NET
             set; 
         }
 
-        public List<AsyncStep> Steps
+        public List<IAsyncStep> Steps
         {
             get;
             set;
         }
 
-        public List<AsyncStep> EmittedAsyncSteps
+        public List<IAsyncStep> EmittedAsyncSteps
         {
             get;
             set;
@@ -152,7 +153,7 @@ namespace Bridge.NET
             set;
         }
 
-        public List<AsyncTryInfo> TryInfos
+        public List<IAsyncTryInfo> TryInfos
         {
             get;
             set;
@@ -175,8 +176,8 @@ namespace Bridge.NET
             this.DetectReturnType();
             this.FindAwaitNodes();
 
-            this.Steps = new List<AsyncStep>();
-            this.TryInfos = new List<AsyncTryInfo>();
+            this.Steps = new List<IAsyncStep>();
+            this.TryInfos = new List<IAsyncTryInfo>();
         }
 
         protected void DetectReturnType()
@@ -578,7 +579,7 @@ namespace Bridge.NET
             this.EndBlock();
         }
 
-        public AsyncStep AddAsyncStep(int fromTaskNumber = -1)
+        public IAsyncStep AddAsyncStep(int fromTaskNumber = -1)
         {
             var step = this.Step++;
             var asyncStep = new AsyncStep(this.Emitter, step, fromTaskNumber);
@@ -608,9 +609,9 @@ namespace Bridge.NET
         }        
     }
 
-    public class AsyncStep
+    public class AsyncStep : IAsyncStep
     {
-        public AsyncStep(Emitter emitter, int step, int fromTaskNumber)
+        public AsyncStep(IEmitter emitter, int step, int fromTaskNumber)
         {
             this.Step = step;
             this.Emitter = emitter;
@@ -653,7 +654,7 @@ namespace Bridge.NET
             set;
         }
 
-        protected Emitter Emitter
+        protected IEmitter Emitter
         {
             get;
             set;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory;
+using Bridge.Plugin;
 
 namespace Bridge.NET 
 {
@@ -12,7 +13,7 @@ namespace Bridge.NET
         public Inspector() 
         {
             this.Usings = new HashSet<string>();
-            this.Types = new List<TypeInfo>();
+            this.Types = new List<ITypeInfo>();
             this.AssemblyInfo = new AssemblyInfo();
         }
         

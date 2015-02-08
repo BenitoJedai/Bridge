@@ -6,12 +6,13 @@ using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using System.Collections.Generic;
 using System.Text;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class MemberReferenceBlock : AbstractEmitterBlock
     {
-        public MemberReferenceBlock(Emitter emitter, MemberReferenceExpression memberReferenceExpression)
+        public MemberReferenceBlock(IEmitter emitter, MemberReferenceExpression memberReferenceExpression)
         {
             this.Emitter = emitter;
             this.MemberReferenceExpression = memberReferenceExpression;
@@ -86,7 +87,11 @@ namespace Bridge.NET
                 return;
             }
 
-            if (hasInline && member.Member.IsStatic)
+            if (member.Member.SymbolKind == SymbolKind.Field && this.Emitter.IsMemberConst(member.Member) && this.Emitter.IsInlineConst(member.Member))
+            {
+                this.WriteScript(member.ConstantValue);
+            }
+            else if (hasInline && member.Member.IsStatic)
             {
                 if (resolveResult is InvocationResolveResult)
                 {
@@ -167,7 +172,7 @@ namespace Bridge.NET
 
                     var isExtensionMethod = resolvedMethod.IsExtensionMethod;
 
-                    this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.DELEGATE_BIND_SCOPE : Emitter.DELEGATE_BIND) + "(");
+                    this.Write(Bridge.NET.Emitter.ROOT + "." + (isExtensionMethod ? Bridge.NET.Emitter.DELEGATE_BIND_SCOPE : Bridge.NET.Emitter.DELEGATE_BIND) + "(");
                     this.Emitter.IsAssignment = false;
                     memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
                     this.Emitter.IsAssignment = oldIsAssignment;

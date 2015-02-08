@@ -9,19 +9,20 @@ using Mono.Cecil;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
-    public partial class ConstructorBlock : AbstractMethodBlock
+    public partial class ConstructorBlock : AbstractMethodBlock, IConstructorBlock
     {
-        public ConstructorBlock(Emitter emitter, TypeInfo typeInfo, bool staticBlock)
+        public ConstructorBlock(IEmitter emitter, ITypeInfo typeInfo, bool staticBlock)
         {
             this.Emitter = emitter;
             this.TypeInfo = typeInfo;
             this.StaticBlock = staticBlock;
         }
 
-        public TypeInfo TypeInfo
+        public ITypeInfo TypeInfo
         {
             get;
             set;
@@ -48,8 +49,7 @@ namespace Bridge.NET
         protected virtual IEnumerable<string> GetInjectors()
         {
             var handlers = this.GetEvents();
-            var aspects = this.GetAspects();
-
+            var aspects = this.Emitter.Plugins.GetConstructorInjectors(this);
             return aspects.Concat(handlers);
         }
 
@@ -289,10 +289,10 @@ namespace Bridge.NET
 
             foreach (var ctor in ctors)
             {
-                MethodDefinition methodDef = AbstractMethodBlock.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef);
+                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef);
                 if (methodDef != null)
                 {
-                    string name = AbstractMethodBlock.GetOverloadName(this.Emitter, methodDef);
+                    string name = Helpers.GetOverloadName(this.Emitter, methodDef);
                     this.EmitMethodDetector(detectorBuilders, methodDef, name);
                 }
                 else

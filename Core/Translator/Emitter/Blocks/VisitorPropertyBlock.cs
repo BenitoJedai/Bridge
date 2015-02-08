@@ -3,12 +3,13 @@ using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class VisitorPropertyBlock : AbstractMethodBlock
     {
-        public VisitorPropertyBlock(Emitter emitter, PropertyDeclaration propertyDeclaration)
+        public VisitorPropertyBlock(IEmitter emitter, PropertyDeclaration propertyDeclaration)
         {
             this.Emitter = emitter;
             this.PropertyDeclaration = propertyDeclaration;
@@ -57,7 +58,7 @@ namespace Bridge.NET
                     }
                     else
                     {
-                        bool isReserved = propertyDeclaration.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(propertyDeclaration.Name);
+                        bool isReserved = propertyDeclaration.HasModifier(Modifiers.Static) && Bridge.NET.Emitter.IsReservedStaticName(propertyDeclaration.Name);
 
                         this.BeginBlock();
 

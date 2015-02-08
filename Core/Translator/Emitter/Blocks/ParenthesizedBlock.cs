@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ParenthesizedBlock : AbstractEmitterBlock
     {
-        public ParenthesizedBlock(Emitter emitter, ParenthesizedExpression parenthesizedExpression)
+        public ParenthesizedBlock(IEmitter emitter, ParenthesizedExpression parenthesizedExpression)
         {
             this.Emitter = emitter;
             this.ParenthesizedExpression = parenthesizedExpression;

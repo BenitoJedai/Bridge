@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class ArrayCreateBlock : AbstractEmitterBlock
     {
-        public ArrayCreateBlock(Emitter emitter, ArrayCreateExpression arrayCreateExpression)
+        public ArrayCreateBlock(IEmitter emitter, ArrayCreateExpression arrayCreateExpression)
         {
             this.Emitter = emitter;
             this.ArrayCreateExpression = arrayCreateExpression;
@@ -30,7 +31,7 @@ namespace Bridge.NET
 
             if (arrayCreateExpression.Arguments.Count > 1)
             {
-                throw this.Emitter.CreateException(arrayCreateExpression, "Multi-dimensional arrays are not supported");
+                throw (Exception)this.Emitter.CreateException(arrayCreateExpression, "Multi-dimensional arrays are not supported");
             }
 
             if (arrayCreateExpression.Initializer.IsNull && arrayCreateExpression.Arguments.Count > 0)

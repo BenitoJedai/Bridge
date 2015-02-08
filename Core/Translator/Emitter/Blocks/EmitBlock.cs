@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class EmitBlock : AbstractEmitterBlock
     {
-        public EmitBlock(Emitter emitter)
+        public EmitBlock(IEmitter emitter)
         {
             this.Emitter = emitter;
         }
@@ -27,10 +28,10 @@ namespace Bridge.NET
             this.Emitter.IsNewLine = true;
             this.Emitter.EnableSemicolon = true;
             this.Emitter.Comma = false;
-            this.Emitter.CurrentDependencies = new List<ModuleDependency>();
+            this.Emitter.CurrentDependencies = new List<IModuleDependency>();
         }
 
-        protected virtual StringBuilder GetOutputForType(TypeInfo typeInfo)
+        protected virtual StringBuilder GetOutputForType(ITypeInfo typeInfo)
         {
             string module = null;
             if (typeInfo.Module != null)
@@ -85,7 +86,7 @@ namespace Bridge.NET
                 fileName = AssemblyInfo.DEFAULT_FILENAME;
             }
 
-            EmitterOutput output = null;
+            IEmitterOutput output = null;
 
             if (this.Emitter.Outputs.ContainsKey(fileName))
             {
@@ -104,7 +105,7 @@ namespace Bridge.NET
 
             if (module == "")
             {
-                module = AssemblyInfo.DEFAULT_FILENAME;
+                module = Bridge.NET.AssemblyInfo.DEFAULT_FILENAME;
             }
 
             if (output.ModuleOutput.ContainsKey(module))
@@ -115,7 +116,7 @@ namespace Bridge.NET
 
             StringBuilder moduleOutput = new StringBuilder();
             output.ModuleOutput.Add(module, moduleOutput);
-            var dependencies = new List<ModuleDependency>();
+            var dependencies = new List<IModuleDependency>();
             output.ModuleDependencies.Add(module, dependencies);
 
             if (typeInfo.Dependencies.Count > 0)
@@ -136,7 +137,7 @@ namespace Bridge.NET
             {
                 this.InitEmitter();
 
-                TypeInfo typeInfo;
+                ITypeInfo typeInfo;
                 if (this.Emitter.TypeInfoDefinitions.ContainsKey(type.GenericFullName))
                 {
                     typeInfo = this.Emitter.TypeInfoDefinitions[type.GenericFullName];

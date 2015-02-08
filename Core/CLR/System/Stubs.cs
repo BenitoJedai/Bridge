@@ -41,11 +41,6 @@ namespace System
     {
         void Dispose();
     }
-
-    [Ignore]
-    public struct Void
-    { 
-    }
     
     [Ignore]
     public struct Byte 
@@ -74,11 +69,6 @@ namespace System
 
     [Ignore]
     public struct SByte 
-    { 
-    }
-
-    [Ignore]
-    public struct UInt16 
     { 
     }
 

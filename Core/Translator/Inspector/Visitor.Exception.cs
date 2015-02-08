@@ -1,12 +1,13 @@
 ﻿using System;
 using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public abstract partial class Visitor : IAstVisitor 
     {
-        public virtual Exception CreateException(AstNode node, string message) 
+        public virtual IVisitorException CreateException(AstNode node, string message) 
         {
             if (String.IsNullOrEmpty(message))
             {
@@ -16,7 +17,7 @@ namespace Bridge.NET
             return Exception.Create("{0} {1}: {2}", message, node.StartLocation, node.ToString()); 
         }
 
-        public virtual Exception CreateException(AstNode node) 
+        public virtual IVisitorException CreateException(AstNode node) 
         {
             return this.CreateException(node, null);
         }
@@ -39,7 +40,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(accessor);
+				throw (Exception)this.CreateException(accessor);
 			}
         }
 
@@ -47,7 +48,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(anonymousMethodExpression);
+				throw (Exception)this.CreateException(anonymousMethodExpression);
 			}
         }
 
@@ -55,7 +56,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(anonymousTypeCreateExpression);
+				throw (Exception)this.CreateException(anonymousTypeCreateExpression);
 			}
         }
 
@@ -63,7 +64,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(arrayCreateExpression);
+				throw (Exception)this.CreateException(arrayCreateExpression);
 			}
         }
 
@@ -71,7 +72,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(arrayInitializerExpression);
+				throw (Exception)this.CreateException(arrayInitializerExpression);
 			}
         }
 
@@ -79,7 +80,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(arraySpecifier);
+				throw (Exception)this.CreateException(arraySpecifier);
 			}
         }
 
@@ -87,7 +88,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(asExpression);
+				throw (Exception)this.CreateException(asExpression);
 			}
         }
 
@@ -95,7 +96,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(assignmentExpression);
+				throw (Exception)this.CreateException(assignmentExpression);
 			}
         }
 
@@ -108,7 +109,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(baseReferenceExpression);
+				throw (Exception)this.CreateException(baseReferenceExpression);
 			}
         }
 
@@ -116,7 +117,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(binaryOperatorExpression);
+				throw (Exception)this.CreateException(binaryOperatorExpression);
 			}
         }
 
@@ -124,7 +125,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(blockStatement);
+				throw (Exception)this.CreateException(blockStatement);
 			}
         }
 
@@ -132,7 +133,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(breakStatement);
+				throw (Exception)this.CreateException(breakStatement);
 			}
         }
 
@@ -140,7 +141,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(caseLabel);
+				throw (Exception)this.CreateException(caseLabel);
 			}
         }
 
@@ -148,7 +149,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(castExpression);
+				throw (Exception)this.CreateException(castExpression);
 			}
         }
 
@@ -156,7 +157,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(catchClause);
+				throw (Exception)this.CreateException(catchClause);
 			}
         }
 
@@ -164,7 +165,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(checkedExpression);
+				throw (Exception)this.CreateException(checkedExpression);
 			}
         }
 
@@ -172,7 +173,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(checkedStatement);
+				throw (Exception)this.CreateException(checkedStatement);
 			}
         }
 
@@ -180,7 +181,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(composedType);
+				throw (Exception)this.CreateException(composedType);
 			}
         }
 
@@ -188,7 +189,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(conditionalExpression);
+				throw (Exception)this.CreateException(conditionalExpression);
 			}
         }
 
@@ -196,7 +197,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(constructorDeclaration);
+				throw (Exception)this.CreateException(constructorDeclaration);
 			}
         }
 
@@ -204,7 +205,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(constructorInitializer);
+				throw (Exception)this.CreateException(constructorInitializer);
 			}
         }
 
@@ -212,7 +213,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(continueStatement);
+				throw (Exception)this.CreateException(continueStatement);
 			}
         }
 
@@ -220,7 +221,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(customEventDeclaration);
+				throw (Exception)this.CreateException(customEventDeclaration);
 			}
         }
 
@@ -228,7 +229,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(delegateDeclaration);
+				throw (Exception)this.CreateException(delegateDeclaration);
 			}
         }
 
@@ -236,7 +237,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(destructorDeclaration);
+				throw (Exception)this.CreateException(destructorDeclaration);
 			}
         }
 
@@ -244,7 +245,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(directionExpression);
+				throw (Exception)this.CreateException(directionExpression);
 			}
         }
 
@@ -252,7 +253,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(doWhileStatement);
+				throw (Exception)this.CreateException(doWhileStatement);
 			}
         }
 
@@ -260,7 +261,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(documentationReference);
+				throw (Exception)this.CreateException(documentationReference);
 			}
         }
 
@@ -268,7 +269,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(emptyExpression);
+				throw (Exception)this.CreateException(emptyExpression);
 			}
         }
 
@@ -276,7 +277,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(emptyStatement);
+				throw (Exception)this.CreateException(emptyStatement);
 			}
         }
 
@@ -284,7 +285,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(enumMemberDeclaration);
+				throw (Exception)this.CreateException(enumMemberDeclaration);
 			}
         }
 
@@ -292,7 +293,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(eventDeclaration);
+				throw (Exception)this.CreateException(eventDeclaration);
 			}
         }
 
@@ -300,7 +301,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(expressionStatement);
+				throw (Exception)this.CreateException(expressionStatement);
 			}
         }
 
@@ -308,7 +309,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(externAliasDeclaration);
+				throw (Exception)this.CreateException(externAliasDeclaration);
 			}
         }
 
@@ -316,7 +317,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(fieldDeclaration);
+				throw (Exception)this.CreateException(fieldDeclaration);
 			}
         }
 
@@ -324,7 +325,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(fixedFieldDeclaration);
+				throw (Exception)this.CreateException(fixedFieldDeclaration);
 			}
         }
 
@@ -332,7 +333,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(fixedStatement);
+				throw (Exception)this.CreateException(fixedStatement);
 			}
         }
 
@@ -340,7 +341,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(fixedVariableInitializer);
+				throw (Exception)this.CreateException(fixedVariableInitializer);
 			}
         }
 
@@ -348,7 +349,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(forStatement);
+				throw (Exception)this.CreateException(forStatement);
 			}
         }
 
@@ -356,7 +357,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(foreachStatement);
+				throw (Exception)this.CreateException(foreachStatement);
 			}
         }
 
@@ -364,7 +365,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(gotoCaseStatement);
+				throw (Exception)this.CreateException(gotoCaseStatement);
 			}
         }
 
@@ -372,7 +373,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(gotoDefaultStatement);
+				throw (Exception)this.CreateException(gotoDefaultStatement);
 			}
         }
 
@@ -380,7 +381,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(gotoStatement);
+				throw (Exception)this.CreateException(gotoStatement);
 			}
         }
 
@@ -388,7 +389,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(identifierExpression);
+				throw (Exception)this.CreateException(identifierExpression);
 			}
         }
 
@@ -396,7 +397,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(ifElseStatement);
+				throw (Exception)this.CreateException(ifElseStatement);
 			}
         }
 
@@ -404,7 +405,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(indexerDeclaration);
+				throw (Exception)this.CreateException(indexerDeclaration);
 			}
         }
 
@@ -412,7 +413,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(indexerExpression);
+				throw (Exception)this.CreateException(indexerExpression);
 			}
         }
 
@@ -420,7 +421,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(invocationExpression);
+				throw (Exception)this.CreateException(invocationExpression);
 			}
         }
 
@@ -428,7 +429,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(isExpression);
+				throw (Exception)this.CreateException(isExpression);
 			}
         }
 
@@ -436,7 +437,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(labelStatement);
+				throw (Exception)this.CreateException(labelStatement);
 			}
         }
 
@@ -444,7 +445,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(lambdaExpression);
+				throw (Exception)this.CreateException(lambdaExpression);
 			}
         }
 
@@ -452,7 +453,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(lockStatement);
+				throw (Exception)this.CreateException(lockStatement);
 			}
         }
 
@@ -460,7 +461,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(memberReferenceExpression);
+				throw (Exception)this.CreateException(memberReferenceExpression);
 			}
         }
 
@@ -468,7 +469,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(memberType);
+				throw (Exception)this.CreateException(memberType);
 			}
         }
 
@@ -476,7 +477,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(methodDeclaration);
+				throw (Exception)this.CreateException(methodDeclaration);
 			}
         }
 
@@ -484,7 +485,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(namedArgumentExpression);
+				throw (Exception)this.CreateException(namedArgumentExpression);
 			}
         }
 
@@ -492,7 +493,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(namedExpression);
+				throw (Exception)this.CreateException(namedExpression);
 			}
         }
 
@@ -500,7 +501,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(namespaceDeclaration);
+				throw (Exception)this.CreateException(namespaceDeclaration);
 			}
         }        
 
@@ -508,7 +509,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(objectCreateExpression);
+				throw (Exception)this.CreateException(objectCreateExpression);
 			}
         }
 
@@ -516,7 +517,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(operatorDeclaration);
+				throw (Exception)this.CreateException(operatorDeclaration);
 			}
         }
 
@@ -524,7 +525,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(parameterDeclaration);
+				throw (Exception)this.CreateException(parameterDeclaration);
 			}
         }
 
@@ -532,7 +533,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(parenthesizedExpression);
+				throw (Exception)this.CreateException(parenthesizedExpression);
 			}
         }
 
@@ -545,7 +546,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(pointerReferenceExpression);
+				throw (Exception)this.CreateException(pointerReferenceExpression);
 			}
         }
 
@@ -553,7 +554,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(primitiveExpression);
+				throw (Exception)this.CreateException(primitiveExpression);
 			}
         }
 
@@ -561,7 +562,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(propertyDeclaration);
+				throw (Exception)this.CreateException(propertyDeclaration);
 			}
         }
 
@@ -569,7 +570,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryContinuationClause);
+				throw (Exception)this.CreateException(queryContinuationClause);
 			}
         }
 
@@ -577,7 +578,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryExpression);
+				throw (Exception)this.CreateException(queryExpression);
 			}
         }
 
@@ -585,7 +586,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryFromClause);
+				throw (Exception)this.CreateException(queryFromClause);
 			}
         }
 
@@ -593,7 +594,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryGroupClause);
+				throw (Exception)this.CreateException(queryGroupClause);
 			}
         }
 
@@ -601,7 +602,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryJoinClause);
+				throw (Exception)this.CreateException(queryJoinClause);
 			}
         }
 
@@ -609,7 +610,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryLetClause);
+				throw (Exception)this.CreateException(queryLetClause);
 			}
         }
 
@@ -617,7 +618,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryOrderClause);
+				throw (Exception)this.CreateException(queryOrderClause);
 			}
         }
 
@@ -625,7 +626,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryOrdering);
+				throw (Exception)this.CreateException(queryOrdering);
 			}
         }
 
@@ -633,7 +634,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(querySelectClause);
+				throw (Exception)this.CreateException(querySelectClause);
 			}
         }
 
@@ -641,7 +642,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(queryWhereClause);
+				throw (Exception)this.CreateException(queryWhereClause);
 			}
         }
 
@@ -649,7 +650,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(returnStatement);
+				throw (Exception)this.CreateException(returnStatement);
 			}
         }
 
@@ -657,7 +658,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(sizeOfExpression);
+				throw (Exception)this.CreateException(sizeOfExpression);
 			}
         }
 
@@ -665,7 +666,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(stackAllocExpression);
+				throw (Exception)this.CreateException(stackAllocExpression);
 			}
         }
 
@@ -673,7 +674,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(switchSection);
+				throw (Exception)this.CreateException(switchSection);
 			}
         }
 
@@ -681,7 +682,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(switchStatement);
+				throw (Exception)this.CreateException(switchStatement);
 			}
         }
 
@@ -689,7 +690,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(syntaxTree);
+				throw (Exception)this.CreateException(syntaxTree);
 			}
         }
 
@@ -697,7 +698,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(textNode);
+				throw (Exception)this.CreateException(textNode);
 			}
         }
 
@@ -705,7 +706,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(thisReferenceExpression);
+				throw (Exception)this.CreateException(thisReferenceExpression);
 			}
         }
 
@@ -713,7 +714,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(throwStatement);
+				throw (Exception)this.CreateException(throwStatement);
 			}
         }
 
@@ -721,7 +722,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(tryCatchStatement);
+				throw (Exception)this.CreateException(tryCatchStatement);
 			}
         }
 
@@ -729,7 +730,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(typeDeclaration);
+				throw (Exception)this.CreateException(typeDeclaration);
 			}
         }
 
@@ -737,7 +738,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(typeOfExpression);
+				throw (Exception)this.CreateException(typeOfExpression);
 			}
         }
 
@@ -745,7 +746,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(typeReferenceExpression);
+				throw (Exception)this.CreateException(typeReferenceExpression);
 			}
         }
 
@@ -753,7 +754,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(unaryOperatorExpression);
+				throw (Exception)this.CreateException(unaryOperatorExpression);
 			}
         }
 
@@ -761,7 +762,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(uncheckedExpression);
+				throw (Exception)this.CreateException(uncheckedExpression);
 			}
         }
 
@@ -769,7 +770,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(uncheckedStatement);
+				throw (Exception)this.CreateException(uncheckedStatement);
 			}
         }
 
@@ -777,7 +778,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(undocumentedExpression);
+				throw (Exception)this.CreateException(undocumentedExpression);
 			}
         }
 
@@ -785,7 +786,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(unsafeStatement);
+				throw (Exception)this.CreateException(unsafeStatement);
 			}
         }
 
@@ -793,7 +794,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(usingAliasDeclaration);
+				throw (Exception)this.CreateException(usingAliasDeclaration);
 			}
         }
 
@@ -801,7 +802,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(usingDeclaration);
+				throw (Exception)this.CreateException(usingDeclaration);
 			}
         }
 
@@ -809,7 +810,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(usingStatement);
+				throw (Exception)this.CreateException(usingStatement);
 			}
         }
 
@@ -817,7 +818,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(variableDeclarationStatement);
+				throw (Exception)this.CreateException(variableDeclarationStatement);
 			}
         }
 
@@ -825,7 +826,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(variableInitializer);
+				throw (Exception)this.CreateException(variableInitializer);
 			}
         }
 
@@ -833,7 +834,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(whileStatement);
+				throw (Exception)this.CreateException(whileStatement);
 			}
         }
 
@@ -841,7 +842,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(whitespaceNode);
+				throw (Exception)this.CreateException(whitespaceNode);
 			}
         }
 
@@ -849,7 +850,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(yieldBreakStatement);
+				throw (Exception)this.CreateException(yieldBreakStatement);
 			}
         }
 
@@ -857,7 +858,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
 			{
-				throw this.CreateException(yieldReturnStatement);
+				throw (Exception)this.CreateException(yieldReturnStatement);
 			}
         }
 
@@ -865,7 +866,7 @@ namespace Bridge.NET
         {
             if (this.ThrowException)
             {
-                throw this.CreateException(errorNode);
+                throw (Exception)this.CreateException(errorNode);
             }
         }
     }

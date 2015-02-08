@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class AnonymousTypeCreateBlock : AbstractObjectCreateBlock
     {
-        public AnonymousTypeCreateBlock(Emitter emitter, AnonymousTypeCreateExpression anonymousTypeCreateExpression)
+        public AnonymousTypeCreateBlock(IEmitter emitter, AnonymousTypeCreateExpression anonymousTypeCreateExpression)
         {
             this.Emitter = emitter;
             this.AnonymousTypeCreateExpression = anonymousTypeCreateExpression;

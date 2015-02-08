@@ -1,11 +1,12 @@
-﻿using Mono.Cecil;
+﻿using Bridge.Plugin;
+using Mono.Cecil;
 using System.Collections.Generic;
 
 namespace Bridge.NET
 {
-    public partial class Emitter : Visitor
+    public partial class Emitter : Visitor, IEmitter
     {
-        public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<TypeInfo> types, Validator validator)
+        public Emitter(IDictionary<string, TypeDefinition> typeDefinitions, List<ITypeInfo> types, IValidator validator)
         {
             this.TypeDefinitions = typeDefinitions;
             this.Types = types;

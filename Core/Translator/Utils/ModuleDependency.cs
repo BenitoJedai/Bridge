@@ -1,6 +1,7 @@
-﻿namespace Bridge.NET
+﻿using Bridge.Plugin;
+namespace Bridge.NET
 {
-    public class ModuleDependency
+    public class ModuleDependency : IModuleDependency
     {
         public string DependencyName
         {

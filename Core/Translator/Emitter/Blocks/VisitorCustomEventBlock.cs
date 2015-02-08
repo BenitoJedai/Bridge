@@ -3,12 +3,13 @@ using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class VisitorCustomEventBlock : AbstractMethodBlock
     {
-        public VisitorCustomEventBlock(Emitter emitter, CustomEventDeclaration customEventDeclaration)
+        public VisitorCustomEventBlock(IEmitter emitter, CustomEventDeclaration customEventDeclaration)
         {
             this.Emitter = emitter;
             this.CustomEventDeclaration = customEventDeclaration;

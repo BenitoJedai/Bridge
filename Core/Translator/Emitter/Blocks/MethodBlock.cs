@@ -8,19 +8,20 @@ using System.Text;
 using Mono.Cecil;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.Semantics;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class MethodBlock : AbstractMethodBlock
     {
-        public MethodBlock(Emitter emitter, TypeInfo typeInfo, bool staticBlock)
+        public MethodBlock(IEmitter emitter, ITypeInfo typeInfo, bool staticBlock)
         {
             this.Emitter = emitter;
             this.TypeInfo = typeInfo;
             this.StaticBlock = staticBlock;
         }
 
-        public TypeInfo TypeInfo
+        public ITypeInfo TypeInfo
         {
             get;
             set;
@@ -100,7 +101,7 @@ namespace Bridge.NET
             this.WriteDot();
             this.Write(this.Emitter.GetEntityName(e));
             this.Write(" = ");
-            this.Write(Emitter.ROOT, ".", add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE);
+            this.Write(Bridge.NET.Emitter.ROOT, ".", add ? Bridge.NET.Emitter.DELEGATE_COMBINE : Bridge.NET.Emitter.DELEGATE_REMOVE);
             this.WriteOpenParentheses();
             this.WriteThis();
             this.WriteDot();

@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System;
@@ -531,7 +532,7 @@ namespace Bridge.NET
         }
     }
 
-    public class WriterInfo
+    public class WriterInfo : IWriterInfo
     {
         public StringBuilder Output
         {

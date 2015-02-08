@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Linq;
+using Bridge.Plugin;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.Reflection;
 
 namespace Bridge.NET
 {
-    public partial class Translator
+    public partial class Translator : ITranslator
     {
         public const string CLR_ASSEMBLY = "Bridge.CLR";
         
@@ -19,6 +23,7 @@ namespace Bridge.NET
 
         public Dictionary<string, string> Translate()
         {
+            this.Plugins = Bridge.NET.Plugins.GetPlugins();
             this.ReadProjectFile();
 
             if (this.Rebuild || !File.Exists(this.AssemblyLocation))
@@ -41,11 +46,12 @@ namespace Bridge.NET
             emitter.References = references;
             emitter.SourceFiles = this.SourceFiles;
             emitter.Log = this.Log;
-            this.InspectGlobalAspects(emitter);
+            emitter.Plugins = this.Plugins;
+            this.Plugins.BeforeEmit(emitter, this);
             this.Outputs = emitter.Emit();
 
             return this.Outputs;
-        }
+        }        
 
         public virtual string GetCode()
         {
@@ -71,7 +77,7 @@ namespace Bridge.NET
             }
 
             string keyPath = this.Outputs.First().Key;
-            string path = Path.Combine(outputDir, keyPath.Replace(AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
+            string path = Path.Combine(outputDir, keyPath.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
             var file = new System.IO.FileInfo(path);
 
             file.Directory.Create();
@@ -85,9 +91,9 @@ namespace Bridge.NET
                 string fileName = item.Key;
                 string code = item.Value;
 
-                if (fileName.Contains(AssemblyInfo.DEFAULT_FILENAME))
+                if (fileName.Contains(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME))
                 {
-                    fileName = fileName.Replace(AssemblyInfo.DEFAULT_FILENAME, defaultFileName);
+                    fileName = fileName.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName);
                 }
 
                 if (!Path.HasExtension(fileName))

@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Bridge.Plugin;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Bridge.NET
 {
-    public class EmitterOutput
+    public class EmitterOutput : IEmitterOutput
     {
         public EmitterOutput(string fileName)
         {
             this.FileName = fileName;
             this.ModuleOutput = new Dictionary<string, StringBuilder>();
             this.NonModuletOutput = new StringBuilder();
-            this.ModuleDependencies = new Dictionary<string, List<ModuleDependency>>();
+            this.ModuleDependencies = new Dictionary<string, List<IModuleDependency>>();
         }
         
         public string FileName
@@ -32,7 +33,7 @@ namespace Bridge.NET
             set;
         }
 
-        public Dictionary<string, List<ModuleDependency>> ModuleDependencies
+        public Dictionary<string, List<IModuleDependency>> ModuleDependencies
         {
             get;
             set;
@@ -47,9 +48,9 @@ namespace Bridge.NET
         }
     }
 
-    public class EmitterOutputs: Dictionary<string, EmitterOutput>
+    public class EmitterOutputs: Dictionary<string, IEmitterOutput>, IEmitterOutputs
     {
-        public EmitterOutput FindModuleOutput(string moduleName)
+        public IEmitterOutput FindModuleOutput(string moduleName)
         {
             if (this.Any(o => o.Value.ModuleOutput.ContainsKey(moduleName)))
             {
@@ -59,7 +60,7 @@ namespace Bridge.NET
             return null;
         }
 
-        public EmitterOutput DefaultOutput
+        public IEmitterOutput DefaultOutput
         {
             get
             {

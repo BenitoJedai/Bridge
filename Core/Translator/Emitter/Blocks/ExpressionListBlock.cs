@@ -1,11 +1,12 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using System.Collections.Generic;
 
 namespace Bridge.NET
 {
     public class ExpressionListBlock : AbstractEmitterBlock
     {
-        public ExpressionListBlock(Emitter emitter, IEnumerable<Expression> expressions, Expression paramArg)
+        public ExpressionListBlock(IEmitter emitter, IEnumerable<Expression> expressions, Expression paramArg)
         {
             this.Emitter = emitter;
             this.Expressions = expressions;

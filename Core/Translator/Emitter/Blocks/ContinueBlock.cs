@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ContinueBlock : AbstractEmitterBlock
     {
-        public ContinueBlock(Emitter emitter, ContinueStatement continueStatement)
+        public ContinueBlock(IEmitter emitter, ContinueStatement continueStatement)
         {
             this.Emitter = emitter;
             this.ContinueStatement = continueStatement;

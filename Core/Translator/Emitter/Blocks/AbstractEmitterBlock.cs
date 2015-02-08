@@ -1,17 +1,18 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using System;
 
 namespace Bridge.NET
 {
     public abstract partial class AbstractEmitterBlock
-    {
-        public Emitter Emitter
+    {        
+        public abstract void Emit();
+
+        public IEmitter Emitter
         {
             get;
             set;
         }
-
-        public abstract void Emit();
 
         protected virtual void EmitBlockOrIndentedLine(AstNode node)
         {
@@ -72,7 +73,7 @@ namespace Bridge.NET
             return false;
         }
 
-        protected AsyncStep WriteAwaiter(AstNode node)
+        protected IAsyncStep WriteAwaiter(AstNode node)
         {
             var index = System.Array.IndexOf(this.Emitter.AsyncBlock.AwaitExpressions, node) + 1;
             this.Write("$task" + index + " = ");

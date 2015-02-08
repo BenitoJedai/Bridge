@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
@@ -8,7 +9,7 @@ namespace Bridge.NET
 {
     public class AssignmentBlock : AbstractEmitterBlock
     {
-        public AssignmentBlock(Emitter emitter, AssignmentExpression assignmentExpression)
+        public AssignmentBlock(IEmitter emitter, AssignmentExpression assignmentExpression)
         {
             this.Emitter = emitter;
             this.AssignmentExpression = assignmentExpression;
@@ -60,7 +61,7 @@ namespace Bridge.NET
                         assignmentExpression.Left.AcceptVisitor(this.Emitter);
                         this.Emitter.IsAssignment = false;
                         this.Write(" = ");
-                        this.Write(Emitter.ROOT + "." + (add ? Emitter.DELEGATE_COMBINE : Emitter.DELEGATE_REMOVE));
+                        this.Write(Bridge.NET.Emitter.ROOT + "." + (add ? Bridge.NET.Emitter.DELEGATE_COMBINE : Bridge.NET.Emitter.DELEGATE_REMOVE));
                         this.WriteOpenParentheses();
                     }                    
                 }
@@ -119,7 +120,7 @@ namespace Bridge.NET
                         this.Write("-");
                         break;
                     default:
-                        throw this.Emitter.CreateException(assignmentExpression, "Unsupported assignment operator: " + assignmentExpression.Operator.ToString());
+                        throw (Exception)this.Emitter.CreateException(assignmentExpression, "Unsupported assignment operator: " + assignmentExpression.Operator.ToString());
                 }
 
                 int count = this.Emitter.Writers.Count;

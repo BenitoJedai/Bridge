@@ -54,7 +54,7 @@ namespace Bridge.NET
 
                     moduleOutput.Append("define(");
 
-                    if (moduleName != AssemblyInfo.DEFAULT_FILENAME)
+                    if (moduleName != Bridge.NET.AssemblyInfo.DEFAULT_FILENAME)
                     {
                         moduleOutput.Append(this.ToJavaScript(moduleName));
                         moduleOutput.Append(", ");

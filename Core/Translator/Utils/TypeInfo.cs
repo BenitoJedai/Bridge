@@ -1,10 +1,11 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using System;
 using System.Collections.Generic;
 
 namespace Bridge.NET
 {
-    public class TypeInfo
+    public class TypeInfo : ITypeInfo
     {
         public TypeInfo() 
         {
@@ -18,7 +19,7 @@ namespace Bridge.NET
             this.FieldsDeclarations = new Dictionary<string, FieldDeclaration>();
             this.Events = new List<EventDeclaration>();
             this.StaticEvents = new List<EventDeclaration>();
-            this.Dependencies = new List<ModuleDependency>();
+            this.Dependencies = new List<IModuleDependency>();
             this.Ctors = new List<ConstructorDeclaration>();
         }
 
@@ -238,13 +239,13 @@ namespace Bridge.NET
             set;
         }
 
-        public List<ModuleDependency> Dependencies
+        public List<IModuleDependency> Dependencies
         {
             get;
             set;
         }
 
-        public TypeInfo ParentType
+        public ITypeInfo ParentType
         {
             get;
             set;

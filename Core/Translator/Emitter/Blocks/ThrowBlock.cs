@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ThrowBlock : AbstractEmitterBlock
     {
-        public ThrowBlock(Emitter emitter, ThrowStatement throwStatement)
+        public ThrowBlock(IEmitter emitter, ThrowStatement throwStatement)
         {
             this.Emitter = emitter;
             this.ThrowStatement = throwStatement;

@@ -9,6 +9,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using ICSharpCode.NRefactory.Semantics;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {

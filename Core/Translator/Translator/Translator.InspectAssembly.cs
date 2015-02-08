@@ -4,6 +4,7 @@ using Mono.Cecil;
 using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
 using System;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
@@ -63,7 +64,7 @@ namespace Bridge.NET
 
         protected virtual List<AssemblyDefinition> InspectReferences()
         {
-            this.TypeInfoDefinitions = new Dictionary<string, TypeInfo>();
+            this.TypeInfoDefinitions = new Dictionary<string, ITypeInfo>();
 
             var references = new List<AssemblyDefinition>();            
             var assembly = this.LoadAssembly(this.AssemblyLocation, references);

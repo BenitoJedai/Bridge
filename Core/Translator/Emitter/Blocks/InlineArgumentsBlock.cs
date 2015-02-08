@@ -4,12 +4,13 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Text;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class InlineArgumentsBlock : AbstractEmitterBlock
     {
-        public InlineArgumentsBlock(Emitter emitter, ArgumentsInfo argsInfo, string inline)
+        public InlineArgumentsBlock(IEmitter emitter, ArgumentsInfo argsInfo, string inline)
         {
             this.Emitter = emitter;
             this.ArgumentsInfo = argsInfo;

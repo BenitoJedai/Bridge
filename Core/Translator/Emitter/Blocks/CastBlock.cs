@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
@@ -10,31 +11,31 @@ namespace Bridge.NET
 {
     public class CastBlock : AbstractEmitterBlock
     {
-        public CastBlock(Emitter emitter, CastExpression castExpression)
+        public CastBlock(IEmitter emitter, CastExpression castExpression)
         {
             this.Emitter = emitter;
             this.CastExpression = castExpression;
         }
 
-        public CastBlock(Emitter emitter, AsExpression asExpression)
+        public CastBlock(IEmitter emitter, AsExpression asExpression)
         {
             this.Emitter = emitter;
             this.AsExpression = asExpression;
         }
 
-        public CastBlock(Emitter emitter, IsExpression isExpression)
+        public CastBlock(IEmitter emitter, IsExpression isExpression)
         {
             this.Emitter = emitter;
             this.IsExpression = isExpression;
         }
 
-        public CastBlock(Emitter emitter, IType iType)
+        public CastBlock(IEmitter emitter, IType iType)
         {
             this.Emitter = emitter;
             this.IType = iType;
         }
 
-        public CastBlock(Emitter emitter, AstType astType)
+        public CastBlock(IEmitter emitter, AstType astType)
         {
             this.Emitter = emitter;
             this.AstType = astType;
@@ -74,15 +75,15 @@ namespace Bridge.NET
         {
             if (this.CastExpression != null)
             {
-                this.EmitCastExpression(this.CastExpression.Expression, this.CastExpression.Type, Emitter.CAST);
+                this.EmitCastExpression(this.CastExpression.Expression, this.CastExpression.Type, Bridge.NET.Emitter.CAST);
             }
             else if (this.AsExpression != null)
             {
-                this.EmitCastExpression(this.AsExpression.Expression, this.AsExpression.Type, Emitter.AS);
+                this.EmitCastExpression(this.AsExpression.Expression, this.AsExpression.Type, Bridge.NET.Emitter.AS);
             }
             else if (this.IsExpression != null)
             {
-                this.EmitCastExpression(this.IsExpression.Expression, this.IsExpression.Type, Emitter.IS);
+                this.EmitCastExpression(this.IsExpression.Expression, this.IsExpression.Type, Bridge.NET.Emitter.IS);
             }
             else if (this.IType != null)
             {
@@ -110,19 +111,19 @@ namespace Bridge.NET
 
             if (simpleType != null && simpleType.Identifier == "dynamic")
             {
-                if (method == Emitter.CAST || method == Emitter.AS)
+                if (method == Bridge.NET.Emitter.CAST || method == Bridge.NET.Emitter.AS)
                 {
                     expression.AcceptVisitor(this.Emitter);
                     return;
                 }
-                else if (method == Emitter.IS)
+                else if (method == Bridge.NET.Emitter.IS)
                 {
                     hasValue = true;
                     method = "hasValue";
                 }
             }
 
-            this.Write(Emitter.ROOT);
+            this.Write(Bridge.NET.Emitter.ROOT);
             this.WriteDot();
             this.Write(method);
             this.WriteOpenParentheses();

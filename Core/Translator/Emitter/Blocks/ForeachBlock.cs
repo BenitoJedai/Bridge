@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class ForeachBlock : AbstractEmitterBlock
     {
-        public ForeachBlock(Emitter emitter, ForeachStatement foreachStatement)
+        public ForeachBlock(IEmitter emitter, ForeachStatement foreachStatement)
         {
             this.Emitter = emitter;
             this.ForeachStatement = foreachStatement;
@@ -57,7 +58,7 @@ namespace Bridge.NET
 
             var oldValue = this.Emitter.ReplaceAwaiterByVar;
             var jumpStatements = this.Emitter.JumpStatements;
-            this.Emitter.JumpStatements = new List<JumpInfo>();
+            this.Emitter.JumpStatements = new List<IJumpInfo>();
             this.WriteAwaiters(foreachStatement.InExpression);
 
             bool containsAwaits = false;
@@ -80,9 +81,9 @@ namespace Bridge.NET
             this.AddLocal(iteratorName, AstType.Null);
 
             this.WriteVar();
-            this.Write(iteratorName, " = ", Emitter.ROOT);
+            this.Write(iteratorName, " = ", Bridge.NET.Emitter.ROOT);
             this.WriteDot();
-            this.Write(Emitter.ENUMERATOR);
+            this.Write(Bridge.NET.Emitter.ENUMERATOR);
 
             this.WriteOpenParentheses();
             foreachStatement.InExpression.AcceptVisitor(this.Emitter);
@@ -95,13 +96,13 @@ namespace Bridge.NET
             this.Write("continue;");
             this.WriteNewLine();
 
-            AsyncStep conditionStep = this.Emitter.AsyncBlock.AddAsyncStep();
+            IAsyncStep conditionStep = this.Emitter.AsyncBlock.AddAsyncStep();
 
             this.WriteIf();
             this.WriteOpenParentheses();
             this.Write(iteratorName);
             this.WriteDot();
-            this.Write(Emitter.MOVE_NEXT);
+            this.Write(Bridge.NET.Emitter.MOVE_NEXT);
             this.WriteOpenCloseParentheses();
             this.WriteCloseParentheses();
             this.WriteSpace();
@@ -111,7 +112,7 @@ namespace Bridge.NET
             this.Write(foreachStatement.VariableName, " = ", iteratorName);
 
             this.WriteDot();
-            this.Write(Emitter.GET_CURRENT);
+            this.Write(Bridge.NET.Emitter.GET_CURRENT);
 
             this.WriteOpenCloseParentheses();
             this.WriteSemiColon();
@@ -135,7 +136,7 @@ namespace Bridge.NET
                 foreachStatement.EmbeddedStatement.AcceptVisitor(this.Emitter);
             }
 
-            AsyncStep loopStep = null;
+            IAsyncStep loopStep = null;
             if (this.Emitter.AsyncBlock.Steps.Count > startCount)
             {
                 loopStep = this.Emitter.AsyncBlock.Steps.Last();
@@ -183,9 +184,9 @@ namespace Bridge.NET
             var iteratorName = this.GetNextIteratorName();
 
             this.WriteVar();
-            this.Write(iteratorName, " = ", Emitter.ROOT);
+            this.Write(iteratorName, " = ", Bridge.NET.Emitter.ROOT);
             this.WriteDot();
-            this.Write(Emitter.ENUMERATOR);
+            this.Write(Bridge.NET.Emitter.ENUMERATOR);
 
             this.WriteOpenParentheses();
             foreachStatement.InExpression.AcceptVisitor(this.Emitter);
@@ -197,7 +198,7 @@ namespace Bridge.NET
             this.WriteOpenParentheses();
             this.Write(iteratorName);
             this.WriteDot();
-            this.Write(Emitter.MOVE_NEXT);
+            this.Write(Bridge.NET.Emitter.MOVE_NEXT);
             this.WriteOpenCloseParentheses();
             this.WriteCloseParentheses();
             this.WriteSpace();
@@ -207,7 +208,7 @@ namespace Bridge.NET
             this.Write(foreachStatement.VariableName, " = ", iteratorName);
 
             this.WriteDot();
-            this.Write(Emitter.GET_CURRENT);
+            this.Write(Bridge.NET.Emitter.GET_CURRENT);
 
             this.WriteOpenCloseParentheses();
             this.WriteSemiColon();

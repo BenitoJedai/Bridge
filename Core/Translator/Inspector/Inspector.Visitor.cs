@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Ext.Net.Utilities;
 using System.Linq;
 using ICSharpCode.NRefactory.Semantics;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
@@ -27,7 +28,7 @@ namespace Bridge.NET
         {
             if (!String.IsNullOrEmpty(this.Namespace))
             {
-                throw this.CreateException(namespaceDeclaration, "Nested namespaces are not supported");
+                throw (Exception)this.CreateException(namespaceDeclaration, "Nested namespaces are not supported");
             }
 
             var prevNamespace = this.Namespace;
@@ -46,9 +47,8 @@ namespace Bridge.NET
         {            
             if (this.CurrentType != null)
             {
-                //throw this.CreateException(typeDeclaration, "Nested types are not supported");
-                this.NestedTypes = this.NestedTypes ?? new List<Tuple<TypeDeclaration, TypeInfo>>();
-                this.NestedTypes.Add(new Tuple<TypeDeclaration, TypeInfo>(typeDeclaration, this.CurrentType));
+                this.NestedTypes = this.NestedTypes ?? new List<Tuple<TypeDeclaration, ITypeInfo>>();
+                this.NestedTypes.Add(new Tuple<TypeDeclaration, ITypeInfo>(typeDeclaration, this.CurrentType));
                 return;
             }
 
@@ -121,7 +121,7 @@ namespace Bridge.NET
                 {
                     if (this.CurrentType.ClassType == ClassType.Enum)
                     {
-                        throw this.CreateException(fieldDeclaration, "Enum items must be explicitly numbered");
+                        throw (Exception)this.CreateException(fieldDeclaration, "Enum items must be explicitly numbered");
                     }
 
                     initializer = this.GetDefaultFieldInitializer(fieldDeclaration.ReturnType);

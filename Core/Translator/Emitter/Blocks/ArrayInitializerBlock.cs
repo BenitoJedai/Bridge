@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class ArrayInitializerBlock : AbstractEmitterBlock
     {
-        public ArrayInitializerBlock(Emitter emitter, ArrayInitializerExpression arrayInitializerExpression)
+        public ArrayInitializerBlock(IEmitter emitter, ArrayInitializerExpression arrayInitializerExpression)
         {
             this.Emitter = emitter;
             this.ArrayInitializerExpression = arrayInitializerExpression;

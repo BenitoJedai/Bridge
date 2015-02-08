@@ -36,7 +36,7 @@ namespace Bridge.NET
 
                 if (item.ParameterModifier == ParameterModifier.Out || item.ParameterModifier == ParameterModifier.Ref)
                 {
-                    var name = item.Name.StartsWith(Emitter.FIX_ARGUMENT_NAME) ? item.Name.Substring(Emitter.FIX_ARGUMENT_NAME.Length) : item.Name;
+                    var name = item.Name.StartsWith(Bridge.NET.Emitter.FIX_ARGUMENT_NAME) ? item.Name.Substring(Bridge.NET.Emitter.FIX_ARGUMENT_NAME.Length) : item.Name;
                     
                     if (!this.Emitter.LocalsMap.ContainsKey(name))
                     {

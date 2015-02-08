@@ -1,21 +1,22 @@
-﻿using System;
+﻿using Bridge.Plugin;
+using System;
 
 namespace Bridge.NET
 {
-    public class Exception : System.Exception 
+    public class Exception : System.Exception, IVisitorException 
     {
         public Exception(string message) : base(message) 
         {
         }
 
-        public static Bridge.NET.Exception Create(string format, params object[] args)
+        public static IVisitorException Create(string format, params object[] args)
         {
             return new Bridge.NET.Exception(String.Format(format, args));
         }
 
         public static void Throw(string format, params object[] args) 
         {
-            throw Bridge.NET.Exception.Create(format, args);
+            throw (Exception)Bridge.NET.Exception.Create(format, args);
         }
     }
 }

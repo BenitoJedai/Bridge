@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ConditionalBlock : AbstractEmitterBlock
     {
-        public ConditionalBlock(Emitter emitter, ConditionalExpression conditionalExpression)
+        public ConditionalBlock(IEmitter emitter, ConditionalExpression conditionalExpression)
         {
             this.Emitter = emitter;
             this.ConditionalExpression = conditionalExpression;

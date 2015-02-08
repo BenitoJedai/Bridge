@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class ArgumentsInfo
     {
-        public Emitter Emitter
+        public IEmitter Emitter
         {
             get;
             private set;
@@ -83,7 +84,7 @@ namespace Bridge.NET
             set;
         }
 
-        public ArgumentsInfo(Emitter emitter, InvocationExpression invocationExpression)
+        public ArgumentsInfo(IEmitter emitter, InvocationExpression invocationExpression)
         {
             this.Emitter = emitter;
             this.Expression = invocationExpression;            
@@ -98,7 +99,7 @@ namespace Bridge.NET
             }            
         }
 
-        public ArgumentsInfo(Emitter emitter, ObjectCreateExpression objectCreateExpression)
+        public ArgumentsInfo(IEmitter emitter, ObjectCreateExpression objectCreateExpression)
         {
             this.Emitter = emitter;
             this.Expression = objectCreateExpression;
@@ -110,7 +111,7 @@ namespace Bridge.NET
             this.BuildTypedArguments(objectCreateExpression.Type);
         }
 
-        public ArgumentsInfo(Emitter emitter, BinaryOperatorExpression binaryOperatorExpression, OperatorResolveResult operatorResolveResult)
+        public ArgumentsInfo(IEmitter emitter, BinaryOperatorExpression binaryOperatorExpression, OperatorResolveResult operatorResolveResult)
         {
             this.Emitter = emitter;
             this.Expression = binaryOperatorExpression;

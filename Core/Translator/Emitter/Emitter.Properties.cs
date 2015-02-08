@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System;
@@ -27,13 +28,13 @@ namespace Bridge.NET
 
         private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };        
 
-        public Validator Validator
+        public IValidator Validator
         {
             get;
             private set;
         }
 
-        public List<TypeInfo> Types 
+        public List<ITypeInfo> Types 
         { 
             get; 
             set; 
@@ -118,7 +119,7 @@ namespace Bridge.NET
             protected set; 
         }
 
-        public TypeInfo TypeInfo 
+        public ITypeInfo TypeInfo 
         { 
             get; 
             set; 
@@ -203,31 +204,31 @@ namespace Bridge.NET
             return list;
         }
 
-        public MemberResolver Resolver
+        public IMemberResolver Resolver
         {
             get;
             set;
         }
 
-        public AssemblyInfo AssemblyInfo
+        public IAssemblyInfo AssemblyInfo
         {
             get;
             set;
         }
 
-        public Dictionary<string, TypeInfo> TypeInfoDefinitions
+        public Dictionary<string, ITypeInfo> TypeInfoDefinitions
         {
             get;
             set;
         }
 
-        public List<ModuleDependency> CurrentDependencies
+        public List<IModuleDependency> CurrentDependencies
         {
             get;
             set;
         }
 
-        public EmitterOutputs Outputs
+        public IEmitterOutputs Outputs
         {
             get;
             set;
@@ -269,7 +270,7 @@ namespace Bridge.NET
             set;
         }
 
-        public AsyncBlock AsyncBlock
+        public IAsyncBlock AsyncBlock
         {
             get;
             set;
@@ -299,19 +300,25 @@ namespace Bridge.NET
             set;
         }
 
-        public WriterInfo LastSavedWriter
+        public IWriterInfo LastSavedWriter
         {
             get;
             set;
         }
 
-        public List<JumpInfo> JumpStatements
+        public List<IJumpInfo> JumpStatements
         {
             get;
             set;
         }
 
         public SwitchStatement AsyncSwitch
+        {
+            get;
+            set;
+        }
+
+        public IPlugins Plugins
         {
             get;
             set;

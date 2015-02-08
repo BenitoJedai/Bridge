@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class CommentBlock : AbstractEmitterBlock
     {
-        public CommentBlock(Emitter emitter, Comment comment)
+        public CommentBlock(IEmitter emitter, Comment comment)
         {
             this.Emitter = emitter;
             this.Comment = comment;

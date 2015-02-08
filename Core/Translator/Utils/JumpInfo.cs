@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Bridge.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Bridge.NET
 {
-    public class JumpInfo
+    public class JumpInfo : IJumpInfo
     {
         public JumpInfo(StringBuilder output, int position, bool @break) 
         {

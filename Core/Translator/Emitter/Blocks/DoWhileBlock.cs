@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class DoWhileBlock : AbstractEmitterBlock
     {
-        public DoWhileBlock(Emitter emitter, DoWhileStatement doWhileStatement)
+        public DoWhileBlock(IEmitter emitter, DoWhileStatement doWhileStatement)
         {
             this.Emitter = emitter;
             this.DoWhileStatement = doWhileStatement;
@@ -39,7 +40,7 @@ namespace Bridge.NET
 
             var oldValue = this.Emitter.ReplaceAwaiterByVar;
             var jumpStatements = this.Emitter.JumpStatements;
-            this.Emitter.JumpStatements = new List<JumpInfo>();
+            this.Emitter.JumpStatements = new List<IJumpInfo>();
 
             var loopStep = this.Emitter.AsyncBlock.Steps.Last();
             if (!string.IsNullOrWhiteSpace(loopStep.Output.ToString()))

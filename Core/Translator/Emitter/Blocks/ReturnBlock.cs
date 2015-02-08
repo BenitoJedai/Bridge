@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class ReturnBlock : AbstractEmitterBlock
     {
-        public ReturnBlock(Emitter emitter, ReturnStatement returnStatement)
+        public ReturnBlock(IEmitter emitter, ReturnStatement returnStatement)
         {
             this.Emitter = emitter;
             this.ReturnStatement = returnStatement;

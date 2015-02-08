@@ -8,12 +8,13 @@ using System.Text;
 using Mono.Cecil;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.Semantics;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class InjectMethodDetectorBlock : AbstractMethodBlock
     {
-        public InjectMethodDetectorBlock(Emitter emitter, BlockStatement blockStatement)
+        public InjectMethodDetectorBlock(IEmitter emitter, BlockStatement blockStatement)
         {
             this.Emitter = emitter;
             this.BlockStatement = blockStatement;

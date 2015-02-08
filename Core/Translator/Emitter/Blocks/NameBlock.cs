@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
@@ -7,11 +8,11 @@ namespace Bridge.NET
 {
     public class NameBlock : AbstractEmitterBlock
     {
-        public NameBlock(Emitter emitter, NamedExpression namedExpression) : this(emitter, namedExpression.Name, namedExpression, namedExpression.Expression)
+        public NameBlock(IEmitter emitter, NamedExpression namedExpression) : this(emitter, namedExpression.Name, namedExpression, namedExpression.Expression)
         {            
         }
 
-        public NameBlock(Emitter emitter, string name, Expression namedExpression, Expression expression)
+        public NameBlock(IEmitter emitter, string name, Expression namedExpression, Expression expression)
         {
             this.Emitter = emitter;
             this.NamedExpression = namedExpression;

@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
@@ -11,7 +12,7 @@ namespace Bridge.NET
 {
     public class InvocationBlock : AbstractEmitterBlock
     {
-        public InvocationBlock(Emitter emitter, InvocationExpression invocationExpression)
+        public InvocationBlock(IEmitter emitter, InvocationExpression invocationExpression)
         {
             this.Emitter = emitter;
             this.InvocationExpression = invocationExpression;
@@ -127,7 +128,7 @@ namespace Bridge.NET
 
                 if (member != null && member.Type.Kind == TypeKind.Delegate)
                 {
-                    throw this.Emitter.CreateException(invocationExpression, "Delegate's methods are not supported. Please use direct delegate invoke.");
+                    throw (Exception)this.Emitter.CreateException(invocationExpression, "Delegate's methods are not supported. Please use direct delegate invoke.");
                 }
 
                 var targetResolve = this.Emitter.Resolver.ResolveNode(targetMember, this.Emitter);
@@ -231,7 +232,7 @@ namespace Bridge.NET
                 bool isIgnore = this.Emitter.Validator.IsIgnoreType(baseType);
                 if (isIgnore)
                 {
-                    throw this.Emitter.CreateException(targetMember.Target, "Cannot call base method, because parent class code is ignored");
+                    throw (Exception)this.Emitter.CreateException(targetMember.Target, "Cannot call base method, because parent class code is ignored");
                 }
 
                 string baseMethod = Helpers.GetScriptName(targetMember, false);

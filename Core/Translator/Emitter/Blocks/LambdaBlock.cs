@@ -8,22 +8,23 @@ using System.Text;
 using Mono.Cecil;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.Semantics;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class LambdaBlock : AbstractMethodBlock
     {
-        public LambdaBlock(Emitter emitter, LambdaExpression lambdaExpression) 
+        public LambdaBlock(IEmitter emitter, LambdaExpression lambdaExpression) 
             : this(emitter, lambdaExpression.Parameters, lambdaExpression.Body, lambdaExpression, lambdaExpression.IsAsync)
         {            
         }
 
-        public LambdaBlock(Emitter emitter, AnonymousMethodExpression anonymousMethodExpression)
+        public LambdaBlock(IEmitter emitter, AnonymousMethodExpression anonymousMethodExpression)
             : this(emitter, anonymousMethodExpression.Parameters, anonymousMethodExpression.Body, anonymousMethodExpression, anonymousMethodExpression.IsAsync)
         {
         }
 
-        public LambdaBlock(Emitter emitter, IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context, bool isAsync)
+        public LambdaBlock(IEmitter emitter, IEnumerable<ParameterDeclaration> parameters, AstNode body, AstNode context, bool isAsync)
         {
             this.Emitter = emitter;
             this.Parameters = parameters;
@@ -68,7 +69,7 @@ namespace Bridge.NET
             set;
         }
 
-        protected AsyncBlock PreviousAsyncBlock
+        protected IAsyncBlock PreviousAsyncBlock
         {
             get;
             set;
@@ -162,7 +163,7 @@ namespace Bridge.NET
 
             if (this.Emitter.ThisRefCounter > savedThisCount)
             {
-                this.Emitter.Output.Insert(savedPos, Emitter.ROOT + "." + Emitter.DELEGATE_BIND + "(this, ");
+                this.Emitter.Output.Insert(savedPos, Bridge.NET.Emitter.ROOT + "." + Bridge.NET.Emitter.DELEGATE_BIND + "(this, ");
                 this.WriteCloseParentheses();
             }
 

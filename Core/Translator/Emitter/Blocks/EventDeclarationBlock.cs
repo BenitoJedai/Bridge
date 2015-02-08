@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public class EventDeclarationBlock : AbstractEmitterBlock
     {
-        public EventDeclarationBlock(Emitter emitter, EventDeclaration eventDeclaration)
+        public EventDeclarationBlock(IEmitter emitter, EventDeclaration eventDeclaration)
         {
             this.Emitter = emitter;
             this.EventDeclaration = eventDeclaration;

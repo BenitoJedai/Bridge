@@ -1,3 +1,4 @@
+using Bridge.Plugin;
 using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.Semantics;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Bridge.NET
 {
-    public class MemberResolver
+    public class MemberResolver : IMemberResolver
     {
         private string lastFileName;
         private IList<string> sourceFiles;

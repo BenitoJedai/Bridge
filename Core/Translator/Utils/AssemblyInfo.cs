@@ -1,25 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Bridge.Plugin;
+using System.Collections.Generic;
 
 namespace Bridge.NET
 {
-    public enum TypesSplit
-    {
-        None = 0,
-        ByFullName = 1,
-        ByName = 2,
-        ByModule = 3,
-        ByNamespace = 4
-    }
-
-    public class AssemblyInfo
+    public class AssemblyInfo : IAssemblyInfo
     {
         public const string DEFAULT_FILENAME = "---";
         
         public AssemblyInfo()
         {
-            this.Dependencies = new List<ModuleDependency>();
-            this.Aspects = new AspectCollection();
-            this.AspectTypeProperties = new Dictionary<string, Dictionary<string, object>>();
+            this.Dependencies = new List<IModuleDependency>();                        
         }
 
         public string FileName
@@ -59,22 +49,10 @@ namespace Bridge.NET
             set;
         }
 
-        public List<ModuleDependency> Dependencies
+        public List<IModuleDependency> Dependencies
         {
             get;
             set;
-        }
-
-        public AspectCollection Aspects
-        {
-            get;
-            set;
-        }
-
-        public Dictionary<string, Dictionary<string, object>> AspectTypeProperties
-        {
-            get;
-            set;
-        }
+        }        
     }
 }

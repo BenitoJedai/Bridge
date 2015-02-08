@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Bridge.NET
 {
     public class UnaryOperatorBlock : AbstractEmitterBlock
     {
-        public UnaryOperatorBlock(Emitter emitter, UnaryOperatorExpression unaryOperatorExpression)
+        public UnaryOperatorBlock(IEmitter emitter, UnaryOperatorExpression unaryOperatorExpression)
         {
             this.Emitter = emitter;
             this.UnaryOperatorExpression = unaryOperatorExpression;
@@ -86,7 +87,7 @@ namespace Bridge.NET
                     }
                     break;
                 default:
-                    throw this.Emitter.CreateException(unaryOperatorExpression, "Unsupported unary operator: " + unaryOperatorExpression.Operator.ToString());
+                    throw (Exception)this.Emitter.CreateException(unaryOperatorExpression, "Unsupported unary operator: " + unaryOperatorExpression.Operator.ToString());
             }
         }           
     }

@@ -7,18 +7,19 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System.Text;
 using Mono.Cecil;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET
 {
     public class ClassBlock : AbstractEmitterBlock
     {
-        public ClassBlock(Emitter emitter, TypeInfo typeInfo)
+        public ClassBlock(IEmitter emitter, ITypeInfo typeInfo)
         {
             this.Emitter = emitter;
             this.TypeInfo = typeInfo;
         }
 
-        public TypeInfo TypeInfo
+        public ITypeInfo TypeInfo
         {
             get;
             set;
@@ -32,45 +33,11 @@ namespace Bridge.NET
 
         public override void Emit()
         {
-            //this.FindAspects(this.Emitter.GetTypeDefinition());
             this.EmitClassHeader();
             this.EmitStaticBlock();
             this.EmitInstantiableBlock();
             this.EmitClassEnd();    
         }        
-
-        protected virtual void FindAspects(TypeDefinition typeDef)
-        {
-            if (typeDef.HasCustomAttributes)
-            {
-                foreach (var attr in typeDef.CustomAttributes)
-                {
-                    if (AspectHelpers.IsAspectAttribute(attr.AttributeType, this.Emitter))
-                    {
-                        var globalAspects = this.Emitter.AssemblyInfo.Aspects;
-
-                        List<AspectInfo> aspects;
-                        if (globalAspects.ContainsKey(AttributeTargets.Class))
-                        {
-                            aspects = globalAspects[AttributeTargets.Class];
-                        }
-                        else
-                        {
-                            aspects = new List<AspectInfo>();
-                            globalAspects.Add(AttributeTargets.Class, aspects);
-                        }
-
-                        var info = AspectHelpers.GetAspectInfo(attr, this.Emitter, AttributeTargets.Class, typeDef.FullName);
-                        aspects.Add(info);
-                    }
-                }
-            }            
-
-            if (typeDef.BaseType != null)
-            {
-                this.FindAspects(Helpers.ToTypeDefinition(typeDef.BaseType, this.Emitter));
-            }            
-        }
 
         protected virtual void EmitClassHeader()
         {
@@ -203,7 +170,7 @@ namespace Bridge.NET
         protected virtual void EmitInstantiableBlock()
         {
             var ctorBlock = new ConstructorBlock(this.Emitter, this.TypeInfo, false);
-            if (this.TypeInfo.HasInstantiable || ctorBlock.GetAspects().Count() > 0)
+            if (this.TypeInfo.HasInstantiable || this.Emitter.Plugins.HasConstructorInjectors(ctorBlock))
             {
                 this.EnsureComma();
                 ctorBlock.Emit();

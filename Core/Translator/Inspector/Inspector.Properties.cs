@@ -3,6 +3,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
+using Bridge.Plugin;
 
 namespace Bridge.NET 
 {
@@ -14,19 +15,19 @@ namespace Bridge.NET
             set; 
         }
 
-        public AssemblyInfo AssemblyInfo
+        public IAssemblyInfo AssemblyInfo
         {
             get;
             set;
         }
 
-        protected TypeInfo CurrentType 
+        protected ITypeInfo CurrentType 
         { 
             get; 
             set; 
         }
 
-        protected TypeInfo ParentType
+        protected ITypeInfo ParentType
         {
             get;
             set;
@@ -38,19 +39,19 @@ namespace Bridge.NET
             set;
         }
 
-        public List<TypeInfo> Types 
+        public List<ITypeInfo> Types 
         { 
             get; 
             protected set; 
         }
 
-        public MemberResolver Resolver
+        public IMemberResolver Resolver
         {
             get;
             set;
         }
 
-        public List<Tuple<TypeDeclaration, TypeInfo>> NestedTypes
+        public List<Tuple<TypeDeclaration, ITypeInfo>> NestedTypes
         {
             get;
             set;

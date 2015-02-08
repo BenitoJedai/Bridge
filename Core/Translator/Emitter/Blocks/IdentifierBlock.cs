@@ -1,4 +1,5 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Plugin;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
@@ -12,7 +13,7 @@ namespace Bridge.NET
 {
     public class IdentifierBlock : AbstractEmitterBlock
     {
-        public IdentifierBlock(Emitter emitter, IdentifierExpression identifierExpression)
+        public IdentifierBlock(IEmitter emitter, IdentifierExpression identifierExpression)
         {
             this.Emitter = emitter;
             this.IdentifierExpression = identifierExpression;
@@ -160,7 +161,7 @@ namespace Bridge.NET
                     {
                         var resolvedMethod = (IMethod)memberResult.Member;
                         var isExtensionMethod = resolvedMethod.IsExtensionMethod;
-                        this.Write(Emitter.ROOT + "." + (isExtensionMethod ? Emitter.DELEGATE_BIND_SCOPE : Emitter.DELEGATE_BIND) + "(");
+                        this.Write(Bridge.NET.Emitter.ROOT + "." + (isExtensionMethod ? Bridge.NET.Emitter.DELEGATE_BIND_SCOPE : Bridge.NET.Emitter.DELEGATE_BIND) + "(");
 
                         if (isStatic)
                         {
@@ -359,7 +360,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    throw this.Emitter.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
+                    throw (Exception)this.Emitter.CreateException(identifierExpression, "Cannot resolve identifier: " + id);
                 }
             }
         }

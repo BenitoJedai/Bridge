@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using Bridge.Plugin;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Bridge.NET
 {
     public partial class Translator
     {
-        public AssemblyInfo AssemblyInfo
+        public IAssemblyInfo AssemblyInfo
         {
             get;
             set;
@@ -24,7 +25,7 @@ namespace Bridge.NET
             set;
         }
 
-        public Validator Validator
+        public IValidator Validator
         {
             get;
             private set;
@@ -108,13 +109,13 @@ namespace Bridge.NET
             set;
         }
 
-        public Dictionary<string, TypeInfo> TypeInfoDefinitions
+        public Dictionary<string, ITypeInfo> TypeInfoDefinitions
         {
             get;
             set;
         }
 
-        public List<TypeInfo> Types 
+        public List<ITypeInfo> Types 
         { 
             get; 
             protected set; 
@@ -124,6 +125,12 @@ namespace Bridge.NET
         {
             get;
             protected set;
+        }
+
+        public IPlugins Plugins
+        {
+            get;
+            set;
         }
     }
 }
