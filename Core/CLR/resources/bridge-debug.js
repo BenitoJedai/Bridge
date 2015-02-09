@@ -337,6 +337,34 @@ Bridge = {
     return a === b;
   },
 
+  compare : function (a, b) {
+      if (!Bridge.isDefined(a, true)) {
+          throw new Bridge.NullReferenceException();
+      }
+      else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
+          return a < b ? -1 : (a > b ? 1 : 0);
+      }          
+      else if (Bridge.isDate(a)) {
+          return Bridge.compare(a.valueOf(), b.valueOf());
+      } 
+
+      return a.compareTo(b);
+  },
+
+  equalsT : function (a, b) {
+      if (!Bridge.isDefined(a, true)) {
+          throw new Bridge.NullReferenceException();
+      }
+      else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
+          return a === b;
+      }
+      else if (Bridge.isDate(a)) {
+          return a.valueOf() === b.valueOf();
+      }
+        
+      return a.equalsT(b);
+  },
+
   fn: {
     call: function (obj, fnName){
       var args = Array.prototype.slice.call(arguments, 2);
@@ -849,6 +877,68 @@ Bridge.Class.extend('Bridge.NullReferenceException', {
 
     $init: function (message, innerException) {
         this.base(message || "Object is null.", innerException);
+    }
+});
+Bridge.Class.extend('Bridge.IFormattable', {});
+Bridge.Class.extend('Bridge.IComparable', {});
+Bridge.Class.generic('Bridge.IComparable$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IComparable$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+    }));
+});
+Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IEquatable$1', T);
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+    }));
+});
+
+Bridge.Class.extend('Bridge.Int', {
+    $extend: [Bridge.IComparable$1(Number), Bridge.IEquatable$1(Number), Bridge.IComparable, Bridge.IFormattable],
+    $statics: {
+        instanceOf : function (instance) {
+            return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;
+        },
+
+        getDefaultValue : function () {
+            return 0;
+        },
+
+        format : function (num, format) {
+            //TODO: Implement it
+            return num.toString();
+        },
+
+        tryParse : function (str, result, min, max) {
+            result.v = 0;
+            if (!/^[+-]?[0-9]+$/.test(str)) {
+                return false;
+            }
+            result.v = parseInt(str, 10);
+            if (result.v < min || result.v > max) {
+                return false;
+            }
+            return true;
+        },
+
+        trunc : function (num) {
+            if (!Bridge.isNumber(num)) {
+                return null;
+            }
+
+            return num > 0 ? Math.floor(num) : Math.ceil(num);
+        },
+
+        div : function (x, y) {
+            if (!Bridge.isNumber(x) || !Bridge.isNumber(y)) {
+                return null;
+            }
+
+            if (y === 0) {
+                throw new Bridge.DivideByZeroException();
+            }
+
+            return this.trunc(x / y);
+        }
     }
 });
 
@@ -1951,818 +2041,5 @@ Bridge.Class.extend('Bridge.INotifyPropertyChanged', {});
 Bridge.Class.extend('Bridge.PropertyChangedEventArgs', {
     $init: function (propertyName) {
         this.propertyName = propertyName;
-    }
-});
-Bridge.Class.extend('Bridge.Aspects.AspectAttribute', {
-    $extend: [Bridge.Attribute]
-});
-
-Bridge.Class.extend('Bridge.Aspects.MulticastAspectAttribute', {
-    $extend: [Bridge.Aspects.AspectAttribute]
-});
-Bridge.Class.extend('Bridge.Aspects.AbstractMethodAspectAttribute', {
-    $extend: [Bridge.Aspects.MulticastAspectAttribute],
-
-    $$setAspect: Bridge.emptyFn,
-
-    init: function (methodName, scope) {
-        this.methodName = methodName;
-        this.scope = scope;
-        this.targetMethod = this.scope[this.methodName];
-
-        if (!this.runTimeValidate(methodName, scope)) {
-            return;
-        }
-
-        this.scope.$$aspects = this.scope.$$aspects || {};
-        if (!this.scope.$$aspects[this.$$name]) {
-            this.scope.$$aspects[this.$$name] = [];
-        }
-        this.scope.$$aspects[this.$$name].push(this);        
-
-        this.$$setAspect();
-    },
-
-    remove: function () {
-        var i,
-            aspects = this.scope.$$aspects[this.$$name];
-
-        this.scope[this.methodName] = this.targetMethod;
-
-        for (i = aspects.length - 1; i >= 0; i--) {
-            if (aspects[i] === this) {
-                aspects.splice(i, 1);
-                return;
-            }
-        }
-    },
-
-    runTimeValidate: function () {
-        return true;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.MethodAspectAttribute', {
-    $extend: [Bridge.Aspects.AbstractMethodAspectAttribute],
-
-    onEntry: Bridge.emptyFn,
-    onExit: Bridge.emptyFn,
-    onSuccess: Bridge.emptyFn,
-    onException: Bridge.emptyFn,    
-
-    $$setAspect: function () {
-        var me = this,
-            fn = function () {
-                var methodArgs = {
-                        arguments: arguments,
-                        methodName: me.methodName,
-                        scope: me.scope,
-                        exception: null,
-                        flow: 0
-                    },                    
-                    catchException;
-
-                me.onEntry(methodArgs);
-
-                if (methodArgs.flow == 3) {
-                    return methodArgs.returnValue;
-                }
-
-                try {
-                    methodArgs.returnValue = me.targetMethod.apply(me.scope, methodArgs.arguments);
-
-                    if (methodArgs.flow == 3) {
-                        return methodArgs.returnValue;
-                    }
-
-                    me.onSuccess(methodArgs);
-                }
-                catch (e) {
-                    methodArgs.exception = Bridge.Exception.create(e);                    
-
-                    catchException = me.$$exceptionTypes.length == 0;
-                    if (me.$$exceptionTypes.length > 0) {
-                        for (var i = 0; i < me.$$exceptionTypes.length; i++) {
-                            if (Bridge.is(methodArgs.exception, me.$$exceptionTypes[i])) {
-                                catchException = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (catchException) {
-                        me.onException(methodArgs);
-                    }                    
-
-                    if (methodArgs.flow == 3) {
-                        return methodArgs.returnValue;
-                    }
-
-                    if (methodArgs.flow == 2 && methodArgs.flow == 0) {
-                        throw e;
-                    }
-                }
-                finally {
-                    me.onExit(methodArgs);
-                }
-
-                return methodArgs.returnValue;
-            };
-
-        this.$$exceptionTypes = this.getExceptionsTypes(this.methodName, this.scope) || [];
-        this.scope[this.methodName] = fn;
-    },    
-
-    getExceptionsTypes: function () {
-        return [];
-    }    
-});
-
-Bridge.Class.extend('Bridge.Aspects.BufferedMethodAttribute', {
-    $extend: [Bridge.Aspects.AbstractMethodAspectAttribute],
-
-    $init: function (buffer) {
-        this.buffer = buffer;
-    },
-
-    $$setAspect: function () {
-        var me = this,
-            timeoutId,
-            fn = function () {
-                var args = Array.prototype.slice.call(arguments, 0);
-
-                if (timeoutId) {
-                    clearTimeout(timeoutId);
-                }
-
-                timeoutId = setTimeout(function () {
-                    me.targetMethod.apply(me.scope, args);
-                }, me.buffer);
-            };
-
-        this.scope[this.methodName] = fn;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.BarrierMethodAttribute', {
-    $extend: [Bridge.Aspects.AbstractMethodAspectAttribute],
-
-    $init: function (count) {
-        this.count = count;
-    },
-
-    $$setAspect: function () {
-        var me = this,
-            fn = function () {
-                if (!--me.count) {
-                    me.targetMethod.apply(me.scope, arguments);
-                }
-            };
-
-        this.scope[this.methodName] = fn;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.DelayedMethodAttribute', {
-    $extend: [Bridge.Aspects.AbstractMethodAspectAttribute],
-
-    $init: function (delay) {
-        this.delay = delay;
-    },
-
-    $$setAspect: function () {
-        var me = this,
-            fn = function () {
-                var args = Array.prototype.slice.call(arguments);
-
-                setTimeout(function () {
-                    me.targetMethod.apply(me.scope, args);
-                }, me.delay);
-            };
-
-        this.scope[this.methodName] = fn;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.ThrottledMethodAttribute', {
-    $extend: [Bridge.Aspects.AbstractMethodAspectAttribute],
-
-    $init: function (interval) {
-        this.interval = interval;
-    },
-
-    $$setAspect: function () {
-        var me = this,
-            lastCallTime = 0,
-            elapsed,
-            lastArgs,
-            timer,
-            execute = function () {
-                me.targetMethod.apply(me.scope, lastArgs);
-                lastCallTime = +new Date();
-                timer = null;
-            };
-
-        this.scope[this.methodName] =  function () {
-            elapsed = +new Date() - lastCallTime;
-            lastArgs = arguments;
-            if (elapsed >= me.interval) {
-                clearTimeout(timer);
-                execute();
-            }
-            else if (!timer) {
-                timer = setTimeout(execute, me.interval - elapsed);
-            }
-        };        
-    }
-});
-Bridge.Class.extend('Bridge.Aspects.PropertyAspectAttribute', {
-    $extend: [Bridge.Aspects.MulticastAspectAttribute],
-
-    onGetValue: Bridge.emptyFn,
-    onSetValue: Bridge.emptyFn,
-    onSuccess: Bridge.emptyFn,
-    onException: Bridge.emptyFn,
-
-    init: function (propertyName, scope) {
-        this.propertyName = propertyName;
-        this.scope = scope;
-        this.getter = this.scope["get" + this.propertyName];
-        this.setter = this.scope["set" + this.propertyName];
-
-        if (!this.runTimeValidate(propertyName, scope)) {
-            return;
-        }
-
-        this.scope.$$aspects = this.scope.$$aspects || {};
-        if (!this.scope.$$aspects[this.$$name]) {
-            this.scope.$$aspects[this.$$name] = [];
-        }
-        this.scope.$$aspects[this.$$name].push(this);
-        this.$$exceptionTypes = this.getExceptionsTypes(propertyName, scope) || [];
-
-        this.$$setAspect();
-    },
-
-    $$setAspect: function () {
-        var fn = function (me, isGetter) {
-                return function (value) {
-                    var methodArgs = {
-                            value: value,
-                            propertyName: me.propertyName,
-                            scope: me.scope,
-                            exception: null,
-                            flow: 0,
-                            isGetter : isGetter
-                        },                    
-                        catchException;
-
-                    if (isGetter) {
-                        me.onGetValue(methodArgs);
-                    }
-                    else {
-                        me.onSetValue(methodArgs);
-                    }
-
-                    if (methodArgs.flow == 3) {
-                        return isGetter ? methodArgs.value : undefined;
-                    }
-
-                    try {
-                        if (isGetter) {
-                            methodArgs.value = me.getter.call(me.scope);
-                        }
-                        else {
-                            me.setter.call(me.scope, methodArgs.value);
-                        }
-
-                        if (methodArgs.flow == 3) {
-                            return isGetter ? methodArgs.value : undefined;
-                        }
-
-                        me.onSuccess(methodArgs);                        
-                    }
-                    catch (e) {
-                        methodArgs.exception = Bridge.Exception.create(e);                    
-
-                        catchException = me.$$exceptionTypes.length == 0;
-                        if (me.$$exceptionTypes.length > 0) {
-                            for (var i = 0; i < me.$$exceptionTypes.length; i++) {
-                                if (Bridge.is(methodArgs.exception, me.$$exceptionTypes[i])) {
-                                    catchException = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (catchException) {
-                            me.onException(methodArgs);
-                        }                    
-
-                        if (methodArgs.flow == 3) {
-                            return isGetter ? methodArgs.value : undefined;
-                        }
-
-                        if (methodArgs.flow == 2 && methodArgs.flow == 0) {
-                            throw e;
-                        }
-                    }
-
-                    return isGetter ? methodArgs.value : undefined;
-                }
-            };
-
-        this.$$initAccessors(fn);
-    },
-
-    $$initAccessors: function (fn) {
-        if (this.getter) {
-            this.scope["get" + this.propertyName] = fn(this, true);
-        }
-
-        if (this.setter) {
-            this.scope["set" + this.propertyName] = fn(this, false);
-        }
-    },
-
-    remove: function () {
-        var i,
-            aspects = this.scope.$$aspects[this.$$name];
-
-        this.scope[this.propertyName] = this.getter;
-        this.scope[this.propertyName] = this.setter;
-        
-        for (i = aspects.length - 1; i >= 0; i--) {
-            if (aspects[i] === this) {
-                aspects.splice(i, 1);
-                return;
-            }
-        }
-    },
-
-    getExceptionsTypes: function () {
-        return [];
-    },
-
-    runTimeValidate: function () {
-        return true;
-    }
-});
-Bridge.Class.extend('Bridge.Aspects.TypeAspectAttribute', {
-    $extend: [Bridge.Aspects.MulticastAspectAttribute],
-
-    onInstance: Bridge.emptyFn,
-    onAfterInstance: Bridge.emptyFn,
-
-    init: function (instance, arguments) {
-        this.instance = instance;
-        this.typeName = instance.$$name;
-        this.arguments = arguments;
-
-        if (!this.runTimeValidate(instance)) {
-            return;
-        }
-
-        this.instance.$$aspects = this.instance.$$aspects || {};
-        if (!this.instance.$$aspects[this.$$name]) {
-            this.instance.$$aspects[this.$$name] = [];
-        }
-        this.instance.$$aspects[this.$$name].push(this);
-        this.$$setAspect();
-    },
-
-    $$setAspect: function () {
-        var me = this;
-        this.$$targetInitCtor = this.instance.$$initCtor;
-        this.instance.$$initCtor = function () {
-            var args = {
-                instance: me.instance,
-                typeName: me.typeName,
-                arguments: arguments
-            };
-
-            me.onInstance(args);
-
-            me.$$targetInitCtor.apply(me.instance, args.arguments)
-
-            me.onAfterInstance(args);
-        };
-    },
-
-    runTimeValidate: function () {
-        return true;
-    }
-});
-Bridge.Class.extend('Bridge.Aspects.NotifyPropertyChangedAttribute', {
-    $extend: [Bridge.Aspects.MulticastAspectAttribute],
-
-    $statics: {
-        globalSuspendCounter: 0,
-
-        resumeEvents: function (instance) {
-            if (Bridge.isDefined(instance, true)) {
-                var a = instance.$$aspects;
-                if (a && Bridge.isDefined(a.$$notifyPropertySuspendCounter)) {
-                    a.$$notifyPropertySuspendCounter--;
-                }
-            }
-            else {
-                this.globalSuspendCounter--;
-            }
-        },
-
-        suspendEvents: function (instance) {
-            if (Bridge.isDefined(instance, true)) {
-                var a = instance.$$aspects;
-                if (a && Bridge.isDefined(a.$$notifyPropertySuspendCounter)) {
-                    a.$$notifyPropertySuspendCounter++;
-                }
-            }
-            else {
-                this.globalSuspendCounter++;
-            }
-        },
-
-        raiseEvents: function (instance) {
-            if (instance && instance.$$aspects) {
-                var i,
-                    aspects = instance.$$aspects[this.$$name];
-
-                for (i = 0; i < aspects.length; i++) {
-                    aspects[i].raiseEvent();
-                }
-            }
-        }
-    },
-
-    $initMembers: function () {
-        this.raiseOnChange = true;
-    },
-
-    init: function (propertyName, scope) {        
-        this.propertyName = propertyName;
-        this.scope = scope;
-        this.getter = this.scope["get" + this.propertyName];
-        this.setter = this.scope["set" + this.propertyName];
-
-        if (!this.runTimeValidate(propertyName, scope)) {
-            return;
-        }
-
-        this.scope.$$aspects = this.scope.$$aspects || {};
-        if (!this.scope.$$aspects[this.$$name]) {
-            this.scope.$$aspects[this.$$name] = [];
-        }
-        this.scope.$$aspects[this.$$name].push(this);
-
-        if (!Bridge.isDefined(this.scope.$$aspects.$$notifyPropertySuspendCounter)) {
-            this.scope.$$aspects.$$notifyPropertySuspendCounter = 0;
-        }
-
-        this.$$setAspect();
-    },
-
-    $$setAspect: function () {        
-        if (this.setter) {
-            var me = this;
-            this.scope["set" + this.propertyName] = function (value) {
-                var args = {
-                    value: value,
-                    propertyName: me.propertyName,
-                    scope: me.scope,
-                    flow: 0,
-                    force: false
-                };
-
-                if (me.raiseOnChange) {
-                    args.lastValue = me.getter();
-                }
-
-                me.setter.call(me.scope, args.value);
-                me.onSetValue(args);                
-            };
-        }
-    },
-
-    beforeEvent: Bridge.emptyFn,
-
-    onSetValue: function (args) {
-        this.beforeEvent(args);
-
-        if (args.flow === 3) {
-            return;
-        }
-
-        if (args.flow !== 1) {
-            if (Bridge.Aspects.NotifyPropertyChangedAttribute.globalSuspendCounter) {
-                return;
-            }
-            
-            if (this.scope.$$aspects.$$notifyPropertySuspendCounter) {
-                return;
-            }
-        }
-
-        var raise = true;
-        if (this.raiseOnChange) {
-            raise = args.value !== args.lastValue;
-        }
-        
-        if (raise) {
-            if (this.scope.onPropertyChanged) {
-                this.scope.onPropertyChanged(args.propertyName);
-            }
-            else if (this.scope.propertyChanged) {
-                this.scope.propertyChanged(this.scope, { propertyName: args.propertyName });
-            }
-        }
-    },
-
-    raiseEvent: function () {
-        var args = {
-            propertyName: this.propertyName,
-            scope: this.scope,
-            flow: 0,
-            force: true,
-            value: null
-        };
-        
-        this.beforeEvent(args);
-
-        if (args.flow === 3) {
-            return;
-        }
-
-        if (this.scope.onPropertyChanged) {
-            this.scope.onPropertyChanged(args.propertyName);
-        }
-        else if (this.scope.propertyChanged) {
-            this.scope.propertyChanged(this.scope, { propertyName: args.propertyName });
-        }
-    },
-
-    runTimeValidate: function () {
-        return true;
-    }
-});
-Bridge.Class.extend('Bridge.Aspects.ParameterAspectAttribute', {
-    $extend: [Bridge.Aspects.MulticastAspectAttribute],
-
-    init: function (argName, argIndex, argType, methodName, scope) {
-        this.parameterName = argName;
-        this.parameterIndex = argIndex;
-        this.parameterType = argType;
-        this.methodName = methodName;
-        this.scope = scope;
-        this.targetMethod = this.scope[this.methodName];
-
-        if (!this.runTimeValidate(argName, argIndex, argType, methodName, scope)) {
-            return;
-        }
-
-        this.scope.$$aspects = this.scope.$$aspects || {};
-        if (!this.scope.$$aspects[this.$$name]) {
-            this.scope.$$aspects[this.$$name] = [];
-        }
-        this.scope.$$aspects[this.$$name].push(this);
-
-        this.$$setAspect();
-    },
-
-    remove: function () {
-        var i,
-            aspects = this.scope.$$aspects[this.$$name];
-
-        this.scope[this.methodName] = this.targetMethod;
-
-        for (i = aspects.length - 1; i >= 0; i--) {
-            if (aspects[i] === this) {
-                aspects.splice(i, 1);
-                return;
-            }
-        }
-    },
-
-    runTimeValidate: function () {
-        return true;
-    },
-
-    parameterValidate: Bridge.emptyFn,
-
-    $$setAspect: function () {
-        var me = this,
-            fn = function () {
-                var args = Array.prototype.slice.call(arguments, 0),
-                    valArg = {
-                        parameterIndex: me.parameterIndex,
-                        parameterType: me.parameterType,
-                        parameterName: me.parameterName,
-                        parameter: args[me.parameterIndex],
-                        methodName: me.methodName,
-                        scope: me.scope
-                    };
-
-                me.parameterValidate(valArg);
-                args[me.parameter] = valArg.parameter;
-                return me.targetMethod.apply(me.scope, args);
-            };
-
-        this.scope[this.methodName] = fn;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.ParameterContractAspectAttribute', {
-    $extend: [Bridge.Aspects.ParameterAspectAttribute],
-
-    parameterValidate: function (arg) {
-        if (this.validate(arg) === false) {
-            throw this.createException(arg);
-        }
-    },
-
-    createException: function (arg) {
-        return new Bridge.ArgumentException(this.message, arg.parameterName);
-    },
-
-    validate: Bridge.emptyFn
-});
-
-Bridge.Class.extend('Bridge.Aspects.CreditCardAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (type) {
-        this.type = type;
-    },
-
-    validate: function (arg) {
-        return Bridge.Validation.isNull(arg.parameter) || Bridge.Validation.creditCard(arg.parameter, this.type);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.EmailAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    validate: function (arg) {
-        return Bridge.Validation.isNull(arg.parameter) || Bridge.Validation.email(arg.parameter);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.UrlAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    validate: function (arg) {
-        return Bridge.Validation.isNull(arg.parameter) || Bridge.Validation.url(arg.parameter);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.GreaterThanAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (min, strict) {
-        this.min = min;
-        this.strict = strict;
-    },
-
-    createException: function (arg) {
-        return new Bridge.ArgumentOutOfRangeException(arg.parameterName, this.message, null, arg.parameter);
-    },
-
-    validate: function (arg) {
-        return this.strict !== false ? arg.parameter > this.min : arg.parameter >= this.min;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.LessThanAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (max, strict) {
-        this.max = max;
-        this.strict = strict;
-    },
-
-    createException: function (arg) {
-        return new Bridge.ArgumentOutOfRangeException(arg.parameterName, this.message, null, arg.parameter);
-    },
-
-    validate: function (arg) {
-        return this.strict !== false ? arg.parameter < this.max : arg.parameter <= this.max;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.NotEmptyAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    createException: function (arg) {
-        return new Bridge.ArgumentNullException(arg.parameterName, this.message);
-    },
-
-    validate: function (arg) {
-        return Bridge.Validation.isNotEmpty(arg.parameter);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.NotNullAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    createException: function (arg) {
-        return new Bridge.ArgumentNullException(arg.parameterName, this.message);
-    },
-
-    validate: function (arg) {
-        return Bridge.Validation.isNotNull(arg.parameter);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.PositiveAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    createException: function (arg) {
-        return new Bridge.ArgumentOutOfRangeException(arg.parameterName, this.message, null, arg.parameter);
-    },
-
-    validate: function (arg) {
-        return arg.parameter >= 0;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.NegativeAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    createException: function (arg) {
-        return new Bridge.ArgumentOutOfRangeException(arg.parameterName, this.message, null, arg.parameter);
-    },
-
-    validate: function (arg) {
-        return arg.parameter < 0;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.RangeAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (min, max, strict) {
-        this.min = min;
-        this.max = max;
-        this.strict = strict;
-    },
-
-    createException: function (arg) {
-        return new Bridge.ArgumentOutOfRangeException(arg.parameterName, this.message, null, arg.parameter);
-    },
-
-    validate: function (arg) {
-        if (this.strict === false) {
-            return arg.parameter <= this.max && arg.parameter >= this.min;
-        }
-        return arg.parameter < this.max && arg.parameter > this.min;
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.RequiredAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    createException: function (arg) {
-        return new Bridge.ArgumentNullException(arg.parameterName, this.message, null);
-    },
-
-    validate: function (arg) {
-        return Bridge.Validation.isNotEmptyOrWhitespace(arg.parameter);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.LengthAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (max, min) {
-        this.max = max;
-        this.min = min || 0;
-    },
-
-    validate: function (arg) {
-        return Bridge.Validation.isNull(arg.parameter) || (arg.parameter.length >= this.min && arg.parameter.length <= this.max);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.RegularExpressionAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (pattern, flags) {
-        this.regExp = new RegExp(pattern, flags);
-    },
-
-    validate: function (arg) {
-        return Bridge.Validation.isNull(arg.parameter) || this.regExp.test(arg.parameter);
-    }
-});
-
-Bridge.Class.extend('Bridge.Aspects.ValidatorAttribute', {
-    $extend: [Bridge.Aspects.ParameterContractAspectAttribute],
-
-    $init: function (fn) {
-        this.fn = Bridge.isString(fn) ? eval(fn) : fn;
-    },
-
-    validate: function (arg) {
-        return this.fn(arg.parameter);
     }
 });
