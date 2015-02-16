@@ -2,7 +2,7 @@
 // @source resources/Task.js
 
 Bridge.Class.extend('Bridge.Exception', {
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.message = message;
         this.innerException = innerException;
         this.errorStack = new Error();
@@ -50,7 +50,7 @@ Bridge.Class.extend('Bridge.Exception', {
 Bridge.Class.extend('Bridge.ErrorException', {
     $extend: [Bridge.Exception],
 
-    $init: function (error) {
+    $ctor: function (error) {
         this.base(error.message);
         this.errorStack = error;
         this.error = error;
@@ -64,7 +64,7 @@ Bridge.Class.extend('Bridge.ErrorException', {
 Bridge.Class.extend('Bridge.ArgumentException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, paramName, innerException) {
+    $ctor: function (message, paramName, innerException) {
         this.base(message || "Value does not fall within the expected range.", innerException);
         this.paramName = paramName;
     },
@@ -77,7 +77,7 @@ Bridge.Class.extend('Bridge.ArgumentException', {
 Bridge.Class.extend('Bridge.ArgumentNullException', {
     $extend: [Bridge.ArgumentException],
 
-    $init: function (paramName, message, innerException) {
+    $ctor: function (paramName, message, innerException) {
         if (!message) {
             message = 'Value cannot be null.';
             if (paramName) {
@@ -92,7 +92,7 @@ Bridge.Class.extend('Bridge.ArgumentNullException', {
 Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
     $extend: [Bridge.ArgumentException],
 
-    $init: function (paramName, message, innerException, actualValue) {
+    $ctor: function (paramName, message, innerException, actualValue) {
         if (!message) {
             message = 'Value is out of range.';
             if (paramName) {
@@ -113,7 +113,7 @@ Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
 Bridge.Class.extend('Bridge.KeyNotFoundException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "Key not found.", innerException);
     }
 });
@@ -121,7 +121,7 @@ Bridge.Class.extend('Bridge.KeyNotFoundException', {
 Bridge.Class.extend('Bridge.DivideByZeroException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "Division by 0.", innerException);
     }
 });
@@ -129,7 +129,7 @@ Bridge.Class.extend('Bridge.DivideByZeroException', {
 Bridge.Class.extend('Bridge.FormatException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "Invalid format.", innerException);
     }
 });
@@ -137,7 +137,7 @@ Bridge.Class.extend('Bridge.FormatException', {
 Bridge.Class.extend('Bridge.InvalidCastException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "The cast is not valid.", innerException);
     }
 });
@@ -145,7 +145,7 @@ Bridge.Class.extend('Bridge.InvalidCastException', {
 Bridge.Class.extend('Bridge.InvalidOperationException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "Operation is not valid due to the current state of the object.", innerException);
     }
 });
@@ -153,7 +153,7 @@ Bridge.Class.extend('Bridge.InvalidOperationException', {
 Bridge.Class.extend('Bridge.NotImplementedException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "The method or operation is not implemented.", innerException);
     }
 });
@@ -161,7 +161,7 @@ Bridge.Class.extend('Bridge.NotImplementedException', {
 Bridge.Class.extend('Bridge.NotSupportedException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "Specified method is not supported.", innerException);
     }
 });
@@ -169,7 +169,7 @@ Bridge.Class.extend('Bridge.NotSupportedException', {
 Bridge.Class.extend('Bridge.NullReferenceException', {
     $extend: [Bridge.Exception],
 
-    $init: function (message, innerException) {
+    $ctor: function (message, innerException) {
         this.base(message || "Object is null.", innerException);
     }
 });

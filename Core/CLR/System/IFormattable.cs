@@ -6,6 +6,6 @@ namespace System
     [Namespace("Bridge")]
 	public interface IFormattable 
     {
-		string ToString(string format);
+        string Format(string format);
 	}
 }

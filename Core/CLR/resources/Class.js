@@ -21,8 +21,8 @@
         else if (this.$ctorDetector) {
             this.$ctorDetector.apply(this, arguments);
         }
-        else if (this.$init) {
-            this.$init.apply(this, arguments);
+        else if (this.$ctor) {
+            this.$ctor.apply(this, arguments);
         }
     };
 
@@ -46,25 +46,25 @@
         prototype = extend ? new extend[0]() : new Object();
         initializing = false;
 
-        if (!prop.$multipleCtors && !prop.$init) {
-            prop.$init = extend ? function () {
+        if (!prop.$multipleCtors && !prop.$ctor) {
+            prop.$ctor = extend ? function () {
                 this.base();
             } : function () { };
         }
 
-        if (!prop.$multipleCtors && !prop.$init) {
-            prop.$init = extend ? function () {
+        if (!prop.$multipleCtors && !prop.$ctor) {
+            prop.$ctor = extend ? function () {
                 this.base();
             } : function () { };
         }
 
-        if (!prop.$initMembers) {
-            prop.$initMembers = extend ? function () {
+        if (!prop.$ctorMembers) {
+            prop.$ctorMembers = extend ? function () {
                 this.base.apply(this, arguments);
             } : function () { };
         }
 
-        prop.$$initCtor = Bridge.Class.initCtor;
+        prop.$$ctorCtor = Bridge.Class.initCtor;
 
         // Copy the properties over onto the new prototype
         for (name in prop) {
@@ -105,11 +105,11 @@
 
             // All construction is actually done in the init method
             if (!initializing) {
-                if (this.$initMembers) {
-                    this.$initMembers.apply(this, arguments);
+                if (this.$ctorMembers) {
+                    this.$ctorMembers.apply(this, arguments);
                 }                
 
-                this.$$initCtor.apply(this, arguments);
+                this.$$ctorCtor.apply(this, arguments);
             }
         }
 
@@ -145,8 +145,8 @@
             scope.$$inheritors.push(Class);
         }
 
-        if (Class.$init) {
-            Class.$init.call(Class);
+        if (Class.$ctor) {
+            Class.$ctor.call(Class);
         }
 
         return Class;

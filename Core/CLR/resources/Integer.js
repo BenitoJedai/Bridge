@@ -9,9 +9,9 @@
             return 0;
         },
 
-        format : function (num, format) {
-            //TODO: Implement it
-            return num.toString();
+        format : function (num, format) {            
+            throw new Bridge.NotImplementedException();
+            //return num.toString();
         },
 
         tryParse : function (str, result, min, max) {

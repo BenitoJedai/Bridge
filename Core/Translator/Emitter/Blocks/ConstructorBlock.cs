@@ -59,7 +59,7 @@ namespace Bridge.NET
 
             if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0 || this.TypeInfo.StaticEvents.Count > 0 || injectors.Count() > 0)
             {
-                this.Write("$init");
+                this.Write("$ctor");
                 this.WriteColon();
                 this.WriteFunction();
                 this.WriteOpenCloseParentheses(true);
@@ -103,7 +103,7 @@ namespace Bridge.NET
                 return;
             }
 
-            this.Write("$initMembers");
+            this.Write("$ctorMembers");
 
             this.WriteColon();
             this.WriteFunction();
@@ -179,10 +179,10 @@ namespace Bridge.NET
                 this.Emitter.Comma = true;
             }
 
-            if (this.TypeInfo.Ctors.Count > 1)
-            {
-                this.EmitCtorDetector(this.TypeInfo.Ctors);
-            }
+            //if (this.TypeInfo.Ctors.Count > 1)
+            //{
+                //this.EmitCtorDetector(this.TypeInfo.Ctors);
+            //}
 
             foreach (var ctor in this.TypeInfo.Ctors)
             {
@@ -191,13 +191,21 @@ namespace Bridge.NET
                 var prevMap = this.BuildLocalsMap(ctor.Body);
                 this.AddLocals(ctor.Parameters);
 
-                var ctorName = "$init";
+                var ctorName = "$ctor";
 
                 if (this.TypeInfo.Ctors.Count > 1)
                 {
                     StringBuilder sb = new StringBuilder();
 
-                    foreach (var p in ctor.Parameters)
+                    if (ctor.Parameters.Count > 0)
+                    {
+                        var methodsDef = typeDef.Methods.Where(m => m.IsConstructor && m.Parameters.Count > 0).ToList();
+                        MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null);
+                        sb.Append("$");
+                        sb.Append(methodsDef.IndexOf(methodDef) + 1);
+                    }
+
+                    /*foreach (var p in ctor.Parameters)
                     {
                         var resolveResult = this.Emitter.Resolver.ResolveNode(p.Type, this.Emitter);
 
@@ -215,7 +223,7 @@ namespace Bridge.NET
                         {
                             sb.Append("$").Append(p.Type.ToString());
                         }
-                    }
+                    }*/
 
                     ctorName += sb.ToString();
                 }
@@ -289,7 +297,7 @@ namespace Bridge.NET
 
             foreach (var ctor in ctors)
             {
-                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef);
+                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null);
                 if (methodDef != null)
                 {
                     string name = Helpers.GetOverloadName(this.Emitter, methodDef);
@@ -309,7 +317,7 @@ namespace Bridge.NET
                     }
 
                     sb.AppendLine("if (arguments.length == 0) {");
-                    sb.AppendLine("    this.$init();");
+                    sb.AppendLine("    this.$ctor();");
                     sb.AppendLine("}");
                 }
             }
@@ -334,7 +342,7 @@ namespace Bridge.NET
             if (initializer.ConstructorInitializerType == ConstructorInitializerType.Base)
             {
                 var baseType = this.Emitter.GetBaseTypeDefinition();
-                var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.Emitter.GetOverloadNameInvocationResolveResult(this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter) as InvocationResolveResult) : "$init";
+                var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member) : "$ctor";
 
                 if (baseName == ctorName)
                 {
@@ -352,7 +360,7 @@ namespace Bridge.NET
             {
                 this.WriteThis();
                 this.WriteDot();
-                this.Write(this.Emitter.GetOverloadNameInvocationResolveResult(this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter) as InvocationResolveResult));
+                this.Write(this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member));
             }
 
             this.WriteOpenParentheses();

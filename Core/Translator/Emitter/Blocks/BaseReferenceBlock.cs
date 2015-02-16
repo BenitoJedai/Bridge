@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Bridge.NET
 {
-    public class BaseReferenceBlock : AbstractEmitterBlock
+    public class BaseReferenceBlock : ConversionBlock
     {
         public BaseReferenceBlock(IEmitter emitter, BaseReferenceExpression baseReferenceExpression)
         {
@@ -19,7 +19,12 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            return this.BaseReferenceExpression;
+        }
+
+        protected override void EmitConversionExpression()
         {
             this.Write("base");
         }

@@ -21,6 +21,13 @@ namespace Bridge.NET
             this.StaticEvents = new List<EventDeclaration>();
             this.Dependencies = new List<IModuleDependency>();
             this.Ctors = new List<ConstructorDeclaration>();
+            this.Operators = new Dictionary<OperatorType, List<OperatorDeclaration>>();
+        }
+
+        public Dictionary<OperatorType, List<OperatorDeclaration>> Operators
+        {
+            get;
+            protected set;
         }
 
         public TypeDeclaration TypeDeclaration
@@ -166,7 +173,8 @@ namespace Bridge.NET
                        || this.StaticProperties.Count > 0
                        || this.Consts.Count > 0
                        || this.StaticEvents.Count > 0
-                       || this.StaticCtor != null;
+                       || this.StaticCtor != null
+                       || this.Operators.Count > 0;
             }
         }
 

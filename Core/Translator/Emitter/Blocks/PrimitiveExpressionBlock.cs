@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Bridge.NET
 {
-    public class PrimitiveExpressionBlock : AbstractEmitterBlock
+    public class PrimitiveExpressionBlock : ConversionBlock
     {
         public PrimitiveExpressionBlock(IEmitter emitter, PrimitiveExpression primitiveExpression)
         {
@@ -19,7 +19,12 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            return this.PrimitiveExpression;
+        }
+
+        protected override void EmitConversionExpression()
         {
             if (this.PrimitiveExpression.IsNull)
             {

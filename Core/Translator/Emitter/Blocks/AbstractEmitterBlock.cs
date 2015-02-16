@@ -4,7 +4,7 @@ using System;
 
 namespace Bridge.NET
 {
-    public abstract partial class AbstractEmitterBlock
+    public abstract partial class AbstractEmitterBlock : IAbstractEmitterBlock
     {        
         public abstract void Emit();
 
@@ -14,7 +14,7 @@ namespace Bridge.NET
             set;
         }
 
-        protected virtual void EmitBlockOrIndentedLine(AstNode node)
+        public virtual void EmitBlockOrIndentedLine(AstNode node)
         {
             bool block = node is BlockStatement;
 
@@ -36,7 +36,7 @@ namespace Bridge.NET
             }
         }
 
-        protected bool NoValueableSiblings(AstNode node)
+        public bool NoValueableSiblings(AstNode node)
         {
             while (node.NextSibling != null)
             {

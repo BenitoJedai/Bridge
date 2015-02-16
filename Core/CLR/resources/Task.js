@@ -2,7 +2,7 @@
 // @source resources/Task.js
 
 Bridge.Class.extend('Bridge.Task', {
-    $init: function (action, state) {
+    $ctor: function (action, state) {
         this.action = action;
         this.state = state;
         this.error = null;

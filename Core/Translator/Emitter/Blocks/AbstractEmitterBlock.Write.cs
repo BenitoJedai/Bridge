@@ -10,12 +10,12 @@ namespace Bridge.NET
 {
     public partial class AbstractEmitterBlock
     {
-        protected virtual void Indent()
+        public virtual void Indent()
         {
             ++this.Emitter.Level;
         }
 
-        protected virtual void Outdent()
+        public virtual void Outdent()
         {
             if (this.Emitter.Level > 0)
             {
@@ -23,7 +23,7 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void WriteIndent()
+        public virtual void WriteIndent()
         {
             if (!this.Emitter.IsNewLine)
             {
@@ -38,32 +38,32 @@ namespace Bridge.NET
             this.Emitter.IsNewLine = false;
         }
 
-        protected virtual void WriteNewLine()
+        public virtual void WriteNewLine()
         {
             this.Emitter.Output.Append('\n');
             this.Emitter.IsNewLine = true;
         }
 
-        protected virtual void BeginBlock()
+        public virtual void BeginBlock()
         {
             this.WriteOpenBrace();
             this.WriteNewLine();
             this.Indent();
         }
 
-        protected virtual void EndBlock()
+        public virtual void EndBlock()
         {
             this.Outdent();
             this.WriteCloseBrace();
         }
 
-        protected virtual void Write(object value)
+        public virtual void Write(object value)
         {
             this.WriteIndent();
             this.Emitter.Output.Append(value);
         }
 
-        protected virtual void Write(params object[] values)
+        public virtual void Write(params object[] values)
         {
             foreach (var item in values)
             {
@@ -71,18 +71,18 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void WriteScript(object value)
+        public virtual void WriteScript(object value)
         {
             this.WriteIndent();
             this.Emitter.Output.Append(this.Emitter.ToJavaScript(value));
         }        
 
-        protected virtual void WriteComma()
+        public virtual void WriteComma()
         {
             this.WriteComma(false);
         }
 
-        protected virtual void WriteComma(bool newLine)
+        public virtual void WriteComma(bool newLine)
         {
             this.Write(",");
 
@@ -96,18 +96,18 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void WriteThis()
+        public virtual void WriteThis()
         {
             this.Write("this");
             this.Emitter.ThisRefCounter++;
         }
 
-        protected virtual void WriteSpace()
+        public virtual void WriteSpace()
         {
             this.WriteSpace(true);
         }
 
-        protected virtual void WriteSpace(bool addSpace)
+        public virtual void WriteSpace(bool addSpace)
         {
             if (addSpace)
             {
@@ -115,22 +115,22 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void WriteDot()
+        public virtual void WriteDot()
         {
             this.Write(".");
         }
 
-        protected virtual void WriteColon()
+        public virtual void WriteColon()
         {
             this.Write(": ");
         }
 
-        protected virtual void WriteSemiColon()
+        public virtual void WriteSemiColon()
         {
             this.WriteSemiColon(false);
         }
 
-        protected virtual void WriteSemiColon(bool newLine)
+        public virtual void WriteSemiColon(bool newLine)
         {
             if (this.Emitter.SkipSemiColon)
             {
@@ -146,12 +146,12 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void WriteNew()
+        public virtual void WriteNew()
         {
             this.Write("new ");
         }
 
-        protected virtual void WriteVar(bool ignoreAsync = false)
+        public virtual void WriteVar(bool ignoreAsync = false)
         {
             if (!this.Emitter.IsAsync || ignoreAsync)
             {
@@ -159,157 +159,157 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual void WriteIf()
+        public virtual void WriteIf()
         {
             this.Write("if ");
         }
 
-        protected virtual void WriteElse()
+        public virtual void WriteElse()
         {
             this.Write("else ");
         }
 
-        protected virtual void WriteWhile()
+        public virtual void WriteWhile()
         {
             this.Write("while ");
         }
 
-        protected virtual void WriteFor()
+        public virtual void WriteFor()
         {
             this.Write("for ");
         }
 
-        protected virtual void WriteThrow()
+        public virtual void WriteThrow()
         {
             this.Write("throw ");
         }
 
-        protected virtual void WriteTry()
+        public virtual void WriteTry()
         {
             this.Write("try ");
         }
 
-        protected virtual void WriteCatch()
+        public virtual void WriteCatch()
         {
             this.Write("catch ");
         }
 
-        protected virtual void WriteFinally()
+        public virtual void WriteFinally()
         {
             this.Write("finally ");
         }
 
-        protected virtual void WriteDo()
+        public virtual void WriteDo()
         {
             this.Write("do ");
         }
 
-        protected virtual void WriteSwitch()
+        public virtual void WriteSwitch()
         {
             this.Write("switch ");
         }
 
-        protected virtual void WriteReturn(bool addSpace)
+        public virtual void WriteReturn(bool addSpace)
         {
             this.Write("return");
             this.WriteSpace(addSpace);
         }
 
-        protected virtual void WriteOpenBracket()
+        public virtual void WriteOpenBracket()
         {
             this.WriteOpenBracket(false);
         }
 
-        protected virtual void WriteOpenBracket(bool addSpace)
+        public virtual void WriteOpenBracket(bool addSpace)
         {
             this.Write("[");
             this.WriteSpace(addSpace);
         }
 
-        protected virtual void WriteCloseBracket()
+        public virtual void WriteCloseBracket()
         {
             this.WriteCloseBracket(false);
         }
 
-        protected virtual void WriteCloseBracket(bool addSpace)
+        public virtual void WriteCloseBracket(bool addSpace)
         {
             this.WriteSpace(addSpace);
             this.Write("]");
         }
 
-        protected virtual void WriteOpenParentheses()
+        public virtual void WriteOpenParentheses()
         {
             this.WriteOpenParentheses(false);
         }
 
-        protected virtual void WriteOpenParentheses(bool addSpace)
+        public virtual void WriteOpenParentheses(bool addSpace)
         {
             this.Write("(");
             this.WriteSpace(addSpace);
         }
 
-        protected virtual void WriteCloseParentheses()
+        public virtual void WriteCloseParentheses()
         {
             this.WriteCloseParentheses(false);
         }
 
-        protected virtual void WriteCloseParentheses(bool addSpace)
+        public virtual void WriteCloseParentheses(bool addSpace)
         {
             this.WriteSpace(addSpace);
             this.Write(")");
         }
 
-        protected virtual void WriteOpenCloseParentheses()
+        public virtual void WriteOpenCloseParentheses()
         {
             this.WriteOpenCloseParentheses(false);
         }
 
-        protected virtual void WriteOpenCloseParentheses(bool addSpace)
+        public virtual void WriteOpenCloseParentheses(bool addSpace)
         {
             this.Write("()");
             this.WriteSpace(addSpace);
         }
 
-        protected virtual void WriteOpenBrace()
+        public virtual void WriteOpenBrace()
         {
             this.WriteOpenBrace(false);
         }
 
-        protected virtual void WriteOpenBrace(bool addSpace)
+        public virtual void WriteOpenBrace(bool addSpace)
         {
             this.Write("{");
             this.WriteSpace(addSpace);
         }
 
-        protected virtual void WriteCloseBrace()
+        public virtual void WriteCloseBrace()
         {
             this.WriteCloseBrace(false);
         }
 
-        protected virtual void WriteCloseBrace(bool addSpace)
+        public virtual void WriteCloseBrace(bool addSpace)
         {
             this.WriteSpace(addSpace);
             this.Write("}");
         }
 
-        protected virtual void WriteOpenCloseBrace()
+        public virtual void WriteOpenCloseBrace()
         {
             this.Write("{ }");
         }
 
-        protected virtual void WriteFunction()
+        public virtual void WriteFunction()
         {
             this.Write("function ");
         }
 
-        protected virtual void PushWriter(string format)
+        public virtual void PushWriter(string format)
         {
             this.Emitter.Writers.Push(new Tuple<string, StringBuilder, bool>(format, this.Emitter.Output, this.Emitter.IsNewLine));
             this.Emitter.IsNewLine = false;
             this.Emitter.Output = new StringBuilder();
         }
 
-        protected virtual string PopWriter(bool preventWrite = false)
+        public virtual string PopWriter(bool preventWrite = false)
         {
             string result = this.Emitter.Output.ToString();
             var tuple = this.Emitter.Writers.Pop();
@@ -324,7 +324,7 @@ namespace Bridge.NET
             return result;
         }
 
-        protected virtual string WriteIndentToString(string value)
+        public virtual string WriteIndentToString(string value)
         {
             StringBuilder output = new StringBuilder();
             for (var i = 0; i < this.Emitter.Level; i++)
@@ -337,7 +337,7 @@ namespace Bridge.NET
             return value.Replace("\n", "\n" + indent);
         }
 
-        protected virtual void EnsureComma(bool newLine = true)
+        public virtual void EnsureComma(bool newLine = true)
         {
             if (this.Emitter.Comma)
             {
@@ -346,7 +346,7 @@ namespace Bridge.NET
             }
         }
 
-        protected WriterInfo SaveWriter()
+        public IWriterInfo SaveWriter()
         {
             /*if (this.Emitter.LastSavedWriter != null && this.Emitter.LastSavedWriter.Output == this.Emitter.Output)
             {
@@ -368,7 +368,7 @@ namespace Bridge.NET
             return info;
         }
 
-        protected bool RestoreWriter(WriterInfo writer)
+        public bool RestoreWriter(IWriterInfo writer)
         {
             if (this.Emitter.Output != writer.Output)
             {
@@ -383,7 +383,7 @@ namespace Bridge.NET
             return false;
         }
 
-        protected StringBuilder NewWriter()
+        public StringBuilder NewWriter()
         {
             this.Emitter.Output = new StringBuilder();
             this.Emitter.IsNewLine = false;

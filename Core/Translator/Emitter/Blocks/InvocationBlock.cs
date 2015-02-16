@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Bridge.NET
 {
-    public class InvocationBlock : AbstractEmitterBlock
+    public class InvocationBlock : ConversionBlock
     {
         public InvocationBlock(IEmitter emitter, InvocationExpression invocationExpression)
         {
@@ -24,7 +24,12 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            return this.InvocationExpression;
+        }
+
+        protected override void EmitConversionExpression()
         {
             this.VisitInvocationExpression();
         }

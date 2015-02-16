@@ -292,7 +292,7 @@ namespace Bridge.NET
 
             switchSection.CaseLabels.ToList().ForEach(l => l.AcceptVisitor(this.Emitter));
             this.Indent();
-            switchSection.AcceptChildren(this.Emitter);
+            switchSection.Statements.ToList().ForEach(s => s.AcceptVisitor(this.Emitter));
             this.Outdent();
         }
 

@@ -39,6 +39,12 @@ namespace System
 			return null;
 		}
 
+        [Template("Bridge.Int.format({this}, {format})")]
+        public string Format(string format)
+        {
+            return null;
+        }
+
 		[Template("Bridge.Int.format({this}, {format})")]
 		public string ToString(string format) 
         {

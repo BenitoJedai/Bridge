@@ -493,6 +493,24 @@ namespace System
             return null; 
         }
 
+        [Template("Bridge.String.endsWith({this}, {suffix})")]
+        public bool EndsWith(string suffix)
+        {
+            return false;
+        }
+
+        [Template("Bridge.String.startsWith({this}, {prefix})")]
+        public bool StartsWith(string prefix)
+        {
+            return false;
+        }
+
+        [Template("Bridge.String.format({format}, {values})")]
+        public static string Format(string format, params object[] values)
+        {
+            return null;
+        }
+
         public static bool operator ==(string s1, string s2)
         {
             return false;

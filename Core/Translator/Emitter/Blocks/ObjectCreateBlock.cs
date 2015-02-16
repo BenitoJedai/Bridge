@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Bridge.NET
 {
-    public class ObjectCreateBlock : AbstractObjectCreateBlock
+    public class ObjectCreateBlock : ConversionBlock
     {
         public ObjectCreateBlock(IEmitter emitter, ObjectCreateExpression objectCreateExpression)
         {
@@ -23,7 +23,12 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            return this.ObjectCreateExpression;
+        }
+
+        protected override void EmitConversionExpression()
         {
             this.VisitObjectCreateExpression();
         }
@@ -113,7 +118,7 @@ namespace Bridge.NET
 
                     if (!this.Emitter.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor) > 1)
                     {
-                        this.WriteScript(this.Emitter.GetOverloadNameInvocationResolveResult(this.Emitter.Resolver.ResolveNode(objectCreateExpression, this.Emitter) as InvocationResolveResult));
+                        this.WriteScript(this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(objectCreateExpression, this.Emitter)).Member));
 
                         if (objectCreateExpression.Arguments.Count > 0)
                         {
@@ -190,6 +195,33 @@ namespace Bridge.NET
                     this.WriteSpace();
                     this.WriteCloseParentheses();
                 }
+            }
+        }
+
+        protected virtual void WriteObjectInitializer(IEnumerable<Expression> expressions, bool changeCase)
+        {
+            bool needComma = false;
+
+            foreach (Expression item in expressions)
+            {
+                NamedExpression namedExression = item as NamedExpression;
+                NamedArgumentExpression namedArgumentExpression = item as NamedArgumentExpression;
+
+                if (needComma)
+                {
+                    this.WriteComma();
+                }
+
+                needComma = true;
+                string name = namedExression != null ? namedExression.Name : namedArgumentExpression.Name;
+                if (changeCase)
+                {
+                    name = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name);
+                }
+                Expression expression = namedExression != null ? namedExression.Expression : namedArgumentExpression.Expression;
+
+                this.Write(name, ": ");
+                expression.AcceptVisitor(this.Emitter);
             }
         }
     }

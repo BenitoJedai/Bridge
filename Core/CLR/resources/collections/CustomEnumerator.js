@@ -1,7 +1,7 @@
 ﻿Bridge.Class.extend("Bridge.CustomEnumerator", {
     $extend: [Bridge.IEnumerator],
 
-    $init: function (moveNext, getCurrent, reset, dispose, scope) {
+    $ctor: function (moveNext, getCurrent, reset, dispose, scope) {
         this.$moveNext = moveNext;
         this.$getCurrent = getCurrent;
         this.$dispose = dispose;

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Bridge.NET
 {
-    public class BinaryOperatorBlock : AbstractEmitterBlock
+    public class BinaryOperatorBlock : ConversionBlock
     {
         public BinaryOperatorBlock(IEmitter emitter, BinaryOperatorExpression binaryOperatorExpression)
         {
@@ -21,28 +21,53 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
         {
-            this.VisitBinaryOperatorExpression();
+            return this.BinaryOperatorExpression;
         }
 
-        protected bool ResolveOperator(BinaryOperatorExpression binaryOperatorExpression)
+        protected override void EmitConversionExpression()
         {
-            var resolveOperator = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression, this.Emitter);
+            this.VisitBinaryOperatorExpression();
+        }  
 
-            if (resolveOperator != null && resolveOperator is OperatorResolveResult)
+        protected bool ResolveOperator(BinaryOperatorExpression binaryOperatorExpression, OperatorResolveResult orr)
+        {
+            if (orr != null && orr.UserDefinedOperatorMethod != null)
             {
-                var orr = (OperatorResolveResult)resolveOperator;
+                var method = orr.UserDefinedOperatorMethod;
+                var inline = this.Emitter.GetInline(method);
 
-                if (orr.UserDefinedOperatorMethod != null)
+                if (!string.IsNullOrWhiteSpace(inline))
                 {
-                    var inline = this.Emitter.GetInline(orr.UserDefinedOperatorMethod);
-
-                    if (!string.IsNullOrWhiteSpace(inline))
+                    new InlineArgumentsBlock(this.Emitter, new ArgumentsInfo(this.Emitter, binaryOperatorExpression, orr), inline).Emit();
+                    return true;
+                }
+                else
+                {
+                    if (orr.IsLiftedOperator)
                     {
-                        new InlineArgumentsBlock(this.Emitter, new ArgumentsInfo(this.Emitter, binaryOperatorExpression, orr), inline).Emit();
-                        return true;
+                        this.Write(Bridge.NET.Emitter.ROOT + ".nullable.lift(");
                     }
+                    
+                    this.Write(this.Emitter.ShortenTypeName(method.DeclaringType.FullName));
+                    this.WriteDot();
+
+                    this.Write(this.Emitter.GetMemberOverloadName(method.MemberDefinition as IMethod));
+
+                    if (orr.IsLiftedOperator)
+                    {
+                        this.WriteComma();
+                    }
+                    else
+                    {
+                        this.WriteOpenParentheses();
+                    }
+                    
+                    new ExpressionListBlock(this.Emitter, new Expression[] { binaryOperatorExpression.Left, binaryOperatorExpression.Right }, null).Emit();
+                    this.WriteCloseParentheses();
+
+                    return true;
                 }
             }
 
@@ -52,17 +77,39 @@ namespace Bridge.NET
         protected void VisitBinaryOperatorExpression()
         {
             BinaryOperatorExpression binaryOperatorExpression = this.BinaryOperatorExpression;
+            var resolveOperator = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression, this.Emitter);
+            OperatorResolveResult orr = resolveOperator as OperatorResolveResult;
 
             var delegateOperator = false;
-            if (this.ResolveOperator(binaryOperatorExpression))
+            if (this.ResolveOperator(binaryOperatorExpression, orr))
             {
                 return;
             }
-            else if (binaryOperatorExpression.Operator == BinaryOperatorType.Add ||
+
+            var leftResolverResult = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression.Left, this.Emitter);
+            var rightResolverResult = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression.Right, this.Emitter);
+
+            if (binaryOperatorExpression.Operator == BinaryOperatorType.Divide &&
+                (
+                    (Helpers.IsIntegerType(leftResolverResult.Type, this.Emitter.Resolver) && 
+                    Helpers.IsIntegerType(rightResolverResult.Type, this.Emitter.Resolver)) ||
+
+                    (Helpers.IsIntegerType(this.Emitter.Resolver.Resolver.GetExpectedType(binaryOperatorExpression.Left), this.Emitter.Resolver) &&
+                    Helpers.IsIntegerType(this.Emitter.Resolver.Resolver.GetExpectedType(binaryOperatorExpression.Right), this.Emitter.Resolver))
+                ))
+            {
+                this.Write("Bridge.Int.div(");
+                binaryOperatorExpression.Left.AcceptVisitor(this.Emitter);
+                this.Write(", ");
+                binaryOperatorExpression.Right.AcceptVisitor(this.Emitter);
+                this.Write(")");
+                return;
+            }
+            
+            if (binaryOperatorExpression.Operator == BinaryOperatorType.Add ||
                 binaryOperatorExpression.Operator == BinaryOperatorType.Subtract)
             {
-                var leftResolverResult = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression.Left, this.Emitter);
-                var rightResolverResult = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression.Right, this.Emitter);
+                
                 var add = binaryOperatorExpression.Operator == BinaryOperatorType.Add;
 
                 if (this.Emitter.Validator.IsDelegateOrLambda(leftResolverResult) && this.Emitter.Validator.IsDelegateOrLambda(rightResolverResult))
@@ -73,67 +120,79 @@ namespace Bridge.NET
                 }
             }
 
-            binaryOperatorExpression.Left.AcceptVisitor(this.Emitter);
+            bool nullable = NullableType.IsNullable(leftResolverResult.Type) || NullableType.IsNullable(rightResolverResult.Type);
+            if (nullable)
+            {
+                this.Write(Bridge.NET.Emitter.ROOT + ".nullable.");
+            }
+            else
+            {
+                binaryOperatorExpression.Left.AcceptVisitor(this.Emitter);
+            }
+
             if (!delegateOperator)
             {
-                this.WriteSpace();
+                if (!nullable)
+                {
+                    this.WriteSpace();
+                }
 
                 switch (binaryOperatorExpression.Operator)
                 {
                     case BinaryOperatorType.Add:
-                        this.Write("+");
+                        this.Write(nullable ? "add" : "+");
                         break;
                     case BinaryOperatorType.BitwiseAnd:
-                        this.Write("&");
+                        this.Write(nullable ? "band" : "&");
                         break;
                     case BinaryOperatorType.BitwiseOr:
-                        this.Write("|");
+                        this.Write(nullable ? "bor" : "|");
                         break;
                     case BinaryOperatorType.ConditionalAnd:
-                        this.Write("&&");
+                        this.Write(nullable ? "and" : "&&");
                         break;
                     case BinaryOperatorType.NullCoalescing:
                     case BinaryOperatorType.ConditionalOr:
-                        this.Write("||");
+                        this.Write(nullable ? "or" : "||");
                         break;
                     case BinaryOperatorType.Divide:
-                        this.Write("/");
+                        this.Write(nullable ? "div" : "/");
                         break;
                     case BinaryOperatorType.Equality:
-                        this.Write("===");
+                        this.Write(nullable ? "eq" : "===");
                         break;
                     case BinaryOperatorType.ExclusiveOr:
-                        this.Write("^");
+                        this.Write(nullable ? "xor" : "^");
                         break;
                     case BinaryOperatorType.GreaterThan:
-                        this.Write(">");
+                        this.Write(nullable ? "gt" : ">");
                         break;
                     case BinaryOperatorType.GreaterThanOrEqual:
-                        this.Write(">=");
+                        this.Write(nullable ? "gte" : ">=");
                         break;
                     case BinaryOperatorType.InEquality:
-                        this.Write("!==");
+                        this.Write(nullable ? "neq" : "!==");
                         break;
                     case BinaryOperatorType.LessThan:
-                        this.Write("<");
+                        this.Write(nullable ? "lt" : "<");
                         break;
                     case BinaryOperatorType.LessThanOrEqual:
-                        this.Write("<=");
+                        this.Write(nullable ? "lte" : "<=");
                         break;
                     case BinaryOperatorType.Modulus:
-                        this.Write("%");
+                        this.Write(nullable ? "mod" : "%");
                         break;
                     case BinaryOperatorType.Multiply:
-                        this.Write("*");
+                        this.Write(nullable ? "mul" : "*");
                         break;
                     case BinaryOperatorType.ShiftLeft:
-                        this.Write("<<");
+                        this.Write(nullable ? "sl" : "<<");
                         break;
                     case BinaryOperatorType.ShiftRight:
-                        this.Write(">>");
+                        this.Write(nullable ? "sr" : ">>");
                         break;
                     case BinaryOperatorType.Subtract:
-                        this.Write("-");
+                        this.Write(nullable ? "sub" : "-");
                         break;
                     default:
                         throw (Exception)this.Emitter.CreateException(binaryOperatorExpression, "Unsupported binary operator: " + binaryOperatorExpression.Operator.ToString());
@@ -144,10 +203,20 @@ namespace Bridge.NET
                 this.WriteComma();
             }
 
-            this.WriteSpace();
+            if (nullable)
+            {
+                this.WriteOpenParentheses();
+                binaryOperatorExpression.Left.AcceptVisitor(this.Emitter);
+                this.WriteComma();
+            }
+            else
+            {
+                this.WriteSpace();
+            }
+            
             binaryOperatorExpression.Right.AcceptVisitor(this.Emitter);
 
-            if (delegateOperator)
+            if (delegateOperator || nullable)
             {
                 this.WriteCloseParentheses();
             }

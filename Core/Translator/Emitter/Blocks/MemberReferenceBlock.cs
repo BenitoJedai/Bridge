@@ -10,7 +10,7 @@ using Bridge.Plugin;
 
 namespace Bridge.NET
 {
-    public class MemberReferenceBlock : AbstractEmitterBlock
+    public class MemberReferenceBlock : ConversionBlock
     {
         public MemberReferenceBlock(IEmitter emitter, MemberReferenceExpression memberReferenceExpression)
         {
@@ -24,7 +24,12 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            return this.MemberReferenceExpression;
+        }
+
+        protected override void EmitConversionExpression()
         {
             this.VisitMemberReferenceExpression();
         }
@@ -61,8 +66,7 @@ namespace Bridge.NET
 
             string inline = member != null ? this.Emitter.GetInline(member.Member) : null;
             bool hasInline = !string.IsNullOrEmpty(inline);
-            bool hasThis = hasInline && inline.Contains("{this}");
-            string appendAdditionalCode = null;
+            bool hasThis = hasInline && inline.Contains("{this}");            
 
             if (hasThis)
             {
@@ -83,7 +87,6 @@ namespace Bridge.NET
                 {
                     this.Write(inline);
                 }
-
                 return;
             }
 
@@ -189,7 +192,13 @@ namespace Bridge.NET
                         this.Emitter.IsAssignment = oldIsAssignment;
                     }
 
-                    appendAdditionalCode = ")";
+                    this.WriteDot();
+
+                    this.Write(this.Emitter.GetMemberOverloadName((IMethod)member.Member));
+
+                    this.Write(")");
+
+                    return;
                 }
                 else
                 {
@@ -247,7 +256,7 @@ namespace Bridge.NET
                 else if (resolveResult is InvocationResolveResult)
                 {
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                    this.Write(this.Emitter.GetOverloadNameInvocationResolveResult(invocationResult));
+                    this.Write(this.Emitter.GetMemberOverloadName(invocationResult.Member));
                 }
                 else if (member.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
                 {
@@ -258,11 +267,6 @@ namespace Bridge.NET
                 else
                 {
                     this.Write(this.Emitter.GetEntityName(member.Member));
-
-                    if (appendAdditionalCode != null)
-                    {
-                        this.Write(appendAdditionalCode);
-                    }
                 }
             }
         }        

@@ -475,13 +475,13 @@ namespace Bridge.NET
             return false;
         }
 
-        public virtual string GetOverloadNameInvocationResolveResult(InvocationResolveResult invocationResult)
+        public virtual string GetMemberOverloadName(IParameterizedMember member)
         {
-            var typeDef = invocationResult.Member.DeclaringType as ITypeDefinition;
+            var typeDef = member.DeclaringType as ITypeDefinition;
 
             if (typeDef == null)
             {
-                var paramType = invocationResult.Member.DeclaringType as ParameterizedType;
+                var paramType = member.DeclaringType as ParameterizedType;
 
                 if (paramType != null)
                 {
@@ -489,30 +489,32 @@ namespace Bridge.NET
                 }
             }            
 
-            if (!this.Validator.IsIgnoreType(typeDef) && invocationResult.Member.DeclaringTypeDefinition.Methods.Count(m => m.Name == invocationResult.Member.Name) > 1)
+            if (!this.Validator.IsIgnoreType(typeDef) && member.DeclaringTypeDefinition.Methods.Count(m => m.Name == member.Name) > 1)
             {
-                var args = invocationResult.Member.Parameters;
-                string name = this.GetEntityName(invocationResult.Member);
+                var args = member.Parameters;
+                string name = this.GetEntityName(member);
 
                 if (name.StartsWith(".ctor"))
                 {
-                    name = "$init";
+                    name = "$ctor";
                 }
-
+                
+                var defaultResolvedMethod = member as IMethod;
+                bool hasGenericParams = defaultResolvedMethod != null && defaultResolvedMethod.TypeParameters.Count > 0;
                 StringBuilder sb = new StringBuilder(name);
 
-                foreach (var p in args)
+                if (args.Count > 0)
                 {
-                    sb.Append("$").Append(p.Type.Name.Replace("[]", "$Array"));
-                    if (p.Type.TypeParameterCount > 0)
-                    {
-                        sb.Append("$").Append(p.Type.TypeParameterCount);
-                    }
+                    var methodsDef = typeDef.Methods.Where(m => m.Name == member.Name && m.Parameters.Count > 0).ToList();
+                    sb.Append("$");
+                    sb.Append(this.GetMethodIndex(methodsDef, (IMethod)member) + 1);
+                }
+                else if (hasGenericParams)
+                {
+                    sb.Append("$0");
                 }
 
-                var defaultResolvedMethod = invocationResult.Member as IMethod;
-
-                if (defaultResolvedMethod != null && defaultResolvedMethod.TypeParameters.Count > 0)
+                if (hasGenericParams)
                 {
                     sb.Append("$").Append(defaultResolvedMethod.TypeParameters.Count);
                 }
@@ -522,15 +524,25 @@ namespace Bridge.NET
             }
             else
             {
-                string name = this.GetEntityName(invocationResult.Member);
+                string name = this.GetEntityName(member);
                 if (name.StartsWith(".ctor"))
                 {
-                    name = "$init";
+                    name = "$ctor";
                 }
 
                 return name;
             }
         }
 
+        public int GetMethodIndex(IEnumerable<IMethod> methods, IMethod method)
+        {
+            return methods.ToList().IndexOf(method);
+            /*IEnumerable<string> names = methods.Select(m => m.ToString());
+            string name = method.ToString();
+            var list = names.ToList();
+            list.Sort();
+
+            return list.IndexOf(name);*/
+        }
     }
 }

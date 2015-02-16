@@ -163,6 +163,38 @@ namespace Bridge.NET
             }
         }
 
+        public virtual void VisitUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression)
+        {
+            if (this.ThrowException)
+            {
+                throw (Exception)this.CreateException(unaryOperatorExpression);
+            }
+        }
+        
+        public override void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
+        {
+            if (this.HasInline(operatorDeclaration))
+            {
+                return;
+            }
+
+            this.FixMethodParameters(operatorDeclaration.Parameters, operatorDeclaration.Body);
+
+            bool isStatic = operatorDeclaration.HasModifier(Modifiers.Static);
+
+            Dictionary<OperatorType, List<OperatorDeclaration>> dict = this.CurrentType.Operators;
+
+            var key = operatorDeclaration.OperatorType;
+            if (dict.ContainsKey(key))
+            {
+                dict[key].Add(operatorDeclaration);
+            }
+            else
+            {
+                dict.Add(key, new List<OperatorDeclaration>(new[] { operatorDeclaration }));
+            }
+        }
+
         public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
         {           
             if (methodDeclaration.HasModifier(Modifiers.Abstract) || this.HasInline(methodDeclaration))

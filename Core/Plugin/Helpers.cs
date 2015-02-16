@@ -89,6 +89,11 @@ namespace Bridge.Plugin
             }
         }
 
+        public static string GetScriptName(OperatorDeclaration op, bool separator)
+        {
+            return Helpers.GetScriptName(op.Name, op.Parameters.Count, separator);
+        }
+
         public static string GetScriptName(MethodDeclaration method, bool separator) 
         {            
             return Helpers.GetScriptName(method.Name, method.Parameters.Count, separator);
@@ -311,10 +316,23 @@ namespace Bridge.Plugin
                 return methods.Count == 1 ? methods[0] : null;
             }
 
-            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods);
+            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods, methodDeclaration.ReturnType);
         }
 
-        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group)
+        public static MethodDefinition GetMethodDefinition(IEmitter emitter, OperatorDeclaration operatorDeclaration, TypeDefinition type)
+        {
+            var parameters = operatorDeclaration.Parameters.ToList();
+            var ops = type.Methods.Where(m => m.Name == operatorDeclaration.Name && m.Parameters.Count == parameters.Count).ToList();
+
+            if (ops.Count <= 1)
+            {
+                return ops.Count == 1 ? ops[0] : null;
+            }
+
+            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, ops, operatorDeclaration.ReturnType);
+        }
+
+        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group, AstType returnType)
         {
             var args = new List<ParameterDeclaration>(parameters);
             var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
@@ -323,33 +341,27 @@ namespace Bridge.Plugin
                 if (args.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
                 {
                     bool match = true;
+
+                    if (returnType != null)
+                    {
+                        var resolveResult = emitter.Resolver.ResolveNode(returnType, emitter);
+                        if (!Helpers.TypeIsMatch(emitter, resolveResult, returnType, method.ReturnType))
+                        {
+                            match = false;
+                            continue;
+                        }
+                    }
+
                     for (int i = 0; i < method.Parameters.Count; i++)
                     {
                         var type = args[i].Type;
                         var resolveResult = emitter.Resolver.ResolveNode(type, emitter);
+                        var typeRef = method.Parameters[i].ParameterType;
 
-                        if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
+                        if (Helpers.TypeIsMatch(emitter, resolveResult, type, typeRef))
                         {
-                            if (((TypeResolveResult)resolveResult).Type.ReflectionName != method.Parameters[i].ParameterType.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
-                            {
-                                match = false;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            var isArray = type.ToString().Contains("[]");
-
-                            var typeName = isArray ? type.ToString().Replace("[]", "") : type.ToString();
-                            var name = emitter.ResolveType(typeName, type);
-
-                            var typeDef = emitter.TypeDefinitions[name];
-
-                            if ((typeDef.FullName + (isArray ? "[]" : "")) != method.Parameters[i].ParameterType.FullName)
-                            {
-                                match = false;
-                                break;
-                            }
+                            match = true;
+                            break;
                         }
                     }
 
@@ -363,6 +375,34 @@ namespace Bridge.Plugin
             return null;
         }
 
+        public static bool TypeIsMatch(IEmitter emitter, ResolveResult resolveResult, AstType type, TypeReference typeRef)
+        {
+            var match = true;
+            if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
+            {
+                if (((TypeResolveResult)resolveResult).Type.ReflectionName != typeRef.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
+                {
+                    match = false;
+                }
+            }
+            else
+            {
+                var isArray = typeRef.ToString().Contains("[]");
+
+                var typeName = isArray ? typeRef.ToString().Replace("[]", "") : typeRef.ToString();
+                var name = emitter.ResolveType(typeName, type);
+
+                var typeDef = emitter.TypeDefinitions[name];
+
+                if ((typeDef.FullName + (isArray ? "[]" : "")) != typeRef.FullName)
+                {
+                    match = false;
+                }
+            }
+
+            return match;
+        }
+
         public static string GetOverloadName(IEmitter emitter, MethodDefinition methodDef)
         {
             var name = emitter.GetMethodName(methodDef);
@@ -370,18 +410,24 @@ namespace Bridge.Plugin
 
             if (methodDef.IsConstructor)
             {
-                name = "$init";
+                name = "$ctor";
             }
 
-            if (attr == null && methodDef.Parameters.Count > 0)
+            if (attr == null && (methodDef.Parameters.Count > 0 || methodDef.HasGenericParameters))
             {
                 StringBuilder sb = new StringBuilder(name);
 
-                foreach (var p in methodDef.Parameters)
+                if (methodDef.Parameters.Count > 0)
                 {
-                    sb.Append("$").Append(p.ParameterType.Name.Replace("[]", "$Array").Replace("`", "$"));
+                    var methodsDef = methodDef.DeclaringType.Methods.Where(m => m.Name == methodDef.Name && m.HasParameters).ToList();
+                    sb.Append("$");
+                    sb.Append(Helpers.GetMethodIndex(methodsDef, methodDef) + 1);
                 }
-
+                else if (methodDef.HasGenericParameters)
+                {
+                    sb.Append("$0");
+                }
+                
                 if (methodDef.HasGenericParameters)
                 {
                     sb.Append("$").Append(methodDef.GenericParameters.Count);
@@ -391,6 +437,17 @@ namespace Bridge.Plugin
             }
 
             return name;
+        }
+
+        public static int GetMethodIndex(IEnumerable<MethodDefinition> methods, MethodDefinition method)
+        {
+            return methods.ToList().IndexOf(method);
+            /*IEnumerable<string> names = methods.Select(m => m.ToString());
+            string name = method.ToString();
+            var list = names.ToList();
+            list.Sort();
+
+            return list.IndexOf(name);*/
         }
 
         public static string TranslateTypeReference(AstType astType, IEmitter emitter)
@@ -443,6 +500,30 @@ namespace Bridge.Plugin
             }
 
             return name;
+        }
+
+        public static bool IsIntegerType(IType type, IMemberResolver resolver)
+        {
+            type = type.IsKnownType(KnownTypeCode.NullableOfT) ? ((ParameterizedType)type).TypeArguments[0] : type;
+
+            return type.Equals(resolver.Compilation.FindType(KnownTypeCode.Byte))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.SByte))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Char))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Int16))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.UInt16))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Int32))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.UInt32))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Int64))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.UInt64));
+        }
+
+        public static bool IsFloatType(IType type, IMemberResolver resolver)
+        {
+            type = type.IsKnownType(KnownTypeCode.NullableOfT) ? ((ParameterizedType)type).TypeArguments[0] : type;
+
+            return type.Equals(resolver.Compilation.FindType(KnownTypeCode.Decimal))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Double))
+                || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Single));
         }
     }
 }

@@ -1,4 +1,18 @@
-﻿Bridge.Class.extend('Bridge.IFormattable', {});
+﻿Bridge.Class.extend('Bridge.IFormattable', {
+    $statics: {
+        $is: function (obj) {
+            if (Bridge.isNumber(obj)) {
+                return true;
+            }
+
+            if (Bridge.isDate(obj)) {
+                return true;
+            }
+
+            return Bridge.is(obj, Bridge.IFormattable, true);
+        }
+    }
+});
 Bridge.Class.extend('Bridge.IComparable', {});
 Bridge.Class.generic('Bridge.IComparable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IComparable$1', T);

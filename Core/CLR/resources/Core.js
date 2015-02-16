@@ -1,7 +1,7 @@
 
 // @source resources/Core.js
 
-Bridge = {
+window.Bridge = {
     emptyFn: function () { },
 
     ns: function (ns, scope) {
@@ -103,7 +103,7 @@ Bridge = {
         return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
     },
 
-    is : function (obj, type) {
+    is : function (obj, type, ignoreFn) {
 	  if (typeof type == "string") {
         type = Bridge.unroll(type);
 	  }
@@ -112,13 +112,15 @@ Bridge = {
 		  return false;
 	  }
 
-	  if (Bridge.isFunction(type.$is)) {
-	      return type.$is(obj);
-	  }
+	  if (ignoreFn !== true) {
+	      if (Bridge.isFunction(type.$is)) {
+	          return type.$is(obj);
+	      }
 
-	  if (Bridge.isFunction(type.instanceOf)) {
-	    return type.instanceOf(obj);
-	  }
+	      if (Bridge.isFunction(type.instanceOf)) {
+	          return type.instanceOf(obj);
+	      }
+	  }	  
 
 	  if ((obj.constructor == type) || (obj instanceof type)) {
 		  return true;
@@ -355,6 +357,30 @@ Bridge = {
       }
         
       return a.equalsT(b);
+  },
+
+  format: function (obj, formatString) {
+      if (Bridge.isNumber(obj)) {
+          return Bridge.Int.format(obj, formatString);
+      }
+      else if (Bridge.isDate(obj)) {
+          return Bridge.Date.format(obj, formatString);
+      }
+
+      return obj.format(formatString);
+  },
+
+  getType : function (instance) {
+      if (!Bridge.isDefined(instance, true)) {
+          throw new Bridge.NullReferenceException('instance is null');
+      }
+
+      try {
+          return instance.constructor;
+      }
+      catch (ex) {
+          return Object;
+      }
   },
 
   fn: {

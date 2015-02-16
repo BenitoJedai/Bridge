@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Bridge.NET
 {
-    public class IdentifierBlock : AbstractEmitterBlock
+    public class IdentifierBlock : ConversionBlock
     {
         public IdentifierBlock(IEmitter emitter, IdentifierExpression identifierExpression)
         {
@@ -25,7 +25,12 @@ namespace Bridge.NET
             set; 
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            return this.IdentifierExpression;
+        }
+
+        protected override void EmitConversionExpression()
         {
             this.VisitIdentifierExpression();
         }
@@ -100,6 +105,7 @@ namespace Bridge.NET
         protected void VisitIdentifierExpression()
         {
             IdentifierExpression identifierExpression = this.IdentifierExpression;
+
             var id = identifierExpression.Identifier;
             this.Emitter.Validator.CheckIdentifier(id, identifierExpression);
 
@@ -193,7 +199,7 @@ namespace Bridge.NET
                     if (resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.Write(this.Emitter.GetOverloadNameInvocationResolveResult(invocationResult));
+                        this.Write(this.Emitter.GetMemberOverloadName(invocationResult.Member));
                     }
                     else
                     {

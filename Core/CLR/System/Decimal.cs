@@ -16,10 +16,6 @@ namespace System
         [InlineConst]
 		public const decimal MinusOne = -1;
 
-		/*[InlineCode("0")]
-		private Decimal(DummyTypeUsedToAddAttributeToDefaultValueTypeConstructor _) {
-		}*/
-
 		[Template("{d}")]
 		public Decimal(double d) 
         {
@@ -76,16 +72,6 @@ namespace System
         {
 			return null;
 		}
-
-		/*[Template("Bridge.netFormatNumber({this}, {format}, {provider})")]
-		public string ToString(string format, IFormatProvider provider) {
-			return null;
-		}
-
-		[InlineCode("{$System.Script}.netFormatNumber({this}, 'G', {provider})")]
-		public string ToString(IFormatProvider provider) {
-			return null;
-		}*/
 
 		public string ToExponential() 
         {

@@ -90,6 +90,7 @@
     <Compile Include="Emitter\Blocks\ArrayInitializerBlock.cs" />
     <Compile Include="Emitter\Blocks\AnonymousTypeCreateBlock.cs" />
     <Compile Include="Emitter\Blocks\AsyncBlock.cs" />
+    <Compile Include="Emitter\Blocks\ConversionBlock.cs" />
     <Compile Include="Emitter\Blocks\ConstructorBlock.Events.cs" />
     <Compile Include="Emitter\Blocks\EmitBlock.cs" />
     <Compile Include="Emitter\Blocks\TypeExpressionListBlock.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Emitter\Blocks\SwitchBlock.cs" />
     <Compile Include="Emitter\Blocks\DoWhileBlock.cs" />
     <Compile Include="Emitter\Blocks\VisitorCustomEventBlock.cs" />
+    <Compile Include="Emitter\Blocks\OperatorBlock.cs" />
     <Compile Include="Emitter\Blocks\WhileBlock.cs" />
     <Compile Include="Emitter\Blocks\TryCatchBlock.cs" />
     <Compile Include="Emitter\Blocks\ConditionalBlock.cs" />

@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
+    <Compile Include="IAbstractEmitterBlock.cs" />
     <Compile Include="IAssemblyInfo.cs" />
     <Compile Include="IAsyncBlock.cs" />
     <Compile Include="IAsyncStep.cs" />

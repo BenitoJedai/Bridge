@@ -37,15 +37,15 @@ namespace Bridge.NET
         {
             if (this.StaticBlock)
             {
-                this.EmitMethods(this.TypeInfo.StaticMethods, this.TypeInfo.StaticProperties, this.TypeInfo.StaticEvents);
+                this.EmitMethods(this.TypeInfo.StaticMethods, this.TypeInfo.StaticProperties, this.TypeInfo.StaticEvents, this.TypeInfo.Operators);                
             }
             else
             {
-                this.EmitMethods(this.TypeInfo.InstanceMethods, this.TypeInfo.InstanceProperties, this.TypeInfo.Events);
+                this.EmitMethods(this.TypeInfo.InstanceMethods, this.TypeInfo.InstanceProperties, this.TypeInfo.Events, null);
             }
         }
 
-        protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, EntityDeclaration> properties, List<EventDeclaration> events)
+        protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, EntityDeclaration> properties, List<EventDeclaration> events, Dictionary<OperatorType, List<OperatorDeclaration>> operators)
         {
             foreach (var e in events)
             {
@@ -83,6 +83,16 @@ namespace Bridge.NET
             foreach (var name in names)
             {
                 this.EmitMethodsGroup(methods[name]);
+            }
+
+            if (operators != null)
+            {
+                var ops = new List<OperatorType>(operators.Keys);
+
+                foreach (var op in ops)
+                {
+                    this.EmitOperatorGroup(operators[op]);
+                }
             }
         }
 
@@ -129,37 +139,48 @@ namespace Bridge.NET
                 var typeDef = this.Emitter.GetTypeDefinition();
                 var name = group[0].Name;
                 var methodsDef = typeDef.Methods.Where(m => m.Name == name);
-                MethodDeclaration noArgsMethod = null;
                 this.Emitter.MethodsGroup = methodsDef;
                 this.Emitter.MethodsGroupBuilder = new Dictionary<int, StringBuilder>();
 
                 foreach (var method in group)
                 {
-                    if (method.Parameters.Count == 0)
+                    if (!method.Body.IsNull)
                     {
-                        noArgsMethod = method;
-                    }
-                    else
-                    {
-                        if (!method.Body.IsNull)
-                        {
-                            this.Emitter.VisitMethodDeclaration(method);
-                        }
+                        this.Emitter.VisitMethodDeclaration(method);
                     }
                 }
 
                 this.Emitter.MethodsGroup = null;
+                this.Emitter.MethodsGroupBuilder = null;
+            }
+        }
 
-                if (noArgsMethod == null)
+        protected virtual void EmitOperatorGroup(List<OperatorDeclaration> group)
+        {
+            if (group.Count == 1)
+            {
+                if (!group[0].Body.IsNull)
                 {
-                    noArgsMethod = new MethodDeclaration();
-                    noArgsMethod.Name = name;
-                    noArgsMethod.Body = new BlockStatement();
+                    this.Emitter.VisitOperatorDeclaration(group[0]);
+                }
+            }
+            else
+            {
+                var typeDef = this.Emitter.GetTypeDefinition();
+                var name = group[0].Name;
+                var methodsDef = typeDef.Methods.Where(m => m.Name == name);
+                this.Emitter.MethodsGroup = methodsDef;
+                this.Emitter.MethodsGroupBuilder = new Dictionary<int, StringBuilder>();
+
+                foreach (var method in group)
+                {
+                    if (!method.Body.IsNull)
+                    {
+                        this.Emitter.VisitOperatorDeclaration(method);
+                    }
                 }
 
-                this.Emitter.InjectMethodDetectors = true;
-                this.Emitter.VisitMethodDeclaration(noArgsMethod);
-
+                this.Emitter.MethodsGroup = null;
                 this.Emitter.MethodsGroupBuilder = null;
             }
         }

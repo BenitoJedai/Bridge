@@ -24,6 +24,22 @@ namespace Bridge.NET
             set;
         }
 
+        public CSharpAstResolver Resolver
+        {
+            get
+            {
+                return this.resolver;
+            }
+        }
+
+        public ICompilation Compilation
+        {
+            get
+            {
+                return this.compilation;
+            }
+        }
+
         public MemberResolver(IList<string> sourceFiles, IEnumerable<IAssemblyReference> assemblies)
         {            
             this.project = null;

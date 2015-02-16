@@ -35,7 +35,7 @@ namespace Bridge.Plugin
         string GetInline(Mono.Cecil.ICustomAttributeProvider provider);
         Tuple<bool, bool, string> GetInlineCode(ICSharpCode.NRefactory.CSharp.InvocationExpression node);
         string GetMethodName(Mono.Cecil.MethodDefinition method);
-        string GetOverloadNameInvocationResolveResult(ICSharpCode.NRefactory.Semantics.InvocationResolveResult invocationResult);
+        string GetMemberOverloadName(IParameterizedMember member);
         System.Collections.Generic.IEnumerable<string> GetScript(ICSharpCode.NRefactory.CSharp.EntityDeclaration method);
         int GetSerializationPriority(Mono.Cecil.TypeDefinition type);
         Mono.Cecil.TypeDefinition GetTypeDefinition();

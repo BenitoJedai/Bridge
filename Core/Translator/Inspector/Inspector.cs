@@ -120,7 +120,7 @@ namespace Bridge.NET
 
         protected virtual void FixMethodParameters(AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
         {
-            if (parameters.Count == 0)
+            /*if (parameters.Count == 0)
             {
                 return;
             }
@@ -137,7 +137,7 @@ namespace Bridge.NET
                 
                 body.InsertChildBefore(body.FirstChild, varState, new Role<VariableDeclarationStatement>("Statement"));
                 
-            }
+            }*/
         }
     }
 }

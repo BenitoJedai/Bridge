@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Bridge.NET
 {
-    public class CastBlock : AbstractEmitterBlock
+    public class CastBlock : ConversionBlock
     {
         public CastBlock(IEmitter emitter, CastExpression castExpression)
         {
@@ -71,7 +71,25 @@ namespace Bridge.NET
             set;
         }
 
-        public override void Emit()
+        protected override Expression GetExpression()
+        {
+            if (this.CastExpression != null)
+            {
+                return this.CastExpression;
+            }
+            else if (this.AsExpression != null)
+            {
+                return this.AsExpression;
+            }
+            else if (this.IsExpression != null)
+            {
+                return this.IsExpression;
+            }
+
+            return null;
+        }
+
+        protected override void EmitConversionExpression()
         {
             if (this.CastExpression != null)
             {
@@ -93,7 +111,7 @@ namespace Bridge.NET
             {
                 this.EmitCastType(this.AstType);
             }
-        }
+        }  
 
         protected virtual void EmitCastExpression(Expression expression, AstType type, string method)
         {
@@ -104,6 +122,28 @@ namespace Bridge.NET
             {
                 this.EmitInlineCast(expression, type, castCode);
                 return;
+            }
+
+            if (method == Bridge.NET.Emitter.CAST)
+            {
+                var resolveResult = this.Emitter.Resolver.ResolveNode(type, this.Emitter);
+                if (Helpers.IsIntegerType(resolveResult.Type, this.Emitter.Resolver))
+                {
+                    var fromType = this.Emitter.Resolver.ResolveNode(this.CastExpression.Expression, this.Emitter).Type;
+                    if (fromType != null && Helpers.IsFloatType(fromType, this.Emitter.Resolver))
+                    {
+                        this.Write("Bridge.Int.trunc(");
+                        expression.AcceptVisitor(this.Emitter);
+                        this.Write(")");
+                        return;
+                    }
+                }
+
+                if (ConversionBlock.IsUserDefinedConversion(this, expression))
+                {
+                    expression.AcceptVisitor(this.Emitter);
+                    return;
+                }
             }
 
             var simpleType = type as SimpleType;

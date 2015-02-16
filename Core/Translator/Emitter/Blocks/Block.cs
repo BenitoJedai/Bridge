@@ -77,6 +77,11 @@ namespace Bridge.NET
                 return true;
             }
 
+            if (parent is OperatorDeclaration)
+            {
+                return true;
+            }
+
             if (parent is Accessor && (parent.Parent is PropertyDeclaration || parent.Parent is CustomEventDeclaration))
             {
                 return true;

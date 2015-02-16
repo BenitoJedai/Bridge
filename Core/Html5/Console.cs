@@ -12,6 +12,16 @@ namespace Bridge.Html5
     [Name("console")]
     public static class Console
     {
+        [Name("log")]
+        public static void WriteLine(string message)
+        {
+        }
+
+        [Template("console.log(Bridge.String.format({message}, {args}))")]
+        public static void WriteLine(string message, params object[] args)
+        {
+        }
+
         /// <summary>
         /// Log a message and stack trace to console if first argument is false.
         /// </summary>

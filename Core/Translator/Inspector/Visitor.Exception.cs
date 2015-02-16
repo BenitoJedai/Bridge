@@ -513,14 +513,6 @@ namespace Bridge.NET
 			}
         }
 
-        public virtual void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
-        {
-            if (this.ThrowException)
-			{
-				throw (Exception)this.CreateException(operatorDeclaration);
-			}
-        }
-
         public virtual void VisitParameterDeclaration(ParameterDeclaration parameterDeclaration)
         {
             if (this.ThrowException)

@@ -96,6 +96,11 @@ namespace Bridge.Plugin
             get; 
         }
 
+        Dictionary<OperatorType, List<OperatorDeclaration>> Operators
+        {
+            get;
+        }
+
         Dictionary<string, List<MethodDeclaration>> StaticMethods 
         { 
             get; 

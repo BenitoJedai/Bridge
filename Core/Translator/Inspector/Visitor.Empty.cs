@@ -66,5 +66,13 @@ namespace Bridge.NET
         public virtual void VisitConstraint(Constraint constraint)
         {            
         }
+
+        public virtual void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
+        {
+            /*if (this.ThrowException)
+            {
+                throw (Exception)this.CreateException(operatorDeclaration);
+            }*/
+        }
     }
 }

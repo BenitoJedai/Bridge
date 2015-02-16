@@ -130,6 +130,25 @@ namespace Bridge.NET
             }            
         }
 
+        public ArgumentsInfo(IEmitter emitter, UnaryOperatorExpression unaryOperatorExpression, OperatorResolveResult operatorResolveResult)
+        {
+            this.Emitter = emitter;
+            this.Expression = unaryOperatorExpression;
+            this.OperatorResolveResult = operatorResolveResult;
+
+            if (operatorResolveResult.UserDefinedOperatorMethod != null)
+            {
+                this.BuildOperatorArgumentsList(new Expression[] { unaryOperatorExpression.Expression });
+                this.BuildOperatorTypedArguments();
+            }
+            else
+            {
+                this.ArgumentsExpressions = new Expression[] { unaryOperatorExpression.Expression };
+                this.ArgumentsNames = new string[] { "arg" };
+                this.CreateNamedExpressions(this.ArgumentsNames, this.ArgumentsExpressions);
+            }
+        }
+
         private void BuildTypedArguments(AstType type)
         {
             var simpleType = type as SimpleType;

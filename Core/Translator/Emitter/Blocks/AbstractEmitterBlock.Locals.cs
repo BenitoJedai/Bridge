@@ -6,7 +6,7 @@ namespace Bridge.NET
 {
     public partial class AbstractEmitterBlock
     {
-        protected virtual void PushLocals()
+        public virtual void PushLocals()
         {
             if (this.Emitter.LocalsStack == null)
             {
@@ -17,18 +17,18 @@ namespace Bridge.NET
             this.Emitter.Locals = new Dictionary<string, AstType>(this.Emitter.Locals);
         }
 
-        protected virtual void PopLocals()
+        public virtual void PopLocals()
         {
             this.Emitter.Locals = this.Emitter.LocalsStack.Pop();
         }
 
-        protected virtual void ResetLocals()
+        public virtual void ResetLocals()
         {
             this.Emitter.Locals = new Dictionary<string, AstType>();
             this.Emitter.IteratorCount = 0;
         }
 
-        protected virtual void AddLocals(IEnumerable<ParameterDeclaration> declarations)
+        public virtual void AddLocals(IEnumerable<ParameterDeclaration> declarations)
         {
             declarations.ToList().ForEach(item =>
             {
@@ -46,7 +46,7 @@ namespace Bridge.NET
             });
         }
 
-        protected void AddLocal(string name, AstType type)
+        public void AddLocal(string name, AstType type)
         {
             this.Emitter.Locals.Add(name, type);
             if (this.Emitter.IsAsync && !this.Emitter.AsyncVariables.Contains(name))
@@ -55,7 +55,7 @@ namespace Bridge.NET
             }
         }
 
-        protected virtual Dictionary<string, string> BuildLocalsMap(AstNode statement)
+        public virtual Dictionary<string, string> BuildLocalsMap(AstNode statement)
         {
             var visitor = new ReferenceArgumentVisitor();
             statement.AcceptVisitor(visitor);
@@ -72,7 +72,7 @@ namespace Bridge.NET
             return prevMap;
         }
 
-        protected virtual void ClearLocalsMap(Dictionary<string, string> prevMap = null)
+        public virtual void ClearLocalsMap(Dictionary<string, string> prevMap = null)
         {
             this.Emitter.LocalsMap = prevMap;
         }

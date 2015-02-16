@@ -138,6 +138,7 @@
     <Content Include="resources\INotifyPropertyChanged.js" />
     <Content Include="resources\Integer.js" />
     <Content Include="resources\Interfaces.js" />
+    <Content Include="resources\String.js" />
     <Content Include="resources\Task.js" />
     <Content Include="resources\Nullable.js" />
     <Content Include="resources\Core.js" />

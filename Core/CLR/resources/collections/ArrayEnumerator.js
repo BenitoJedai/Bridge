@@ -1,5 +1,5 @@
 ﻿Bridge.Class.extend('Bridge.ArrayEnumerator', {
-    $init: function (array) {
+    $ctor: function (array) {
         this.array = array;
         this.reset();
     },

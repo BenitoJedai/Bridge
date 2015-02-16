@@ -18,7 +18,12 @@ namespace Bridge.NET
         public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
         {
             new VisitorMethodBlock(this, methodDeclaration).Emit();
-        }                
+        }
+
+        public override void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
+        {
+            new OperatorBlock(this, operatorDeclaration).Emit();
+        }
 
         public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
         {

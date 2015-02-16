@@ -8,11 +8,16 @@ namespace System
 		[Template("{0}")]
 		public Nullable(T value) 
         {
-            this.HasValue = false;
 		}
-
-        [Template("Bridge.nullable.hasValue({this})")]
-		public readonly bool HasValue;
+        
+        public bool HasValue
+        {
+            [Template("Bridge.nullable.hasValue({this})")]
+            get
+            {
+                return false;
+            }
+        }
         
         public T Value
         {

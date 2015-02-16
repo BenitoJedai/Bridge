@@ -61,7 +61,47 @@ namespace System
         public virtual bool PropertyIsEnumerable(object v) 
         { 
             return false; 
+        }
+
+        [Template("Bridge.getType({this})")]
+        public Type GetType()
+        {
+            return null;
+        }
+
+        [Template("{a} === {b}")]
+        public static bool ReferenceEquals(object a, object b)
+        {
+            return false;
+        }
+
+        [Template("Bridge.equals({this}, {o})")]
+        public virtual bool Equals(object o)
+        {
+            return false;
         }        
+
+        [Template("Bridge.equals({a}, {b})")]
+        public static bool Equals(object a, object b)
+        {
+            return false;
+        }
+
+        [Template("Bridge.getHashCode({this})")]
+        public virtual int GetHashCode()
+        {
+            return 0;
+        }
+
+        public static string[] Keys(object obj)
+        {
+            return null;
+        }
+
+        public static string[] GetOwnPropertyNames(object obj)
+        {
+            return null;
+        }
     }
 
     [Ignore]
