@@ -383,6 +383,16 @@ window.Bridge = {
       }
   },
 
+  isLower: function isLower(c) {
+      var s = String.fromCharCode(c);
+      return s === s.toLowerCase() && s !== s.toUpperCase();
+  },
+
+  isUpper: function isUpper(c) {
+    var s = String.fromCharCode(c);
+    return s !== s.toLowerCase() && s === s.toUpperCase();
+  },
+
   fn: {
     call: function (obj, fnName){
       var args = Array.prototype.slice.call(arguments, 2);

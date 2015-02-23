@@ -6,6 +6,7 @@
   <file name="Exception.js" />
   <file name="Interfaces.js" />
   <file name="Integer.js" />
+  <file name="Date.js" />
   <file name="String.js" />
   <file name="collections/Interfaces.js" path="collections" />
   <file name="collections/CustomEnumerator.js" path="collections" />
@@ -25,6 +26,7 @@
     <include name="Exception.js" />
     <include name="Interfaces.js" />
     <include name="Integer.js" />
+    <include name="Date.js" />
     <include name="String.js" />
     <include name="Browser.js" />
     <include name="collections/Interfaces.js" />

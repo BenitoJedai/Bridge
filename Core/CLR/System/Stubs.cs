@@ -41,46 +41,6 @@ namespace System
     {
         void Dispose();
     }
-    
-    [Ignore]
-    public struct Byte 
-    { 
-    }
-
-    [Ignore]
-    public struct Int16 
-    { 
-    }
-
-    [Ignore]
-    public struct Int64 
-    { 
-    }
-
-    [Ignore]
-    public struct Single 
-    { 
-    }
-
-    [Ignore]
-    public struct Char 
-    { 
-    }
-
-    [Ignore]
-    public struct SByte 
-    { 
-    }
-
-    [Ignore]
-    public struct UInt32 
-    { 
-    }
-
-    [Ignore]
-    public struct UInt64 
-    { 
-    }
 
     [Ignore]
     public struct RuntimeTypeHandle

@@ -2,6 +2,7 @@
 using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using System.Collections.Generic;
 
 namespace Bridge.NET
@@ -12,12 +13,14 @@ namespace Bridge.NET
         {
             var expression = this.GetExpression();
             var isConversion = false;
-            if (expression != null && !expression.IsNull && expression.Parent != null)
+            bool check = expression != null && !expression.IsNull && expression.Parent != null;
+            if (check)
             {
                 isConversion = this.CheckConversion(expression);   
             }
             
             this.EmitConversionExpression();
+ 
             if (isConversion)
             {
                 this.Write(")");

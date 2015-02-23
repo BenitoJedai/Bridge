@@ -64,6 +64,7 @@ namespace Bridge.NET
                     this.WriteSpace();
                     returnStatement.Expression.AcceptVisitor(this.Emitter);
                 }
+                
                 this.WriteSemiColon();
                 this.WriteNewLine();
             }            

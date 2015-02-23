@@ -59,6 +59,7 @@ namespace Bridge.NET
 
             if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0 || this.TypeInfo.StaticEvents.Count > 0 || injectors.Count() > 0)
             {
+                this.ResetLocals();
                 this.Write("$ctor");
                 this.WriteColon();
                 this.WriteFunction();

@@ -57,7 +57,17 @@ namespace Bridge.NET
 
                 this.WriteAwaiters(variable.Initializer);
 
-                if (!this.Emitter.IsAsync || !variable.Initializer.IsNull)
+                var hasInitializer = !variable.Initializer.IsNull;
+                if (variable.Initializer.IsNull && !this.VariableDeclarationStatement.Type.IsVar())
+                {
+                    var typeDef = this.Emitter.GetTypeDefinition(this.VariableDeclarationStatement.Type);
+                    if (typeDef.IsValueType && !this.Emitter.Validator.IsIgnoreType(typeDef))
+                    {
+                        hasInitializer = true;
+                    }
+                }
+
+                if (!this.Emitter.IsAsync || hasInitializer)
                 {
                     if (needComma)
                     {
@@ -76,7 +86,7 @@ namespace Bridge.NET
                     this.Write(variable.Name);
                 }
 
-                if (!variable.Initializer.IsNull)
+                if (hasInitializer)
                 {
                     addSemicolon = true;
                     this.Write(" = ");
@@ -88,7 +98,15 @@ namespace Bridge.NET
 
                     var oldValue = this.Emitter.ReplaceAwaiterByVar;
                     this.Emitter.ReplaceAwaiterByVar = true;
-                    variable.Initializer.AcceptVisitor(this.Emitter);
+
+                    if (!variable.Initializer.IsNull)
+                    {
+                        variable.Initializer.AcceptVisitor(this.Emitter);
+                    }
+                    else
+                    {
+                        this.Write("new " + Helpers.TranslateTypeReference(this.VariableDeclarationStatement.Type, this.Emitter) + "()");
+                    }
                     this.Emitter.ReplaceAwaiterByVar = oldValue;
 
                     if (isReferenceLocal)

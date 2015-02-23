@@ -62,7 +62,7 @@ return a.equalsT(b);},format:function(obj,formatString){if(Bridge.isNumber(obj))
 else if(Bridge.isDate(obj)){return Bridge.Date.format(obj,formatString);}
 return obj.format(formatString);},getType:function(instance){if(!Bridge.isDefined(instance,true)){throw new Bridge.NullReferenceException('instance is null');}
 try{return instance.constructor;}
-catch(ex){return Object;}},fn:{call:function(obj,fnName){var args=Array.prototype.slice.call(arguments,2);return obj[fnName].apply(obj,args);},bind:function(obj,method,args,appendArgs){if(method&&method.$method==method&&method.$scope==obj){return method;}
+catch(ex){return Object;}},isLower:function isLower(c){var s=String.fromCharCode(c);return s===s.toLowerCase()&&s!==s.toUpperCase();},isUpper:function isUpper(c){var s=String.fromCharCode(c);return s!==s.toLowerCase()&&s===s.toUpperCase();},fn:{call:function(obj,fnName){var args=Array.prototype.slice.call(arguments,2);return obj[fnName].apply(obj,args);},bind:function(obj,method,args,appendArgs){if(method&&method.$method==method&&method.$scope==obj){return method;}
 var fn=null;if(arguments.length===2){fn=function(){return method.apply(obj,arguments)};}
 else{fn=function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
 else if(typeof appendArgs=='number'){callArgs=Array.prototype.slice.call(arguments,0);if(appendArgs===0){callArgs.unshift.apply(callArgs,args);}
@@ -123,6 +123,8 @@ return true;},trunc:function(num){if(!Bridge.isNumber(num)){return null;}
 return num>0?Math.floor(num):Math.ceil(num);},div:function(x,y){if(!Bridge.isNumber(x)||!Bridge.isNumber(y)){return null;}
 if(y===0){throw new Bridge.DivideByZeroException();}
 return this.trunc(x/y);}}});
+
+Bridge.Date={today:function(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());},format:function(date,format){throw new Bridge.NotImplementedException();},parseExact:function(value,format){throw new Bridge.NotImplementedException();},isDaylightSavingTime:function(dt){var temp=Bridge.Date.today();temp.setMonth(0);temp.setDate(1);return temp.getTimezoneOffset()!=dt.getTimezoneOffset();},toUTC:function(date){return new Date(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),date.getUTCHours(),date.getUTCMinutes(),date.getUTCSeconds(),date.getUTCMilliseconds());},toLocal:function(date){return new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds(),date.getMilliseconds()));}};
 
 Bridge.String={format:function(format){var _formatRe=/\{\{|\}\}|\{(\d+)(?:,(-?\d+))?(?:\:([\w\s\.]*))?\}/g,args=Array.prototype.slice.call(arguments,1);return format.replace(_formatRe,function(m,idx,alignment,formatStr){if(m==="{{"||m==="}}"){return m.charAt(0);}
 var replaceValue=args[parseInt(idx,10)],values,match;if(!Bridge.isDefined(replaceValue,true)){return"";}

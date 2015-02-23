@@ -194,41 +194,7 @@ namespace System
             return 0;
         }
 
-        [Template("{0},{1},{2},{3},{4},{5},{6}")]
-        public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds, int ms)
-        {
-            return null;
-        }
-
-        [Template("{0},{1},{2},{3},{4},{5}")]
-        public static Date UTC(int year, int month, int date, int hours, int minutes, int seconds)
-        {
-            return null;
-        }
-
-        [Template("{0},{1},{2},{3},{4}")]
-        public static Date UTC(int year, int month, int date, int hours, int minutes)
-        {
-            return null;
-        }
-
-        [Template("{0},{1},{2},{3}")]
-        public static Date UTC(int year, int month, int date, int hours)
-        {
-            return null;
-        }
-
-        [Template("{0},{1},{2}")]
-        public static Date UTC(int year, int month, int date)
-        {
-            return null;
-        }
-
-        [Template("{0},{1}")]
-        public static Date UTC(int year, int month)
-        {
-            return null;
-        }
+        
 
         public virtual string ToDateString()
         {

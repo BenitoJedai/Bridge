@@ -124,6 +124,8 @@ namespace Bridge.NET
                     this.Write(id);
                 }
 
+                Helpers.CheckValueTypeClone(resolveResult, identifierExpression, this);
+
                 return;
             }
 
@@ -226,6 +228,8 @@ namespace Bridge.NET
                     }
                 }
 
+                Helpers.CheckValueTypeClone(resolveResult, identifierExpression, this);
+
                 return;
             }
 
@@ -287,7 +291,7 @@ namespace Bridge.NET
                 {
                     this.Write(inlineCode);
                 }
-            }
+            }            
             else if (memberResult != null && memberResult.Member.SymbolKind == SymbolKind.Property && memberResult.TargetResult.Type.Kind != TypeKind.Anonymous)
             {
                 this.WriteTarget(memberResult);
@@ -319,13 +323,13 @@ namespace Bridge.NET
                 else
                 {
                     this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
-                    this.Write(memberResult.Member.Name);                    
+                    this.Write(memberResult.Member.Name);
                 }
 
                 this.WriteOpenParentheses();
             }
             else
-            {                
+            {
                 if (!string.IsNullOrWhiteSpace(inlineCode))
                 {
                     this.Write(inlineCode);
@@ -341,7 +345,7 @@ namespace Bridge.NET
                         if (typeResolveResult.Type.TypeParameterCount > 0)
                         {
                             this.WriteOpenParentheses();
-                            new TypeExpressionListBlock(this.Emitter, this.IdentifierExpression.TypeArguments).Emit();                            
+                            new TypeExpressionListBlock(this.Emitter, this.IdentifierExpression.TypeArguments).Emit();
                             this.WriteCloseParentheses();
                         }
                         else
@@ -363,6 +367,8 @@ namespace Bridge.NET
                     {
                         this.Write(resolveResult.ToString());
                     }
+
+                    Helpers.CheckValueTypeClone(resolveResult, identifierExpression, this);
                 }
                 else
                 {

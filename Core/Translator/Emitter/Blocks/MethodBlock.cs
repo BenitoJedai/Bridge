@@ -94,6 +94,136 @@ namespace Bridge.NET
                     this.EmitOperatorGroup(operators[op]);
                 }
             }
+
+            if (this.TypeInfo.ClassType == ClassType.Struct && !this.StaticBlock)
+            {
+                this.EmitStructMethods();
+            }
+        }
+
+        protected virtual void EmitStructMethods()
+        {
+            var typeDef = this.Emitter.TypeDefinitions[this.TypeInfo.GenericFullName];
+            string structName = this.Emitter.Validator.GetCustomTypeName(typeDef);
+
+            if (structName.IsEmpty())
+            {
+                structName = this.TypeInfo.GenericFullName;
+            }
+
+            if (this.TypeInfo.InstanceFields.Count == 0)
+            {
+                this.EnsureComma();
+                this.Write("$clone: function(o) { return this; }");
+                this.Emitter.Comma = true;
+                return;
+            }
+
+            if (!this.TypeInfo.InstanceMethods.ContainsKey("GetHashCode"))
+            {
+                this.EnsureComma();
+                this.Write("getHashCode: function() ");
+                this.BeginBlock();
+                this.Write("var hash = 17;");                
+
+                foreach (var field in this.TypeInfo.InstanceFields)
+                {
+                    string fieldName = GetFieldName(field.Key);
+
+                    this.WriteNewLine();
+                    this.Write("hash = hash * 23 + ");
+                    this.Write("(this." + fieldName);
+                    this.Write(" == null ? 0 : ");                    
+                    this.Write("Bridge.getHashCode(");
+                    this.Write("this." + fieldName);
+                    this.Write("));");
+                }
+
+                this.WriteNewLine();
+                this.Write("return hash;");
+                this.WriteNewLine();
+                this.EndBlock();
+                this.Emitter.Comma = true;
+            }
+
+            if (!this.TypeInfo.InstanceMethods.ContainsKey("Equals"))
+            {                
+                this.EnsureComma();
+                this.Write("equals: function(o) ");
+                this.BeginBlock();
+                this.Write("if (!Bridge.is(o,");
+                this.Write(structName);
+                this.Write(")) ");
+                this.BeginBlock();
+                this.Write("return false;");
+                this.WriteNewLine();
+                this.EndBlock();
+                this.WriteNewLine();
+
+                this.Write("return ");
+                bool and = false;
+                foreach (var field in this.TypeInfo.InstanceFields)
+                {
+                    string fieldName = GetFieldName(field.Key);
+
+                    if (and)
+                    {
+                        this.Write(" && ");
+                    }
+                    and = true;
+
+                    this.Write("Bridge.equals(this.");
+                    this.Write(fieldName);
+                    this.Write(", o.");
+                    this.Write(fieldName);
+                    this.Write(")");
+                }
+
+                this.Write(";");
+                this.WriteNewLine();
+                this.EndBlock();
+                this.Emitter.Comma = true;
+            }
+
+            this.EnsureComma();
+            this.Write("$clone: function(o) ");
+            this.BeginBlock();
+            this.Write("var s = new ");
+            this.Write(structName);
+            this.Write("();");                        
+
+            foreach (var field in this.TypeInfo.InstanceFields)
+            {
+                this.WriteNewLine();
+                string fieldName = GetFieldName(field.Key);
+
+                this.Write("s.");
+                this.Write(fieldName);
+                this.Write(" = o.");
+                this.Write(fieldName);
+                this.Write(";");
+            }
+
+            this.WriteNewLine();
+            this.Write("return s;");
+            this.WriteNewLine();
+            this.EndBlock();
+            this.Emitter.Comma = true;
+        }
+
+        protected virtual string GetFieldName(string field)
+        {
+            string fieldName = field;
+
+            if (this.TypeInfo.FieldsDeclarations.ContainsKey(fieldName))
+            {
+                fieldName = this.Emitter.GetEntityName(this.TypeInfo.FieldsDeclarations[fieldName]);
+            }
+            else
+            {
+                fieldName = this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
+            }
+            return fieldName;
         }
 
         protected void EmitEventAccessor(EventDeclaration e, VariableInitializer evtVar, bool add)

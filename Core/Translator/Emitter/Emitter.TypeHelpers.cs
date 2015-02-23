@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using Bridge.Plugin;
+using ICSharpCode.NRefactory.TypeSystem;
 
 namespace Bridge.NET
 {
@@ -65,6 +66,19 @@ namespace Bridge.NET
         public virtual TypeDefinition GetTypeDefinition()
         {
             return this.TypeDefinitions[Helpers.GetTypeMapKey(this.TypeInfo)];
+        }
+
+        public virtual TypeDefinition GetTypeDefinition(IType type)
+        {
+            string name = Helpers.GetScriptFullName(type);
+            name = this.ResolveType(name, null);
+
+            if (this.TypeDefinitions.ContainsKey(name))
+            {
+                return this.TypeDefinitions[name];
+            }
+
+            return null;
         }
 
         public virtual TypeDefinition GetTypeDefinition(AstType reference)

@@ -1,0 +1,118 @@
+using Bridge.CLR;
+
+namespace System 
+{
+	[Ignore]
+	[Name("Number")]
+    public struct Single : IComparable, IComparable<Single>, IEquatable<Single>, IFormattable 
+    {
+        private Single(int i) 
+        {
+		}
+
+		[InlineConst]
+		public const float MaxValue = (float)3.40282346638528859e+38;
+
+		[InlineConst]
+		public const float MinValue = (float)-3.40282346638528859e+38;
+
+		[InlineConst]
+        public const float Epsilon = (float)1.4e-45;
+
+		[Name("NaN")]
+		public const float NaN = 0;
+
+		[Name("NEGATIVE_INFINITY")]
+		public const float NegativeInfinity = 0;
+
+		[Name("POSITIVE_INFINITY")]
+		public const float PositiveInfinity = 0;
+
+		[Template("Bridge.Int.format({this}, {format})")]
+		public string Format(string format) 
+        {
+			return null;
+		}
+
+        [Template("Bridge.Int.format({this}, {format})")]
+		public string ToString(string format) 
+        {
+			return null;
+		}
+
+		public string ToExponential() 
+        {
+			return null;
+		}
+
+		public string ToExponential(int fractionDigits) {
+			return null;
+		}
+
+		public string ToFixed() 
+        {
+			return null;
+		}
+
+		public string ToFixed(int fractionDigits) 
+        {
+			return null;
+		}
+
+		public string ToPrecision() 
+        {
+			return null;
+		}
+
+		public string ToPrecision(int precision) 
+        {
+			return null;
+		}
+
+        [Template("({d} === Number.POSITIVE_INFINITY)")]
+        public static bool IsPositiveInfinity(float d)
+        {
+            return false;
+        }
+
+        [Template("({d} === Number.NEGATIVE_INFINITY)")]
+        public static bool IsNegativeInfinity(float d)
+        {
+            return false;
+        }
+
+        [Template("(Math.abs({d}) === Number.POSITIVE_INFINITY)")]
+        public static bool IsInfinity(float d)
+        {
+            return false;
+        }
+
+        public static bool IsFinite(float d)
+        {
+            return false;
+        }
+
+        public static bool IsNaN(float d)
+        {
+            return false;
+        }
+
+        [Template("Bridge.compare({this}, {other})")]
+        public int CompareTo(float other)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.compare({this}, {obj})")]
+        public int CompareTo(object obj)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.equalsT({this}, {other})")]
+        public bool Equals(float other)
+        {
+            return false;
+        }
+	}
+}

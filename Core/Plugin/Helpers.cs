@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using ICSharpCode.NRefactory.Semantics;
 using System;
+using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace Bridge.Plugin
 {
@@ -524,6 +525,51 @@ namespace Bridge.Plugin
             return type.Equals(resolver.Compilation.FindType(KnownTypeCode.Decimal))
                 || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Double))
                 || type.Equals(resolver.Compilation.FindType(KnownTypeCode.Single));
+        }
+
+        public static void CheckValueTypeClone(ResolveResult resolveResult, Expression expression, IAbstractEmitterBlock block)
+        {
+            if (resolveResult == null || resolveResult.IsError)
+            {
+                return;
+            }
+
+            if (resolveResult is InvocationResolveResult ||
+               block.Emitter.IsAssignment)
+            {
+                return;
+            }
+
+            if (resolveResult.Type.Kind == TypeKind.Struct)
+            {
+                var typeDef = block.Emitter.GetTypeDefinition(resolveResult.Type);
+                if (block.Emitter.Validator.IsIgnoreType(typeDef))
+                {
+                    return;
+                }
+
+                var memberResult = resolveResult as MemberResolveResult;
+
+                var field = memberResult != null ? memberResult.Member as DefaultResolvedField : null;
+
+                if (field != null && field.IsReadOnly)
+                {
+                    block.Write(".$clone()");
+                    return;
+                }
+
+                if (expression == null ||
+                    expression.Parent is NamedExpression ||
+                    expression.Parent is ObjectCreateExpression ||
+                    expression.Parent is ArrayInitializerExpression || 
+                    expression.Parent is ReturnStatement || 
+                    expression.Parent is InvocationExpression || 
+                    expression.Parent is AssignmentExpression ||
+                    expression.Parent is VariableInitializer)
+                {
+                    block.Write(".$clone()");
+                }
+            }
         }
     }
 }

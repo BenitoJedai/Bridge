@@ -4,32 +4,32 @@ namespace System
 {
     [Ignore]
 	[Name("Bridge.Int")]
-    public struct UInt16 : IComparable, IComparable<UInt16>, IEquatable<UInt16>, IFormattable 
+    public struct Int16 : IComparable, IComparable<Int16>, IEquatable<Int16>, IFormattable 
     {
-		private UInt16(int i) 
+		private Int16(int i) 
         {
 		}
 
 		[InlineConst]
-		public const ushort MinValue = 0;
+        public const short MinValue = -32768;
 
         [InlineConst]
-		public const ushort MaxValue = 0xFFFF;
+        public const short MaxValue = 32767;
 
         [Template("parseInt({s})")]
-		public static ushort Parse(string s) 
+		public static short Parse(string s) 
         {
 			return 0;
 		}
 
         [Template("parseInt({s}, {radix})")]
-		public static ushort Parse(string s, int radix) 
+		public static short Parse(string s, int radix) 
         {
 			return 0;
 		}
 
         [Template("Bridge.Int.tryParse({s}, {result}, 0, 32768)")]
-		public static bool TryParse(string s, out ushort result) 
+		public static bool TryParse(string s, out short result) 
         {
 			result = 0;
 			return false;
@@ -53,7 +53,7 @@ namespace System
 		}
 
 		[Template("Bridge.compare({this}, {other})")]
-		public int CompareTo(ushort other) 
+		public int CompareTo(short other) 
         {
 			return 0;
 		}
@@ -65,7 +65,7 @@ namespace System
         }
 
         [Template("Bridge.equalsT({this}, {other})")]
-		public bool Equals(ushort other) 
+		public bool Equals(short other) 
         {
 			return false;
 		}

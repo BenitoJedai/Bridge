@@ -4,10 +4,12 @@ namespace System
 {
 	[Ignore]
 	[Name("Number")]
-	public struct Decimal : IComparable<Decimal>, IEquatable<Decimal>, IFormattable 
+    public struct Decimal : IComparable, IComparable<Decimal>, IEquatable<Decimal>, IFormattable 
     {
-		public const decimal MaxValue = 79228162514264337593543950335m;
-		public const decimal MinValue = -79228162514264337593543950335m;
+        [Name("MAX_VALUE")]
+        public const decimal MaxValue = 0;
+        [Name("MIN_VALUE")]
+        public const decimal MinValue = 0;
 
 		[InlineConst]
 		public const decimal Zero = 0;
@@ -50,14 +52,8 @@ namespace System
         {
 		}
 
-		[Template("Bridge.formatNumber({this}, {format})")]
+		[Template("Bridge.Int.format({this}, {format})")]
 		public string Format(string format) 
-        {
-			return null;
-		}
-
-		[Template("Bridge.localeFormatNumber({this}, {format})")]
-		public string LocaleFormat(string format) 
         {
 			return null;
 		}
@@ -67,11 +63,17 @@ namespace System
 			return null;
 		}
 
-		[Template("Bridge.formatNumber({this}, {format})")]
+        [Template("Bridge.Int.format({this}, {format})")]
 		public string ToString(string format) 
         {
 			return null;
 		}
+
+        [Template("parseFloat({s})")]
+        public static decimal Parse(string s)
+        {
+            return 0;
+        }
 
 		public string ToExponential() 
         {
@@ -348,6 +350,12 @@ namespace System
         {
 			return 0;
 		}
+
+        [Template("Bridge.compare({this}, {obj})")]
+        public int CompareTo(object obj)
+        {
+            return 0;
+        }
 
         [Template("Bridge.equalsT({this}, {other})")]
 		public bool Equals(decimal other) 

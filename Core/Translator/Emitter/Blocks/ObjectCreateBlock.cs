@@ -116,7 +116,7 @@ namespace Bridge.NET
 
                     this.WriteOpenParentheses();
 
-                    if (!this.Emitter.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor) > 1)
+                    if (!this.Emitter.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor && !m.IsStatic) > (type.IsValueType ? 0 : 1))
                     {
                         this.WriteScript(this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(objectCreateExpression, this.Emitter)).Member));
 
@@ -196,6 +196,8 @@ namespace Bridge.NET
                     this.WriteCloseParentheses();
                 }
             }
+
+            Helpers.CheckValueTypeClone(invocationResolveResult, this.ObjectCreateExpression, this);
         }
 
         protected virtual void WriteObjectInitializer(IEnumerable<Expression> expressions, bool changeCase)

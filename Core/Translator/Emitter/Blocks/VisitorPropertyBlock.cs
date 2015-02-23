@@ -70,6 +70,9 @@ namespace Bridge.NET
                         {
                             this.WriteReturn(true);
                             this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase());
+
+                            var resolveResult = this.Emitter.Resolver.ResolveNode(propertyDeclaration.ReturnType, this.Emitter);
+                            Helpers.CheckValueTypeClone(resolveResult, null, this);
                             this.WriteSemiColon();
                         }
 

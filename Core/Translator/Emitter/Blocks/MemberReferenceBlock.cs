@@ -250,7 +250,7 @@ namespace Bridge.NET
                     else
                     {
                         bool changeCase = (!this.Emitter.IsNativeMember(member.Member.FullName) ? this.Emitter.ChangeCase : true) && !isConst;
-                        this.Write(this.Emitter.GetEntityName(member.Member, !changeCase));
+                        this.Write(this.Emitter.GetEntityName(member.Member, !changeCase));                        
                     }
                 }
                 else if (resolveResult is InvocationResolveResult)
@@ -266,8 +266,10 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    this.Write(this.Emitter.GetEntityName(member.Member));
+                    this.Write(this.Emitter.GetEntityName(member.Member));                    
                 }
+
+                Helpers.CheckValueTypeClone(resolveResult, memberReferenceExpression, this);
             }
         }        
     }
