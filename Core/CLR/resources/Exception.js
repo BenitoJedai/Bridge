@@ -25,6 +25,10 @@ Bridge.Class.extend('Bridge.Exception', {
         return this.data;
     },
 
+    toString: function () {
+        return this.getMessage();
+    },
+
     $statics: {
         create: function (error) {
             if (Bridge.is(error, Bridge.Exception)) {

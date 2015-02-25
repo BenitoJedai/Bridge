@@ -7,6 +7,7 @@
   <file name="Interfaces.js" />
   <file name="Integer.js" />
   <file name="Date.js" />
+  <file name="TimeSpan.js" />
   <file name="String.js" />
   <file name="collections/Interfaces.js" path="collections" />
   <file name="collections/CustomEnumerator.js" path="collections" />
@@ -27,6 +28,7 @@
     <include name="Interfaces.js" />
     <include name="Integer.js" />
     <include name="Date.js" />
+    <include name="TimeSpan.js" />
     <include name="String.js" />
     <include name="Browser.js" />
     <include name="collections/Interfaces.js" />

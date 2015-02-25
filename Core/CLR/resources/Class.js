@@ -152,6 +152,20 @@
         return Class;
     };
 
+    Bridge.Class.addExtend = function (cls, extend) {        
+        Array.prototype.push.apply(cls.$$extend, extend);
+
+        for (i = 0; i < extend.length; i++) {
+            scope = extend[i];
+
+            if (!scope.$$inheritors) {
+                scope.$$inheritors = [];
+            }
+
+            scope.$$inheritors.push(cls);
+        }
+    };
+
     Bridge.Class.set = function (scope, className, cls) {
         var nameParts = className.split('.');
 

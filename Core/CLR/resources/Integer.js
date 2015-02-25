@@ -1,5 +1,5 @@
 ﻿Bridge.Class.extend('Bridge.Int', {
-    $extend: [Bridge.IComparable$1(Number), Bridge.IEquatable$1(Number), Bridge.IComparable, Bridge.IFormattable],
+    $extend: [Bridge.IComparable, Bridge.IFormattable],
     $statics: {
         instanceOf : function (instance) {
             return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;
@@ -47,3 +47,4 @@
         }
     }
 });
+Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);

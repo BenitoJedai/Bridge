@@ -148,6 +148,7 @@
     <Content Include="resources\Exception.js" />
     <Content Include="resources\INotifyPropertyChanged.js" />
     <Content Include="resources\Date.js" />
+    <Content Include="resources\TimeSpan.js" />
     <Content Include="resources\Integer.js" />
     <Content Include="resources\Interfaces.js" />
     <Content Include="resources\String.js" />

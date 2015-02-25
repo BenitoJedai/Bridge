@@ -3,13 +3,22 @@
 namespace System
 {
     [Ignore]
-    [Name("TimeSpan")]
-    public struct TimeSpan
+    [Name("Bridge.TimeSpan")]
+    public struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>
     {
+        [InlineConst]
         public const long TicksPerDay = 864000000000;
+        
+        [InlineConst]
         public const long TicksPerHour = 36000000000;
+
+        [InlineConst]
         public const long TicksPerMillisecond = 10000;
+
+        [InlineConst]
         public const long TicksPerMinute = 600000000;
+
+        [InlineConst]
         public const long TicksPerSecond = 10000000;
 
         public static readonly TimeSpan MaxValue;
@@ -32,51 +41,61 @@ namespace System
         {
         }
 
+        [Template("new Bridge.TimeSpan(-{t}.ticks)")]
         public static TimeSpan operator -(TimeSpan t)
         {
             return new TimeSpan();
         }
 
+        [Template("new Bridge.TimeSpan({t1}.ticks - {t2}.ticks)")]
         public static TimeSpan operator -(TimeSpan t1, TimeSpan t2)
         {
             return new TimeSpan();
         }
 
+        [Template("{t1}.ticks !== {t2}.ticks")]
         public static bool operator !=(TimeSpan t1, TimeSpan t2)
         {
             return false;
         }
 
+        [Template("new Bridge.TimeSpan({t}.ticks)")]
         public static TimeSpan operator +(TimeSpan t)
         {
             return new TimeSpan();
         }
 
+        [Template("new Bridge.TimeSpan({t1}.ticks + {t2}.ticks)")]
         public static TimeSpan operator +(TimeSpan t1, TimeSpan t2)
         {
             return new TimeSpan();
         }
 
+        [Template("{t1}.ticks < {t2}.ticks")]
         public static bool operator <(TimeSpan t1, TimeSpan t2)
         {
             return false;
         }
 
+        [Template("{t1}.ticks <= {t2}.ticks")]
         public static bool operator <=(TimeSpan t1, TimeSpan t2)
         {
             return false;
         }
 
+        [Template("{t1}.ticks === {t2}.ticks")]
         public static bool operator ==(TimeSpan t1, TimeSpan t2)
         {
             return false;
         }
 
+        [Template("{t1}.ticks > {t2}.ticks")]
         public static bool operator >(TimeSpan t1, TimeSpan t2)
         {
             return false;
         }
 
+        [Template("{t1}.ticks >= {t2}.ticks")]
         public static bool operator >=(TimeSpan t1, TimeSpan t2)
         {
             return false;
@@ -176,6 +195,7 @@ namespace System
             return new TimeSpan();
         }
 
+        [Template("{t1}.compareTo({t2})")]
         public static int Compare(TimeSpan t1, TimeSpan t2)
         {
             return 0;
@@ -200,6 +220,7 @@ namespace System
             return false;
         }
 
+        [Template("{t1}.ticks === {t2}.ticks")]
         public static bool Equals(TimeSpan t1, TimeSpan t2)
         {
             return false;
@@ -239,17 +260,6 @@ namespace System
         {
             return new TimeSpan();
         }
-
-        public static TimeSpan Parse(string s)
-        {
-            return new TimeSpan();
-        }
-
-        /*public static TimeSpan Parse(string input, IFormatProvider formatProvider);
-        public static TimeSpan ParseExact(string input, string format, IFormatProvider formatProvider);
-        public static TimeSpan ParseExact(string input, string[] formats, IFormatProvider formatProvider);
-        public static TimeSpan ParseExact(string input, string format, IFormatProvider formatProvider, TimeSpanStyles styles);
-        public static TimeSpan ParseExact(string input, string[] formats, IFormatProvider formatProvider, TimeSpanStyles styles);*/
 
         public TimeSpan Subtract(TimeSpan ts)
         {

@@ -253,14 +253,22 @@ namespace System
 			return null;
 		}
 
-		public long ValueOf() 
+        [Template("new Date({d} - new Date({t} / 10000))")]
+        public static DateTime operator -(DateTime d, TimeSpan t)
         {
-			return 0;
-		}
+            return default(DateTime);
+        }
 
-		public static int operator -(DateTime a, DateTime b) 
+        [Template("new Date({d}.getTime() + ({t} / 10000))")]
+        public static DateTime operator +(DateTime d, TimeSpan t)
         {
-			return 0;
+            return default(DateTime);
+        }
+
+        [Template("new Bridge.TimeSpan(({a} - {b}) * 10000)")]
+		public static TimeSpan operator -(DateTime a, DateTime b) 
+        {
+            return default(TimeSpan);
 		}
 
 		[Template("new Bridge.TimeSpan(({this} - {value}) * 10000)")]

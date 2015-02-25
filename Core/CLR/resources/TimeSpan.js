@@ -1,0 +1,150 @@
+﻿Bridge.Class.extend('Bridge.TimeSpan', {
+    $extend: [Bridge.IComparable],
+    $statics: {
+        fromDays: function (value) {
+            return new Bridge.TimeSpan(value * 864e9);
+        },
+
+        fromHours: function (value) {
+            return new Bridge.TimeSpan(value * 36e9);
+        },
+
+        fromMilliseconds: function (value) {
+            return new Bridge.TimeSpan(value * 1e4);
+        },
+
+        fromMinutes: function (value) {
+            return new Bridge.TimeSpan(value * 6e8);
+        },
+
+        fromSeconds: function (value) {
+            return new Bridge.TimeSpan(value * 1e7);
+        },
+
+        fromTicks: function (value) {
+            return new Bridge.TimeSpan(value);
+        },
+
+        $ctor: function () {
+            this.zero = new Bridge.TimeSpan(0);
+            this.maxValue = new Bridge.TimeSpan(864e13);
+            this.minValue = new Bridge.TimeSpan(-864e13);
+        },
+
+        getDefaultValue: function () {
+            return new Bridge.TimeSpan(0);
+        }
+    },
+
+    $ctorMembers : function () {
+        this.ticks = 0;
+    },
+
+    $ctor: function () {
+        if (arguments.length == 1) {
+            this.ticks = arguments[0];
+        }
+        else if (arguments.length == 3) {
+            this.ticks = (((arguments[0] * 60 + arguments[1]) * 60) + arguments[2]) * 1e7;
+        }
+        else if (arguments.length == 4) {
+            this.ticks = ((((arguments[0] * 24 + arguments[1]) * 60 + arguments[2]) * 60) + arguments[3]) * 1e7;
+        }
+        else if (arguments.length == 5) {
+            this.ticks = (((((arguments[0] * 24 + arguments[1]) * 60 + arguments[2]) * 60) + arguments[3]) * 1e3 + arguments[4]) * 1e4;
+        }
+    },
+
+    getTicks: function () {
+        return this.ticks;
+    },
+
+    getDays: function () {
+        return this.ticks / 864e9 | 0;
+    },
+
+    getHours: function () {
+        return this.ticks / 36e9 % 24 | 0;
+    },
+
+    getMilliseconds: function () {
+        return this.ticks / 1e4 % 1e3 | 0;
+    },
+
+    getMinutes: function () {
+        return this.ticks / 6e8 % 60 | 0;
+    },
+
+    getSeconds: function () {
+        return this.ticks / 1e7 % 60 | 0;
+    },
+
+    getTotalDays: function () {
+        return this.ticks / 864e9;
+    },
+
+    getTotalHours: function () {
+        return this.ticks / 36e9;
+    },
+
+    getTotalMilliseconds: function () {
+        return this.ticks / 1e4;
+    },
+
+    getTotalMinutes: function () {
+        return this.ticks / 6e8;
+    },
+
+    getTotalSeconds: function () {
+        return this.ticks / 1e7;
+    },
+
+    add: function (ts) {
+        return new Bridge.TimeSpan(this.ticks + ts.ticks);
+    },
+
+    subtract: function (ts) {
+        return new Bridge.TimeSpan(this.ticks - ts.ticks);
+    },
+
+    duration: function () {
+        return new Bridge.TimeSpan(Math.abs(this.ticks));
+    },
+
+    negate: function () {
+        return new Bridge.TimeSpan(-this.ticks);
+    },
+
+    compareTo: function (other) {
+        return this.ticks < other.ticks ? -1 : (this.ticks > other.ticks ? 1 : 0);
+    },
+
+    equals: function (other) {
+        return other.ticks === this.ticks;
+    },
+
+    toString: function () {
+        var ticks = this.ticks,
+            result = "",
+            format = function (t, n) {
+                return Bridge.String.alignString((t | 0).toString(), n || 2, "0", 2);
+            };
+        
+        if (Math.abs(ticks) >= 864e9) {
+            result += format(ticks / 864e9) + ".";
+            ticks %= 864e9;
+        }
+
+        result += format(ticks / 36e9) + ":";
+        ticks %= 36e9;
+        result += format(ticks / 6e8 | 0) + ':';
+        ticks %= 6e8;
+        result += format(ticks / 1e7);
+        ticks %= 1e7;
+        if (ticks > 0) {
+            result += "." + format(ticks, 7);
+        }
+        return result;
+    }
+});
+Bridge.Class.addExtend(Bridge.TimeSpan, [Bridge.IComparable$1(Bridge.TimeSpan), Bridge.IEquatable$1(Bridge.TimeSpan)]);
