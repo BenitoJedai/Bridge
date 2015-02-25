@@ -11,9 +11,16 @@ namespace Bridge.NET
 {
     public class Plugins : IPlugins
     {
-        public static IPlugins GetPlugins()
-        {
-            DirectoryCatalog dirCatalog = new DirectoryCatalog(@".\plugins\", "*.dll");
+        public static IPlugins GetPlugins(ITranslator translator)
+        {            
+            var path = System.IO.Path.GetDirectoryName(translator.CLRLocation) + @"\plugins\";
+            
+            if (!System.IO.Directory.Exists(path)) 
+            {
+                return new Plugins() { plugins = new IPlugin[0] };
+            }
+
+            DirectoryCatalog dirCatalog = new DirectoryCatalog(path, "*.dll");            
             var catalog = new AggregateCatalog(dirCatalog);
 
             CompositionContainer container = new CompositionContainer(catalog);

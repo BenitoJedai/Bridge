@@ -119,7 +119,7 @@ namespace Bridge.NET
 
             if (!this.Emitter.Validator.IsIgnoreType(baseType))
             {
-                this.Write("this.base();");
+                this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.$ctorMembers.call(this);");
                 this.WriteNewLine();
             }
 
@@ -345,17 +345,10 @@ namespace Bridge.NET
                 var baseType = this.Emitter.GetBaseTypeDefinition();
                 var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member) : "$ctor";
 
-                if (baseName == ctorName)
-                {
-                    this.Write("this.base");
-                }
-                else
-                {
-                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.");
-                    this.Write(baseName);
-                    this.Write(".call");
-                    appendScope = true;
-                }
+                this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.");
+                this.Write(baseName);
+                this.Write(".call");
+                appendScope = true;
             }
             else
             {

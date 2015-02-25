@@ -227,13 +227,6 @@ namespace Bridge.NET
                 var baseType = this.Emitter.GetBaseMethodOwnerTypeDefinition(targetMember.MemberName, targetMember.TypeArguments.Count);
                 var method = invocationExpression.GetParent<MethodDeclaration>();
 
-                string currentMethod = "";
-
-                if (method != null)
-                {
-                    currentMethod = method.Name;
-                }
-
                 bool isIgnore = this.Emitter.Validator.IsIgnoreType(baseType);
                 if (isIgnore)
                 {
@@ -243,50 +236,32 @@ namespace Bridge.NET
                 string baseMethod = Helpers.GetScriptName(targetMember, false);
                 bool needComma = false;
 
-                if (currentMethod == baseMethod)
+                var resolveResult = this.Emitter.Resolver.ResolveNode(targetMember, this.Emitter);
+
+                if (resolveResult != null && resolveResult is InvocationResolveResult)
                 {
-                    this.WriteThis();
-                    this.WriteDot();
-                    this.Write("base");
-
-                    if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
-                    {
-                        this.WriteOpenParentheses();
-                        new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
-                        this.WriteCloseParentheses();
-                    }
-
-                    this.WriteOpenParentheses();
+                    InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
+                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.GetEntityName(invocationResult.Member));
                 }
                 else
                 {
-                    var resolveResult = this.Emitter.Resolver.ResolveNode(targetMember, this.Emitter);
-
-                    if (resolveResult != null && resolveResult is InvocationResolveResult)
-                    {
-                        InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.GetEntityName(invocationResult.Member));
-                    }
-                    else
-                    {
-                        this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
-                    }
-
-                    if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
-                    {
-                        this.WriteOpenParentheses();
-                        new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
-                        this.WriteCloseParentheses();
-                    }
-
-                    this.WriteDot();
-
-                    this.Write("call");
-                    this.WriteOpenParentheses();
-
-                    this.WriteThis();
-                    needComma = true;
+                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
                 }
+
+                if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)
+                {
+                    this.WriteOpenParentheses();
+                    new TypeExpressionListBlock(this.Emitter, argsInfo.TypeArguments).Emit();
+                    this.WriteCloseParentheses();
+                }
+
+                this.WriteDot();
+
+                this.Write("call");
+                this.WriteOpenParentheses();
+
+                this.WriteThis();
+                needComma = true;
 
                 foreach (var arg in argsExpressions)
                 {

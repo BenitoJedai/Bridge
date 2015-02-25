@@ -23,7 +23,7 @@ namespace Bridge.NET
 
         public Dictionary<string, string> Translate()
         {
-            this.Plugins = Bridge.NET.Plugins.GetPlugins();
+            this.Plugins = Bridge.NET.Plugins.GetPlugins(this);
             this.ReadProjectFile();
 
             if (this.Rebuild || !File.Exists(this.AssemblyLocation))

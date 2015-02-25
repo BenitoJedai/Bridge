@@ -26,7 +26,8 @@ namespace Bridge.NET
 
         protected override void EmitConversionExpression()
         {
-            this.Write("base");
+            var baseType = this.Emitter.GetBaseTypeDefinition();
+            this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype");
         }
     }
 }

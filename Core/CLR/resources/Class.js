@@ -8,8 +8,7 @@
 
 // Inspired by base2 and Prototype
 (function () {
-    var initializing = false,
-          fnTest = /xyz/.test(function () { xyz; }) ? /\bbase\b/ : /.*/;
+    var initializing = false;
 
     // The base Class implementation (does nothing)
     Bridge.Class = function () { };
@@ -48,47 +47,21 @@
 
         if (!prop.$multipleCtors && !prop.$ctor) {
             prop.$ctor = extend ? function () {
-                this.base();
-            } : function () { };
-        }
-
-        if (!prop.$multipleCtors && !prop.$ctor) {
-            prop.$ctor = extend ? function () {
-                this.base();
+                base.$ctor();
             } : function () { };
         }
 
         if (!prop.$ctorMembers) {
             prop.$ctorMembers = extend ? function () {
-                this.base.apply(this, arguments);
+                base.$ctorMembers.apply(this, arguments);
             } : function () { };
         }
 
         prop.$$ctorCtor = Bridge.Class.initCtor;
 
         // Copy the properties over onto the new prototype
-        for (name in prop) {
-            // Check if we're overwriting an existing function
-            prototype[name] = typeof prop[name] == 'function' &&
-              typeof base[name] == 'function' && fnTest.test(prop[name]) ?
-              (function (name, fn) {
-                  return function () {
-                      var tmp = this.base;
-
-                      // Add a new .base() method that is the same method
-                      // but on the super-class
-                      this.base = base[name];
-
-                      // The method only need to be bound temporarily, so we
-                      // remove it when we're done executing
-                      var ret = fn.apply(this, arguments);
-
-                      this.base = tmp;
-
-                      return ret;
-                  };
-              })(name, prop[name]) :
-              prop[name];
+        for (name in prop) {            
+            prototype[name] = prop[name];
         }
 
         prototype.$$name = className;
