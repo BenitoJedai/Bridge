@@ -115,6 +115,12 @@ namespace Bridge.NET
 
         protected virtual void EmitCastExpression(Expression expression, AstType type, string method)
         {
+            if (method != Bridge.NET.Emitter.IS && Helpers.IsIgnoreCast(type, this.Emitter))
+            {
+                expression.AcceptVisitor(this.Emitter);
+                return;
+            }
+            
             bool isInlineCast;
             string castCode = this.GetCastCode(expression, type, out isInlineCast);
 

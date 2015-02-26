@@ -2,7 +2,7 @@ using Bridge.CLR;
 
 namespace System 
 {
-	[Ignore] 
+	[Ignore,IgnoreGeneric,IgnoreCast] 
     [Name("Object")]
 	public sealed class Tuple<T1> 
     {
@@ -21,7 +21,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2> 
     {
@@ -48,7 +48,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2, T3> 
     {
@@ -83,7 +83,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2, T3, T4> 
     {
@@ -126,7 +126,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2, T3, T4, T5> 
     {
@@ -177,7 +177,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2, T3, T4, T5, T6> 
     {
@@ -236,7 +236,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2, T3, T4, T5, T6, T7> 
     {
@@ -303,7 +303,7 @@ namespace System
 		}
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public sealed class Tuple<T1, T2, T3, T4, T5, T6, T7, TRest> 
     {
@@ -378,7 +378,7 @@ namespace System
         }
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public static class Tuple 
     {

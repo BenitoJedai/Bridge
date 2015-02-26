@@ -90,7 +90,7 @@ namespace Bridge.NET
                 return;
             }
 
-            if (member.Member.SymbolKind == SymbolKind.Field && this.Emitter.IsMemberConst(member.Member) && this.Emitter.IsInlineConst(member.Member))
+            if (member != null && member.Member.SymbolKind == SymbolKind.Field && this.Emitter.IsMemberConst(member.Member) && this.Emitter.IsInlineConst(member.Member))
             {
                 this.WriteScript(member.ConstantValue);
             }
@@ -172,14 +172,20 @@ namespace Bridge.NET
                     )
                 {
                     var resolvedMethod = (IMethod)member.Member;
+                    bool isStatic = resolvedMethod != null && resolvedMethod.IsStatic;                    
 
                     var isExtensionMethod = resolvedMethod.IsExtensionMethod;
 
-                    this.Write(Bridge.NET.Emitter.ROOT + "." + (isExtensionMethod ? Bridge.NET.Emitter.DELEGATE_BIND_SCOPE : Bridge.NET.Emitter.DELEGATE_BIND) + "(");
                     this.Emitter.IsAssignment = false;
-                    memberReferenceExpression.Target.AcceptVisitor(this.Emitter);
+                    if (!isStatic)
+                    {
+                        this.Write(Bridge.NET.Emitter.ROOT + "." + (isExtensionMethod ? Bridge.NET.Emitter.DELEGATE_BIND_SCOPE : Bridge.NET.Emitter.DELEGATE_BIND) + "(");
+                        memberReferenceExpression.Target.AcceptVisitor(this.Emitter);                        
+                        this.Write(", ");
+                    }
+               
                     this.Emitter.IsAssignment = oldIsAssignment;
-                    this.Write(", ");
+                    
 
                     if (isExtensionMethod)
                     {
@@ -195,8 +201,10 @@ namespace Bridge.NET
                     this.WriteDot();
 
                     this.Write(this.Emitter.GetMemberOverloadName((IMethod)member.Member));
-
-                    this.Write(")");
+                    if (!isStatic)
+                    {
+                        this.Write(")");
+                    }
 
                     return;
                 }

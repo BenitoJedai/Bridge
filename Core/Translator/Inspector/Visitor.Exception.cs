@@ -463,15 +463,7 @@ namespace Bridge.NET
 			{
 				throw (Exception)this.CreateException(memberReferenceExpression);
 			}
-        }
-
-        public virtual void VisitMemberType(MemberType memberType)
-        {
-            if (this.ThrowException)
-			{
-				throw (Exception)this.CreateException(memberType);
-			}
-        }
+        }        
 
         public virtual void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
         {

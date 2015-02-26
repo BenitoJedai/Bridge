@@ -41,6 +41,8 @@
     <AdditionalExplicitAssemblyReferences />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Attributes\IgnoreCast.cs" />
+    <Compile Include="Attributes\IgnoreGenericAttribute.cs" />
     <Compile Include="Attributes\SerializationPriorityAttribute.cs" />
     <Compile Include="Attributes\EventAttribute.cs" />
     <Compile Include="Attributes\EnumAttribute.cs" />

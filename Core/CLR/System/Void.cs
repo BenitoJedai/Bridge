@@ -2,7 +2,7 @@ using Bridge.CLR;
 
 namespace System 
 {
-	[Ignore]
+	[Ignore, IgnoreCast]
 	[Name("Object")]
 	public struct Void 
     {

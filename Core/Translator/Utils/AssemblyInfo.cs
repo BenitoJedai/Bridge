@@ -53,6 +53,19 @@ namespace Bridge.NET
         {
             get;
             set;
-        }        
+        }
+
+
+        public string BeforeEvent
+        {
+            get;
+            set;
+        }
+
+        public string AfterEvent
+        {
+            get;
+            set;
+        }
     }
 }

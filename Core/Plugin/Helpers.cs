@@ -481,7 +481,7 @@ namespace Bridge.Plugin
             }
 
 
-            if (simpleType != null && simpleType.TypeArguments.Count > 0)
+            if (simpleType != null && simpleType.TypeArguments.Count > 0 && !Helpers.IsIgnoreGeneric(simpleType, emitter))
             {
                 StringBuilder sb = new StringBuilder(name);
                 bool needComma = false;
@@ -501,6 +501,36 @@ namespace Bridge.Plugin
             }
 
             return name;
+        }
+
+        public static bool IsIgnoreGeneric(AstType astType, IEmitter emitter)
+        {
+            var fullname = emitter.ResolveType(Helpers.GetScriptName(astType, true), astType);
+            if (emitter.TypeDefinitions.ContainsKey(fullname))
+            {
+                var typeDef = emitter.TypeDefinitions[fullname];
+                if (emitter.Validator.HasAttribute(typeDef.CustomAttributes, "Bridge.CLR.IgnoreGenericAttribute"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsIgnoreCast(AstType astType, IEmitter emitter)
+        {
+            var fullname = emitter.ResolveType(Helpers.GetScriptName(astType, true), astType);
+            if (emitter.TypeDefinitions.ContainsKey(fullname))
+            {
+                var typeDef = emitter.TypeDefinitions[fullname];
+                if (emitter.Validator.HasAttribute(typeDef.CustomAttributes, "Bridge.CLR.IgnoreCastAttribute"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool IsIntegerType(IType type, IMemberResolver resolver)

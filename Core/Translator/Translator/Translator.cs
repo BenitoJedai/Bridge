@@ -23,6 +23,13 @@ namespace Bridge.NET
 
         public Dictionary<string, string> Translate()
         {
+            var config = this.ReadConfig(null);
+
+            if (config != null && !string.IsNullOrWhiteSpace(config.BeforeEvent))
+            {
+                this.RunEvent(config.BeforeEvent);
+            }
+            
             this.Plugins = Bridge.NET.Plugins.GetPlugins(this);
             this.ReadProjectFile();
 

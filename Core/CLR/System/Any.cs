@@ -1,6 +1,6 @@
 ﻿namespace Bridge.CLR
 {
-	[Ignore]
+	[Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
 	public class Any<T1, T2> 
     {
@@ -25,7 +25,7 @@
         }
 	}
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
     public class Any<T1, T2, T3>
     {
@@ -60,7 +60,7 @@
         }
     }
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
     public class Any<T1, T2, T3, T4>
     {
@@ -105,7 +105,7 @@
         }
     }
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
     public class Any<T1, T2, T3, T4, T5>
     {
@@ -160,7 +160,7 @@
         }
     }
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
     public class Any<T1, T2, T3, T4, T5, T6>
     {
@@ -225,7 +225,7 @@
         }
     }
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
     public class Any<T1, T2, T3, T4, T5, T6, T7>
     {
@@ -300,7 +300,7 @@
         }
     }
 
-    [Ignore]
+    [Ignore,IgnoreGeneric,IgnoreCast]
     [Name("Object")]
     public class Any<T1, T2, T3, T4, T5, T6, T7, T8>
     {

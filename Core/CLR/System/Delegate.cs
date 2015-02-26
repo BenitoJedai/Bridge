@@ -2,7 +2,7 @@
 
 namespace System 
 {
-    [Ignore]
+    [Ignore,IgnoreCast]
     [Name("Function")]
     public class Delegate 
     {
@@ -40,7 +40,7 @@ namespace System
         }
     }
 
-    [Ignore]
+    [Ignore,IgnoreCast]
     [Name("Function")]
     public class MulticastDelegate : Delegate 
     {

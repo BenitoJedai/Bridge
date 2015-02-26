@@ -19,5 +19,7 @@ namespace Bridge.Plugin
         string Module { get; set; }
         string OutputDir { get; set; }
         int StartIndexInName { get; set; }
+        string BeforeEvent { get; set; }
+        string AfterEvent { get; set; }
     }
 }

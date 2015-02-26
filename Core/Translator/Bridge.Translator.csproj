@@ -149,6 +149,7 @@
     <Compile Include="Emitter\Emitter.Log.cs" />
     <Compile Include="Emitter\EmitterOutput.cs" />
     <Compile Include="Translator\Plugins.cs" />
+    <Compile Include="Translator\Translator.Config.cs" />
     <Compile Include="Utils\ReferenceArgumentVisitor.cs" />
     <Compile Include="Utils\AwaitSearchVisitor.cs" />
     <Compile Include="Utils\AssemblyInfo.cs" />

@@ -167,21 +167,16 @@ namespace Bridge.NET
                          )
                     )
                     {
-                        var resolvedMethod = (IMethod)memberResult.Member;
-                        var isExtensionMethod = resolvedMethod.IsExtensionMethod;
-                        this.Write(Bridge.NET.Emitter.ROOT + "." + (isExtensionMethod ? Bridge.NET.Emitter.DELEGATE_BIND_SCOPE : Bridge.NET.Emitter.DELEGATE_BIND) + "(");
+                        var resolvedMethod = (IMethod)memberResult.Member;                        
 
-                        if (isStatic)
+                        if (!isStatic)
                         {
-                            this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(member.DeclaringType)));
-                        }
-                        else
-                        {
+                            var isExtensionMethod = resolvedMethod.IsExtensionMethod;
+                            this.Write(Bridge.NET.Emitter.ROOT + "." + (isExtensionMethod ? Bridge.NET.Emitter.DELEGATE_BIND_SCOPE : Bridge.NET.Emitter.DELEGATE_BIND) + "(");
                             this.WriteThis();
+                            this.Write(", ");
+                            appendAdditionalCode = ")";
                         }
-
-                        this.Write(", ");
-                        appendAdditionalCode = ")";
                     }
                 }
 

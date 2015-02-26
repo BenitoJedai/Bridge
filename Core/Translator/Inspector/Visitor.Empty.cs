@@ -74,5 +74,13 @@ namespace Bridge.NET
                 throw (Exception)this.CreateException(operatorDeclaration);
             }*/
         }
+
+        public virtual void VisitMemberType(MemberType memberType)
+        {
+            /*if (this.ThrowException)
+            {
+                throw (Exception)this.CreateException(memberType);
+            }*/
+        }
     }
 }

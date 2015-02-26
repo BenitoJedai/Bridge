@@ -34,7 +34,7 @@ namespace Bridge.NET
                 FileName = this.GetBuilderPath(),
                 Arguments = this.GetBuilderArguments()
             };
-
+            info.WindowStyle = ProcessWindowStyle.Hidden;
             using (var p = Process.Start(info))
             {
                 p.WaitForExit();
