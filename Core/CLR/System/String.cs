@@ -261,6 +261,17 @@ namespace System
         /// <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
         /// <param name="callback"></param>
         /// <returns></returns>
+        public string Replace(Regex Regex, Delegate callback)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+        /// </summary>
+        /// <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public string Replace(Regex Regex, Func<string, string> callback) 
         { 
             return null; 
@@ -297,6 +308,17 @@ namespace System
         public string Replace(string substr, string newSubStr) 
         { 
             return null; 
+        }
+
+        /// <summary>
+        /// The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+        /// </summary>
+        /// <param name="substr">A String that is to be replaced by newSubStr.</param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public string Replace(string substr, Delegate callback)
+        {
+            return null;
         }
 
         /// <summary>
