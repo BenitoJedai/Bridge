@@ -16,7 +16,7 @@ namespace Bridge.Html5
     }
 
     [Ignore]
-    public abstract class EventAttribute : Bridge.CLR.EventAttribute
+    public abstract class EventAttribute : Bridge.CLR.AdapterAttribute
     {
         public const string Format = "Bridge.on('{0}', {1}, this.{2});";
     }
