@@ -11,6 +11,27 @@
 window.Bridge = {
     emptyFn: function () { },
 
+    copy : function (to, from, keys, toIf) {
+        if (typeof keys === 'string') {
+            keys = keys.split(/[,;\s]+/);
+        }
+
+        for (var name, i = 0, n = keys ? keys.length : 0; i < n; i++) {
+            name = keys[i];
+
+            if (toIf !== true || to[name] === undefined) {
+                if (Bridge.is(from[name], Bridge.ICloneable)) {
+                    to[name] = from[name].clone();
+                }
+                else {
+                    to[name] = from[name];
+                }
+            }
+        }
+
+        return to;
+    },
+
     ns: function (ns, scope) {
         var nsParts = ns.split('.');
 
@@ -961,6 +982,30 @@ Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
     }
 });
 
+Bridge.Class.extend('Bridge.CultureNotFoundException', {
+    $extend: [Bridge.ArgumentException],
+
+    $ctor: function (paramName, invalidCultureName, message, innerException) {
+        if (!message) {
+            message = 'Culture is not supported.';
+            if (paramName) {
+                message += '\nParameter name: ' + paramName;
+            }
+            if (invalidCultureName) {
+                message += '\n' + invalidCultureName + ' is an invalid culture identifier.';
+            }            
+        }
+
+        Bridge.ArgumentException.prototype.$ctor.call(this, message, paramName, innerException);
+
+        this.invalidCultureName = invalidCultureName;
+    },
+
+    getInvalidCultureName: function () {
+        return this.invalidCultureName;
+    }
+});
+
 Bridge.Class.extend('Bridge.KeyNotFoundException', {
     $extend: [Bridge.Exception],
 
@@ -969,11 +1014,27 @@ Bridge.Class.extend('Bridge.KeyNotFoundException', {
     }
 });
 
-Bridge.Class.extend('Bridge.DivideByZeroException', {
+Bridge.Class.extend('Bridge.ArithmeticException', {
     $extend: [Bridge.Exception],
 
     $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Division by 0.", innerException);
+        Bridge.Exception.prototype.$ctor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.DivideByZeroException', {
+    $extend: [Bridge.ArithmeticException],
+
+    $ctor: function (message, innerException) {
+        Bridge.ArithmeticException.prototype.$ctor.call(this, message || "Division by 0.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.OverflowException', {
+    $extend: [Bridge.ArithmeticException],
+
+    $ctor: function (message, innerException) {
+        Bridge.ArithmeticException.prototype.$ctor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
     }
 });
 
@@ -1042,6 +1103,8 @@ Bridge.Class.extend('Bridge.IFormattable', {
 
 Bridge.Class.extend('Bridge.IComparable', { });
 
+Bridge.Class.extend('Bridge.IFormatProvider', {});
+Bridge.Class.extend('Bridge.ICloneable', {});
 Bridge.Class.generic('Bridge.IComparable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IComparable$1', T);
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
@@ -1054,6 +1117,319 @@ Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
     }));
 });
 
+Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
+    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+
+    $statics: {
+        $allStandardFormats: {
+            "d": "shortDatePattern",
+            "D": "longDatePattern",
+            "f": "longDatePattern shortTimePattern",
+            "F": "longDatePattern longTimePattern",
+            "g": "shortDatePattern shortTimePattern",
+            "G": "shortDatePattern longTimePattern",
+            "m": "monthDayPattern",
+            "M": "monthDayPattern",
+            "o": "roundtripFormat",
+            "O": "roundtripFormat",
+            "r": "rFC1123",
+            "R": "rFC1123",
+            "s": "sortableDateTimePattern",
+            "t": "shortTimePattern",
+            "T": "longTimePattern",
+            "u": "universalSortableDateTimePattern",
+            "U": "longDatePattern longTimePattern",
+            "y": "yearMonthPattern",
+            "Y": "yearMonthPattern"
+        },
+
+        $ctor: function () {
+            this.invariantInfo = Bridge.merge(new Bridge.DateTimeFormatInfo(), {
+                abbreviatedDayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                abbreviatedMonthGenitiveNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
+                abbreviatedMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
+                amDesignator: "AM",
+                dateSeparator: "/",
+                dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                firstDayOfWeek: 0,
+                fullDateTimePattern: "dddd, MMMM dd, yyyy h:mm:ss tt",
+                longDatePattern: "dddd, MMMM dd, yyyy",
+                longTimePattern: "h:mm:ss tt",
+                monthDayPattern: "MMMM dd",
+                monthGenitiveNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
+                monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
+                pmDesignator: "PM",
+                rFC1123: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
+                shortDatePattern: "M/d/yyyy",
+                shortestDayNames: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                shortTimePattern: "h:mm tt",
+                sortableDateTimePattern: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+                timeSeparator: ":",
+                universalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
+                yearMonthPattern: "MMMM, yyyy",
+                roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffK"
+            });
+        }
+    },
+
+    getFormat: function (type) {
+        switch (type) {
+            case Bridge.DateTimeFormatInfo:
+                return this.dateTimeFormat;
+            default:
+                return null;
+        }
+    },
+
+    getAbbreviatedDayName: function (dayofweek) {
+        if (dayofweek < 0 || dayofweek > 6) {
+            throw new Bridge.ArgumentOutOfRangeException("dayofweek");
+        }        
+        return this.abbreviatedDayNames[dayofweek];
+    },
+
+    getAbbreviatedMonthName: function (month) {
+        if (month < 1 || month > 13) {
+            throw new Bridge.ArgumentOutOfRangeException("month");
+        }
+        return this.abbreviatedMonthNames[month - 1];
+    },
+
+    getAllDateTimePatterns: function (format) {
+        var f = Bridge.DateTimeFormatInfo.$allStandardFormats,
+            formats,
+            names,
+            pattern,
+            i,
+            result = [];
+
+        if (format) {
+            if (!f[format]) {
+                throw new Bridge.ArgumentException(null, "format");
+            }
+
+            formats = {};
+            formats[format] = f[format];
+        }
+        else {
+            formats = f;
+        }
+
+        for (f in formats) {
+            names = formats[f].split(" ");
+            pattern = "";
+            for (i = 0; i < names.length; i++) {
+                pattern = (i == 0 ? "" : (pattern + " ")) + this[names[i]];
+            }
+
+            result.push(pattern);
+        }
+
+        return result;
+    },
+
+    getDayName: function (dayofweek) {
+        if (dayofweek < 0 || dayofweek > 6) {
+            throw new Bridge.ArgumentOutOfRangeException("dayofweek");
+        }
+ 
+        return this.dayNames[dayofweek];
+    },
+
+    getMonthName: function (month) {
+        if (month < 1 || month > 13) {
+            throw new Bridge.ArgumentOutOfRangeException("month");
+        }
+        return this.monthNames[month-1];
+    },
+
+    getShortestDayName: function (dayOfWeek) {
+        if (dayOfWeek < 0 || dayOfWeek > 6) {
+            throw new Bridge.ArgumentOutOfRangeException("dayOfWeek");
+        }
+        return this.shortestDayNames[dayOfWeek];
+    },
+
+    clone: function () {
+        return Bridge.copy(new Bridge.DateTimeFormatInfo(), this, [
+            "abbreviatedDayNames",
+            "abbreviatedMonthGenitiveNames",
+            "abbreviatedMonthNames",
+            "amDesignator",
+            "dateSeparator",
+            "dayNames",
+            "firstDayOfWeek",
+            "fullDateTimePattern",
+            "longDatePattern",
+            "longTimePattern",
+            "monthDayPattern",
+            "monthGenitiveNames",
+            "monthNames",
+            "pmDesignator",
+            "rFC1123",
+            "shortDatePattern",
+            "shortestDayNames",
+            "shortTimePattern",
+            "sortableDateTimePattern",
+            "timeSeparator",
+            "universalSortableDateTimePattern",
+            "yearMonthPattern",
+            "roundtripFormat"
+        ]);
+    }
+});
+
+Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
+    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+
+    $statics: {
+        $ctor: function () {
+            this.numberNegativePatterns =  ["(n)", "-n", "- n", "n-", "n -"];
+            this.currencyNegativePattern = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
+            this.currencyPositivePattern = ["$n", "n$", "$ n", "n $"];
+            this.percentNegativePattern = ["-n %", "-n%", "-%n", "%-n", "%n-", "n-%", "n%-", "-% n", "n %-", "% n-", "% -n", "n- %"];
+            this.percentPositivePattern = ["n %", "n%", "%n", "% n"];
+
+            this.invariantInfo = Bridge.merge(new Bridge.NumberFormatInfo(), {
+                naNSymbol: "NaN",
+                negativeSign: "-",
+                positiveSign: "+",
+                negativeInfinitySymbol: "-Infinity",
+                positiveInfinitySymbol: "Infinity",
+
+                percentSymbol: "%",
+                percentGroupSizes: [3],
+                percentDecimalDigits: 2,
+                percentDecimalSeparator: ".",
+                percentGroupSeparator: ",",
+                percentPositivePattern: 0,
+                percentNegativePattern: 0,
+
+                currencySymbol: "$",
+                currencyGroupSizes: [3],
+                currencyDecimalDigits: 2,
+                currencyDecimalSeparator: ".",
+                currencyGroupSeparator: ",",
+                currencyNegativePattern: 0,
+                currencyPositivePattern: 0,
+
+                numberGroupSizes: [3],
+                numberDecimalDigits: 2,
+                numberDecimalSeparator: ".",
+                numberGroupSeparator: ",",
+                numberNegativePattern: 0
+            });
+        }
+    },
+
+    getFormat: function (type) {
+        switch (type) {
+            case Bridge.NumberFormatInfo:
+                return this.numberFormat;
+            default:
+                return null;
+        }
+    },
+
+    clone: function () {
+        return Bridge.copy(new Bridge.NumberFormatInfo(), this, [
+            "naNSymbol",
+            "negativeSign",
+            "positiveSign",
+            "negativeInfinitySymbol",
+            "positiveInfinitySymbol",
+            "percentSymbol",
+            "percentGroupSizes",
+            "percentDecimalDigits",
+            "percentDecimalSeparator",
+            "percentGroupSeparator",
+            "percentPositivePattern",
+            "percentNegativePattern",
+            "currencySymbol",
+            "currencyGroupSizes",
+            "currencyDecimalDigits",
+            "currencyDecimalSeparator",
+            "currencyGroupSeparator",
+            "currencyNegativePattern",
+            "currencyPositivePattern",
+            "numberGroupSizes",
+            "numberDecimalDigits",
+            "numberDecimalSeparator",
+            "numberGroupSeparator",
+            "numberNegativePattern"
+        ]);
+    }
+});
+
+Bridge.Class.extend("Bridge.CultureInfo", {
+    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+
+    $statics: {
+        $ctor: function () {
+            this.cultures = {};
+            this.invariantCulture = Bridge.merge(new Bridge.CultureInfo("en-US"), {
+                englishName: "English (United States)",
+                nativeName: "English (United States)",
+                numberFormat: Bridge.NumberFormatInfo.invariantInfo, 
+                dateTimeFormat: Bridge.DateTimeFormatInfo.invariantInfo
+            });
+            this.setCurrentCulture(this.invariantCulture);
+        },
+
+        getCurrentCulture : function () {
+            return this.currentCulture;
+        },
+
+        setCurrentCulture: function (culture) {
+            this.currentCulture = culture;
+            Bridge.DateTimeFormatInfo.currentInfo = culture.dateTimeFormat;
+            Bridge.NumberFormatInfo.currentInfo = culture.numberFormat;
+        },
+
+        getCultureInfo: function (name) {
+            if (!name) {
+                throw new Bridge.ArgumentNullException("name");
+            }
+            return this.cultures[name];
+        },
+
+        getCultures: function () {
+            var names = Bridge.getPropertyNames(this.cultures),
+                result = [],
+                i;
+            for (i = 0; i < names.length; i++) {
+                result.push(this.cultures[names[i]]);
+            }
+
+            return result;
+        }
+    },
+
+    $ctor: function (name) {
+        this.name = name;
+        Bridge.CultureInfo.cultures[name] = this;
+    },
+
+    getFormat:  function (type) {
+        switch (type) {
+            case Bridge.NumberFormatInfo:
+                return this.numberFormat;
+            case Bridge.DateTimeFormatInfo:
+                return this.dateTimeFormat;
+            default:
+                return null;
+        }
+    },
+
+    clone: function () {
+        return Bridge.copy(new Bridge.CultureInfo(this.name), this, [
+            "englishName",
+            "nativeName",
+            "numberFormat",
+            "dateTimeFormat"
+        ]);
+    }
+});
 Bridge.Class.extend('Bridge.Int', {
     $extend: [Bridge.IComparable, Bridge.IFormattable],
     $statics: {
@@ -1070,19 +1446,82 @@ Bridge.Class.extend('Bridge.Int', {
             //return num.toString();
         },
 
-        tryParse : function (str, result, min, max) {
-            result.v = 0;
+        parseFloat: function (str, provider) {
+            if (str == null) {
+                throw new Bridge.ArgumentNullException("str");
+            }
 
+            var nfInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo),
+                result = parseFloat(str.replace(nfInfo.numberDecimalSeparator, '.'));
+
+            if (isNaN(result) && str !== nfInfo.naNSymbol) {
+                if (str == nfInfo.negativeInfinitySymbol) {
+                    return Number.NEGATIVE_INFINITY;
+                }
+
+                if (str == nfInfo.positiveInfinitySymbol) {
+                    return Number.POSITIVE_INFINITY;
+                }
+
+                throw new Bridge.FormatException("Input string was not in a correct format.");
+            }
+
+            return result;
+        },
+
+        tryParseFloat: function (str, provider, result) {
+            result.v = 0;
+            if (str == null) {
+                return false;
+            }
+            var nfInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo);
+            result.v = parseFloat(str.replace(nfInfo.numberDecimalSeparator, '.'));
+
+            if (isNaN(result.v) && str !== nfInfo.naNSymbol) {
+                if (str == nfInfo.negativeInfinitySymbol) {
+                    result.v = Number.NEGATIVE_INFINITY;
+                    return true;
+                }
+
+                if (str == nfInfo.positiveInfinitySymbol) {
+                    result.v = Number.POSITIVE_INFINITY;
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        },
+
+        parseInt: function (str, min, max, radix) {            
+            if (str == null) {
+                throw new Bridge.ArgumentNullException("str");
+            }
+
+            if (!/^[+-]?[0-9]+$/.test(str)) {
+                throw new Bridge.FormatException("Input string was not in a correct format.");
+            }
+            var result = parseInt(str, radix || 10);
+            if (isNaN(result)) {
+                throw new Bridge.FormatException("Input string was not in a correct format.");
+            }
+
+            if (result < min || result > max) {
+                throw new Bridge.OverflowException();
+            }
+            return result;
+        },
+
+        tryParseInt: function (str, result, min, max, radix) {
+            result.v = 0;
             if (!/^[+-]?[0-9]+$/.test(str)) {
                 return false;
             }
-
-            result.v = parseInt(str, 10);
-
+            result.v = parseInt(str, radix || 10);
             if (result.v < min || result.v > max) {
                 return false;
             }
-
             return true;
         },
 
@@ -1107,7 +1546,6 @@ Bridge.Class.extend('Bridge.Int', {
         }
     }
 });
-
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);
 Bridge.Date = {    
     today : function() {
@@ -1119,7 +1557,19 @@ Bridge.Date = {
         throw new Bridge.NotImplementedException();
     },
 
-    parseExact: function (value, format) {
+    parse: function (value, provider) {
+        throw new Bridge.NotImplementedException();
+    },
+
+    parseExact: function (value, format, provider) {
+        throw new Bridge.NotImplementedException();
+    },
+
+    tryParse: function (value, provider, result) {
+        throw new Bridge.NotImplementedException();
+    },
+
+    tryParseExact: function (value, format, provider, result) {
         throw new Bridge.NotImplementedException();
     },
 
@@ -1252,6 +1702,10 @@ Bridge.Class.extend('Bridge.TimeSpan', {
         return this.ticks / 1e7;
     },
 
+    get12HourHour: function () {
+        return (this.getHours() > 12) ? this.getHours() - 12 : (this.getHours() === 0) ? 12 : this.getHours();
+    },
+
     add: function (ts) {
         return new Bridge.TimeSpan(this.ticks + ts.ticks);
     },
@@ -1276,12 +1730,47 @@ Bridge.Class.extend('Bridge.TimeSpan', {
         return other.ticks === this.ticks;
     },
 
-    toString: function () {
+    toString: function (formatStr, provider) {
         var ticks = this.ticks,
             result = "",
+            me = this,
+            dtInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),
             format = function (t, n) {
                 return Bridge.String.alignString((t | 0).toString(), n || 2, "0", 2);
             };
+
+        if (formatStr) {            
+            return formatStr.replace(/dd?|HH?|hh?|mm?|ss?|tt?/g,
+                function (formatStr) {                    
+                    switch (formatStr) {
+                        case "d":
+                            return me.getDays();
+                        case "dd":
+                            return format(me.getDays());
+                        case "H":
+                            return me.getHours();
+                        case "HH":
+                            return format(me.getHours());
+                        case "h":
+                            return me.get12HourHour();
+                        case "hh":
+                            return format(me.get12HourHour());
+                        case "m":
+                            return me.getMinutes();
+                        case "mm":
+                            return format(me.getMinutes());
+                        case "s":
+                            return me.getSeconds();
+                        case "ss":
+                            return format(me.getSeconds());
+                        case "t":
+                            return ((me.getHours() < 12) ? dtInfo.amDesignator : dtInfo.pmDesignator).substring(0, 1);
+                        case "tt":
+                            return (me.getHours() < 12) ? dtInfo.amDesignator : dtInfo.pmDesignator;
+                    }
+                }
+            );
+        }        
         
         if (Math.abs(ticks) >= 864e9) {
             result += format(ticks / 864e9) + ".";
