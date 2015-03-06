@@ -39,9 +39,31 @@ namespace Bridge.Html5
         /// <param name="text">The string to parse as JSON. See the JSON object for a description of JSON syntax.</param>
         /// <param name="reviver">If a function, prescribes how the value originally produced by parsing is transformed, before being returned.</param>
         /// <returns></returns>
+        public static object Parse(string text, Delegate reviver)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.parse() method parses a string as JSON, optionally transforming the value produced by parsing.
+        /// </summary>
+        /// <param name="text">The string to parse as JSON. See the JSON object for a description of JSON syntax.</param>
+        /// <param name="reviver">If a function, prescribes how the value originally produced by parsing is transformed, before being returned.</param>
+        /// <returns></returns>
         public static object Parse(string text, Func<string, object, object> reviver)
         {
             return null;
+        }
+
+        /// <summary>
+        /// The JSON.parse() method parses a string as JSON, optionally transforming the value produced by parsing.
+        /// </summary>
+        /// <param name="text">The string to parse as JSON. See the JSON object for a description of JSON syntax.</param>
+        /// <param name="reviver">If a function, prescribes how the value originally produced by parsing is transformed, before being returned.</param>
+        /// <returns></returns>
+        public static T Parse<T>(string text, Delegate reviver)
+        {
+            return default(T);
         }
 
         /// <summary>
@@ -71,6 +93,17 @@ namespace Bridge.Html5
         /// <param name="value">The value to convert to a JSON string.</param>
         /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
         /// <returns></returns>
+        public static string Stringify(object value, Delegate replacer)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <returns></returns>
         public static string Stringify(object value, Func<string, object, object> replacer)
         {
             return null;
@@ -83,7 +116,31 @@ namespace Bridge.Html5
         /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
         /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
         /// <returns></returns>
+        public static string Stringify(object value, Delegate replacer, int space)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
+        /// <returns></returns>
         public static string Stringify(object value, Func<string, object, object> replacer, int space)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The JSON.stringify() method converts a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified.
+        /// </summary>
+        /// <param name="value">The value to convert to a JSON string.</param>
+        /// <param name="replacer">If a function, transforms values and properties encountered while stringifying; if an array, specifies the set of properties included in objects in the final string.</param>
+        /// <param name="space">Causes the resulting string to be pretty-printed. If it is a number, successive levels in the stringification will each be indented by this many space characters (up to 10). If it is a string, successive levels will indented by this string (or the first ten characters of it).</param>
+        /// <returns></returns>
+        public static string Stringify(object value, Delegate replacer, string space)
         {
             return null;
         }

@@ -180,10 +180,13 @@
         ticks %= 6e8;
         result += format(ticks / 1e7);
         ticks %= 1e7;
+
         if (ticks > 0) {
             result += "." + format(ticks, 7);
         }
+
         return result;
     }
 });
+
 Bridge.Class.addExtend(Bridge.TimeSpan, [Bridge.IComparable$1(Bridge.TimeSpan), Bridge.IEquatable$1(Bridge.TimeSpan)]);

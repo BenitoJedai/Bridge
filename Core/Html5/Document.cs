@@ -17,7 +17,25 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">A string representing the event type to listen for.</param>
         /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(string type, Delegate listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
         public static void AddEventListener(string type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(EventType type, Delegate listener)
         {
         }
 
@@ -54,7 +72,27 @@ namespace Bridge.Html5
         /// <param name="type">A string representing the event type to listen for.</param>
         /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
         /// <param name="useCapture"></param>
+        public static void AddEventListener(string type, Delegate listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
         public static void AddEventListener(string type, Action listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(EventType type, Delegate listener, bool useCapture)
         {
         }
 
@@ -179,7 +217,26 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">A string representing the event type being removed.</param>
         /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        public static void RemoveEventListener(EventType type, Delegate listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
         public static void RemoveEventListener(EventType type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        /// <param name="capture">Specifies whether the EventListener being removed was registered as a capturing listener or not. If not specified, useCapture defaults to false.</param>
+        public static void RemoveEventListener(EventType type, Delegate listener, bool capture)
         {
         }
 
@@ -198,7 +255,26 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">A string representing the event type being removed.</param>
         /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        public static void RemoveEventListener(string type, Delegate listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
         public static void RemoveEventListener(string type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        /// <param name="capture">Specifies whether the EventListener being removed was registered as a capturing listener or not. If not specified, useCapture defaults to false.</param>
+        public static void RemoveEventListener(string type, Delegate listener, bool capture)
         {
         }
 

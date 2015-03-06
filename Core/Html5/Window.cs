@@ -197,7 +197,25 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">A string representing the event type to listen for.</param>
         /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(string type, Delegate listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
         public static void AddEventListener(string type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        public static void AddEventListener(EventType type, Delegate listener)
         {
         }
 
@@ -234,7 +252,27 @@ namespace Bridge.Html5
         /// <param name="type">A string representing the event type to listen for.</param>
         /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
         /// <param name="useCapture"></param>
+        public static void AddEventListener(string type, Delegate listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
         public static void AddEventListener(string type, Action listener, bool useCapture)
+        {
+        }
+
+        /// <summary>
+        /// The method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events.
+        /// </summary>
+        /// <param name="type">A string representing the event type to listen for.</param>
+        /// <param name="listener">The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.</param>
+        /// <param name="useCapture"></param>
+        public static void AddEventListener(EventType type, Delegate listener, bool useCapture)
         {
         }
 
@@ -606,6 +644,16 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="callback">A parameter specifying a function to call when it's time to update your animation for the next repaint. The callback has one single argument, a DOMHighResTimeStamp, which indicates the current time for when requestAnimationFrame starts to fire callbacks.</param>
         /// <returns>requestID is a long integer value that uniquely identifies the entry in the callback list. This is a non-zero value, but you may not make any other assumptions about its value. You can pass this value to window.cancelAnimationFrame() to cancel the refresh callback request.</returns>
+        public static int RequestAnimationFrame(Delegate callback)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// The window.requestAnimationFrame() method tells the browser that you wish to perform an animation and requests that the browser call a specified function to update an animation before the next repaint. The method takes as an argument a callback to be invoked before the repaint.
+        /// </summary>
+        /// <param name="callback">A parameter specifying a function to call when it's time to update your animation for the next repaint. The callback has one single argument, a DOMHighResTimeStamp, which indicates the current time for when requestAnimationFrame starts to fire callbacks.</param>
+        /// <returns>requestID is a long integer value that uniquely identifies the entry in the callback list. This is a non-zero value, but you may not make any other assumptions about its value. You can pass this value to window.cancelAnimationFrame() to cancel the refresh callback request.</returns>
         public static int RequestAnimationFrame(Action<double> callback)
         {
             return 0;
@@ -808,7 +856,26 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">A string representing the event type being removed.</param>
         /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        public static void RemoveEventListener(EventType type, Delegate listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
         public static void RemoveEventListener(EventType type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        /// <param name="capture">Specifies whether the EventListener being removed was registered as a capturing listener or not. If not specified, useCapture defaults to false.</param>
+        public static void RemoveEventListener(EventType type, Delegate listener, bool capture)
         {
         }
 
@@ -827,7 +894,26 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="type">A string representing the event type being removed.</param>
         /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        public static void RemoveEventListener(string type, Delegate listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
         public static void RemoveEventListener(string type, Action listener)
+        {
+        }
+
+        /// <summary>
+        /// Removes the event listener previously registered with EventTarget.addEventListener.
+        /// </summary>
+        /// <param name="type">A string representing the event type being removed.</param>
+        /// <param name="listener">The listener parameter indicates the EventListener function to be removed.</param>
+        /// <param name="capture">Specifies whether the EventListener being removed was registered as a capturing listener or not. If not specified, useCapture defaults to false.</param>
+        public static void RemoveEventListener(string type, Delegate listener, bool capture)
         {
         }
 
@@ -945,9 +1031,30 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="handler">the function you want to be called repeatedly.</param>
         /// <returns>a unique interval ID you can pass to clearInterval().</returns>
+        public static int SetInterval(Delegate handler)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function.
+        /// </summary>
+        /// <param name="handler">the function you want to be called repeatedly.</param>
+        /// <returns>a unique interval ID you can pass to clearInterval().</returns>
         public static int SetInterval(Action handler) 
         { 
             return 0; 
+        }
+
+        /// <summary>
+        /// Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function.
+        /// </summary>
+        /// <param name="handler">the function you want to be called repeatedly.</param>
+        /// <param name="delay">the number of milliseconds (thousandths of a second) that the setInterval() function should wait before each call to func.</param>
+        /// <returns>a unique interval ID you can pass to clearInterval().</returns>
+        public static int SetInterval(Delegate handler, int delay)
+        {
+            return 0;
         }
 
         /// <summary>
@@ -1023,9 +1130,30 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="handler"> the function you want to execute after delay milliseconds.</param>
         /// <returns> the numerical ID of the timeout, which can be used later with window.clearTimeout().</returns>
+        public static int SetTimeout(Delegate handler)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// Calls a function or executes a code snippet after a specified delay.
+        /// </summary>
+        /// <param name="handler"> the function you want to execute after delay milliseconds.</param>
+        /// <returns> the numerical ID of the timeout, which can be used later with window.clearTimeout().</returns>
         public static int SetTimeout(Action handler) 
         { 
             return 0; 
+        }
+
+        /// <summary>
+        /// Calls a function or executes a code snippet after a specified delay.
+        /// </summary>
+        /// <param name="handler"> the function you want to execute after delay milliseconds.</param>
+        /// <param name="delay"> the number of milliseconds (thousandths of a second) that the function call should be delayed by. The actual delay may be longer;</param>
+        /// <returns> the numerical ID of the timeout, which can be used later with window.clearTimeout().</returns>
+        public static int SetTimeout(Delegate handler, int delay)
+        {
+            return 0;
         }
 
         /// <summary>
