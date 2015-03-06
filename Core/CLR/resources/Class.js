@@ -16,11 +16,9 @@
     Bridge.Class.initCtor = function () {
         if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
             this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
-        }
-        else if (this.$ctorDetector) {
+        } else if (this.$ctorDetector) {
             this.$ctorDetector.apply(this, arguments);
-        }
-        else if (this.$ctor) {
+        } else if (this.$ctor) {
             this.$ctor.apply(this, arguments);
         }
     };

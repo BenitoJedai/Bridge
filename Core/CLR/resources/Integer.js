@@ -16,13 +16,17 @@
 
         tryParse : function (str, result, min, max) {
             result.v = 0;
+
             if (!/^[+-]?[0-9]+$/.test(str)) {
                 return false;
             }
+
             result.v = parseInt(str, 10);
+
             if (result.v < min || result.v > max) {
                 return false;
             }
+
             return true;
         },
 
@@ -47,4 +51,5 @@
         }
     }
 });
+
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);

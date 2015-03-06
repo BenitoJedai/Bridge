@@ -34,18 +34,15 @@ Bridge.String = {
     },
 
     alignString : function (str, alignment, pad, dir) {
-        if (!alignment)
-        {
+        if (!alignment) {
             return str;
         }
 
-        if (!pad)
-        {
+        if (!pad) {
             pad = " ";
         }
 
-        if (!dir)
-        {
+        if (!dir) {
             dir = alignment < 0 ? 2 : 1;
         }
 
@@ -79,9 +76,11 @@ Bridge.String = {
         if (!prefix.length) {
             return true;
         }
+
         if (prefix.length > str.length) {
             return false;
         }
+
         return str.match("^" + prefix) !== null;
     },
 
@@ -89,9 +88,11 @@ Bridge.String = {
         if (!suffix.length) {
             return true;
         }
+
         if (suffix.length > str.length) {
             return false;
         }
+
         return str.match(suffix + "$") !== null;
     }
 };

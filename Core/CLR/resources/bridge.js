@@ -1,7 +1,7 @@
 /*
  * @version   : 1.0.0 - Bridge.NET
  * @author    : Object.NET, Inc. http://www.bridge.net/
- * @date      : 2014-06-01
+ * @date      : 2015-03-11
  * @copyright : Copyright (c) 2008-2014, Object.NET, Inc. (http://www.object.net/). All rights reserved.
  * @license   : See license.txt and https://github.com/bridgedotnet/Bridge.NET/blob/master/LICENSE.
  */
@@ -61,8 +61,7 @@ else if(Bridge.isDate(a)){return a.valueOf()===b.valueOf();}
 return a.equalsT(b);},format:function(obj,formatString){if(Bridge.isNumber(obj)){return Bridge.Int.format(obj,formatString);}
 else if(Bridge.isDate(obj)){return Bridge.Date.format(obj,formatString);}
 return obj.format(formatString);},getType:function(instance){if(!Bridge.isDefined(instance,true)){throw new Bridge.NullReferenceException('instance is null');}
-try{return instance.constructor;}
-catch(ex){return Object;}},isLower:function isLower(c){var s=String.fromCharCode(c);return s===s.toLowerCase()&&s!==s.toUpperCase();},isUpper:function isUpper(c){var s=String.fromCharCode(c);return s!==s.toLowerCase()&&s===s.toUpperCase();},fn:{call:function(obj,fnName){var args=Array.prototype.slice.call(arguments,2);return obj[fnName].apply(obj,args);},bind:function(obj,method,args,appendArgs){if(method&&method.$method==method&&method.$scope==obj){return method;}
+try{return instance.constructor;}catch(ex){return Object;}},isLower:function isLower(c){var s=String.fromCharCode(c);return s===s.toLowerCase()&&s!==s.toUpperCase();},isUpper:function isUpper(c){var s=String.fromCharCode(c);return s!==s.toLowerCase()&&s===s.toUpperCase();},fn:{call:function(obj,fnName){var args=Array.prototype.slice.call(arguments,2);return obj[fnName].apply(obj,args);},bind:function(obj,method,args,appendArgs){if(method&&method.$method==method&&method.$scope==obj){return method;}
 var fn=null;if(arguments.length===2){fn=function(){return method.apply(obj,arguments)};}
 else{fn=function(){var callArgs=args||arguments;if(appendArgs===true){callArgs=Array.prototype.slice.call(arguments,0);callArgs=callArgs.concat(args);}
 else if(typeof appendArgs=='number'){callArgs=Array.prototype.slice.call(arguments,0);if(appendArgs===0){callArgs.unshift.apply(callArgs,args);}
@@ -85,9 +84,7 @@ else if(a===false&&b===false){return false;}
 return null;},div:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a/b:null;},eq:function(a,b){return!Bridge.hasValue(a)?!Bridge.hasValue(b):(a===b);},xor:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a^b:null;},gt:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)&&a>b;},gte:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)&&a>=b;},neq:function(a,b){return!Bridge.hasValue(a)?Bridge.hasValue(b):(a!==b);},lt:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)&&a<b;},lte:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)&&a<=b;},mod:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a%b:null;},mul:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a*b:null;},sl:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a<<b:null;},sr:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a>>b:null;},sub:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a-b:null;},bnot:function(a){return Bridge.hasValue(a)?~a:null;},neg:function(a){return Bridge.hasValue(a)?-a:null;},not:function(a){return Bridge.hasValue(a)?!a:null;},pos:function(a){return Bridge.hasValue(a)?+a:null;},lift:function(){for(var i=1;i<arguments.length;i++){if(!Bridge.hasValue(arguments[i])){return null;}}
 return arguments[0].apply(null,Array.prototype.slice.call(arguments,1));}};Bridge.hasValue=Bridge.nullable.hasValue;
 
-(function(){var initializing=false;Bridge.Class=function(){};Bridge.Class.cache={};Bridge.Class.initCtor=function(){if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=='string'&&Bridge.isFunction(this[arguments[0]])){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}
-else if(this.$ctorDetector){this.$ctorDetector.apply(this,arguments);}
-else if(this.$ctor){this.$ctor.apply(this,arguments);}};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;if(!prop.$multipleCtors&&!prop.$ctor){prop.$ctor=extend?function(){base.$ctor();}:function(){};}
+(function(){var initializing=false;Bridge.Class=function(){};Bridge.Class.cache={};Bridge.Class.initCtor=function(){if(this.$multipleCtors&&arguments.length>0&&typeof arguments[0]=='string'&&Bridge.isFunction(this[arguments[0]])){this[arguments[0]].apply(this,Array.prototype.slice.call(arguments,1));}else if(this.$ctorDetector){this.$ctorDetector.apply(this,arguments);}else if(this.$ctor){this.$ctor.apply(this,arguments);}};Bridge.Class.extend=function(className,prop){var extend=prop.$extend,statics=prop.$statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,name;delete prop.$extend;delete prop.$statics;initializing=true;prototype=extend?new extend[0]():new Object();initializing=false;if(!prop.$multipleCtors&&!prop.$ctor){prop.$ctor=extend?function(){base.$ctor();}:function(){};}
 if(!prop.$ctorMembers){prop.$ctorMembers=extend?function(){base.$ctorMembers.apply(this,arguments);}:function(){};}
 prop.$$ctorCtor=Bridge.Class.initCtor;for(name in prop){prototype[name]=prop[name];}
 prototype.$$name=className;function Class(){if(!(this instanceof Class)){var args=Array.prototype.slice.call(arguments,0),object=Object.create(Class.prototype),result=Class.apply(object,args);return typeof result==='object'?result:object;}
@@ -137,12 +134,9 @@ Bridge.String={format:function(format){var _formatRe=/\{\{|\}\}|\{(\d+)(?:,(-?\d
 var replaceValue=args[parseInt(idx,10)],values,match;if(!Bridge.isDefined(replaceValue,true)){return"";}
 if(alignment){alignment=parseInt(alignment,10);if(!Bridge.isNumber(alignment)){alignment=null;}}
 if(formatStr&&Bridge.is(replaceValue,Bridge.IFormattable)){values=[replaceValue];return Bridge.String.alignString(Bridge.format(replaceValue,formatStr),alignment);}
-return Bridge.String.alignString(replaceValue.toString(),alignment);});},alignString:function(str,alignment,pad,dir){if(!alignment)
-{return str;}
-if(!pad)
-{pad=" ";}
-if(!dir)
-{dir=alignment<0?2:1;}
+return Bridge.String.alignString(replaceValue.toString(),alignment);});},alignString:function(str,alignment,pad,dir){if(!alignment){return str;}
+if(!pad){pad=" ";}
+if(!dir){dir=alignment<0?2:1;}
 alignment=Math.abs(alignment);if(alignment+1>=str.length){switch(dir){case 2:str=Array(alignment+1-str.length).join(pad)+str;break;case 3:var padlen=alignment-str.length,right=Math.ceil(padlen/2),left=padlen-right;str=Array(left+1).join(pad)+str+Array(right+1).join(pad);break;case 1:default:str=str+Array(alignment+1-str.length).join(pad);break;}}
 return str;},startsWith:function(str,prefix){if(!prefix.length){return true;}
 if(prefix.length>str.length){return false;}
@@ -215,12 +209,17 @@ this.result=result;this.status=Bridge.TaskStatus.ranToCompletion;this.runCallbac
 this.error=error;this.status=Bridge.TaskStatus.faulted;this.runCallbacks();return true;},cancel:function(){if(this.isCompleted()){return false;}
 this.status=Bridge.TaskStatus.canceled;this.runCallbacks();return true;},isCanceled:function(){return this.status===Bridge.TaskStatus.canceled;},isCompleted:function(){return this.status==Bridge.TaskStatus.ranToCompletion||this.status==Bridge.TaskStatus.canceled||this.status==Bridge.TaskStatus.faulted;},isFaulted:function(){return this.status===Bridge.TaskStatus.faulted;},getResult:function(){switch(this.status){case Bridge.TaskStatus.ranToCompletion:return this.result;case Bridge.TaskStatus.canceled:throw new Error('Task was cancelled.');case Bridge.TaskStatus.faulted:throw this.error;default:throw new Error('Task is not yet completed.');}},setCanceled:function(){if(!this.cancel()){throw new Error('Task was already completed.');}},setResult:function(result){if(!this.complete(result)){throw new Error('Task was already completed.');}},setError:function(error){if(!this.fail(error)){throw new Error('Task was already completed.');}},dispose:function(){},getAwaiter:function(){return this;}});Bridge.Class.extend('Bridge.TaskStatus',{$statics:{created:0,waitingForActivation:1,waitingToRun:2,running:3,waitingForChildrenToComplete:4,ranToCompletion:5,canceled:6,faulted:7}});
 
-Bridge.Validation={isNull:function(value){return!Bridge.isDefined(value,true);},isEmpty:function(value){return value==null||value.length===0||Bridge.is(value,Bridge.ICollection)?value.getCount()==0:false;},isNotEmptyOrWhitespace:function(value){return Bridge.isDefined(value,true)&&!(/^$|\s+/.test(value));},isNotNull:function(value){return Bridge.isDefined(value,true);},isNotEmpty:function(value){return!Bridge.Validation.isEmpty(value);},email:function(value){var re=/^(")?(?:[^\."])(?:(?:[\.])?(?:[\w\-!#$%&'*+/=?^_`{|}~]))*\1@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/;return re.test(value);},url:function(value){var re=/(((^https?)|(^ftp)):\/\/((([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*)|(localhost|LOCALHOST))\/?)/i;return re.test(value);},alpha:function(value){var re=/^[a-zA-Z_]+$/;return re.test(value);},alphaNum:function(value){var re=/^[a-zA-Z_]+$/;return re.test(value);},creditCard:function(value,type){var re,checksum,i,digit;if(type=="Visa"){re=/^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/;}else if(type=="MasterCard"){re=/^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/;}else if(type=="Discover"){re=/^6011-?\d{4}-?\d{4}-?\d{4}$/;}else if(type=="AmericanExpress"){re=/^3[4,7]\d{13}$/;}else if(type=="DinersClub"){re=/^3[0,6,8]\d{12}$/;}
+Bridge.Validation={isNull:function(value){return!Bridge.isDefined(value,true);},isEmpty:function(value){return value==null||value.length===0||Bridge.is(value,Bridge.ICollection)?value.getCount()==0:false;},isNotEmptyOrWhitespace:function(value){return Bridge.isDefined(value,true)&&!(/^$|\s+/.test(value));},isNotNull:function(value){return Bridge.isDefined(value,true);},isNotEmpty:function(value){return!Bridge.Validation.isEmpty(value);},email:function(value){var re=/^(")?(?:[^\."])(?:(?:[\.])?(?:[\w\-!#$%&'*+/=?^_`{|}~]))*\1@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/;return re.test(value);},url:function(value){var re=/(((^https?)|(^ftp)):\/\/((([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*)|(localhost|LOCALHOST))\/?)/i;return re.test(value);},alpha:function(value){var re=/^[a-zA-Z_]+$/;return re.test(value);},alphaNum:function(value){var re=/^[a-zA-Z_]+$/;return re.test(value);},creditCard:function(value,type){var re,checksum,i,digit;if(type=="Visa"){re=/^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/;}
+else if(type=="MasterCard"){re=/^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/;}
+else if(type=="Discover"){re=/^6011-?\d{4}-?\d{4}-?\d{4}$/;}
+else if(type=="AmericanExpress"){re=/^3[4,7]\d{13}$/;}
+else if(type=="DinersClub"){re=/^3[0,6,8]\d{12}$/;}
 else{if(!value||value.length<13||value.length>19){return false;}
 re=/[^0-9 \-]+/;}
 if(!re.test(value)){return false;}
 value=value.split("-").join("");checksum=0;for(i=(2-(value.length%2));i<=value.length;i+=2){checksum+=parseInt(ccnum.charAt(i-1));}
-for(i=(value.length%2)+1;i<value.length;i+=2){digit=parseInt(value.charAt(i-1))*2;if(digit<10){checksum+=digit;}else{checksum+=(digit-9);}}
+for(i=(value.length%2)+1;i<value.length;i+=2){digit=parseInt(value.charAt(i-1))*2;if(digit<10){checksum+=digit;}
+else{checksum+=(digit-9);}}
 return(checksum%10)==0;}};
 
 Bridge.Class.extend('Bridge.Attribute',{});

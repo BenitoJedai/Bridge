@@ -14,9 +14,11 @@ Bridge.Class.extend('Bridge.Task', {
     $statics: {
         delay : function (delay, state) {
             var task = new Bridge.Task();
+
             setTimeout(function () {
                 task.setResult(state);
             }, delay);
+
             return task;
         },
 
@@ -24,12 +26,14 @@ Bridge.Class.extend('Bridge.Task', {
             var task = new Bridge.Task();
             t.status = Bridge.TaskStatus.ranToCompletion;
             t.result = result;
+
             return t;
         },
 
         run : function (fn) {
             var task = new Bridge.Task();
-            setTimeout(function() {
+
+            setTimeout(function () {
                 try {
                     task.setResult(fn());
                 }
@@ -37,6 +41,7 @@ Bridge.Class.extend('Bridge.Task', {
                     task.setError(e);
                 }
             }, 0);
+
             return task;
         },
 
@@ -54,10 +59,12 @@ Bridge.Class.extend('Bridge.Task', {
 
             if (tasks.length === 0) {
                 task.setResult([]);
+
                 return task;
             }
 
             result = new Array(tasks.length);
+
             for (i = 0; i < tasks.length; i++) {                
                 tasks[i].$index = i;
                 tasks[i].continueWith(function (t) {
@@ -76,6 +83,7 @@ Bridge.Class.extend('Bridge.Task', {
                     }
 
                     executing--;
+
                     if (!executing) {
                         if (errors.length > 0) {
                             task.setError(errors);
@@ -104,8 +112,9 @@ Bridge.Class.extend('Bridge.Task', {
 
             var task = new Bridge.Task(),
                 i;
+
             for (i = 0; i < tasks.length; i++) {
-                tasks[i].continueWith(function(t) {
+                tasks[i].continueWith(function (t) {
                     switch (t.status) {
                         case Bridge.TaskStatus.ranToCompletion:
                             task.complete(t);
@@ -137,6 +146,7 @@ Bridge.Class.extend('Bridge.Task', {
             args.push(callback);
 
             target[method].apply(target, args);
+
             return task;
         },
 
@@ -152,6 +162,7 @@ Bridge.Class.extend('Bridge.Task', {
             resultHandler(args, callback);
 
             target[method].apply(target, args);
+
             return task;
         },
 
@@ -168,6 +179,7 @@ Bridge.Class.extend('Bridge.Task', {
             args[0][name] = callback;
 
             target[method].apply(target, args);
+
             return task;
         },
 
@@ -217,6 +229,7 @@ Bridge.Class.extend('Bridge.Task', {
 
         var me = this;
         this.status = Bridge.TaskStatus.running;
+
         setTimeout(function() {
             try {
                 var result = me.action(me.state);
@@ -234,6 +247,7 @@ Bridge.Class.extend('Bridge.Task', {
         for (var i = 0; i < this.callbacks.length; i++) {
             this.callbacks[i](this);
         }
+
         delete this.callbacks;
     },
 
@@ -241,9 +255,11 @@ Bridge.Class.extend('Bridge.Task', {
         if (this.isCompleted()) {
             return false;
         }
+
         this.result = result;
         this.status = Bridge.TaskStatus.ranToCompletion;
         this.runCallbacks();
+
         return true;
     },
 
@@ -251,9 +267,11 @@ Bridge.Class.extend('Bridge.Task', {
         if (this.isCompleted()) {
             return false;
         }
+
         this.error = error;
         this.status = Bridge.TaskStatus.faulted;
         this.runCallbacks();
+
         return true;
     },
 
@@ -261,8 +279,10 @@ Bridge.Class.extend('Bridge.Task', {
         if (this.isCompleted()) {
             return false;
         }
+
         this.status = Bridge.TaskStatus.canceled;
         this.runCallbacks();
+
         return true;
     },
 
