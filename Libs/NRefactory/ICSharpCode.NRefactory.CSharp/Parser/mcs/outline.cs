@@ -505,7 +505,7 @@ public class Outline {
 			//   void A ();
 			// }
 			//
-			// A needs to be virtual (the CLR requires
+			// A needs to be virtual (the Foundation requires
 			// methods implementing an iface be virtual),
 			// but can not be inherited. It also can not
 			// be inherited. In C# this is represented

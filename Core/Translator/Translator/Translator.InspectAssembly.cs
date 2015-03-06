@@ -71,7 +71,7 @@ namespace Bridge.NET
             this.TypeDefinitions = new Dictionary<string, TypeDefinition>();
             this.AssemblyDefinition = assembly;
             
-            if (assembly.Name.Name != Translator.CLR_ASSEMBLY)
+            if (assembly.Name.Name != Translator.Foundation_ASSEMBLY)
             {
                 this.ReadTypes(assembly);
             }

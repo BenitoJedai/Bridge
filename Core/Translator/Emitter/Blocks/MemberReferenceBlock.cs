@@ -132,7 +132,7 @@ namespace Bridge.NET
                         if (enumMode >= 3)
                         {
                             string enumStringName = member.Member.Name;
-                            var attr = this.Emitter.GetAttribute(member.Member.Attributes, Translator.CLR_ASSEMBLY + ".NameAttribute");
+                            var attr = this.Emitter.GetAttribute(member.Member.Attributes, Translator.Foundation_ASSEMBLY + ".NameAttribute");
 
                             if (attr != null)
                             {

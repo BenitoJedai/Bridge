@@ -1,4 +1,4 @@
-﻿using Bridge.CLR;
+﻿using Bridge.Foundation;
 
 namespace Bridge.Html5
 {

@@ -273,7 +273,7 @@ namespace Bridge.NET
 
                 if (attributes != null)
                 {
-                    var attribute = this.Emitter.GetAttribute(attributes, Translator.CLR_ASSEMBLY + ".CastAttribute");
+                    var attribute = this.Emitter.GetAttribute(attributes, Translator.Foundation_ASSEMBLY + ".CastAttribute");
 
                     if (attribute != null)
                     {

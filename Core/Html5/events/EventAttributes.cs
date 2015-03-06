@@ -1,4 +1,4 @@
-﻿using Bridge.CLR;
+﻿using Bridge.Foundation;
 
 namespace Bridge.Html5
 {
@@ -16,7 +16,7 @@ namespace Bridge.Html5
     }
 
     [Ignore]
-    public abstract class EventAttribute : Bridge.CLR.AdapterAttribute
+    public abstract class EventAttribute : Bridge.Foundation.AdapterAttribute
     {
         public const string Format = "Bridge.on('{0}', {1}, this.{2});";
     }

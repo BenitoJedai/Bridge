@@ -33,7 +33,7 @@ namespace Bridge.NET
                             {
                                 var baseTypes = resolveresult.Type.GetAllBaseTypes().ToArray();
 
-                                if (baseTypes.Any(t => t.FullName == "Bridge.CLR.EventAttribute"))
+                                if (baseTypes.Any(t => t.FullName == "Bridge.Foundation.EventAttribute"))
                                 {
                                     if (methodGroup.Value.Count > 1)
                                     {
@@ -118,7 +118,7 @@ namespace Bridge.NET
                                         var memberResolveResult = this.Emitter.Resolver.ResolveNode(attr.Arguments.ElementAt(selectorIndex + 1), this.Emitter) as MemberResolveResult;
                                         if (memberResolveResult != null && memberResolveResult.Member.Attributes.Count > 0)
                                         {
-                                            var template = this.Emitter.Validator.GetAttribute(memberResolveResult.Member.Attributes, "Bridge.CLR.TemplateAttribute");
+                                            var template = this.Emitter.Validator.GetAttribute(memberResolveResult.Member.Attributes, "Bridge.Foundation.TemplateAttribute");
 
                                             if (template != null)
                                             {
@@ -152,7 +152,7 @@ namespace Bridge.NET
 
                                             if (fields.Count() > 0)
                                             {
-                                                var template = this.Emitter.Validator.GetAttribute(fields.First().Attributes, "Bridge.CLR.TemplateAttribute");
+                                                var template = this.Emitter.Validator.GetAttribute(fields.First().Attributes, "Bridge.Foundation.TemplateAttribute");
 
                                                 if (template != null)
                                                 {

@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Bridge.CLR.dll">
-      <HintPath>$(MSBuildThisFileDirectory)Bridge.CLR.dll</HintPath>
+    <Reference Include="Bridge.Foundation.dll">
+      <HintPath>$(MSBuildThisFileDirectory)Bridge.Foundation.dll</HintPath>
     </Reference>
   </ItemGroup>
 

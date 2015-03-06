@@ -342,8 +342,8 @@ namespace Bridge.NET
 
         protected virtual bool ReadModuleInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.CLR_ASSEMBLY + ".Module")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".ModuleAttribute")))
+            if ((name == (Translator.Foundation_ASSEMBLY + ".Module")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".ModuleAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {
@@ -363,8 +363,8 @@ namespace Bridge.NET
 
         protected virtual bool ReadFileNameInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.CLR_ASSEMBLY + ".FileName")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".FileNameAttribute")))
+            if ((name == (Translator.Foundation_ASSEMBLY + ".FileName")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".FileNameAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {
@@ -384,8 +384,8 @@ namespace Bridge.NET
 
         protected virtual bool ReadOutputDirInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.CLR_ASSEMBLY + ".OutputDir")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".OutputDirAttribute")))
+            if ((name == (Translator.Foundation_ASSEMBLY + ".OutputDir")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".OutputDirAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {
@@ -405,8 +405,8 @@ namespace Bridge.NET
 
         protected virtual bool ReadFileHierarchyInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.CLR_ASSEMBLY + ".FilesHierrarchy")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".FilesHierrarchyAttribute")))
+            if ((name == (Translator.Foundation_ASSEMBLY + ".FilesHierrarchy")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".FilesHierrarchyAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {
@@ -436,8 +436,8 @@ namespace Bridge.NET
 
         protected virtual bool ReadModuleDependency(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.CLR_ASSEMBLY + ".ModuleDependency")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.CLR_ASSEMBLY + ".ModuleDependencyAttribute")))
+            if ((name == (Translator.Foundation_ASSEMBLY + ".ModuleDependency")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".ModuleDependencyAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {

@@ -58,23 +58,23 @@ namespace Bridge.NET
 
         public virtual bool IsIgnoreType(ICustomAttributeProvider type) 
         {
-            string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
-            string objectLiteralAttr = Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute";
+            string ignoreAttr = Translator.Foundation_ASSEMBLY + ".IgnoreAttribute";
+            string objectLiteralAttr = Translator.Foundation_ASSEMBLY + ".ObjectLiteralAttribute";
 
             return this.HasAttribute(type.CustomAttributes, ignoreAttr) || this.HasAttribute(type.CustomAttributes, objectLiteralAttr);
         }
 
         public virtual bool IsIgnoreType(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition typeDefinition)
         {
-            string ignoreAttr = Translator.CLR_ASSEMBLY + ".IgnoreAttribute";
-            string objectLiteralAttr = Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute";
+            string ignoreAttr = Translator.Foundation_ASSEMBLY + ".IgnoreAttribute";
+            string objectLiteralAttr = Translator.Foundation_ASSEMBLY + ".ObjectLiteralAttribute";
 
             return typeDefinition.Attributes.Any(attr => attr.Constructor!= null && ((attr.Constructor.DeclaringType.FullName == ignoreAttr) || (attr.Constructor.DeclaringType.FullName == objectLiteralAttr)));
         }
 
         public virtual int EnumEmitMode(DefaultResolvedTypeDefinition type)
         {
-            string enumAttr = Translator.CLR_ASSEMBLY + ".EnumAttribute";
+            string enumAttr = Translator.Foundation_ASSEMBLY + ".EnumAttribute";
             int result = -1;
             type.Attributes.Any(attr => {
                 if (attr.Constructor != null && attr.Constructor.DeclaringType.FullName == enumAttr && attr.PositionalArguments.Count > 0)
@@ -142,41 +142,41 @@ namespace Bridge.NET
 
         public virtual bool IsInlineMethod(MethodDefinition method)
         {
-            var attr = this.GetAttribute(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
+            var attr = this.GetAttribute(method.CustomAttributes, Translator.Foundation_ASSEMBLY + ".TemplateAttribute");
 
             return attr != null && !attr.HasConstructorArguments;
         }
 
         public virtual string GetInlineCode(MethodDefinition method) 
         {
-            return this.GetAttributeValue(method.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
+            return this.GetAttributeValue(method.CustomAttributes, Translator.Foundation_ASSEMBLY + ".TemplateAttribute");
         }
 
         public virtual string GetInlineCode(PropertyDefinition property)
         {
-            return this.GetAttributeValue(property.CustomAttributes, Translator.CLR_ASSEMBLY + ".TemplateAttribute");
+            return this.GetAttributeValue(property.CustomAttributes, Translator.Foundation_ASSEMBLY + ".TemplateAttribute");
         }
 
         public virtual bool IsObjectLiteral(TypeDefinition type)
         {
-            return this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute");
+            return this.HasAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".ObjectLiteralAttribute");
         }
 
         public virtual bool IsObjectLiteral(ICSharpCode.NRefactory.TypeSystem.ITypeDefinition type)
         {
-            return this.HasAttribute(type.Attributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute");
+            return this.HasAttribute(type.Attributes, Translator.Foundation_ASSEMBLY + ".ObjectLiteralAttribute");
         }
 
         public virtual string GetCustomTypeName(TypeDefinition type) 
         {
-            var name = this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NameAttribute");
+            var name = this.GetAttributeValue(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".NameAttribute");
 
             if (!string.IsNullOrEmpty(name))
             {
                 return name;
             }
 
-            var nsAtrr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".NamespaceAttribute");
+            var nsAtrr = this.GetAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".NamespaceAttribute");
             if (nsAtrr != null && nsAtrr.ConstructorArguments.Count > 0)
             {
                 var arg = nsAtrr.ConstructorArguments[0];
@@ -195,7 +195,7 @@ namespace Bridge.NET
                 }
             }
 
-            if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute"))
+            if (this.HasAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".ObjectLiteralAttribute"))
             {
                 return "Object";
             }
@@ -205,14 +205,14 @@ namespace Bridge.NET
 
         public virtual string GetCustomConstructor(TypeDefinition type) 
         {
-            string ctor = this.GetAttributeValue(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ConstructorAttribute");
+            string ctor = this.GetAttributeValue(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".ConstructorAttribute");
 
             if (!string.IsNullOrEmpty(ctor))
             {
                 return ctor;
             }
 
-            if (this.HasAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ObjectLiteralAttribute"))
+            if (this.HasAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".ObjectLiteralAttribute"))
             {
                 return "{ }";
             }
@@ -427,7 +427,7 @@ namespace Bridge.NET
         {
             if (type.HasCustomAttributes)
             {
-                var attr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".FileNameAttribute");
+                var attr = this.GetAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".FileNameAttribute");
 
                 if (attr != null)
                 {
@@ -447,7 +447,7 @@ namespace Bridge.NET
         {
             if (type.HasCustomAttributes)
             {
-                var attr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ModuleAttribute");
+                var attr = this.GetAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".ModuleAttribute");
 
                 if (attr != null)
                 {
@@ -470,7 +470,7 @@ namespace Bridge.NET
         {
             if (type.HasCustomAttributes)
             {
-                var attr = this.GetAttribute(type.CustomAttributes, Translator.CLR_ASSEMBLY + ".ModuleDependencyAttribute");
+                var attr = this.GetAttribute(type.CustomAttributes, Translator.Foundation_ASSEMBLY + ".ModuleDependencyAttribute");
 
                 if (attr != null)
                 {

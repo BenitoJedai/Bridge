@@ -2,8 +2,8 @@ SET _=%~dp0
 SET mode=Debug
 copy /Y "%_%..\..\Builder\Build\bin\%mode%\Bridge.Build.dll" "%_%"
 copy /Y "%_%..\..\Builder\Builder\bin\%mode%\Bridge.Builder.exe" "%_%"
-copy /Y "%_%..\Core\CLR\bin\%mode%\Bridge.CLR.dll" "%_%"
-copy /Y "%_%..\Core\CLR\bin\%mode%\Bridge.CLR.xml" "%_%"
+copy /Y "%_%..\Core\Foundation\bin\%mode%\Bridge.Foundation.dll" "%_%"
+copy /Y "%_%..\Core\Foundation\bin\%mode%\Bridge.Foundation.xml" "%_%"
 copy /Y "%_%..\Core\Html5\bin\%mode%\Bridge.Html5.dll" "%_%"
 copy /Y "%_%..\Core\Html5\bin\%mode%\Bridge.Html5.xml" "%_%"
 copy /Y "%_%..\Core\Plugin\bin\%mode%\Bridge.Plugin.dll" "%_%"

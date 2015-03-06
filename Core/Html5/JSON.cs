@@ -2,7 +2,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON
 
 using System;
-using Bridge.CLR;
+using Bridge.Foundation;
 
 namespace Bridge.Html5
 {

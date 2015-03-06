@@ -278,7 +278,7 @@ namespace Mono.CSharp {
 					continue;
 
 				//
-				// CLR does not distinguishes between ref and out
+				// Foundation does not distinguishes between ref and out
 				//
 				for (int i = 0; i < p.methods.Count; ++i) {
 					MethodSpec compared_method = p.methods[i];

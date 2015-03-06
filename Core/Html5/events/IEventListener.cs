@@ -1,7 +1,7 @@
 ﻿// Event WebAPI by Mozilla Contributors is licensed under CC-BY-SA 2.5.
 // https://developer.mozilla.org/en-US/docs/Web/API/EventListener
 
-using Bridge.CLR;
+using Bridge.Foundation;
 
 namespace Bridge.Html5
 {
