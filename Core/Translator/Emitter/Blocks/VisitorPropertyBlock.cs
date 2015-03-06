@@ -4,6 +4,8 @@ using Mono.Cecil;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
 using Bridge.Plugin;
+using ICSharpCode.NRefactory.Semantics;
+using System.Linq;
 
 namespace Bridge.NET
 {
@@ -29,6 +31,13 @@ namespace Bridge.NET
 
         protected virtual void EmitPropertyMethod(PropertyDeclaration propertyDeclaration, Accessor accessor, bool setter)
         {
+            var memberResult = this.Emitter.Resolver.ResolveNode(propertyDeclaration, this.Emitter) as MemberResolveResult;
+
+            if (memberResult != null && memberResult.Member.Attributes.Any(a => a.AttributeType.FullName == "Bridge.CLR.FieldPropertyAttribute"))
+            {
+                return;
+            }
+
             if (!accessor.IsNull && this.Emitter.GetInline(accessor) == null)
             {
                 this.EnsureComma();

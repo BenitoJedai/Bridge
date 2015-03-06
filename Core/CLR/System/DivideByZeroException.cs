@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class DivideByZeroException : Exception 
+    public class DivideByZeroException : ArithmeticException 
     {
 		public DivideByZeroException() 
         {

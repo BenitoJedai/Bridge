@@ -200,7 +200,7 @@ namespace Bridge.NET
             {                
                 this.TypeArguments = new TypeParamExpression[method.TypeParameters.Count];
 
-                if (typedArguments.Count == method.TypeParameters.Count) 
+                if (typedArguments != null && typedArguments.Count == method.TypeParameters.Count) 
                 {
                     var list = typedArguments.ToList();
                     for (int i = 0; i < list.Count; i++)

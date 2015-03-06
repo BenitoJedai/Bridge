@@ -28,22 +28,59 @@ namespace System
 		public const double NaN = 0;
 
         [Template("Bridge.Int.format({this}, {format})")]
-		public string Format(string format) 
+        public string Format(string format)
         {
-			return null;
-		}
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
+        public string ToString(int radix)
+        {
+            return null;
+        }
 
         [Template("Bridge.Int.format({this}, {format})")]
-		public string ToString(string format) 
+        public string ToString(string format)
         {
-			return null;
-		}
+            return null;
+        }
 
-        [Template("parseFloat({s})")]
-		public static double Parse(string s) 
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
         {
-			return 0;
-		}
+            return null;
+        }
+
+        [Template("Bridge.Int.parseFloat({s})")]
+        public static double Parse(string s)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.Int.parseFloat({s}, {provider})")]
+        public static double Parse(string s, IFormatProvider provider)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.Int.tryParseFloat({s}, null, {result})")]
+        public static bool TryParse(string s, out double result)
+        {
+            result = 0;
+            return false;
+        }
+
+        [Template("Bridge.Int.tryParseFloat({s}, {provider}, {result})")]
+        public static bool TryParse(string s, IFormatProvider provider, out double result)
+        {
+            result = 0;
+            return false;
+        }
 
 		public string ToExponential() 
         {

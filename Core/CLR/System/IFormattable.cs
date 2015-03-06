@@ -6,6 +6,7 @@ namespace System
     [Namespace("Bridge")]
 	public interface IFormattable 
     {
-        string Format(string format);
+        [Template("Bridge.format({this}, {format}, {formatProvider})")]
+        string Format(string format, IFormatProvider formatProvider);
 	}
 }

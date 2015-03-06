@@ -33,10 +33,14 @@ namespace Bridge.NET
             var prevMap = this.BuildLocalsMap(operatorDeclaration.Body);
             this.AddLocals(operatorDeclaration.Parameters);
 
-            if (this.Emitter.MethodsGroup != null)
+            var typeDef = this.Emitter.GetTypeDefinition();
+            var methods = Helpers.GetMethodOverloads(typeDef, this.Emitter, operatorDeclaration.Name, 0, true);
+            Helpers.SortMethodOverloads(methods, this.Emitter);
+
+            if (methods.Count > 1)
             {
-                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, operatorDeclaration.Parameters, null, this.Emitter.MethodsGroup, operatorDeclaration.ReturnType);
-                string name = Helpers.GetOverloadName(this.Emitter, methodDef);
+                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, operatorDeclaration.Parameters, null, methods, operatorDeclaration.ReturnType);
+                string name = Helpers.GetOverloadName(this.Emitter, methodDef, methods);
                 this.EmitMethodDetector(this.Emitter.MethodsGroupBuilder, methodDef, name);
 
                 this.Write(name);

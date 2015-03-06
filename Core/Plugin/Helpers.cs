@@ -286,6 +286,11 @@ namespace Bridge.Plugin
 
         public static TypeDefinition ToTypeDefinition(TypeReference reference, IEmitter emitter)
         {
+            if (reference == null)
+            {
+                return null;
+            }
+
             try
             {
                 if (emitter.TypeDefinitions.ContainsKey(reference.FullName))
@@ -333,6 +338,46 @@ namespace Bridge.Plugin
             return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, ops, operatorDeclaration.ReturnType);
         }
 
+        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IList<IParameter> parameters, IList<IType> typeParameters, List<MethodDefinition> group, IType returnType)
+        {
+            var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
+            foreach (var method in group)
+            {
+                if (parameters.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
+                {
+                    bool match = method.Parameters.Count == 0;
+
+                    if (returnType != null)
+                    {
+                        if (!Helpers.TypeIsMatch(emitter, returnType, method.ReturnType))
+                        {
+                            match = false;
+                            continue;
+                        }
+                    }
+
+                    for (int i = 0; i < method.Parameters.Count; i++)
+                    {
+                        var type = parameters[i].Type;
+                        var typeRef = method.Parameters[i].ParameterType;
+
+                        if (Helpers.TypeIsMatch(emitter, type, typeRef))
+                        {
+                            match = true;
+                            break;
+                        }
+                    }
+
+                    if (match)
+                    {
+                        return method;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group, AstType returnType)
         {
             var args = new List<ParameterDeclaration>(parameters);
@@ -341,7 +386,7 @@ namespace Bridge.Plugin
             {
                 if (args.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
                 {
-                    bool match = true;
+                    bool match = method.Parameters.Count == 0;
 
                     if (returnType != null)
                     {
@@ -404,37 +449,38 @@ namespace Bridge.Plugin
             return match;
         }
 
-        public static string GetOverloadName(IEmitter emitter, MethodDefinition methodDef)
+        public static bool TypeIsMatch(IEmitter emitter, IType type, TypeReference typeRef)
+        {
+            var match = true;
+            
+            if (type.ReflectionName != typeRef.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
+            {
+                match = false;
+            }
+
+            return match;
+        }
+
+        public static string GetOverloadName(IEmitter emitter, MethodDefinition methodDef, List<MethodDefinition> methods)
         {
             var name = emitter.GetMethodName(methodDef);
             var attr = emitter.GetAttribute(methodDef.CustomAttributes, "Bridge.CLR.Name");
+
+            if (attr != null)
+            {
+                return name;
+            }
 
             if (methodDef.IsConstructor)
             {
                 name = "$ctor";
             }
 
-            if (attr == null && (methodDef.Parameters.Count > 0 || methodDef.HasGenericParameters))
+            var index = Helpers.GetMethodIndex(methods, methodDef);
+
+            if (index > 0)
             {
-                StringBuilder sb = new StringBuilder(name);
-
-                if (methodDef.Parameters.Count > 0)
-                {
-                    var methodsDef = methodDef.DeclaringType.Methods.Where(m => m.Name == methodDef.Name && m.HasParameters).ToList();
-                    sb.Append("$");
-                    sb.Append(Helpers.GetMethodIndex(methodsDef, methodDef) + 1);
-                }
-                else if (methodDef.HasGenericParameters)
-                {
-                    sb.Append("$0");
-                }
-                
-                if (methodDef.HasGenericParameters)
-                {
-                    sb.Append("$").Append(methodDef.GenericParameters.Count);
-                }
-
-                name = sb.ToString();
+                name += "$" + index;
             }
 
             return name;
@@ -443,12 +489,6 @@ namespace Bridge.Plugin
         public static int GetMethodIndex(IEnumerable<MethodDefinition> methods, MethodDefinition method)
         {
             return methods.ToList().IndexOf(method);
-            /*IEnumerable<string> names = methods.Select(m => m.ToString());
-            string name = method.ToString();
-            var list = names.ToList();
-            list.Sort();
-
-            return list.IndexOf(name);*/
         }
 
         public static string TranslateTypeReference(AstType astType, IEmitter emitter)
@@ -601,5 +641,96 @@ namespace Bridge.Plugin
                 }
             }
         }
+
+        public static bool IsFieldProperty(IMember property)
+        {
+            return property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.CLR.FieldPropertyAttribute");
+        }
+
+        public static string GetPropertyRef(IMember property, IEmitter emitter, bool isSetter = false)
+        {
+            var name = emitter.GetEntityName(property);
+            if (property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.CLR.FieldPropertyAttribute"))
+            {
+                return name;
+            }
+
+            return (isSetter ? "set" : "get") + property.Name;
+        }
+
+        public static List<MethodDefinition> GetMethods(TypeDefinition typeDef, IEmitter emitter, List<MethodDefinition> list = null)
+        {
+            if (list == null)
+            {
+                list = new List<MethodDefinition>(typeDef.Methods);
+            }
+            else
+            {
+                list.AddRange(typeDef.Methods);
+            }
+
+            var baseTypeDefinition = Helpers.ToTypeDefinition(typeDef.BaseType, emitter);
+
+            if (baseTypeDefinition != null)
+            {
+                Helpers.GetMethods(baseTypeDefinition, emitter, list);
+            }
+
+            return list;
+        }
+
+        public static List<MethodDefinition> GetMethodOverloads(TypeDefinition typeDef, IEmitter emitter, string name, int genericCount, bool inherited, List<MethodDefinition> list = null)
+        {
+            var methods = typeDef.Methods.Where(m => m.Name == name/* && m.GenericParameters.Count == genericCount*/);
+
+            if (list == null)
+            {
+                list = new List<MethodDefinition>(methods);
+            }
+            else
+            {
+                list.AddRange(methods);
+            }
+
+            if (inherited)
+            {
+                var baseTypeDefinition = Helpers.ToTypeDefinition(typeDef.BaseType, emitter);
+
+                if (baseTypeDefinition != null)
+                {
+                    Helpers.GetMethodOverloads(baseTypeDefinition, emitter, name, genericCount, inherited, list);
+                }
+            }
+
+            return list;
+        }
+
+        public static void SortMethodOverloads(List<MethodDefinition> methods, IEmitter emitter)
+        {            
+            methods.Sort((m1, m2)=>{
+                if (m1.DeclaringType != m2.DeclaringType)
+                {
+                    return Helpers.IsSubclassOf(m1.DeclaringType, m2.DeclaringType, emitter) ? 1 : -1;
+                }                
+
+                return string.Compare(Helpers.MethodToString(m1), Helpers.MethodToString(m2));
+            });
+        }
+
+        private static string MethodToString(MethodDefinition m)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(m.ReturnType.ToString()).Append(" ");
+            sb.Append(m.Name).Append(" ");
+            sb.Append(m.GenericParameters.Count).Append(" ");            
+
+            foreach (var p in m.Parameters)
+            {
+                sb.Append(p.ParameterType.ToString()).Append(" ");
+            }
+
+            return sb.ToString();
+        }        
     }
 }

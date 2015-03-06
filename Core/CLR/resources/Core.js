@@ -4,6 +4,27 @@
 window.Bridge = {
     emptyFn: function () { },
 
+    copy : function (to, from, keys, toIf) {
+        if (typeof keys === 'string') {
+            keys = keys.split(/[,;\s]+/);
+        }
+
+        for (var name, i = 0, n = keys ? keys.length : 0; i < n; i++) {
+            name = keys[i];
+
+            if (toIf !== true || to[name] === undefined) {
+                if (Bridge.is(from[name], Bridge.ICloneable)) {
+                    to[name] = from[name].clone();
+                }
+                else {
+                    to[name] = from[name];
+                }
+            }
+        }
+
+        return to;
+    },
+
     ns: function (ns, scope) {
         var nsParts = ns.split('.');
 

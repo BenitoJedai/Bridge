@@ -74,7 +74,17 @@ namespace Bridge.NET
         public virtual void WriteScript(object value)
         {
             this.WriteIndent();
-            this.Emitter.Output.Append(this.Emitter.ToJavaScript(value));
+            string s = null;
+            if (value is char)
+            {
+                s = this.Emitter.ToJavaScript((int)(char)value);
+            }
+            else
+            {
+                s = this.Emitter.ToJavaScript(value);
+            }
+            
+            this.Emitter.Output.Append(s);
         }        
 
         public virtual void WriteComma()

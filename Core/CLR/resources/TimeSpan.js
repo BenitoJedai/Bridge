@@ -99,6 +99,10 @@
         return this.ticks / 1e7;
     },
 
+    get12HourHour: function () {
+        return (this.getHours() > 12) ? this.getHours() - 12 : (this.getHours() === 0) ? 12 : this.getHours();
+    },
+
     add: function (ts) {
         return new Bridge.TimeSpan(this.ticks + ts.ticks);
     },
@@ -123,12 +127,47 @@
         return other.ticks === this.ticks;
     },
 
-    toString: function () {
+    toString: function (formatStr, provider) {
         var ticks = this.ticks,
             result = "",
+            me = this,
+            dtInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),
             format = function (t, n) {
                 return Bridge.String.alignString((t | 0).toString(), n || 2, "0", 2);
             };
+
+        if (formatStr) {            
+            return formatStr.replace(/dd?|HH?|hh?|mm?|ss?|tt?/g,
+                function (formatStr) {                    
+                    switch (formatStr) {
+                        case "d":
+                            return me.getDays();
+                        case "dd":
+                            return format(me.getDays());
+                        case "H":
+                            return me.getHours();
+                        case "HH":
+                            return format(me.getHours());
+                        case "h":
+                            return me.get12HourHour();
+                        case "hh":
+                            return format(me.get12HourHour());
+                        case "m":
+                            return me.getMinutes();
+                        case "mm":
+                            return format(me.getMinutes());
+                        case "s":
+                            return me.getSeconds();
+                        case "ss":
+                            return format(me.getSeconds());
+                        case "t":
+                            return ((me.getHours() < 12) ? dtInfo.amDesignator : dtInfo.pmDesignator).substring(0, 1);
+                        case "tt":
+                            return (me.getHours() < 12) ? dtInfo.amDesignator : dtInfo.pmDesignator;
+                    }
+                }
+            );
+        }        
         
         if (Math.abs(ticks) >= 864e9) {
             result += format(ticks / 864e9) + ".";

@@ -16,20 +16,27 @@ namespace System
         [InlineConst]
         public const long MaxValue = 9007199254740991;
 
-        [Template("parseInt({s})")]
+        [Template("Bridge.Int.parseInt({s}, -9007199254740991, 9007199254740991)")]
         public static long Parse(string s)
         {
             return 0;
         }
 
-        [Template("parseInt({s}, {radix})")]
+        [Template("Bridge.Int.parseInt({s}, -9007199254740991, 9007199254740991, {radix})")]
         public static long Parse(string s, int radix)
         {
             return 0;
         }
 
-        [Template("Bridge.Int.tryParse({s}, {result}, 0, 32768)")]
+        [Template("Bridge.Int.tryParseInt({s}, {result}, -9007199254740991, 9007199254740991)")]
         public static bool TryParse(string s, out long result)
+        {
+            result = 0;
+            return false;
+        }
+
+        [Template("Bridge.Int.tryParseInt({s}, {result}, -9007199254740991, 9007199254740991, {radix})")]
+        public static bool TryParse(string s, out long result, int radix)
         {
             result = 0;
             return false;
@@ -46,8 +53,20 @@ namespace System
             return null;
         }
 
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
         [Template("Bridge.Int.format({this}, {format})")]
         public string ToString(string format)
+        {
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
         {
             return null;
         }

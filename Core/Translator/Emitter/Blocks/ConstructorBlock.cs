@@ -194,39 +194,13 @@ namespace Bridge.NET
 
                 var ctorName = "$ctor";
 
-                if (this.TypeInfo.Ctors.Count > 1)
+                if (this.TypeInfo.Ctors.Count > 1 && ctor.Parameters.Count > 0)
                 {
-                    StringBuilder sb = new StringBuilder();
-
-                    if (ctor.Parameters.Count > 0)
-                    {
-                        var methodsDef = typeDef.Methods.Where(m => m.IsConstructor && m.Parameters.Count > 0).ToList();
-                        MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null);
-                        sb.Append("$");
-                        sb.Append(methodsDef.IndexOf(methodDef) + 1);
-                    }
-
-                    /*foreach (var p in ctor.Parameters)
-                    {
-                        var resolveResult = this.Emitter.Resolver.ResolveNode(p.Type, this.Emitter);
-
-                        if (resolveResult is TypeResolveResult)
-                        {
-                            var type = ((TypeResolveResult)resolveResult).Type;
-                            sb.Append("$").Append(type.Name);
-
-                            if (type.TypeParameterCount > 0)
-                            {
-                                sb.Append("$").Append(type.TypeParameterCount);
-                            }
-                        }
-                        else
-                        {
-                            sb.Append("$").Append(p.Type.ToString());
-                        }
-                    }*/
-
-                    ctorName += sb.ToString();
+                    var methodsDef = typeDef.Methods.Where(m => m.IsConstructor && m.Parameters.Count > 0).ToList();
+                    Helpers.SortMethodOverloads(methodsDef, this.Emitter);
+                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null);
+                    ctorName += "$";
+                    ctorName += (methodsDef.IndexOf(methodDef) + 1).ToString();
                 }
 
                 this.Write(ctorName);
@@ -285,51 +259,7 @@ namespace Bridge.NET
                 this.Emitter.Comma = true;
                 this.ClearLocalsMap(prevMap);
             }
-        }
-
-        protected virtual void EmitCtorDetector(List<ConstructorDeclaration> ctors)
-        {
-            var methodsDef = this.Emitter.GetTypeDefinition().Methods.Where(m => m.IsConstructor);
-            Dictionary<int, StringBuilder> detectorBuilders = new Dictionary<int, StringBuilder>();
-            this.EnsureComma();
-
-            this.Write("$ctorDetector: function () ");
-            this.BeginBlock();
-
-            foreach (var ctor in ctors)
-            {
-                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null);
-                if (methodDef != null)
-                {
-                    string name = Helpers.GetOverloadName(this.Emitter, methodDef);
-                    this.EmitMethodDetector(detectorBuilders, methodDef, name);
-                }
-                else
-                {
-                    StringBuilder sb = null;
-                    if (!detectorBuilders.ContainsKey(0))
-                    {
-                        sb = new StringBuilder();
-                        detectorBuilders.Add(0, sb);
-                    }
-                    else
-                    {
-                        sb = detectorBuilders[0];
-                    }
-
-                    sb.AppendLine("if (arguments.length == 0) {");
-                    sb.AppendLine("    this.$ctor();");
-                    sb.AppendLine("}");
-                }
-            }
-
-            string detectors = Ext.Net.Utilities.StringUtils.ReplaceLastInstanceOf(this.GetMethodsDetector(detectorBuilders), Environment.NewLine, "");
-
-            this.Write(this.WriteIndentToString(detectors));
-            this.WriteNewLine();
-            this.EndBlock();
-            this.Emitter.Comma = true;
-        }
+        }        
 
         protected virtual void EmitBaseConstructor(ConstructorDeclaration ctor, string ctorName)
         {

@@ -38,7 +38,15 @@ namespace Bridge.NET
         {
             MemberReferenceExpression memberReferenceExpression = this.MemberReferenceExpression;
 
-            var resolveResult = this.Emitter.Resolver.ResolveNode(memberReferenceExpression, this.Emitter);
+            ResolveResult resolveResult = null;
+            if (memberReferenceExpression.Parent is InvocationExpression && (((InvocationExpression)(memberReferenceExpression.Parent)).Target == memberReferenceExpression))
+            {
+                resolveResult = this.Emitter.Resolver.ResolveNode(memberReferenceExpression.Parent, this.Emitter);
+            }
+            else
+            {
+                resolveResult = this.Emitter.Resolver.ResolveNode(memberReferenceExpression, this.Emitter);
+            }
             bool oldIsAssignment = this.Emitter.IsAssignment;
 
             if (resolveResult == null && !(resolveResult is ErrorResolveResult))
@@ -235,16 +243,19 @@ namespace Bridge.NET
                 }
                 else if (member.Member.SymbolKind == SymbolKind.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous && !this.Emitter.Validator.IsObjectLiteral(member.Member.DeclaringTypeDefinition))
                 {
-                    if (!this.Emitter.IsAssignment)
+                    if (Helpers.IsFieldProperty(member.Member))
                     {
-                        this.Write("get");
-                        this.Write(memberReferenceExpression.MemberName);
+                        this.Write(Helpers.GetPropertyRef(member.Member, this.Emitter));
+                    }
+                    else if (!this.Emitter.IsAssignment)
+                    {
+                        this.Write(Helpers.GetPropertyRef(member.Member, this.Emitter));
                         this.WriteOpenParentheses();
                         this.WriteCloseParentheses();
                     }
                     else
                     {
-                        this.PushWriter("set" + memberReferenceExpression.MemberName + "({0})");
+                        this.PushWriter(Helpers.GetPropertyRef(member.Member, this.Emitter, true) + "({0})");
                     }
                 }
                 else if (member.Member.SymbolKind == SymbolKind.Field)

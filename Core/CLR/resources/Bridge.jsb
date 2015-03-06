@@ -5,6 +5,7 @@
   <file name="Class.js" />
   <file name="Exception.js" />
   <file name="Interfaces.js" />
+  <file name="Globalization.js" />
   <file name="Integer.js" />
   <file name="Date.js" />
   <file name="TimeSpan.js" />
@@ -26,6 +27,7 @@
     <include name="Class.js" />
     <include name="Exception.js" />
     <include name="Interfaces.js" />
+    <include name="Globalization.js" />
     <include name="Integer.js" />
     <include name="Date.js" />
     <include name="TimeSpan.js" />

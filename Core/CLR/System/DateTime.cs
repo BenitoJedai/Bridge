@@ -118,11 +118,23 @@ namespace System
 			return null;
 		}
 
+        [Template("Bridge.Date.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
         [Template("Bridge.Date.format({this}, {format})")]
 		public string ToString(string format) 
         {
 			return null;
 		}
+
+        [Template("Bridge.Date.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
 
 		public int GetDate() 
         {
@@ -216,17 +228,57 @@ namespace System
 			return 0;
 		}
 
-		[Template("new Date(Date.parse({value}))")]
+        [Template("Bridge.Date.parse({value})")]
 		public static DateTime Parse(string value) 
         {
 			return default(DateTime);
 		}
+
+        [Template("Bridge.Date.parse({value}, {provider})")]
+        public static DateTime Parse(string value, IFormatProvider provider)
+        {
+            return default(DateTime);
+        }
+
+        [Template("Bridge.Date.tryParse({value}, null, {result})")]
+        public static bool TryParse(string value, out DateTime result)
+        {
+            result = default(DateTime);
+            return false;
+        }
+
+        [Template("Bridge.Date.tryParse({value}, {provider}, {result})")]
+        public static bool TryParse(string value, IFormatProvider provider, out DateTime result)
+        {
+            result = default(DateTime);
+            return false;
+        }
 
 		[Template("Bridge.Date.parseExact({value}, {format})")]
 		public static DateTime ParseExact(string value, string format) 
         {
             return default(DateTime);
 		}
+
+        [Template("Bridge.Date.parseExact({value}, {format}, {provider})")]
+        public static DateTime ParseExact(string value, string format, IFormatProvider provider)
+        {
+            return default(DateTime);
+        }
+
+        [Template("Bridge.Date.tryParseExact({value}, {format}, null, {result})")]
+        public static bool TryParseExact(string value, string format, out DateTime result)
+        {
+            result = default(DateTime);
+            return false;
+        }
+
+        [Template("Bridge.Date.tryParseExact({value}, {format}, {provider}, {result})")]
+        public static bool TryParseExact(string value, string format, IFormatProvider provider, out DateTime result)
+        {
+            result = default(DateTime);
+            return false;
+        }
 
 		public string ToDateString() 
         {

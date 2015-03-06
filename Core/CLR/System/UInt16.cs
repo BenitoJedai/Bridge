@@ -14,31 +14,38 @@ namespace System
 		public const ushort MinValue = 0;
 
         [InlineConst]
-		public const ushort MaxValue = 0xFFFF;
+		public const ushort MaxValue = 65535;
 
-        [Template("parseInt({s})")]
-		public static ushort Parse(string s) 
+        [Template("Bridge.Int.parseInt({s}, 0, 65535)")]
+        public static ushort Parse(string s)
         {
-			return 0;
-		}
+            return 0;
+        }
 
-        [Template("parseInt({s}, {radix})")]
-		public static ushort Parse(string s, int radix) 
+        [Template("Bridge.Int.parseInt({s}, 0, 65535, {radix})")]
+        public static ushort Parse(string s, int radix)
         {
-			return 0;
-		}
+            return 0;
+        }
 
-        [Template("Bridge.Int.tryParse({s}, {result}, 0, 32768)")]
-		public static bool TryParse(string s, out ushort result) 
+        [Template("Bridge.Int.tryParseInt({s}, {result}, 0, 65535)")]
+        public static bool TryParse(string s, out ushort result)
         {
-			result = 0;
-			return false;
-		}
+            result = 0;
+            return false;
+        }
 
-		public string ToString(int radix) 
+        [Template("Bridge.Int.tryParseInt({s}, {result}, 0, 65535, {radix})")]
+        public static bool TryParse(string s, out ushort result, int radix)
         {
-			return null;
-		}
+            result = 0;
+            return false;
+        }
+
+        public string ToString(int radix)
+        {
+            return null;
+        }
 
         [Template("Bridge.Int.format({this}, {format})")]
         public string Format(string format)
@@ -46,11 +53,23 @@ namespace System
             return null;
         }
 
-		[Template("Bridge.Int.format({this}, {format})")]
-		public string ToString(string format) 
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
         {
-			return null;
-		}
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format})")]
+        public string ToString(string format)
+        {
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
 
 		[Template("Bridge.compare({this}, {other})")]
 		public int CompareTo(ushort other) 

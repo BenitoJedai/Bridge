@@ -716,7 +716,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 			TextLocation location = TypeSystemConvertVisitor.GetStartLocationAfterAttributes(node);
 			return typeDef.GetMembers(
 				delegate (IUnresolvedMember m) {
-					if (m.UnresolvedFile != unresolvedFile)
+					if (m.UnresolvedFile.FileName != unresolvedFile.FileName)
 						return false;
 					DomRegion region = m.Region;
 					return !region.IsEmpty && region.Begin <= location && region.End > location;

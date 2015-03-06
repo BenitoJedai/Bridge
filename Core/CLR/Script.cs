@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bridge.CLR;
+using System;
 
 namespace Bridge.CLR
 {
@@ -41,6 +42,60 @@ namespace Bridge.CLR
         public static bool Is(object type, string typeName)
         {
             return false;
+        }
+
+        [Template("Bridge.copy({0}, {1}, {2})")]
+        public static object Copy(object to, object from, string[] keys)
+        {
+            return null;
+        }
+
+        [Template("Bridge.copy({0}, {1}, {2})")]
+        public static object Copy(object to, object from, string keys)
+        {
+            return null;
+        }
+
+        [Template("Bridge.copy({0}, {1}, {2}, {3})")]
+        public static object Copy(object to, object from, string[] keys, bool toIf)
+        {
+            return null;
+        }
+
+        [Template("Bridge.copy({0}, {1}, {2}, {3})")]
+        public static object Copy(object to, object from, string keys, bool toIf)
+        {
+            return null;
+        }
+
+        [Template("Bridge.ns({0}, {1})")]
+        public static object NS(string ns, object scope)
+        {
+            return null;
+        }
+
+        [Template("Bridge.ns({0})")]
+        public static object NS(string ns)
+        {
+            return null;
+        }
+
+        [Template("Bridge.getHashCode({0})")]
+        public static int GetHashCode(object value)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.getDefaultValue({0})")]
+        public static T GetDefaultValue<T>(Type type)
+        {
+            return default(T);
+        }
+
+        [Template("Bridge.getDefaultValue({0})")]
+        public static object GetDefaultValue(Type type)
+        {
+            return null;
         }
 
         /// <summary>

@@ -58,6 +58,12 @@ namespace System
 			return null;
 		}
 
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
 		public string ToString(int radix) 
         {
 			return null;
@@ -69,10 +75,36 @@ namespace System
 			return null;
 		}
 
-        [Template("parseFloat({s})")]
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
+        [Template("Bridge.Int.parseFloat({s})")]
         public static decimal Parse(string s)
         {
             return 0;
+        }
+
+        [Template("Bridge.Int.parseFloat({s}, {provider})")]
+        public static decimal Parse(string s, IFormatProvider provider)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.Int.tryParseFloat({s}, null, {result})")]
+        public static bool TryParse(string s, out decimal result)
+        {
+            result = 0;
+            return false;
+        }
+
+        [Template("Bridge.Int.tryParseFloat({s}, {provider}, {result})")]
+        public static bool TryParse(string s, IFormatProvider provider, out decimal result)
+        {
+            result = 0;
+            return false;
         }
 
 		public string ToExponential() 

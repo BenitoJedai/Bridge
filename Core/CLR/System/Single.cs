@@ -28,17 +28,60 @@ namespace System
 		[Name("POSITIVE_INFINITY")]
 		public const float PositiveInfinity = 0;
 
-		[Template("Bridge.Int.format({this}, {format})")]
-		public string Format(string format) 
+        [Template("Bridge.Int.format({this}, {format})")]
+        public string Format(string format)
         {
-			return null;
-		}
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
+        public string ToString(int radix)
+        {
+            return null;
+        }
 
         [Template("Bridge.Int.format({this}, {format})")]
-		public string ToString(string format) 
+        public string ToString(string format)
         {
-			return null;
-		}
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
+        [Template("Bridge.Int.parseFloat({s})")]
+        public static float Parse(string s)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.Int.parseFloat({s}, {provider})")]
+        public static float Parse(string s, IFormatProvider provider)
+        {
+            return 0;
+        }
+
+        [Template("Bridge.Int.tryParseFloat({s}, null, {result})")]
+        public static bool TryParse(string s, out float result)
+        {
+            result = 0;
+            return false;
+        }
+
+        [Template("Bridge.Int.tryParseFloat({s}, {provider}, {result})")]
+        public static bool TryParse(string s, IFormatProvider provider, out float result)
+        {
+            result = 0;
+            return false;
+        }
 
 		public string ToExponential() 
         {

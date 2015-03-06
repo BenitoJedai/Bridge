@@ -477,72 +477,33 @@ namespace Bridge.NET
 
         public virtual string GetMemberOverloadName(IParameterizedMember member)
         {
-            var typeDef = member.DeclaringType as ITypeDefinition;
+            var method = member as IMethod;
+            var typeDef = this.GetTypeDefinition(member.DeclaringType);           
 
-            if (typeDef == null)
+            if (typeDef != null && !this.Validator.IsIgnoreType(typeDef))
             {
-                var paramType = member.DeclaringType as ParameterizedType;
+                var methods = Helpers.GetMethodOverloads(typeDef, this, member.Name, 0, !method.IsConstructor);
+                Helpers.SortMethodOverloads(methods, this);
 
-                if (paramType != null)
+                if (methods.Count > 1)
                 {
-                    typeDef = paramType.GetDefinition();
+                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this, method.Parameters, method.TypeArguments, methods, method.ReturnType);
+                    return Helpers.GetOverloadName(this, methodDef, methods);
                 }
             }            
 
-            if (!this.Validator.IsIgnoreType(typeDef) && member.DeclaringTypeDefinition.Methods.Count(m => m.Name == member.Name) > 1)
+            string name = this.GetEntityName(member);
+            if (name.StartsWith(".ctor"))
             {
-                var args = member.Parameters;
-                string name = this.GetEntityName(member);
-
-                if (name.StartsWith(".ctor"))
-                {
-                    name = "$ctor";
-                }
-                
-                var defaultResolvedMethod = member as IMethod;
-                bool hasGenericParams = defaultResolvedMethod != null && defaultResolvedMethod.TypeParameters.Count > 0;
-                StringBuilder sb = new StringBuilder(name);
-
-                if (args.Count > 0)
-                {
-                    var methodsDef = typeDef.Methods.Where(m => m.Name == member.Name && m.Parameters.Count > 0).ToList();
-                    sb.Append("$");
-                    sb.Append(this.GetMethodIndex(methodsDef, (IMethod)member) + 1);
-                }
-                else if (hasGenericParams)
-                {
-                    sb.Append("$0");
-                }
-
-                if (hasGenericParams)
-                {
-                    sb.Append("$").Append(defaultResolvedMethod.TypeParameters.Count);
-                }
-
-                name = sb.ToString();
-                return name;
+                name = "$ctor";
             }
-            else
-            {
-                string name = this.GetEntityName(member);
-                if (name.StartsWith(".ctor"))
-                {
-                    name = "$ctor";
-                }
 
-                return name;
-            }
+            return name;
         }
 
         public int GetMethodIndex(IEnumerable<IMethod> methods, IMethod method)
         {
             return methods.ToList().IndexOf(method);
-            /*IEnumerable<string> names = methods.Select(m => m.ToString());
-            string name = method.ToString();
-            var list = names.ToList();
-            list.Sort();
-
-            return list.IndexOf(name);*/
         }
     }
 }

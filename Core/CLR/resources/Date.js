@@ -8,7 +8,19 @@
         throw new Bridge.NotImplementedException();
     },
 
-    parseExact: function (value, format) {
+    parse: function (value, provider) {
+        throw new Bridge.NotImplementedException();
+    },
+
+    parseExact: function (value, format, provider) {
+        throw new Bridge.NotImplementedException();
+    },
+
+    tryParse: function (value, provider, result) {
+        throw new Bridge.NotImplementedException();
+    },
+
+    tryParseExact: function (value, format, provider, result) {
         throw new Bridge.NotImplementedException();
     },
 

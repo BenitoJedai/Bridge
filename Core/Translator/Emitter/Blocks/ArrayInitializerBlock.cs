@@ -27,7 +27,7 @@ namespace Bridge.NET
             var isCollectionInitializer = first is ArrayInitializerExpression;
             var isObjectInitializer = first is NamedExpression || first is NamedArgumentExpression;
 
-            if (isCollectionInitializer || this.ArrayInitializerExpression.IsSingleElement)
+            if (!isObjectInitializer || this.ArrayInitializerExpression.IsSingleElement)
             {
                 this.Write("[");
             }
@@ -38,7 +38,7 @@ namespace Bridge.NET
             
             new ExpressionListBlock(this.Emitter, elements, null).Emit();
 
-            if (isCollectionInitializer || this.ArrayInitializerExpression.IsSingleElement)
+            if (!isObjectInitializer || this.ArrayInitializerExpression.IsSingleElement)
             {
                 this.Write("]");
             }

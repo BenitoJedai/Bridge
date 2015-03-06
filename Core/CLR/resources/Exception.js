@@ -114,6 +114,30 @@ Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
     }
 });
 
+Bridge.Class.extend('Bridge.CultureNotFoundException', {
+    $extend: [Bridge.ArgumentException],
+
+    $ctor: function (paramName, invalidCultureName, message, innerException) {
+        if (!message) {
+            message = 'Culture is not supported.';
+            if (paramName) {
+                message += '\nParameter name: ' + paramName;
+            }
+            if (invalidCultureName) {
+                message += '\n' + invalidCultureName + ' is an invalid culture identifier.';
+            }            
+        }
+
+        Bridge.ArgumentException.prototype.$ctor.call(this, message, paramName, innerException);
+
+        this.invalidCultureName = invalidCultureName;
+    },
+
+    getInvalidCultureName: function () {
+        return this.invalidCultureName;
+    }
+});
+
 Bridge.Class.extend('Bridge.KeyNotFoundException', {
     $extend: [Bridge.Exception],
 
@@ -122,11 +146,27 @@ Bridge.Class.extend('Bridge.KeyNotFoundException', {
     }
 });
 
-Bridge.Class.extend('Bridge.DivideByZeroException', {
+Bridge.Class.extend('Bridge.ArithmeticException', {
     $extend: [Bridge.Exception],
 
     $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Division by 0.", innerException);
+        Bridge.Exception.prototype.$ctor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.DivideByZeroException', {
+    $extend: [Bridge.ArithmeticException],
+
+    $ctor: function (message, innerException) {
+        Bridge.ArithmeticException.prototype.$ctor.call(this, message || "Division by 0.", innerException);
+    }
+});
+
+Bridge.Class.extend('Bridge.OverflowException', {
+    $extend: [Bridge.ArithmeticException],
+
+    $ctor: function (message, innerException) {
+        Bridge.ArithmeticException.prototype.$ctor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
     }
 });
 

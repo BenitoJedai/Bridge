@@ -16,29 +16,36 @@ namespace System
         [InlineConst]
         public const sbyte MaxValue = 127;
 
-        [Template("parseInt({s})")]
-		public static sbyte Parse(string s) 
+        [Template("Bridge.Int.parseInt({s}, -128, 127)")]
+        public static sbyte Parse(string s)
         {
-			return 0;
-		}
+            return 0;
+        }
 
-        [Template("parseInt({s}, {radix})")]
-		public static sbyte Parse(string s, int radix) 
+        [Template("Bridge.Int.parseInt({s}, -128, 127, {radix})")]
+        public static sbyte Parse(string s, int radix)
         {
-			return 0;
-		}
+            return 0;
+        }
 
-        [Template("Bridge.Int.tryParse({s}, {result}, 0, 32768)")]
-		public static bool TryParse(string s, out sbyte result) 
+        [Template("Bridge.Int.tryParseInt({s}, {result}, -128, 127)")]
+        public static bool TryParse(string s, out sbyte result)
         {
-			result = 0;
-			return false;
-		}
+            result = 0;
+            return false;
+        }
 
-		public string ToString(int radix) 
+        [Template("Bridge.Int.tryParseInt({s}, {result}, -128, 127, {radix})")]
+        public static bool TryParse(string s, out sbyte result, int radix)
         {
-			return null;
-		}
+            result = 0;
+            return false;
+        }
+
+        public string ToString(int radix)
+        {
+            return null;
+        }
 
         [Template("Bridge.Int.format({this}, {format})")]
         public string Format(string format)
@@ -46,11 +53,23 @@ namespace System
             return null;
         }
 
-		[Template("Bridge.Int.format({this}, {format})")]
-		public string ToString(string format) 
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
         {
-			return null;
-		}
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format})")]
+        public string ToString(string format)
+        {
+            return null;
+        }
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
 
 		[Template("Bridge.compare({this}, {other})")]
 		public int CompareTo(sbyte other) 

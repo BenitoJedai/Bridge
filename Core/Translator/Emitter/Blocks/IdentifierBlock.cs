@@ -106,10 +106,18 @@ namespace Bridge.NET
         {
             IdentifierExpression identifierExpression = this.IdentifierExpression;
 
+            ResolveResult resolveResult = null;
+            if (identifierExpression.Parent is InvocationExpression && (((InvocationExpression)(identifierExpression.Parent)).Target == identifierExpression))
+            {
+                resolveResult = this.Emitter.Resolver.ResolveNode(identifierExpression.Parent, this.Emitter);
+            }
+            else
+            {
+                resolveResult = this.Emitter.Resolver.ResolveNode(identifierExpression, this.Emitter);
+            }
             var id = identifierExpression.Identifier;
             this.Emitter.Validator.CheckIdentifier(id, identifierExpression);
 
-            var resolveResult = this.Emitter.Resolver.ResolveNode(identifierExpression, this.Emitter);
             var isResolved = resolveResult != null && !(resolveResult is ErrorResolveResult);
             var memberResult = resolveResult as MemberResolveResult;
 
@@ -295,16 +303,19 @@ namespace Bridge.NET
                 {
                     this.Write(inlineCode);
                 }
+                else if (Helpers.IsFieldProperty(memberResult.Member))
+                {
+                    this.Write(Helpers.GetPropertyRef(memberResult.Member, this.Emitter));
+                }
                 else if (!this.Emitter.IsAssignment)
                 {
-                    this.Write("get");
-                    this.Write(id);
+                    this.Write(Helpers.GetPropertyRef(memberResult.Member, this.Emitter));
                     this.WriteOpenParentheses();
                     this.WriteCloseParentheses();
                 }
                 else
                 {
-                    this.PushWriter("set" + id + "({0})");
+                    this.PushWriter(Helpers.GetPropertyRef(memberResult.Member, this.Emitter, true) + "({0})");
                 }
             }
             else if (memberResult != null && memberResult.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))

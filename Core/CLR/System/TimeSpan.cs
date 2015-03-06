@@ -4,7 +4,7 @@ namespace System
 {
     [Ignore]
     [Name("Bridge.TimeSpan")]
-    public struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>
+    public struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>, IFormattable
     {
         [InlineConst]
         public const long TicksPerDay = 864000000000;
@@ -267,6 +267,23 @@ namespace System
         }
 
         public string ToString(string format)
+        {
+            return null;
+        }
+
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
+
+        [Name("toString")]
+        public string Format(string format)
+        {
+            return null;
+        }
+
+        [Name("toString")]
+        public string Format(string format, IFormatProvider provider)
         {
             return null;
         }

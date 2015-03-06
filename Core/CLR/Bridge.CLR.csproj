@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Attributes\IgnoreCast.cs" />
     <Compile Include="Attributes\IgnoreGenericAttribute.cs" />
+    <Compile Include="Attributes\FieldPropertyAttribute.cs" />
     <Compile Include="Attributes\SerializationPriorityAttribute.cs" />
     <Compile Include="Attributes\EventAttribute.cs" />
     <Compile Include="Attributes\EnumAttribute.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="System\Activator.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\ArgumentException.cs" />
+    <Compile Include="System\ArithmeticException.cs" />
+    <Compile Include="System\OverflowException.cs" />
+    <Compile Include="System\Globalization\CultureNotFoundException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />
     <Compile Include="System\Array.cs" />
     <Compile Include="System\Boolean.cs" />
@@ -71,6 +75,11 @@
     <Compile Include="System\DateTime.cs" />
     <Compile Include="System\DayOfWeek.cs" />
     <Compile Include="System\Double.cs" />
+    <Compile Include="System\Globalization\CultureInfo.cs" />
+    <Compile Include="System\Globalization\DateTimeFormatInfo.cs" />
+    <Compile Include="System\Globalization\NumberFormatInfo.cs" />
+    <Compile Include="System\ICloneable.cs" />
+    <Compile Include="System\IFormatProvider.cs" />
     <Compile Include="System\SByte.cs" />
     <Compile Include="System\Byte.cs" />
     <Compile Include="System\Int16.cs" />
@@ -147,9 +156,11 @@
     <Content Include="resources\collections\CustomEnumerator.js" />
     <Content Include="resources\collections\Dictionary.js" />
     <Content Include="resources\collections\Interfaces.js" />
+    <Content Include="resources\Globalization.js" />
     <Content Include="resources\Exception.js" />
     <Content Include="resources\INotifyPropertyChanged.js" />
     <Content Include="resources\Date.js" />
+    <Content Include="resources\locales\ru-RU.js" />
     <Content Include="resources\TimeSpan.js" />
     <Content Include="resources\Integer.js" />
     <Content Include="resources\Interfaces.js" />

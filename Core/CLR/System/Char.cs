@@ -22,10 +22,16 @@ namespace System
 			return null;
 		}
 
-		[Template("{s}.charCodeAt(0)")]
-		public static int Parse(string s) 
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string Format(string format, IFormatProvider provider)
         {
-			return 0;
+            return null;
+        }
+
+		[Template("{s}.charCodeAt(0)")]
+		public static char Parse(string s) 
+        {
+			return '\0';
 		}
 
 		[Template("String.fromCharCode({ch})")]
@@ -45,6 +51,12 @@ namespace System
         {
 			return null;
 		}
+
+        [Template("Bridge.Int.format({this}, {format}, {provider})")]
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return null;
+        }
         
 		[Template("Bridge.compare({this}, {other})")]
 		public int CompareTo(char other) 
