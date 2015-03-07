@@ -79,7 +79,7 @@ var list1=fn1.$invocationList?fn1.$invocationList:[fn1],list2=fn2.$invocationLis
 if(!exclude){result.push(list1[i]);}}
 result.reverse();return Bridge.fn.$build(result);}}};
 
-Bridge.nullable={hasValue:function(obj){return(obj!==null)&&(obj!==undefined);},getValue:function(obj){if(!Bridge.nullable.hasValue(obj)){throw new Brdige.InvalidOperationException("Nullable instance doesn't have a value.");}
+Bridge.nullable={hasValue:function(obj){return(obj!==null)&&(obj!==undefined);},getValue:function(obj){if(!Bridge.nullable.hasValue(obj)){throw new Bridge.InvalidOperationException("Nullable instance doesn't have a value.");}
 return obj;},getValueOrDefault:function(obj,defValue){return Bridge.nullable.hasValue(obj)?obj:defValue;},add:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a+b:null;},band:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a&b:null;},bor:function(a,b){return Bridge.hasValue(a)&&Bridge.hasValue(b)?a|b:null;},and:function(a,b){if(a===true&&b===true){return true;}
 else if(a===false||b===false){return false;}
 return null;},or:function(a,b){if(a===true||b===true){return true;}

@@ -8,7 +8,7 @@ Bridge.nullable = {
 
     getValue: function (obj) {
         if (!Bridge.nullable.hasValue(obj)) {
-            throw new Brdige.InvalidOperationException("Nullable instance doesn't have a value.");
+            throw new Bridge.InvalidOperationException("Nullable instance doesn't have a value.");
         }
         return obj;
     },
