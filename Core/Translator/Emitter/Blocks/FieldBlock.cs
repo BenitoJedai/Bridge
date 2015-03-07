@@ -69,10 +69,19 @@ namespace Bridge.NET
                 }
 
                 this.Write("this.", name, " = ");
-
+                
                 if (isField)
                 {
-                    this.TypeInfo.StaticFields[fieldName].AcceptVisitor(this.Emitter);
+                    var typeExpr = this.TypeInfo.StaticFields[fieldName];
+                    var primitiveExpr = typeExpr as PrimitiveExpression;
+                    if (primitiveExpr != null && primitiveExpr.Value is AstType)
+                    {
+                        this.Write("new " + Helpers.TranslateTypeReference((AstType)primitiveExpr.Value, this.Emitter) + "()");
+                    }
+                    else
+                    {
+                        typeExpr.AcceptVisitor(this.Emitter);
+                    }                    
                 }
                 else
                 {
@@ -103,7 +112,18 @@ namespace Bridge.NET
                 }
 
                 this.Write("this.", fieldName, " = ");
-                this.TypeInfo.InstanceFields[name].AcceptVisitor(this.Emitter);
+
+                var typeExpr = this.TypeInfo.InstanceFields[name];
+                var primitiveExpr = typeExpr as PrimitiveExpression;
+                if (primitiveExpr != null && primitiveExpr.Value is AstType)
+                {
+                    this.Write("new " + Helpers.TranslateTypeReference((AstType)primitiveExpr.Value, this.Emitter) + "()");
+                }
+                else
+                {
+                    typeExpr.AcceptVisitor(this.Emitter);
+                }
+                
                 this.WriteSemiColon();
                 this.WriteNewLine();
             }

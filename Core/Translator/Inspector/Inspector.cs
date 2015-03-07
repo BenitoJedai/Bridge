@@ -89,6 +89,19 @@ namespace Bridge.NET
                         return false;
                 }                
             }
+
+            var resolveResult = this.Resolver.ResolveNode(type, null);
+
+            if (!resolveResult.IsError && resolveResult.Type.Kind == TypeKind.Enum)
+            {
+                return 0;
+            }
+
+            if (!resolveResult.IsError && resolveResult.Type.Kind == TypeKind.Struct)
+            {
+                return type;
+            }
+
             return null;
         }
 
