@@ -31,7 +31,7 @@ You can fork our project from GitHub, develop/merge your feature or bugfix, then
 ## Submitting Changes
 
 1. **IMPORTANT:** Please read the [Contributor License Agreement](http://bridge.net/cla/)
-2. **IMPORTANT:** Complete the [Contributor License Agreement](http://goo.gl/forms/CvDFLA3EPO) form
+2. **IMPORTANT:** Complete the [Contributor License Agreement Form](http://goo.gl/forms/CvDFLA3EPO)
 3. Push your changes to a branch in your fork of the repository
 4. Submit a pull request to the related Bridge.NET project
 5. Update your forum thread with a link to your Pull Request
