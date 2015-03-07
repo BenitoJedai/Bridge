@@ -22,6 +22,61 @@ namespace Bridge.Html5
         {
         }
 
+        [Template("console.log()")]
+        public static void WriteLine() 
+        { 
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(bool value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(char value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(decimal value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(double value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(float value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(int value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(long value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(object value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(uint value)
+        {
+        }
+
+        [Template("console.log({value})")]
+        public static void WriteLine(ulong value)
+        {
+        }
+
         /// <summary>
         /// Log a message and stack trace to console if first argument is false.
         /// </summary>

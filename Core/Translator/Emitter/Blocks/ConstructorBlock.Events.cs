@@ -33,7 +33,7 @@ namespace Bridge.NET
                             {
                                 var baseTypes = resolveresult.Type.GetAllBaseTypes().ToArray();
 
-                                if (baseTypes.Any(t => t.FullName == "Bridge.Foundation.EventAttribute"))
+                                if (baseTypes.Any(t => t.FullName == "Bridge.Foundation.AdapterAttribute"))
                                 {
                                     if (methodGroup.Value.Count > 1)
                                     {

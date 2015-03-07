@@ -9,9 +9,8 @@
             return 0;
         },
 
-        format : function (num, format) {            
-            throw new Bridge.NotImplementedException();
-            //return num.toString();
+        format : function (num, format, provider) {            
+            var nf = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo);
         },
 
         parseFloat: function (str, provider) {
