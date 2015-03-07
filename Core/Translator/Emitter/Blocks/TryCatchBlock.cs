@@ -126,14 +126,7 @@ namespace Bridge.NET
         {
             this.EmitTryBlock();
 
-            if (this.TryCatchStatement.CatchClauses.Count > 1)
-            {
-                this.EmitMultipleCatchBlock();
-            }
-            else
-            {
-                this.EmitSingleCatchBlock();
-            }
+            this.EmitMultipleCatchBlock();
 
             this.EmitFinallyBlock();
         }
