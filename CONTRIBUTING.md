@@ -13,7 +13,7 @@ Your contribution will be subject to license’s Clause #5.
 ## Getting Started
 
 1. Make sure you have a GitHub account
-2. **IMPORTANT** Start a thread in the Bridge.NET [Community Forums](http://forums.bridge.net) related to your issue
+2. **IMPORTANT:** Start a thread in the Bridge.NET [Community Forums](http://forums.bridge.net) related to your issue
  - Start the conversation regarding this defect or feature
  - Please provide a simplified code sample demonstrating how to reproduce the feature or issue
  - Clearly describe the issue, including steps to reproduce when it is a bug
@@ -30,8 +30,8 @@ You can fork our project from GitHub, develop/merge your feature or bugfix, then
 
 ## Submitting Changes
 
-1. Please read the [Contributor License Agreement](http://bridge.net/cla/)
-2. Sign the [Contributor License Agreement](http://goo.gl/forms/CvDFLA3EPO)
+1. **IMPORTANT:** Please read the [Contributor License Agreement](http://bridge.net/cla/)
+2. **IMPORTANT:** Complete the [Contributor License Agreement](http://goo.gl/forms/CvDFLA3EPO) form
 3. Push your changes to a branch in your fork of the repository
 4. Submit a pull request to the related Bridge.NET project
 5. Update your forum thread with a link to your Pull Request
