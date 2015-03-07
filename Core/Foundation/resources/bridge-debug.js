@@ -1279,7 +1279,7 @@ Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
     }
 });
 
-Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
+Bridge.Class.extend("Bridge.NumberFormatInfo", {
     $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     $statics: {
