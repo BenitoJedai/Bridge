@@ -18,7 +18,12 @@ copy /Y "%_%..\Core\Translator\bin\%mode%\Mono.Cecil.Pdb.dll" "%_%"
 copy /Y "%_%..\Core\Translator\bin\%mode%\Mono.Cecil.Rocks.dll" "%_%"
 copy /Y "%_%..\Core\Translator\bin\%mode%\Newtonsoft.Json.dll" "%_%"
 copy /Y "%_%..\Core\Translator\bin\%mode%\Bridge.Translator.dll" "%_%"
+
 if not exist "%_%plugins\" mkdir "%_%plugins\"
 copy /Y "%_%..\..\Plugins\Aspects\bin\%mode%\Bridge.Aspects.dll" "%_%plugins\"
 
+copy /Y "%_%..\..\Frameworks\Bootstrap3\bin\%mode%\Bridge.Bootstrap3.dll" "%_%"
+copy /Y "%_%..\..\Frameworks\Bootstrap3\bin\%mode%\Bridge.Bootstrap3.xml" "%_%"
+copy /Y "%_%..\..\Frameworks\jQuery2\bin\%mode%\Bridge.jQuery2.dll" "%_%"
+copy /Y "%_%..\..\Frameworks\jQuery2\bin\%mode%\Bridge.jQuery2.xml" "%_%"
 pause
