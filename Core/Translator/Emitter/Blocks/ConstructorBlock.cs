@@ -89,7 +89,7 @@ namespace Bridge.NET
                 this.WriteSpace();
                 this.BeginBlock();
 
-                if (this.TypeInfo.InstanceFields.Count > 0 || this.TypeInfo.Events.Count > 0)
+                if (this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.StaticEvents.Count > 0)
                 {
                     new FieldBlock(this.Emitter, this.TypeInfo, true).Emit();
                     this.Emitter.Comma = true;
