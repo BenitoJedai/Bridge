@@ -1139,7 +1139,7 @@ Bridge.Class.define('Bridge.ErrorException', {
     extend: [Bridge.Exception],
 
     constructor: function (error) {
-        Bridge.Exception.prototype.constructor.call(this, error.message);
+        Bridge.Exception.prototype.$constructor.call(this, error.message);
         this.errorStack = error;
         this.error = error;
     },
@@ -1153,7 +1153,7 @@ Bridge.Class.define('Bridge.ArgumentException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, paramName, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Value does not fall within the expected range.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Value does not fall within the expected range.", innerException);
         this.paramName = paramName;
     },
 
@@ -1173,7 +1173,7 @@ Bridge.Class.define('Bridge.ArgumentNullException', {
             }
         }
 
-        Bridge.ArgumentException.prototype.constructor.call(this, message, paramName, innerException);
+        Bridge.ArgumentException.prototype.$constructor.call(this, message, paramName, innerException);
     }
 });
 
@@ -1188,7 +1188,7 @@ Bridge.Class.define('Bridge.ArgumentOutOfRangeException', {
             }
         }
 
-        Bridge.ArgumentException.prototype.constructor.call(this, message, paramName, innerException);
+        Bridge.ArgumentException.prototype.$constructor.call(this, message, paramName, innerException);
 
         this.actualValue = actualValue;
     },
@@ -1212,7 +1212,7 @@ Bridge.Class.define('Bridge.CultureNotFoundException', {
             }            
         }
 
-        Bridge.ArgumentException.prototype.constructor.call(this, message, paramName, innerException);
+        Bridge.ArgumentException.prototype.$constructor.call(this, message, paramName, innerException);
 
         this.invalidCultureName = invalidCultureName;
     },
@@ -1226,7 +1226,7 @@ Bridge.Class.define('Bridge.KeyNotFoundException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Key not found.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Key not found.", innerException);
     }
 });
 
@@ -1234,7 +1234,7 @@ Bridge.Class.define('Bridge.ArithmeticException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
     }
 });
 
@@ -1242,7 +1242,7 @@ Bridge.Class.define('Bridge.DivideByZeroException', {
     extend: [Bridge.ArithmeticException],
 
     constructor: function (message, innerException) {
-        Bridge.ArithmeticException.prototype.constructor.call(this, message || "Division by 0.", innerException);
+        Bridge.ArithmeticException.prototype.$constructor.call(this, message || "Division by 0.", innerException);
     }
 });
 
@@ -1250,7 +1250,7 @@ Bridge.Class.define('Bridge.OverflowException', {
     extend: [Bridge.ArithmeticException],
 
     constructor: function (message, innerException) {
-        Bridge.ArithmeticException.prototype.constructor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
+        Bridge.ArithmeticException.prototype.$constructor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
     }
 });
 
@@ -1258,7 +1258,7 @@ Bridge.Class.define('Bridge.FormatException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Invalid format.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Invalid format.", innerException);
     }
 });
 
@@ -1266,7 +1266,7 @@ Bridge.Class.define('Bridge.InvalidCastException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "The cast is not valid.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "The cast is not valid.", innerException);
     }
 });
 
@@ -1274,7 +1274,7 @@ Bridge.Class.define('Bridge.InvalidOperationException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Operation is not valid due to the current state of the object.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Operation is not valid due to the current state of the object.", innerException);
     }
 });
 
@@ -1282,7 +1282,7 @@ Bridge.Class.define('Bridge.NotImplementedException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "The method or operation is not implemented.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "The method or operation is not implemented.", innerException);
     }
 });
 
@@ -1290,7 +1290,7 @@ Bridge.Class.define('Bridge.NotSupportedException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Specified method is not supported.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Specified method is not supported.", innerException);
     }
 });
 
@@ -1298,7 +1298,7 @@ Bridge.Class.define('Bridge.NullReferenceException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
-        Bridge.Exception.prototype.constructor.call(this, message || "Object is null.", innerException);
+        Bridge.Exception.prototype.$constructor.call(this, message || "Object is null.", innerException);
     }
 });
 Bridge.Class.define('Bridge.IFormattable', {
