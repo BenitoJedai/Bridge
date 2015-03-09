@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NoStdLib>true</NoStdLib>
+    <DocumentationFile>bin\$(Configuration)\$(MSBuildProjectName).xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,7 +35,6 @@
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\Bridge.Foundation.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
