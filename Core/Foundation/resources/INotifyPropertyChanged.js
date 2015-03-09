@@ -1,6 +1,6 @@
-﻿Bridge.Class.extend('Bridge.INotifyPropertyChanged', {});
-Bridge.Class.extend('Bridge.PropertyChangedEventArgs', {
-    $ctor: function (propertyName) {
+﻿Bridge.Class.define('Bridge.INotifyPropertyChanged', {});
+Bridge.Class.define('Bridge.PropertyChangedEventArgs', {
+    constructor: function (propertyName) {
         this.propertyName = propertyName;
     }
 });

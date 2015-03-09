@@ -25,6 +25,11 @@ namespace Bridge.NET
 
         public override void Emit()
         {
+            if (this.PropertyDeclaration.Getter.Body.IsNull && this.PropertyDeclaration.Setter.Body.IsNull)
+            {
+                return;
+            }
+
             this.EmitPropertyMethod(this.PropertyDeclaration, this.PropertyDeclaration.Getter, false);
             this.EmitPropertyMethod(this.PropertyDeclaration, this.PropertyDeclaration.Setter, true);
         }

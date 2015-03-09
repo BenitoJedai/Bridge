@@ -41,8 +41,6 @@ namespace Bridge.NET
             {
                 MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, operatorDeclaration.Parameters, null, methods, operatorDeclaration.ReturnType);
                 string name = Helpers.GetOverloadName(this.Emitter, methodDef, methods);
-                this.EmitMethodDetector(this.Emitter.MethodsGroupBuilder, methodDef, name);
-
                 this.Write(name);
             }
             else

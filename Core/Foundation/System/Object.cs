@@ -21,6 +21,8 @@ namespace System
         //[Template("{this}")]
         //public readonly dynamic This;
 
+        public readonly Type Constructor;
+
         [Template("{this}")]
         public virtual dynamic ToDynamic()
         {

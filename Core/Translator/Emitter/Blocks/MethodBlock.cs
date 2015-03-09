@@ -47,7 +47,7 @@ namespace Bridge.NET
 
         protected virtual void EmitMethods(Dictionary<string, List<MethodDeclaration>> methods, Dictionary<string, EntityDeclaration> properties, List<EventDeclaration> events, Dictionary<OperatorType, List<OperatorDeclaration>> operators)
         {
-            foreach (var e in events)
+            /*foreach (var e in events)
             {
                 foreach (var evtVar in e.Variables)
                 {
@@ -60,7 +60,7 @@ namespace Bridge.NET
                     this.EmitEventAccessor(e, evtVar, false);
                     this.Emitter.Comma = true;
                 }  
-            }
+            }*/
             
             var names = new List<string>(properties.Keys);
 

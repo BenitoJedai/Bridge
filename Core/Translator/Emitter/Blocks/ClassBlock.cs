@@ -56,7 +56,7 @@ namespace Bridge.NET
                 this.WriteGenericHeader(name, typeDef);
             }
 
-            this.Write(Bridge.NET.Emitter.ROOT + ".Class.extend");
+            this.Write(Bridge.NET.Emitter.ROOT + ".Class.define");
             this.WriteOpenParentheses();
 
             if (this.IsGeneric)
@@ -74,7 +74,11 @@ namespace Bridge.NET
 
             if (extend.IsNotEmpty() && !this.TypeInfo.IsEnum)
             {
-                this.Write("$extend");
+                if (this.TypeInfo.InstanceMethods.Any(m => m.Value.Any(subm => this.Emitter.GetEntityName(subm) == "extend")))
+                {
+                    this.Write("$");
+                }
+                this.Write("extend");
                 this.WriteColon();
                 this.Write(extend);
                 this.Emitter.Comma = true;
@@ -154,7 +158,12 @@ namespace Bridge.NET
             if (this.TypeInfo.HasStatic)
             {
                 this.EnsureComma();
-                this.Write("$statics");
+
+                if (this.TypeInfo.InstanceMethods.Any(m => m.Value.Any(subm => this.Emitter.GetEntityName(subm) == "statics")))
+                {
+                    this.Write("$");
+                }
+                this.Write("statics");
                 this.WriteColon();
                 this.BeginBlock();
 

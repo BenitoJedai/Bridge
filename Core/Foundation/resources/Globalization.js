@@ -1,7 +1,7 @@
-﻿Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
-    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+﻿Bridge.Class.define("Bridge.DateTimeFormatInfo", {
+    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
-    $statics: {
+    statics: {
         $allStandardFormats: {
             "d": "shortDatePattern",
             "D": "longDatePattern",
@@ -24,7 +24,7 @@
             "Y": "yearMonthPattern"
         },
 
-        $ctor: function () {
+        constructor: function () {
             this.invariantInfo = Bridge.merge(new Bridge.DateTimeFormatInfo(), {
                 abbreviatedDayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
                 abbreviatedMonthGenitiveNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
@@ -160,11 +160,11 @@
     }
 });
 
-Bridge.Class.extend("Bridge.NumberFormatInfo", {
-    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+Bridge.Class.define("Bridge.NumberFormatInfo", {
+    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
-    $statics: {
-        $ctor: function () {
+    statics: {
+        constructor: function () {
             this.numberNegativePatterns =  ["(n)", "-n", "- n", "n-", "n -"];
             this.currencyNegativePattern = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
             this.currencyPositivePattern = ["$n", "n$", "$ n", "n $"];
@@ -242,11 +242,11 @@ Bridge.Class.extend("Bridge.NumberFormatInfo", {
     }
 });
 
-Bridge.Class.extend("Bridge.CultureInfo", {
-    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+Bridge.Class.define("Bridge.CultureInfo", {
+    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
-    $statics: {
-        $ctor: function () {
+    statics: {
+        constructor: function () {
             this.cultures = {};
             this.invariantCulture = Bridge.merge(new Bridge.CultureInfo("en-US"), {
                 englishName: "English (United States)",
@@ -286,7 +286,7 @@ Bridge.Class.extend("Bridge.CultureInfo", {
         }
     },
 
-    $ctor: function (name) {
+    constructor: function (name) {
         this.name = name;
         Bridge.CultureInfo.cultures[name] = this;
     },

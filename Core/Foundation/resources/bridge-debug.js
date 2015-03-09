@@ -696,6 +696,104 @@ Bridge.nullable = {
 };
 
 Bridge.hasValue = Bridge.nullable.hasValue;
+Bridge.String = {
+    format : function (format) {
+        var _formatRe = /\{\{|\}\}|\{(\d+)(?:,(-?\d+))?(?:\:([\w\s\.]*))?\}/g,
+            args = Array.prototype.slice.call(arguments, 1);
+
+        return format.replace(_formatRe, function (m, idx, alignment, formatStr) {
+            if (m === "{{" || m === "}}") {
+                return m.charAt(0);
+            }
+
+            var replaceValue = args[parseInt(idx, 10)],
+                values,
+                match;
+
+            if (!Bridge.isDefined(replaceValue, true)) {
+                return "";
+            }
+
+            if (alignment) {
+                alignment = parseInt(alignment, 10);
+                if (!Bridge.isNumber(alignment)) {
+                    alignment = null;
+                }
+            }
+
+            if (formatStr && Bridge.is(replaceValue, Bridge.IFormattable)) {
+                values = [replaceValue];
+
+                return Bridge.String.alignString(Bridge.format(replaceValue, formatStr), alignment);
+            }
+
+            return Bridge.String.alignString(replaceValue.toString(), alignment);
+        });
+    },
+
+    alignString : function (str, alignment, pad, dir) {
+        if (!alignment) {
+            return str;
+        }
+
+        if (!pad) {
+            pad = " ";
+        }
+
+        if (!dir) {
+            dir = alignment < 0 ? 2 : 1;
+        }
+
+        alignment = Math.abs(alignment);
+
+        if (alignment + 1 >= str.length) {
+            switch (dir) {
+                case 2:
+                    str = Array(alignment + 1 - str.length).join(pad) + str;
+                    break;
+
+                case 3:
+                    var padlen = alignment - str.length,
+                        right = Math.ceil(padlen / 2),
+                        left = padlen - right;
+
+                    str = Array(left + 1).join(pad) + str + Array(right + 1).join(pad);
+                    break;
+
+                case 1:
+                default:
+                    str = str + Array(alignment + 1 - str.length).join(pad);
+                    break;
+            }
+        }
+
+        return str;
+    },
+
+    startsWith: function (str, prefix) {
+        if (!prefix.length) {
+            return true;
+        }
+
+        if (prefix.length > str.length) {
+            return false;
+        }
+
+        return str.match("^" + prefix) !== null;
+    },
+
+    endsWith: function (str, suffix) {
+        if (!suffix.length) {
+            return true;
+        }
+
+        if (suffix.length > str.length) {
+            return false;
+        }
+
+        return str.match(suffix + "$") !== null;
+    }
+};
 
 // @source resources/Class.js
 
@@ -708,56 +806,107 @@ Bridge.hasValue = Bridge.nullable.hasValue;
     // The base Class implementation (does nothing)
     Bridge.Class = function () { };
     Bridge.Class.cache = {};
+    
     Bridge.Class.initCtor = function () {
-        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
-            this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (this.$ctorDetector) {
-            this.$ctorDetector.apply(this, arguments);
-        } else if (this.$ctor) {
-            this.$ctor.apply(this, arguments);
+        var value = arguments[0];
+        if (this.$multipleCtors && arguments.length > 0 && typeof value == 'string') {
+            value = value === "constructor" ? "$constructor" : value;
+            if ((value === "$constructor" || Bridge.String.startsWith(value, "constructor\\$")) && Bridge.isFunction(this[value])) {
+                this[value].apply(this, Array.prototype.slice.call(arguments, 1));
+                return;
+            }            
+        }
+
+        if (this.$constructor) {
+            this.$constructor.apply(this, arguments);
         }
     };
 
+    Bridge.Class.initConfig = function (extend, base, config, statics, scope) {                
+        scope.$initMembers = function () {
+            var name;
+            if (extend && !statics && base.$initMembers) {
+                base.$initMembers.apply(this, arguments);
+            }
+
+            if (config.fields) {
+                for (name in config.fields) {
+                    this[name] = config.fields[name];
+                }
+            }
+
+            if (config.properties) {
+                for (name in config.properties) {
+                    this[name] = config.properties[name];
+                    var cap = name.charAt(0).toUpperCase() + name.slice(1);
+                    this["get" + cap] = (function (name) {
+                        return function () {
+                            return this[name];
+                        };                        
+                    })(name);
+                    this["set" + cap] = (function (name) {
+                        return function (value) {
+                            this[name] = value;
+                        };
+                    })(name);
+                }
+            }
+
+            if (config.events) {
+                for (name in config.events) {
+                    this[name] = config.events[name];
+                    this["add" + name] = (function (name) {
+                        return function (value) {
+                            this[name] = Bridge.fn.combine(this[name], value);
+                        };
+                    })(name);
+                    this["remove" + name] = (function (name) {
+                        return function (value) {
+                            this[name] = Bridge.fn.remove(this[name], value);
+                        };
+                    })(name);
+                }
+            }
+
+            if (config.init) {
+                config.init.apply(this, arguments);
+            }
+        };
+    };
+
     // Create a new Class that inherits from this class
-    Bridge.Class.extend = function (className, prop) {
-        var extend = prop.$extend,
-            statics = prop.$statics,
+    Bridge.Class.define = function (className, prop) {
+        var extend = prop.$extend || prop.extend,
+            statics = prop.$statics || prop.statics,
             base = extend ? extend[0].prototype : this.prototype,
             prototype,
             nameParts,
             scope = prop.$scope || window,
             i,
+            v,
+            ctorCounter,
+            isCtor,
             name;
 
-        delete prop.$extend;
-        delete prop.$statics;
-
-        // Instantiate a base class (but only create the instance,
-        // don't run the init constructor)
-        initializing = true;
-        prototype = extend ? new extend[0]() : new Object();
-        initializing = false;
-
-        if (!prop.$multipleCtors && !prop.$ctor) {
-            prop.$ctor = extend ? function () {
-                base.$ctor();
-            } : function () { };
+        if (Bridge.isFunction(extend)) {
+            extend = null;
+        }
+        else if (prop.$extend) {
+            delete prop.$extend;
+        }
+        else {
+            delete prop.extend;
         }
 
-        if (!prop.$ctorMembers) {
-            prop.$ctorMembers = extend ? function () {
-                base.$ctorMembers.apply(this, arguments);
-            } : function () { };
+        if (Bridge.isFunction(statics)) {
+            statics = null;
         }
-
-        prop.$$ctorCtor = Bridge.Class.initCtor;
-
-        // Copy the properties over onto the new prototype
-        for (name in prop) {            
-            prototype[name] = prop[name];
-        }
-
-        prototype.$$name = className;
+        else if (prop.$statics) {
+			delete prop.$statics;
+		}
+		else {
+			delete prop.statics;
+		}
 
         // The dummy class constructor
         function Class() {
@@ -771,13 +920,76 @@ Bridge.hasValue = Bridge.nullable.hasValue;
 
             // All construction is actually done in the init method
             if (!initializing) {
-                if (this.$ctorMembers) {
-                    this.$ctorMembers.apply(this, arguments);
-                }                
+                if (this.$initMembers) {
+                    this.$initMembers.apply(this, arguments);
+                }
 
-                this.$$ctorCtor.apply(this, arguments);
+                this.$$initCtor.apply(this, arguments);
             }
         }
+
+        // Instantiate a base class (but only create the instance,
+        // don't run the init constructor)
+        initializing = true;
+        prototype = extend ? new extend[0]() : new Object();
+        initializing = false;
+
+        if (statics) {
+            var staticsConfig = statics.$config || statics.config;
+            if (staticsConfig && !Bridge.isFunction(staticsConfig)) {
+                Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
+
+                if (statics.$config) {
+                    delete statics.$config;
+                }
+                else {
+                    delete statics.config;
+                }
+            }
+        }        
+
+        var instanceConfig = prop.$config || prop.config;
+        if (instanceConfig && !Bridge.isFunction(instanceConfig)) {
+            Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
+
+            if (prop.$config) {
+                delete prop.$config;
+            }
+            else {
+                delete prop.config;
+            }
+        }
+        else {
+            prop.$initMembers = extend ? function () {
+                base.$initMembers.apply(this, arguments);
+            } : function () { };
+        }
+
+        prop.$$initCtor = Bridge.Class.initCtor;
+
+        // Copy the properties over onto the new prototype
+        ctorCounter = 0;
+        for (name in prop) {            
+            v = prop[name];
+            isCtor = name === "constructor";
+            if (Bridge.isFunction(v) && (isCtor || Bridge.String.startsWith(name, "constructor\\$"))) {
+                ctorCounter++;
+            }
+
+            prototype[isCtor ? "$constructor" : name] = prop[name];
+        }
+
+        if (ctorCounter == 0) {
+            prototype.$constructor = extend ? function () {
+                base.$constructor();
+            } : function () { };
+        }
+
+        if (ctorCounter > 1) {
+            prototype.$multipleCtors = true;
+        }
+
+        prototype.$$name = className;        
 
         // Populate our constructed prototype object
         Class.prototype = prototype;
@@ -810,9 +1022,13 @@ Bridge.hasValue = Bridge.nullable.hasValue;
 
             scope.$$inheritors.push(Class);
         }
+        
+        if (Class.$initMembers) {
+            Class.$initMembers.call(Class);
+        }
 
-        if (Class.$ctor) {
-            Class.$ctor.call(Class);
+        if (Class.constructor) {
+            Class.constructor.call(Class);
         }
 
         return Class;
@@ -869,8 +1085,8 @@ Bridge.hasValue = Bridge.nullable.hasValue;
 
 // @source resources/Task.js
 
-Bridge.Class.extend('Bridge.Exception', {
-    $ctor: function (message, innerException) {
+Bridge.Class.define('Bridge.Exception', {
+    constructor: function (message, innerException) {
         this.message = message;
         this.innerException = innerException;
         this.errorStack = new Error();
@@ -897,7 +1113,7 @@ Bridge.Class.extend('Bridge.Exception', {
         return this.getMessage();
     },
 
-    $statics: {
+    statics: {
         create: function (error) {
             if (Bridge.is(error, Bridge.Exception)) {
                 return error;
@@ -919,11 +1135,11 @@ Bridge.Class.extend('Bridge.Exception', {
     }
 });
 
-Bridge.Class.extend('Bridge.ErrorException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.ErrorException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (error) {
-        Bridge.Exception.prototype.$ctor.call(this, error.message);
+    constructor: function (error) {
+        Bridge.Exception.prototype.constructor.call(this, error.message);
         this.errorStack = error;
         this.error = error;
     },
@@ -933,11 +1149,11 @@ Bridge.Class.extend('Bridge.ErrorException', {
     }
 });
 
-Bridge.Class.extend('Bridge.ArgumentException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.ArgumentException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, paramName, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Value does not fall within the expected range.", innerException);
+    constructor: function (message, paramName, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Value does not fall within the expected range.", innerException);
         this.paramName = paramName;
     },
 
@@ -946,10 +1162,10 @@ Bridge.Class.extend('Bridge.ArgumentException', {
     }
 });
 
-Bridge.Class.extend('Bridge.ArgumentNullException', {
-    $extend: [Bridge.ArgumentException],
+Bridge.Class.define('Bridge.ArgumentNullException', {
+    extend: [Bridge.ArgumentException],
 
-    $ctor: function (paramName, message, innerException) {
+    constructor: function (paramName, message, innerException) {
         if (!message) {
             message = 'Value cannot be null.';
             if (paramName) {
@@ -957,14 +1173,14 @@ Bridge.Class.extend('Bridge.ArgumentNullException', {
             }
         }
 
-        Bridge.ArgumentException.prototype.$ctor.call(this, message, paramName, innerException);
+        Bridge.ArgumentException.prototype.constructor.call(this, message, paramName, innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
-    $extend: [Bridge.ArgumentException],
+Bridge.Class.define('Bridge.ArgumentOutOfRangeException', {
+    extend: [Bridge.ArgumentException],
 
-    $ctor: function (paramName, message, innerException, actualValue) {
+    constructor: function (paramName, message, innerException, actualValue) {
         if (!message) {
             message = 'Value is out of range.';
             if (paramName) {
@@ -972,7 +1188,7 @@ Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
             }
         }
 
-        Bridge.ArgumentException.prototype.$ctor.call(this, message, paramName, innerException);
+        Bridge.ArgumentException.prototype.constructor.call(this, message, paramName, innerException);
 
         this.actualValue = actualValue;
     },
@@ -982,10 +1198,10 @@ Bridge.Class.extend('Bridge.ArgumentOutOfRangeException', {
     }
 });
 
-Bridge.Class.extend('Bridge.CultureNotFoundException', {
-    $extend: [Bridge.ArgumentException],
+Bridge.Class.define('Bridge.CultureNotFoundException', {
+    extend: [Bridge.ArgumentException],
 
-    $ctor: function (paramName, invalidCultureName, message, innerException) {
+    constructor: function (paramName, invalidCultureName, message, innerException) {
         if (!message) {
             message = 'Culture is not supported.';
             if (paramName) {
@@ -996,7 +1212,7 @@ Bridge.Class.extend('Bridge.CultureNotFoundException', {
             }            
         }
 
-        Bridge.ArgumentException.prototype.$ctor.call(this, message, paramName, innerException);
+        Bridge.ArgumentException.prototype.constructor.call(this, message, paramName, innerException);
 
         this.invalidCultureName = invalidCultureName;
     },
@@ -1006,87 +1222,87 @@ Bridge.Class.extend('Bridge.CultureNotFoundException', {
     }
 });
 
-Bridge.Class.extend('Bridge.KeyNotFoundException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.KeyNotFoundException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Key not found.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Key not found.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.ArithmeticException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.ArithmeticException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.DivideByZeroException', {
-    $extend: [Bridge.ArithmeticException],
+Bridge.Class.define('Bridge.DivideByZeroException', {
+    extend: [Bridge.ArithmeticException],
 
-    $ctor: function (message, innerException) {
-        Bridge.ArithmeticException.prototype.$ctor.call(this, message || "Division by 0.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.ArithmeticException.prototype.constructor.call(this, message || "Division by 0.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.OverflowException', {
-    $extend: [Bridge.ArithmeticException],
+Bridge.Class.define('Bridge.OverflowException', {
+    extend: [Bridge.ArithmeticException],
 
-    $ctor: function (message, innerException) {
-        Bridge.ArithmeticException.prototype.$ctor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.ArithmeticException.prototype.constructor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.FormatException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.FormatException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Invalid format.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Invalid format.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.InvalidCastException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.InvalidCastException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "The cast is not valid.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "The cast is not valid.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.InvalidOperationException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.InvalidOperationException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Operation is not valid due to the current state of the object.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Operation is not valid due to the current state of the object.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.NotImplementedException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.NotImplementedException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "The method or operation is not implemented.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "The method or operation is not implemented.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.NotSupportedException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.NotSupportedException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Specified method is not supported.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Specified method is not supported.", innerException);
     }
 });
 
-Bridge.Class.extend('Bridge.NullReferenceException', {
-    $extend: [Bridge.Exception],
+Bridge.Class.define('Bridge.NullReferenceException', {
+    extend: [Bridge.Exception],
 
-    $ctor: function (message, innerException) {
-        Bridge.Exception.prototype.$ctor.call(this, message || "Object is null.", innerException);
+    constructor: function (message, innerException) {
+        Bridge.Exception.prototype.constructor.call(this, message || "Object is null.", innerException);
     }
 });
-Bridge.Class.extend('Bridge.IFormattable', {
-    $statics: {
+Bridge.Class.define('Bridge.IFormattable', {
+    statics: {
         $is: function (obj) {
             if (Bridge.isNumber(obj)) {
                 return true;
@@ -1101,26 +1317,26 @@ Bridge.Class.extend('Bridge.IFormattable', {
     }
 });
 
-Bridge.Class.extend('Bridge.IComparable', { });
+Bridge.Class.define('Bridge.IComparable', { });
 
-Bridge.Class.extend('Bridge.IFormatProvider', {});
-Bridge.Class.extend('Bridge.ICloneable', {});
+Bridge.Class.define('Bridge.IFormatProvider', {});
+Bridge.Class.define('Bridge.ICloneable', {});
 Bridge.Class.generic('Bridge.IComparable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IComparable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
     }));
 });
 
 Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEquatable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
     }));
 });
 
-Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
-    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+Bridge.Class.define("Bridge.DateTimeFormatInfo", {
+    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
-    $statics: {
+    statics: {
         $allStandardFormats: {
             "d": "shortDatePattern",
             "D": "longDatePattern",
@@ -1143,7 +1359,7 @@ Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
             "Y": "yearMonthPattern"
         },
 
-        $ctor: function () {
+        constructor: function () {
             this.invariantInfo = Bridge.merge(new Bridge.DateTimeFormatInfo(), {
                 abbreviatedDayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
                 abbreviatedMonthGenitiveNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
@@ -1279,11 +1495,11 @@ Bridge.Class.extend("Bridge.DateTimeFormatInfo", {
     }
 });
 
-Bridge.Class.extend("Bridge.NumberFormatInfo", {
-    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+Bridge.Class.define("Bridge.NumberFormatInfo", {
+    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
-    $statics: {
-        $ctor: function () {
+    statics: {
+        constructor: function () {
             this.numberNegativePatterns =  ["(n)", "-n", "- n", "n-", "n -"];
             this.currencyNegativePattern = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
             this.currencyPositivePattern = ["$n", "n$", "$ n", "n $"];
@@ -1361,11 +1577,11 @@ Bridge.Class.extend("Bridge.NumberFormatInfo", {
     }
 });
 
-Bridge.Class.extend("Bridge.CultureInfo", {
-    $extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+Bridge.Class.define("Bridge.CultureInfo", {
+    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
-    $statics: {
-        $ctor: function () {
+    statics: {
+        constructor: function () {
             this.cultures = {};
             this.invariantCulture = Bridge.merge(new Bridge.CultureInfo("en-US"), {
                 englishName: "English (United States)",
@@ -1405,7 +1621,7 @@ Bridge.Class.extend("Bridge.CultureInfo", {
         }
     },
 
-    $ctor: function (name) {
+    constructor: function (name) {
         this.name = name;
         Bridge.CultureInfo.cultures[name] = this;
     },
@@ -1430,9 +1646,9 @@ Bridge.Class.extend("Bridge.CultureInfo", {
         ]);
     }
 });
-Bridge.Class.extend('Bridge.Int', {
-    $extend: [Bridge.IComparable, Bridge.IFormattable],
-    $statics: {
+Bridge.Class.define('Bridge.Int', {
+    extend: [Bridge.IComparable, Bridge.IFormattable],
+    statics: {
         instanceOf : function (instance) {
             return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;
         },
@@ -1600,9 +1816,9 @@ Bridge.Date = {
                                  date.getMilliseconds()));
     }
 };
-Bridge.Class.extend('Bridge.TimeSpan', {
-    $extend: [Bridge.IComparable],
-    $statics: {
+Bridge.Class.define('Bridge.TimeSpan', {
+    extend: [Bridge.IComparable],
+    statics: {
         fromDays: function (value) {
             return new Bridge.TimeSpan(value * 864e9);
         },
@@ -1627,7 +1843,7 @@ Bridge.Class.extend('Bridge.TimeSpan', {
             return new Bridge.TimeSpan(value);
         },
 
-        $ctor: function () {
+        constructor: function () {
             this.zero = new Bridge.TimeSpan(0);
             this.maxValue = new Bridge.TimeSpan(864e13);
             this.minValue = new Bridge.TimeSpan(-864e13);
@@ -1638,11 +1854,13 @@ Bridge.Class.extend('Bridge.TimeSpan', {
         }
     },
 
-    $ctorMembers : function () {
-        this.ticks = 0;
+    config : {
+        fields: {
+            ticks: 0
+        }
     },
 
-    $ctor: function () {
+    constructor: function () {
         if (arguments.length == 1) {
             this.ticks = arguments[0];
         }
@@ -1792,104 +2010,6 @@ Bridge.Class.extend('Bridge.TimeSpan', {
 });
 
 Bridge.Class.addExtend(Bridge.TimeSpan, [Bridge.IComparable$1(Bridge.TimeSpan), Bridge.IEquatable$1(Bridge.TimeSpan)]);
-Bridge.String = {
-    format : function (format) {
-        var _formatRe = /\{\{|\}\}|\{(\d+)(?:,(-?\d+))?(?:\:([\w\s\.]*))?\}/g,
-            args = Array.prototype.slice.call(arguments, 1);
-
-        return format.replace(_formatRe, function (m, idx, alignment, formatStr) {
-            if (m === "{{" || m === "}}") {
-                return m.charAt(0);
-            }
-
-            var replaceValue = args[parseInt(idx, 10)],
-                values,
-                match;
-
-            if (!Bridge.isDefined(replaceValue, true)) {
-                return "";
-            }
-
-            if (alignment) {
-                alignment = parseInt(alignment, 10);
-                if (!Bridge.isNumber(alignment)) {
-                    alignment = null;
-                }
-            }
-
-            if (formatStr && Bridge.is(replaceValue, Bridge.IFormattable)) {
-                values = [replaceValue];
-
-                return Bridge.String.alignString(Bridge.format(replaceValue, formatStr), alignment);
-            }
-
-            return Bridge.String.alignString(replaceValue.toString(), alignment);
-        });
-    },
-
-    alignString : function (str, alignment, pad, dir) {
-        if (!alignment) {
-            return str;
-        }
-
-        if (!pad) {
-            pad = " ";
-        }
-
-        if (!dir) {
-            dir = alignment < 0 ? 2 : 1;
-        }
-
-        alignment = Math.abs(alignment);
-
-        if (alignment + 1 >= str.length) {
-            switch (dir) {
-                case 2:
-                    str = Array(alignment + 1 - str.length).join(pad) + str;
-                    break;
-
-                case 3:
-                    var padlen = alignment - str.length,
-                        right = Math.ceil(padlen / 2),
-                        left = padlen - right;
-
-                    str = Array(left + 1).join(pad) + str + Array(right + 1).join(pad);
-                    break;
-
-                case 1:
-                default:
-                    str = str + Array(alignment + 1 - str.length).join(pad);
-                    break;
-            }
-        }
-
-        return str;
-    },
-
-    startsWith: function (str, prefix) {
-        if (!prefix.length) {
-            return true;
-        }
-
-        if (prefix.length > str.length) {
-            return false;
-        }
-
-        return str.match("^" + prefix) !== null;
-    },
-
-    endsWith: function (str, suffix) {
-        if (!suffix.length) {
-            return true;
-        }
-
-        if (suffix.length > str.length) {
-            return false;
-        }
-
-        return str.match(suffix + "$") !== null;
-    }
-};
 
 // @source resources/Browser.js
 
@@ -2015,52 +2135,52 @@ Bridge.String = {
     standalone: !!window.navigator.standalone
   };
 })();
-Bridge.Class.extend('Bridge.IEnumerable', {});
-Bridge.Class.extend('Bridge.IEnumerator', {});
-Bridge.Class.extend('Bridge.IEqualityComparer', {});
-Bridge.Class.extend('Bridge.ICollection', {
-    $extend: [Bridge.IEnumerable]
+Bridge.Class.define('Bridge.IEnumerable', {});
+Bridge.Class.define('Bridge.IEnumerator', {});
+Bridge.Class.define('Bridge.IEqualityComparer', {});
+Bridge.Class.define('Bridge.ICollection', {
+    extend: [Bridge.IEnumerable]
 });
 
 Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerator$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IEnumerator]
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IEnumerator]
     }));
 });
 
 Bridge.Class.generic('Bridge.IEnumerable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IEnumerable]
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IEnumerable]
     }));
 });
 
 Bridge.Class.generic('Bridge.ICollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.ICollection$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IEnumerable$1(T)]
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IEnumerable$1(T)]
     }));
 });
 
 Bridge.Class.generic('Bridge.IEqualityComparer$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEqualityComparer$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IEqualityComparer]
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IEqualityComparer]
     }));
 });
 
 Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.IDictionary$2', TKey, TValue);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IEnumerable$1(Bridge.KeyValuePair$2(TKey, TValue))],
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IEnumerable$1(Bridge.KeyValuePair$2(TKey, TValue))],
     }));
 });
 
-Bridge.Class.extend("Bridge.CustomEnumerator", {
-    $extend: [Bridge.IEnumerator],
+Bridge.Class.define("Bridge.CustomEnumerator", {
+    extend: [Bridge.IEnumerator],
 
-    $ctor: function (moveNext, getCurrent, reset, dispose, scope) {
+    constructor: function (moveNext, getCurrent, reset, dispose, scope) {
         this.$moveNext = moveNext;
         this.$getCurrent = getCurrent;
         this.$dispose = dispose;
@@ -2094,8 +2214,8 @@ Bridge.Class.extend("Bridge.CustomEnumerator", {
     }
 });
 
-Bridge.Class.extend('Bridge.ArrayEnumerator', {
-    $ctor: function (array) {
+Bridge.Class.define('Bridge.ArrayEnumerator', {
+    constructor: function (array) {
         this.array = array;
         this.reset();
     },
@@ -2115,8 +2235,8 @@ Bridge.Class.extend('Bridge.ArrayEnumerator', {
 });
 Bridge.Class.generic('Bridge.EqualityComparer$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.EqualityComparer$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IEqualityComparer$1(T)],
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IEqualityComparer$1(T)],
 
         equals: function (x, y) {
             if (!Bridge.isDefined(x, true)) {
@@ -2136,8 +2256,8 @@ Bridge.Class.generic('Bridge.EqualityComparer$1', function (T) {
 Bridge.EqualityComparer$1.default = new Bridge.EqualityComparer$1(Object)();
 Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.KeyValuePair$2', TKey, TValue);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $ctor: function (key, value) {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        constructor: function (key, value) {
             this.key = key;
             this.value = value;
         }
@@ -2146,10 +2266,10 @@ Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
 
 Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.Dictionary$2', TKey, TValue);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IDictionary$2(TKey, TValue)],
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IDictionary$2(TKey, TValue)],
 
-        $ctor: function (obj, comparer) {
+        constructor: function (obj, comparer) {
             this.comparer = comparer || Bridge.EqualityComparer$1.default;
             this.clear();
 
@@ -2330,10 +2450,10 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
 Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.DictionaryCollection$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.ICollection$1(T)],
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.ICollection$1(T)],
 
-        $ctor: function (dictionary, keys) {
+        constructor: function (dictionary, keys) {
             this.dictionary = dictionary;
             this.keys = keys;
         },
@@ -2369,9 +2489,9 @@ Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
 });
 Bridge.Class.generic('Bridge.List$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.List$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.ICollection$1(T), Bridge.ICollection],
-        $ctor: function (obj) {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.ICollection$1(T), Bridge.ICollection],
+        constructor: function (obj) {
             if (Object.prototype.toString.call(obj) === '[object Array]') {
                 this.items = obj;
             }
@@ -2559,8 +2679,8 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
 
 // @source resources/Task.js
 
-Bridge.Class.extend('Bridge.Task', {
-    $ctor: function (action, state) {
+Bridge.Class.define('Bridge.Task', {
+    constructor: function (action, state) {
         this.action = action;
         this.state = state;
         this.error = null;
@@ -2569,7 +2689,7 @@ Bridge.Class.extend('Bridge.Task', {
         this.result = null;
     },
 
-    $statics: {
+    statics: {
         delay : function (delay, state) {
             var task = new Bridge.Task();
 
@@ -2895,7 +3015,7 @@ Bridge.Class.extend('Bridge.Task', {
     }
 });
 
-Bridge.Class.extend('Bridge.TaskStatus', {
+Bridge.Class.define('Bridge.TaskStatus', {
     $statics: {
         created: 0,
         waitingForActivation: 1,
@@ -3018,10 +3138,10 @@ Bridge.Validation = {
         return (checksum % 10) == 0;
     }
 };
-Bridge.Class.extend('Bridge.Attribute', { });
-Bridge.Class.extend('Bridge.INotifyPropertyChanged', {});
-Bridge.Class.extend('Bridge.PropertyChangedEventArgs', {
-    $ctor: function (propertyName) {
+Bridge.Class.define('Bridge.Attribute', { });
+Bridge.Class.define('Bridge.INotifyPropertyChanged', {});
+Bridge.Class.define('Bridge.PropertyChangedEventArgs', {
+    constructor: function (propertyName) {
         this.propertyName = propertyName;
     }
 });

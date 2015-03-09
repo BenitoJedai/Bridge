@@ -1,6 +1,6 @@
-﻿Bridge.Class.extend('Bridge.Int', {
-    $extend: [Bridge.IComparable, Bridge.IFormattable],
-    $statics: {
+﻿Bridge.Class.define('Bridge.Int', {
+    extend: [Bridge.IComparable, Bridge.IFormattable],
+    statics: {
         instanceOf : function (instance) {
             return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;
         },

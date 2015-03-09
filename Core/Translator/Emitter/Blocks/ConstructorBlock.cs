@@ -55,43 +55,67 @@ namespace Bridge.NET
 
         protected virtual void EmitCtorForStaticClass()
         {
-            var injectors = this.GetInjectors();
+            var ctor = this.TypeInfo.StaticCtor;
 
-            if (this.TypeInfo.StaticCtor != null || this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0 || this.TypeInfo.StaticEvents.Count > 0 || injectors.Count() > 0)
+            if (ctor != null && ctor.Body.HasChildren)
             {
                 this.ResetLocals();
-                this.Write("$ctor");
+                this.Write("constructor");
                 this.WriteColon();
                 this.WriteFunction();
                 this.WriteOpenCloseParentheses(true);
 
-                this.BeginBlock();                
+                this.BeginBlock();
 
-                new FieldBlock(this.Emitter, this.TypeInfo, true).Emit();
-
-                if (this.TypeInfo.StaticEvents.Count > 0)
-                {
-                    new EventBlock(this.Emitter, this.TypeInfo.StaticEvents).Emit();
-                }
-
-                if (this.TypeInfo.StaticCtor != null)
-                {
-                    var ctor = this.TypeInfo.StaticCtor;
-
-                    if (ctor.Body.HasChildren)
-                    {
-                        ctor.Body.AcceptChildren(this.Emitter);
-                    }
-                }
-
-                foreach (var fn in injectors)
-                {
-                    this.Write(fn);
-                    this.WriteNewLine();
-                }
+                ctor.Body.AcceptChildren(this.Emitter);                
 
                 this.EndBlock();
                 this.Emitter.Comma = true;
+            }
+
+            var injectors = this.GetInjectors();
+            if (this.TypeInfo.StaticFields.Count > 0 || this.TypeInfo.Consts.Count > 0 || this.TypeInfo.StaticEvents.Count > 0 || injectors.Count() > 0)
+            {
+                this.EnsureComma();
+
+                if (this.TypeInfo.StaticMethods.Any(m => m.Value.Any(subm => this.Emitter.GetEntityName(subm) == "config")))
+                {
+                    this.Write("$");
+                }
+
+                this.Write("config");
+
+                this.WriteColon();
+                this.WriteSpace();
+                this.BeginBlock();
+
+                if (this.TypeInfo.InstanceFields.Count > 0 || this.TypeInfo.Events.Count > 0)
+                {
+                    new FieldBlock(this.Emitter, this.TypeInfo, true).Emit();
+                    this.Emitter.Comma = true;
+                }
+
+                if (injectors.Count() > 0)
+                {
+                    this.EnsureComma();
+
+                    this.Write("init");
+                    this.WriteColon();
+                    this.WriteFunction();
+                    this.WriteOpenParentheses();
+                    this.WriteCloseParentheses();
+                    this.WriteSpace();
+                    this.BeginBlock();
+                    foreach (var fn in injectors)
+                    {
+                        this.Write(fn);
+                        this.WriteNewLine();
+                    }
+                    this.EndBlock();
+                    this.Emitter.Comma = true;
+                }
+                this.WriteNewLine();
+                this.EndBlock();
             }
         }
 
@@ -104,49 +128,49 @@ namespace Bridge.NET
                 return;
             }
 
-            this.Write("$ctorMembers");
+            if (this.TypeInfo.InstanceMethods.Any(m => m.Value.Any(subm => this.Emitter.GetEntityName(subm) == "config")))
+            {
+                this.Write("$");
+            }
 
-            this.WriteColon();
-            this.WriteFunction();
-            this.WriteOpenParentheses();
-            this.WriteCloseParentheses();
+            this.Write("config");            
+
+            this.WriteColon();            
             this.WriteSpace();
             this.BeginBlock();
 
-            var requireNewLine = false;
             var changeCase = this.Emitter.ChangeCase;
             var baseType = this.Emitter.GetBaseTypeDefinition();
 
-            if (!this.Emitter.Validator.IsIgnoreType(baseType))
-            {
-                this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.$ctorMembers.call(this);");
-                this.WriteNewLine();
-            }
-
-            if (this.TypeInfo.InstanceFields.Count > 0)
+            if (this.TypeInfo.InstanceFields.Count > 0 || this.TypeInfo.Events.Count > 0)
             {
                 new FieldBlock(this.Emitter, this.TypeInfo, false).Emit();
-                requireNewLine = true;
+                this.Emitter.Comma = true;
             }
 
-            if (this.TypeInfo.Events.Count > 0)
+            if (injectors.Count() > 0)
             {
-                if (requireNewLine)
+                this.EnsureComma();
+                this.Write("init");
+                this.WriteColon();
+                this.WriteFunction();
+                this.WriteOpenParentheses();
+                this.WriteCloseParentheses();
+                this.WriteSpace();
+                this.BeginBlock();
+
+                foreach (var fn in injectors)
                 {
+                    this.Write(fn);
                     this.WriteNewLine();
                 }
-                new EventBlock(this.Emitter, this.TypeInfo.Events).Emit();
-                requireNewLine = true;
-            }
 
-            foreach (var fn in injectors)
-            {
-                this.Write(fn);
-                this.WriteNewLine();
-            }
+                this.EndBlock();
 
-            this.EndBlock();
-            this.Emitter.Comma = true;
+                this.Emitter.Comma = true;
+            }
+            this.WriteNewLine();
+            this.EndBlock();            
         }
 
         protected virtual void EmitCtorForInstantiableClass()
@@ -172,19 +196,6 @@ namespace Bridge.NET
                 });
             }
 
-            if (this.TypeInfo.Ctors.Count > 1)
-            {
-                this.Write("$multipleCtors");
-                this.WriteColon();
-                this.WriteScript(true);
-                this.Emitter.Comma = true;
-            }
-
-            //if (this.TypeInfo.Ctors.Count > 1)
-            //{
-                //this.EmitCtorDetector(this.TypeInfo.Ctors);
-            //}
-
             foreach (var ctor in this.TypeInfo.Ctors)
             {
                 this.EnsureComma();
@@ -192,7 +203,7 @@ namespace Bridge.NET
                 var prevMap = this.BuildLocalsMap(ctor.Body);
                 this.AddLocals(ctor.Parameters);
 
-                var ctorName = "$ctor";
+                var ctorName = "constructor";
 
                 if (this.TypeInfo.Ctors.Count > 1 && ctor.Parameters.Count > 0)
                 {
@@ -273,7 +284,12 @@ namespace Bridge.NET
             if (initializer.ConstructorInitializerType == ConstructorInitializerType.Base)
             {
                 var baseType = this.Emitter.GetBaseTypeDefinition();
-                var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member) : "$ctor";
+                var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member) : "constructor";
+
+                if (baseName == "constructor")
+                {
+                    baseName = "$constructor";
+                }
 
                 this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.");
                 this.Write(baseName);
@@ -284,7 +300,15 @@ namespace Bridge.NET
             {
                 this.WriteThis();
                 this.WriteDot();
-                this.Write(this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member));
+
+                var baseName = this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member);
+
+                if (baseName == "constructor")
+                {
+                    baseName = "$constructor";
+                }
+                
+                this.Write(baseName);
             }
 
             this.WriteOpenParentheses();

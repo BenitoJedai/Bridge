@@ -13,56 +13,107 @@
     // The base Class implementation (does nothing)
     Bridge.Class = function () { };
     Bridge.Class.cache = {};
+    
     Bridge.Class.initCtor = function () {
-        if (this.$multipleCtors && arguments.length > 0 && typeof arguments[0] == 'string' && Bridge.isFunction(this[arguments[0]])) {
-            this[arguments[0]].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (this.$ctorDetector) {
-            this.$ctorDetector.apply(this, arguments);
-        } else if (this.$ctor) {
-            this.$ctor.apply(this, arguments);
+        var value = arguments[0];
+        if (this.$multipleCtors && arguments.length > 0 && typeof value == 'string') {
+            value = value === "constructor" ? "$constructor" : value;
+            if ((value === "$constructor" || Bridge.String.startsWith(value, "constructor\\$")) && Bridge.isFunction(this[value])) {
+                this[value].apply(this, Array.prototype.slice.call(arguments, 1));
+                return;
+            }            
+        }
+
+        if (this.$constructor) {
+            this.$constructor.apply(this, arguments);
         }
     };
 
+    Bridge.Class.initConfig = function (extend, base, config, statics, scope) {                
+        scope.$initMembers = function () {
+            var name;
+            if (extend && !statics && base.$initMembers) {
+                base.$initMembers.apply(this, arguments);
+            }
+
+            if (config.fields) {
+                for (name in config.fields) {
+                    this[name] = config.fields[name];
+                }
+            }
+
+            if (config.properties) {
+                for (name in config.properties) {
+                    this[name] = config.properties[name];
+                    var cap = name.charAt(0).toUpperCase() + name.slice(1);
+                    this["get" + cap] = (function (name) {
+                        return function () {
+                            return this[name];
+                        };                        
+                    })(name);
+                    this["set" + cap] = (function (name) {
+                        return function (value) {
+                            this[name] = value;
+                        };
+                    })(name);
+                }
+            }
+
+            if (config.events) {
+                for (name in config.events) {
+                    this[name] = config.events[name];
+                    this["add" + name] = (function (name) {
+                        return function (value) {
+                            this[name] = Bridge.fn.combine(this[name], value);
+                        };
+                    })(name);
+                    this["remove" + name] = (function (name) {
+                        return function (value) {
+                            this[name] = Bridge.fn.remove(this[name], value);
+                        };
+                    })(name);
+                }
+            }
+
+            if (config.init) {
+                config.init.apply(this, arguments);
+            }
+        };
+    };
+
     // Create a new Class that inherits from this class
-    Bridge.Class.extend = function (className, prop) {
-        var extend = prop.$extend,
-            statics = prop.$statics,
+    Bridge.Class.define = function (className, prop) {
+        var extend = prop.$extend || prop.extend,
+            statics = prop.$statics || prop.statics,
             base = extend ? extend[0].prototype : this.prototype,
             prototype,
             nameParts,
             scope = prop.$scope || window,
             i,
+            v,
+            ctorCounter,
+            isCtor,
             name;
 
-        delete prop.$extend;
-        delete prop.$statics;
-
-        // Instantiate a base class (but only create the instance,
-        // don't run the init constructor)
-        initializing = true;
-        prototype = extend ? new extend[0]() : new Object();
-        initializing = false;
-
-        if (!prop.$multipleCtors && !prop.$ctor) {
-            prop.$ctor = extend ? function () {
-                base.$ctor();
-            } : function () { };
+        if (Bridge.isFunction(extend)) {
+            extend = null;
+        }
+        else if (prop.$extend) {
+            delete prop.$extend;
+        }
+        else {
+            delete prop.extend;
         }
 
-        if (!prop.$ctorMembers) {
-            prop.$ctorMembers = extend ? function () {
-                base.$ctorMembers.apply(this, arguments);
-            } : function () { };
+        if (Bridge.isFunction(statics)) {
+            statics = null;
         }
-
-        prop.$$ctorCtor = Bridge.Class.initCtor;
-
-        // Copy the properties over onto the new prototype
-        for (name in prop) {            
-            prototype[name] = prop[name];
-        }
-
-        prototype.$$name = className;
+        else if (prop.$statics) {
+			delete prop.$statics;
+		}
+		else {
+			delete prop.statics;
+		}
 
         // The dummy class constructor
         function Class() {
@@ -76,13 +127,76 @@
 
             // All construction is actually done in the init method
             if (!initializing) {
-                if (this.$ctorMembers) {
-                    this.$ctorMembers.apply(this, arguments);
-                }                
+                if (this.$initMembers) {
+                    this.$initMembers.apply(this, arguments);
+                }
 
-                this.$$ctorCtor.apply(this, arguments);
+                this.$$initCtor.apply(this, arguments);
             }
         }
+
+        // Instantiate a base class (but only create the instance,
+        // don't run the init constructor)
+        initializing = true;
+        prototype = extend ? new extend[0]() : new Object();
+        initializing = false;
+
+        if (statics) {
+            var staticsConfig = statics.$config || statics.config;
+            if (staticsConfig && !Bridge.isFunction(staticsConfig)) {
+                Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
+
+                if (statics.$config) {
+                    delete statics.$config;
+                }
+                else {
+                    delete statics.config;
+                }
+            }
+        }        
+
+        var instanceConfig = prop.$config || prop.config;
+        if (instanceConfig && !Bridge.isFunction(instanceConfig)) {
+            Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
+
+            if (prop.$config) {
+                delete prop.$config;
+            }
+            else {
+                delete prop.config;
+            }
+        }
+        else {
+            prop.$initMembers = extend ? function () {
+                base.$initMembers.apply(this, arguments);
+            } : function () { };
+        }
+
+        prop.$$initCtor = Bridge.Class.initCtor;
+
+        // Copy the properties over onto the new prototype
+        ctorCounter = 0;
+        for (name in prop) {            
+            v = prop[name];
+            isCtor = name === "constructor";
+            if (Bridge.isFunction(v) && (isCtor || Bridge.String.startsWith(name, "constructor\\$"))) {
+                ctorCounter++;
+            }
+
+            prototype[isCtor ? "$constructor" : name] = prop[name];
+        }
+
+        if (ctorCounter == 0) {
+            prototype.$constructor = extend ? function () {
+                base.$constructor();
+            } : function () { };
+        }
+
+        if (ctorCounter > 1) {
+            prototype.$multipleCtors = true;
+        }
+
+        prototype.$$name = className;        
 
         // Populate our constructed prototype object
         Class.prototype = prototype;
@@ -115,9 +229,13 @@
 
             scope.$$inheritors.push(Class);
         }
+        
+        if (Class.$initMembers) {
+            Class.$initMembers.call(Class);
+        }
 
-        if (Class.$ctor) {
-            Class.$ctor.call(Class);
+        if (Class.constructor) {
+            Class.constructor.call(Class);
         }
 
         return Class;

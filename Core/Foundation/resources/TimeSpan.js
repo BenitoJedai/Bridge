@@ -1,6 +1,6 @@
-﻿Bridge.Class.extend('Bridge.TimeSpan', {
-    $extend: [Bridge.IComparable],
-    $statics: {
+﻿Bridge.Class.define('Bridge.TimeSpan', {
+    extend: [Bridge.IComparable],
+    statics: {
         fromDays: function (value) {
             return new Bridge.TimeSpan(value * 864e9);
         },
@@ -25,7 +25,7 @@
             return new Bridge.TimeSpan(value);
         },
 
-        $ctor: function () {
+        constructor: function () {
             this.zero = new Bridge.TimeSpan(0);
             this.maxValue = new Bridge.TimeSpan(864e13);
             this.minValue = new Bridge.TimeSpan(-864e13);
@@ -36,11 +36,13 @@
         }
     },
 
-    $ctorMembers : function () {
-        this.ticks = 0;
+    config : {
+        fields: {
+            ticks: 0
+        }
     },
 
-    $ctor: function () {
+    constructor: function () {
         if (arguments.length == 1) {
             this.ticks = arguments[0];
         }

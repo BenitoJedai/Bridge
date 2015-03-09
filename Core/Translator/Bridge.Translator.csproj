@@ -129,7 +129,6 @@
     <Compile Include="Emitter\Blocks\PrimitiveExpressionBlock.cs" />
     <Compile Include="Emitter\Blocks\MemberReferenceBlock.cs" />
     <Compile Include="Emitter\Blocks\VariableBlock.cs" />
-    <Compile Include="Emitter\Blocks\InjectMethodDetectorBlock.cs" />
     <Compile Include="Emitter\Blocks\VisitorPropertyBlock.cs" />
     <Compile Include="Emitter\Blocks\VisitorMethodBlock.cs" />
     <Compile Include="Emitter\Blocks\FieldBlock.cs" />

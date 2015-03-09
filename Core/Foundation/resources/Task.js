@@ -1,8 +1,8 @@
 
 // @source resources/Task.js
 
-Bridge.Class.extend('Bridge.Task', {
-    $ctor: function (action, state) {
+Bridge.Class.define('Bridge.Task', {
+    constructor: function (action, state) {
         this.action = action;
         this.state = state;
         this.error = null;
@@ -11,7 +11,7 @@ Bridge.Class.extend('Bridge.Task', {
         this.result = null;
     },
 
-    $statics: {
+    statics: {
         delay : function (delay, state) {
             var task = new Bridge.Task();
 
@@ -337,7 +337,7 @@ Bridge.Class.extend('Bridge.Task', {
     }
 });
 
-Bridge.Class.extend('Bridge.TaskStatus', {
+Bridge.Class.define('Bridge.TaskStatus', {
     $statics: {
         created: 0,
         waitingForActivation: 1,

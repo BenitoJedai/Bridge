@@ -252,12 +252,6 @@ namespace Bridge.NET
             set;
         }
 
-        public bool InjectMethodDetectors
-        {
-            get;
-            set;
-        }
-
         public bool IsAsync 
         { 
             get; 

@@ -473,7 +473,7 @@ namespace Bridge.Plugin
 
             if (methodDef.IsConstructor)
             {
-                name = "$ctor";
+                name = "constructor";
             }
 
             var index = Helpers.GetMethodIndex(methods, methodDef);

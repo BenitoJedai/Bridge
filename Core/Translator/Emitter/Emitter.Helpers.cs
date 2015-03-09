@@ -495,7 +495,7 @@ namespace Bridge.NET
             string name = this.GetEntityName(member);
             if (name.StartsWith(".ctor"))
             {
-                name = "$ctor";
+                name = "constructor";
             }
 
             return name;

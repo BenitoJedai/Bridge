@@ -1,1 +1,1 @@
-﻿Bridge.Class.extend('Bridge.Attribute', { });
+﻿Bridge.Class.define('Bridge.Attribute', { });

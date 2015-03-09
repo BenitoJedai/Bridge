@@ -289,6 +289,8 @@ namespace Bridge.NET
                 {
                     this.CurrentType.InstanceFields.Add(propertyDeclaration.Name.ToLowerCamelCase(), initializer);
                 }
+
+                this.CurrentType.AutoProperties.Add(propertyDeclaration.Name.ToLowerCamelCase());
             }
         }
 

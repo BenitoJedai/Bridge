@@ -22,6 +22,7 @@ namespace Bridge.NET
             this.Dependencies = new List<IModuleDependency>();
             this.Ctors = new List<ConstructorDeclaration>();
             this.Operators = new Dictionary<OperatorType, List<OperatorDeclaration>>();
+            this.AutoProperties = new List<string>();
         }
 
         public Dictionary<OperatorType, List<OperatorDeclaration>> Operators
@@ -254,6 +255,13 @@ namespace Bridge.NET
         }
 
         public ITypeInfo ParentType
+        {
+            get;
+            set;
+        }
+
+
+        public List<string> AutoProperties
         {
             get;
             set;

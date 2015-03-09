@@ -81,6 +81,11 @@ namespace Bridge.Plugin
             get;
         }
 
+        List<string> AutoProperties
+        {
+            get;
+        }
+
         Dictionary<string, Expression> StaticFields 
         { 
             get; 

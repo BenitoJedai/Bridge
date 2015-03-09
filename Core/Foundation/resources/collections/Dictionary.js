@@ -1,7 +1,7 @@
 ﻿Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.KeyValuePair$2', TKey, TValue);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $ctor: function (key, value) {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        constructor: function (key, value) {
             this.key = key;
             this.value = value;
         }
@@ -10,10 +10,10 @@
 
 Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.Dictionary$2', TKey, TValue);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.IDictionary$2(TKey, TValue)],
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.IDictionary$2(TKey, TValue)],
 
-        $ctor: function (obj, comparer) {
+        constructor: function (obj, comparer) {
             this.comparer = comparer || Bridge.EqualityComparer$1.default;
             this.clear();
 
@@ -194,10 +194,10 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
 Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.DictionaryCollection$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.extend($$name, {
-        $extend: [Bridge.ICollection$1(T)],
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.ICollection$1(T)],
 
-        $ctor: function (dictionary, keys) {
+        constructor: function (dictionary, keys) {
             this.dictionary = dictionary;
             this.keys = keys;
         },

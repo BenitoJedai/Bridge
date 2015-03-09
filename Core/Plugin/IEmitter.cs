@@ -42,8 +42,7 @@ namespace Bridge.Plugin
         Mono.Cecil.TypeDefinition GetTypeDefinition(ICSharpCode.NRefactory.CSharp.AstType reference);
         Mono.Cecil.TypeDefinition GetTypeDefinition(IType type);
         string GetTypeHierarchy();
-        ICSharpCode.NRefactory.CSharp.AstNode IgnoreBlock { get; set; }
-        bool InjectMethodDetectors { get; set; }
+        ICSharpCode.NRefactory.CSharp.AstNode IgnoreBlock { get; set; }        
         bool IsAssignment { get; set; }
         bool IsAsync { get; set; }
         bool IsInlineConst(ICSharpCode.NRefactory.TypeSystem.IMember member);

@@ -132,18 +132,12 @@ namespace Bridge.NET
 
         public void BeginEmitBlock()
         {
-            this.AddEndBlock = this.Emitter.InjectMethodDetectors && this.BlockStatement.Children.ToList().Count > 0;
             this.PushLocals();
 
             if (!this.NoBraces && (!this.Emitter.IsAsync || (!this.AsyncNoBraces && this.BlockStatement.Parent != this.Emitter.AsyncBlock.Node)))
             {
                 this.BeginBlock();
             }            
-
-            if (this.Emitter.InjectMethodDetectors)
-            {
-                new InjectMethodDetectorBlock(this.Emitter, this.BlockStatement).Emit();
-            }
         }        
     }
 }
