@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLProgressElement interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <progress> elements.
+    /// The HTMLProgressElement interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of &lt;progress&gt; elements.
     /// </summary>
     [Ignore]
     [Name("HTMLProgressElement")]
@@ -31,7 +31,7 @@ namespace Bridge.Html5
         public double Value;
 
         /// <summary>
-        /// Returns NodeList containing the list of <label> elements that are labels for this element.
+        /// Returns NodeList containing the list of &lt;label&gt; elements that are labels for this element.
         /// </summary>
         public NodeList Labels;
     }

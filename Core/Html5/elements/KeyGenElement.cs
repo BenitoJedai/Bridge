@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The <keygen> elements expose the HTMLKeygenElement interface, which provides special properties and methods (beyond the regular element object interface they also have available to them by inheritance) for manipulating the layout and presentation of keygen elements.
+    /// The &lt;keygen&gt; elements expose the HTMLKeygenElement interface, which provides special properties and methods (beyond the regular element object interface they also have available to them by inheritance) for manipulating the layout and presentation of keygen elements.
     /// </summary>
     [Ignore]
     [Name("HTMLKeygenElement")]
@@ -48,7 +48,7 @@ namespace Bridge.Html5
         public string KeyType;
 
         /// <summary>
-        /// A list of <label> elements that are labels for this element.
+        /// A list of &lt;label&gt; elements that are labels for this element.
         /// </summary>
         public readonly NodeList Labels;
 

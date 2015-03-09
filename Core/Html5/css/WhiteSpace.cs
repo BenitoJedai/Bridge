@@ -37,7 +37,7 @@ namespace Bridge.Html5
         PreWrap,
 
         /// <summary>
-        /// Sequences of whitespace are collapsed. Lines are broken at newline characters, at <br>, and as necessary to fill line boxes.
+        /// Sequences of whitespace are collapsed. Lines are broken at newline characters, at &lt;br&gt;, and as necessary to fill line boxes.
         /// </summary>
         [Name("pre-line")]
         PreLine

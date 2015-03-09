@@ -435,7 +435,7 @@ namespace Bridge.Html5
         public readonly DocumentType Doctype;
 
         /// <summary>
-        /// Returns the Element that is the root element of the document (for example, the <html> element for HTML documents).
+        /// Returns the Element that is the root element of the document (for example, the &lt;html&gt; element for HTML documents).
         /// </summary>
         public readonly Element DocumentElement;
 

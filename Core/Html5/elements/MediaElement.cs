@@ -200,7 +200,7 @@ namespace Bridge.Html5
     }
 
     /// <summary>
-    /// The TimeRanges interface is used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements.
+    /// The TimeRanges interface is used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the &lt;audio&gt; and &lt;video&gt; elements.
     /// A TimeRanges object includes one or more ranges of time, each specified by a starting and ending time offset. You reference each time range by using the start() and end() methods, passing the index number of the time range you want to retrieve.
     /// The term "normalized TimeRanges object" indicates that ranges in such an object are ordered, don't overlap, aren't empty, and don't touch (adjacent ranges are folded into one bigger range).
     /// </summary>

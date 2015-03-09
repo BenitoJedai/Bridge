@@ -35,7 +35,7 @@ namespace Bridge.Html5
         public readonly DocumentInstance Document;
 
         /// <summary>
-        /// Returns the element (such as <iframe> or <object>) in which the window is embedded, or null if the window is top-level.
+        /// Returns the element (such as &lt;iframe&gt; or &lt;object&gt;) in which the window is embedded, or null if the window is top-level.
         /// </summary>
         public readonly IFrameElement FrameElement;
 
@@ -685,7 +685,7 @@ namespace Bridge.Html5
         /// The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.
         /// </summary>
         /// <param name="url">The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.</param>
-        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an <a> or <form> element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
+        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an &lt;a&gt; or &lt;form&gt; element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
         /// <returns>A reference to the newly created window. If the call failed, it will be null. The reference can be used to access properties and methods of the new window provided it complies with Same origin policy security requirements.</returns>
         public virtual WindowInstance Open(string url, string name)
         {
@@ -696,7 +696,7 @@ namespace Bridge.Html5
         /// The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.
         /// </summary>
         /// <param name="url">The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.</param>
-        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an <a> or <form> element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
+        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an &lt;a&gt; or &lt;form&gt; element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
         /// <param name="features">Optional parameter listing the features (size, position, scrollbars, etc.) of the new window. The string must not contain any blank space, each feature name and value must be separated by a comma.</param>
         /// <returns>A reference to the newly created window. If the call failed, it will be null. The reference can be used to access properties and methods of the new window provided it complies with Same origin policy security requirements.</returns>
         public virtual WindowInstance Open(string url, string name, string features)
@@ -728,7 +728,7 @@ namespace Bridge.Html5
         /// window.openDialog is an extension to window.open. It behaves the same, except that it can optionally take one or more parameters past windowFeatures, and windowFeatures itself is treated a little differently.
         /// </summary>
         /// <param name="url">The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.</param>
-        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an <a> or <form> element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
+        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an &lt;a&gt; or &lt;form&gt; element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
         /// <returns>A reference to the newly created window. If the call failed, it will be null. The reference can be used to access properties and methods of the new window provided it complies with Same origin policy security requirements.</returns>
         public virtual WindowInstance OpenDialog(string url, string name)
         {
@@ -739,7 +739,7 @@ namespace Bridge.Html5
         /// window.openDialog is an extension to window.open. It behaves the same, except that it can optionally take one or more parameters past windowFeatures, and windowFeatures itself is treated a little differently.
         /// </summary>
         /// <param name="url">The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.</param>
-        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an <a> or <form> element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
+        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an &lt;a&gt; or &lt;form&gt; element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
         /// <param name="features">Optional parameter listing the features (size, position, scrollbars, etc.) of the new window. The string must not contain any blank space, each feature name and value must be separated by a comma.</param>
         /// <returns>A reference to the newly created window. If the call failed, it will be null. The reference can be used to access properties and methods of the new window provided it complies with Same origin policy security requirements.</returns>
         public virtual WindowInstance OpenDialog(string url, string name, string features)
@@ -751,7 +751,7 @@ namespace Bridge.Html5
         /// window.openDialog is an extension to window.open. It behaves the same, except that it can optionally take one or more parameters past windowFeatures, and windowFeatures itself is treated a little differently.
         /// </summary>
         /// <param name="url">The URL to be loaded in the newly opened window. strUrl can be an HTML document on the web, image file or any resource supported by the browser.</param>
-        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an <a> or <form> element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
+        /// <param name="name">A string name for the new window. The name can be used as the target of links and forms using the target attribute of an &lt;a&gt; or &lt;form&gt; element. The name should not contain any blank space. Note that strWindowName does not specify the title of the new window.</param>
         /// <param name="features">Optional parameter listing the features (size, position, scrollbars, etc.) of the new window. The string must not contain any blank space, each feature name and value must be separated by a comma.</param>
         /// <param name="args">The arguments to be passed to the new window (optional).</param>
         /// <returns>A reference to the newly created window. If the call failed, it will be null. The reference can be used to access properties and methods of the new window provided it complies with Same origin policy security requirements.</returns>

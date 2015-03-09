@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLQuoteElement interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating quoting elements, like <blockquote> and <q>, but not the <cite> element.
+    /// The HTMLQuoteElement interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating quoting elements, like &lt;blockquote&gt; and &lt;q&gt;, but not the &lt;cite&gt; element.
     /// </summary>
     [Ignore]
     [Name("HTMLQuoteElement")]
@@ -27,7 +27,7 @@ namespace Bridge.Html5
     }
 
     /// <summary>
-    /// Specifies the type of quote: <blockquote> or <q>
+    /// Specifies the type of quote: &lt;blockquote&gt; or &lt;q&gt;
     /// </summary>
     [Ignore]
     [Enum(Emit.StringNameLowerCase)]
@@ -35,12 +35,12 @@ namespace Bridge.Html5
     public enum QuoteType
     {
         /// <summary>
-        /// <blockquote></blockquote>
+        /// &lt;blockquote&gt;&lt;/blockquote&gt;
         /// </summary>
         BlockQuote,
 
         /// <summary>
-        /// <q></q>
+        /// &lt;q&gt;&lt;/q&gt;
         /// </summary>
         Q
     }

@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLModElement interface provides special properties (beyond the regular methods and properties available through the HTMLElement interface they also have available to them by inheritance) for manipulating modification elements, that is <del> and <ins>.
+    /// The HTMLModElement interface provides special properties (beyond the regular methods and properties available through the HTMLElement interface they also have available to them by inheritance) for manipulating modification elements, that is &lt;del&gt; and &lt;ins&gt;.
     /// </summary>
     [Ignore]
     [Name("HTMLModElement")]
@@ -36,12 +36,12 @@ namespace Bridge.Html5
     public enum ModElementType
     {
         /// <summary>
-        /// The HTML <ins> Element (or HTML Inserted Text) HTML represents a range of text that has been added to a document.
+        /// The HTML &lt;ins&gt; Element (or HTML Inserted Text) HTML represents a range of text that has been added to a document.
         /// </summary>
         Ins,
 
         /// <summary>
-        /// The HTML <del> element (or HTML Deleted Text Element) represents a range of text that has been deleted from a document. This element is often (but need not be) rendered with strike-through text.
+        /// The HTML &lt;del&gt; element (or HTML Deleted Text Element) represents a range of text that has been deleted from a document. This element is often (but need not be) rendered with strike-through text.
         /// </summary>
         Del
     }

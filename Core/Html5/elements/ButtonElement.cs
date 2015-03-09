@@ -33,32 +33,32 @@ namespace Bridge.Html5
         public readonly FormElement Form;
 
         /// <summary>
-        /// The URI of a resource that processes information submitted by the button. If specified, this attribute overrides the action attribute of the <form> element that owns this element.
+        /// The URI of a resource that processes information submitted by the button. If specified, this attribute overrides the action attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormAction;
 
         /// <summary>
-        /// The type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the <form> element that owns this element.
+        /// The type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormEncType;
 
         /// <summary>
-        /// The HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the <form> element that owns this element.
+        /// The HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormMethod;
         
         /// <summary>
-        /// Indicates that the form is not to be validated when it is submitted. If specified, this attribute overrides the enctype attribute of the <form> element that owns this element.
+        /// Indicates that the form is not to be validated when it is submitted. If specified, this attribute overrides the enctype attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public bool FormNoValidate;
 
         /// <summary>
-        /// A name or keyword indicating where to display the response that is received after submitting the form. If specified, this attribute overrides the target attribute of the <form> element that owns this element.
+        /// A name or keyword indicating where to display the response that is received after submitting the form. If specified, this attribute overrides the target attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormTarget;
 
         /// <summary>
-        /// A list of <label> elements that are labels for this button.
+        /// A list of &lt;label&gt; elements that are labels for this button.
         /// </summary>
         public readonly NodeList Labels;
 

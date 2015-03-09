@@ -6,7 +6,7 @@ using System.Collections;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLFormElement interface provides methods to create and modify <form> elements; it inherits from properties and methods of the HTMLElement interface.
+    /// The HTMLFormElement interface provides methods to create and modify &lt;form&gt; elements; it inherits from properties and methods of the HTMLElement interface.
     /// </summary>
     [Ignore]
     [Name("HTMLFormElement")]    

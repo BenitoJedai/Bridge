@@ -5,7 +5,7 @@ namespace Bridge.Html5
 {
     /// <summary>
     /// The HTMLTableSectionElement interface provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of sections, that is headers, footers and bodies, in an HTML table.
-    /// The HTML elements implementing this interface: <tfoot>, <thead>, and <tbody>.
+    /// The HTML elements implementing this interface: &lt;tfoot&gt;, &lt;thead&gt;, and &lt;tbody&gt;.
     /// </summary>
     [Ignore]
     [Name("HTMLTableSectionElement")]
@@ -48,7 +48,7 @@ namespace Bridge.Html5
     }
 
     /// <summary>
-    /// Specifies the type of a table section. It can be a footer <tfoot>, a header <thead> or a body <tbody> section.
+    /// Specifies the type of a table section. It can be a footer &lt;tfoot&gt;, a header &lt;thead&gt; or a body &lt;tbody&gt; section.
     /// </summary>
     [Ignore]
     [Enum(Emit.StringName)]
@@ -56,19 +56,19 @@ namespace Bridge.Html5
     public enum TableSectionType
     {
         /// <summary>
-        /// <tbody></tbody>
+        /// &lt;tbody&gt;&lt;/tbody&gt;
         /// </summary>
         [Name("tbody")]
         Body,
 
         /// <summary>
-        /// <tfoot></tfoot>
+        /// &lt;tfoot&gt;&lt;/tfoot&gt;
         /// </summary>
         [Name("tfoot")]
         Footer,
 
         /// <summary>
-        /// <thead></thead>
+        /// &lt;thead&gt;&lt;/thead&gt;
         /// </summary>
         [Name("thead")]
         Header

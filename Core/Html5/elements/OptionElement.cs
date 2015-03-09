@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLOptionElement interface represents <option> elements and inherits all classes and methods of the HTMLElement interface.
+    /// The HTMLOptionElement interface represents &lt;option&gt; elements and inherits all classes and methods of the HTMLElement interface.
     /// </summary>
     [Ignore]
     [Name("HTMLOptionElement")]
@@ -21,17 +21,17 @@ namespace Bridge.Html5
         public bool DefaultSelected;
 
         /// <summary>
-        /// Reflects the value of the disabled HTML attribute, which indicates that the option is unavailable to be selected. An option can also be disabled if it is a child of an <optgroup> element that is disabled.
+        /// Reflects the value of the disabled HTML attribute, which indicates that the option is unavailable to be selected. An option can also be disabled if it is a child of an &lt;optgroup&gt; element that is disabled.
         /// </summary>
         public bool Disable;
 
         /// <summary>
-        /// If the option is a descendent of a <select> element, then this property has the same value as the form property of the corresponding HTMLSelectElement object; otherwise, it is null.
+        /// If the option is a descendent of a &lt;select&gt; element, then this property has the same value as the form property of the corresponding HTMLSelectElement object; otherwise, it is null.
         /// </summary>
         public readonly FormElement Form;
 
         /// <summary>
-        /// The position of the option within the list of options it belongs to, in tree-order. If the option is not part of a list of options, like when it is part of the <datalist> element, the value is 0.
+        /// The position of the option within the list of options it belongs to, in tree-order. If the option is not part of a list of options, like when it is part of the &lt;datalist&gt; element, the value is 0.
         /// </summary>
         public readonly int Index;
 

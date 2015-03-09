@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLOptGroupElement interface provides special properties and methods (beyond the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <optgroup> elements.
+    /// The HTMLOptGroupElement interface provides special properties and methods (beyond the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of &lt;optgroup&gt; elements.
     /// </summary>
     [Ignore]
     [Name("HTMLOptGroupElement")]
@@ -16,7 +16,7 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// If true, the whole list of children <option> is disabled.
+        /// If true, the whole list of children &lt;option&gt; is disabled.
         /// </summary>
         public bool Disabled;
 

@@ -4,8 +4,8 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLObjectElement interface provides special properties and methods (beyond those on the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <object> element, representing external resources.
-    /// The HTML <object> Element (or HTML Embedded Object Element) represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin.
+    /// The HTMLObjectElement interface provides special properties and methods (beyond those on the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of &lt;object&gt; element, representing external resources.
+    /// The HTML &lt;object&gt; Element (or HTML Embedded Object Element) represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin.
     /// </summary>
     [Ignore]
     [Name("HTMLObjectElement")]
@@ -62,7 +62,7 @@ namespace Bridge.Html5
         public bool TypeMustMatch;
 
         /// <summary>
-        /// Reflects the usemap HTML attribute, specifying a <map> element to use.
+        /// Reflects the usemap HTML attribute, specifying a &lt;map&gt; element to use.
         /// </summary>
         public string useMap;
 

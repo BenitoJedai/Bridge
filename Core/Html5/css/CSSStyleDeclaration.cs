@@ -267,7 +267,7 @@ namespace Bridge.Html5
         public string BorderImageSlice;
 
         /// <summary>
-        /// The border-image-source CSS property defines the <image> to use instead of the style of the border. If this property is set to none, the style defined by border-style is used instead.
+        /// The border-image-source CSS property defines the &lt;image&gt; to use instead of the style of the border. If this property is set to none, the style defined by border-style is used instead.
         /// </summary>
         public string BorderImageSource;
 
@@ -431,7 +431,7 @@ namespace Bridge.Html5
         public BoxSizing BoxSizing;
 
         /// <summary>
-        /// The caption-side CSS property positions the content of a table's <caption> on the specified side.
+        /// The caption-side CSS property positions the content of a table's &lt;caption&gt; on the specified side.
         /// </summary>
         public CaptionSide CaptionSide;
 
@@ -629,12 +629,12 @@ namespace Bridge.Html5
         public FlexWrap FlexWrap;
 
         /// <summary>
-        /// The flood-color attribute indicates what color to use to flood the current filter primitive subregion defined through the <feflood> element. The keyword currentColor and ICC colors can be specified in the same manner as within a <paint> specification for the fill and stroke attributes.
+        /// The flood-color attribute indicates what color to use to flood the current filter primitive subregion defined through the &lt;feflood&gt; element. The keyword currentColor and ICC colors can be specified in the same manner as within a &lt;paint&gt; specification for the fill and stroke attributes.
         /// </summary>
         public string FloodColor;
 
         /// <summary>
-        /// The flood-opacity attribute indicates the opacity value to use across the current filter primitive subregion defined through the <feflood> element.
+        /// The flood-opacity attribute indicates the opacity value to use across the current filter primitive subregion defined through the &lt;feflood&gt; element.
         /// </summary>
         public string FloodOpacity;
 
@@ -891,7 +891,7 @@ namespace Bridge.Html5
         public ListStylePosition ListStylePosition;
 
         /// <summary>
-        /// The list-style-type CSS property specifies appearance of a list item element. As it is the only one who defaults to display:list-item, this is usually a <li> element, but can be any element with this display value.
+        /// The list-style-type CSS property specifies appearance of a list item element. As it is the only one who defaults to display:list-item, this is usually a &lt;li&lt; element, but can be any element with this display value.
         /// </summary>
         public ListStyleType ListStyleType;
 
@@ -931,7 +931,7 @@ namespace Bridge.Html5
         public string Mask;
 
         /// <summary>
-        /// The CSS mask-type properties defines if a SVG <mask> element is a luminance or an alpha mask.
+        /// The CSS mask-type properties defines if a SVG &lt;mask&gt; element is a luminance or an alpha mask.
         /// </summary>
         public MaskType MaskType;
 

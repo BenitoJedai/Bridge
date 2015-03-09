@@ -5,7 +5,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// HTML <select> elements share all of the properties and methods of other HTML elements described in the element section. They also have the specialized interface HTMLSelectElement.
+    /// HTML &lt;select&gt; elements share all of the properties and methods of other HTML elements described in the element section. They also have the specialized interface HTMLSelectElement.
     /// </summary>
     [Ignore]
     [Name("HTMLSelectElement")]
@@ -40,7 +40,7 @@ namespace Bridge.Html5
         public readonly NodeList Labels;
 
         /// <summary>
-        /// The number of <option> elements in this select element.
+        /// The number of &lt;option&gt; elements in this select element.
         /// </summary>
         public int Length;
 
@@ -55,7 +55,7 @@ namespace Bridge.Html5
         public string Name;
 
         /// <summary>
-        /// The set of <option> elements contained by this element. Read only.
+        /// The set of &lt;option&gt; elements contained by this element. Read only.
         /// </summary>
         public readonly OptionsCollection Options;
 
@@ -65,7 +65,7 @@ namespace Bridge.Html5
         public bool Required;
 
         /// <summary>
-        /// The index of the first selected <option> element. The value -1 is returned if no element is selected.
+        /// The index of the first selected &lt;option&gt; element. The value -1 is returned if no element is selected.
         /// </summary>
         public int SelectedIndex;
 

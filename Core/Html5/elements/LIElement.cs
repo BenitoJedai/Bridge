@@ -21,7 +21,7 @@ namespace Bridge.Html5
         public string Type;
 
         /// <summary>
-        /// Indicates the ordinal position of the list element inside a given <ol>. It reflects the value attribute of the HTML <li> element, and can be smaller than 0. If the <li> element is not a child of an <ol> element, the property has no meaning.
+        /// Indicates the ordinal position of the list element inside a given &lt;ol&gt;. It reflects the value attribute of the HTML &lt;li&gt; element, and can be smaller than 0. If the &lt;li&gt; element is not a child of an &lt;ol&gt; element, the property has no meaning.
         /// </summary>
         public int Value;
     }
