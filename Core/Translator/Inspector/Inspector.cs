@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET 
 {

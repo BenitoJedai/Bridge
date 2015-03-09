@@ -8,7 +8,7 @@ using System.Text;
 using System.Collections.Generic;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
-using Bridge.Plugin;
+using Bridge.Contract;
 using ICSharpCode.NRefactory.TypeSystem;
 
 namespace Bridge.NET

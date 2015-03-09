@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public interface IModuleDependency
     {

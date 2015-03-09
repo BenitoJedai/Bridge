@@ -1,4 +1,4 @@
-﻿using Bridge.Plugin;
+﻿using Bridge.Contract;
 using System;
 using System.Collections.Generic;
 using System.Text;

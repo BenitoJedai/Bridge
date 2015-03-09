@@ -1,7 +1,7 @@
 ﻿using System;
 using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

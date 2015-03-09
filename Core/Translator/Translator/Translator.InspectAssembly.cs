@@ -4,7 +4,7 @@ using Mono.Cecil;
 using ICSharpCode.NRefactory.CSharp;
 using System.Linq;
 using System;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

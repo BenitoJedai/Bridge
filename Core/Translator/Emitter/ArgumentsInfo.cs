@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

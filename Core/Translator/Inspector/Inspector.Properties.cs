@@ -3,7 +3,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET 
 {

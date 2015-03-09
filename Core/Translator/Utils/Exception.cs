@@ -1,4 +1,4 @@
-﻿using Bridge.Plugin;
+﻿using Bridge.Contract;
 using System;
 
 namespace Bridge.NET

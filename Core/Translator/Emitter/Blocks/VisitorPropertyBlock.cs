@@ -3,7 +3,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
 using Ext.Net.Utilities;
-using Bridge.Plugin;
+using Bridge.Contract;
 using ICSharpCode.NRefactory.Semantics;
 using System.Linq;
 

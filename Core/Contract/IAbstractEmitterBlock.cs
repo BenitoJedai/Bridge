@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public interface IAbstractEmitterBlock
     {
@@ -10,7 +10,7 @@ namespace Bridge.Plugin
         void ClearLocalsMap(System.Collections.Generic.Dictionary<string, string> prevMap = null);
         void Emit();
         void EmitBlockOrIndentedLine(ICSharpCode.NRefactory.CSharp.AstNode node);
-        Bridge.Plugin.IEmitter Emitter { get; set; }
+        Bridge.Contract.IEmitter Emitter { get; set; }
         void EndBlock();
         void EnsureComma(bool newLine = true);
         int GetNumberOfEmptyLinesAtEnd();

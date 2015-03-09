@@ -1,4 +1,4 @@
-﻿using Bridge.Plugin;
+﻿using Bridge.Contract;
 using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;

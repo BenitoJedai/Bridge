@@ -178,9 +178,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plugin\Bridge.Plugin.csproj">
+    <ProjectReference Include="..\Contract\Bridge.Contract.csproj">
       <Project>{52ae9e3e-6929-4720-ab7a-f9f22b9a8972}</Project>
-      <Name>Bridge.Plugin</Name>
+      <Name>Bridge.Contract</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

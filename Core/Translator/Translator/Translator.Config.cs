@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Bridge.Plugin;
+using Bridge.Contract;
 using System.IO;
 using Newtonsoft.Json;
 

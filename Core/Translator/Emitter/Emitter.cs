@@ -1,4 +1,4 @@
-﻿using Bridge.Plugin;
+﻿using Bridge.Contract;
 using Mono.Cecil;
 using System.Collections.Generic;
 

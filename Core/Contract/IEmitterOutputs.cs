@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public interface IEmitterOutputs : IDictionary<string, IEmitterOutput>
     {

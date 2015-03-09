@@ -5,7 +5,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

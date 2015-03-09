@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public interface IAsyncStep
     {

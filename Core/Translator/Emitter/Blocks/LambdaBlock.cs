@@ -8,7 +8,7 @@ using System.Text;
 using Mono.Cecil;
 using Ext.Net.Utilities;
 using ICSharpCode.NRefactory.Semantics;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

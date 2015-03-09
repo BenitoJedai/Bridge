@@ -1,4 +1,4 @@
-﻿using Bridge.Plugin;
+﻿using Bridge.Contract;
 namespace Bridge.NET
 {
     public class ModuleDependency : IModuleDependency

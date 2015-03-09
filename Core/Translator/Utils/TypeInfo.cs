@@ -1,4 +1,4 @@
-﻿using Bridge.Plugin;
+﻿using Bridge.Contract;
 using ICSharpCode.NRefactory.CSharp;
 using System;
 using System.Collections.Generic;

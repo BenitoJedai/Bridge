@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public enum TypesSplit
     {

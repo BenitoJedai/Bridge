@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public interface ITranslator
     {

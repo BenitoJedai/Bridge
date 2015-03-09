@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Text;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

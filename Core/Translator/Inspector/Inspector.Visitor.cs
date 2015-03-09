@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Ext.Net.Utilities;
 using System.Linq;
 using ICSharpCode.NRefactory.Semantics;
-using Bridge.Plugin;
+using Bridge.Contract;
 
 namespace Bridge.NET
 {

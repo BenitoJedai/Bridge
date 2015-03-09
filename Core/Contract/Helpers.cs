@@ -8,7 +8,7 @@ using ICSharpCode.NRefactory.Semantics;
 using System;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
-namespace Bridge.Plugin
+namespace Bridge.Contract
 {
     public static class Helpers 
     {
