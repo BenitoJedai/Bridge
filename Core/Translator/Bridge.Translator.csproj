@@ -195,7 +195,7 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <PostBuildEvent>call $(SolutionDir)\assemblies\deploy.bat "$(MSBuildProjectName)" "$(SolutionDir)"
-@for %25%25a in (AjaxMin Ext.Net.Utilities ICSharpCode Mono Newtonsoft) do @(
+@for %25%25a in (AjaxMin Object.Net.Utilities ICSharpCode Mono Newtonsoft) do @(
  @for %25%25x in (dll pdb xml) do @(
   @if exist %25%25a*.%25%25x @(
    @copy /y %25%25a*.%25%25x "$(SolutionDir)\assemblies\."
