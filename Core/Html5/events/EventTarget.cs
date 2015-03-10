@@ -159,6 +159,7 @@ namespace Bridge.Html5
         {
         }
 
+        /// <summary>
         /// Dispatches the specified event to the current element.
         /// To create an event object use the createEvent method in Firefox, Opera, Google Chrome, Safari and Internet Explorer from version 9. After the new event is created, initialize it first (for details, see the page for the createEvent method). When the event is initialized, it is ready for dispatching.
         /// </summary>

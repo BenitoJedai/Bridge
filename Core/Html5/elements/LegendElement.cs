@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLLegendElement is an interface allowing to access properties of the <legend> elements. It inherits properties and methods from the HTMLElement interface.
+    /// The HTMLLegendElement is an interface allowing to access properties of the &lt;legend&gt; elements. It inherits properties and methods from the HTMLElement interface.
     /// </summary>
     [Ignore]
     [Name("HTMLLegendElement")]

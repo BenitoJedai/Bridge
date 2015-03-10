@@ -6,7 +6,7 @@ using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.CSharp;
-using Ext.Net.Utilities;
+using Object.Net.Utilities;
 using Bridge.Contract;
 
 namespace Bridge.NET

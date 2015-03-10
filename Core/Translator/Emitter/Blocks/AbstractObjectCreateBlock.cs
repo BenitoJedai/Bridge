@@ -1,6 +1,4 @@
 ﻿using ICSharpCode.NRefactory.CSharp;
-using ICSharpCode.NRefactory.Semantics;
-using ICSharpCode.NRefactory.TypeSystem;
 using System.Collections.Generic;
 
 namespace Bridge.NET
@@ -23,10 +21,12 @@ namespace Bridge.NET
 
                 needComma = true;
                 string name = namedExression != null ? namedExression.Name : namedArgumentExpression.Name;
+                
                 if (changeCase)
                 {
-                    name = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name);
+                    name = Object.Net.Utilities.StringUtils.ToLowerCamelCase(name);
                 }
+                
                 Expression expression = namedExression != null ? namedExression.Expression : namedArgumentExpression.Expression;
 
                 this.Write(name, ": ");

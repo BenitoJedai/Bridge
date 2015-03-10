@@ -947,7 +947,7 @@ namespace Bridge.Html5
         public const int DOM_VK_PERCENT = 165;
 
         /// <summary>
-        /// Ampersand ("&") key.
+        /// Ampersand ("&amp;") key.
         /// </summary>
         [InlineConst]
         public const int DOM_VK_AMPERSAND = 166;

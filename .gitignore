@@ -116,6 +116,7 @@ UpgradeLog*.XML
 
 /assemblies/*
 !/assemblies/*.targets
+!/assemblies/*.bat
 
 /Sandbox/Bridge.TestLibrary/build/*.js
 /Sandbox/CompanyX/Build/*.js

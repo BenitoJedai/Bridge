@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLTextAreaElement interface, which provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <textarea> elements.
+    /// The HTMLTextAreaElement interface, which provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of &lt;textarea&gt; elements.
     /// </summary>
     [Ignore]
     [Name("HTMLTextAreaElement")]
@@ -38,7 +38,7 @@ namespace Bridge.Html5
 
         /// <summary>
         /// The containing form element, if this element is in a form. If this element is not contained in a form element:
-        /// HTML5 this can be the id attribute of any <form> element in the same document. Even if the attribute is set on <input>, this property will be null, if it isn't the id of a <form> element.
+        /// HTML5 this can be the id attribute of any &lt;form&gt; element in the same document. Even if the attribute is set on &lt;input&gt;, this property will be null, if it isn't the id of a &lt;form&gt; element.
         /// HTML 4 this must be null.
         /// </summary>
         public readonly FormElement Form;

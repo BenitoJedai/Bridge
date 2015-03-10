@@ -33,7 +33,7 @@ namespace System
         public bool IgnorePunctuation;
 
         /// <summary>
-        /// Whether numeric collation should be used, such that "1" < "2" < "10". Possible values are true and false; the default is false. This option can be set through an options property or through a Unicode extension key; if both are provided, the options property takes precedence. Implementations are not required to support this property.
+        /// Whether numeric collation should be used, such that "1" &lt; "2" &lt; "10". Possible values are true and false; the default is false. This option can be set through an options property or through a Unicode extension key; if both are provided, the options property takes precedence. Implementations are not required to support this property.
         /// </summary>
         public bool Numeric;
 

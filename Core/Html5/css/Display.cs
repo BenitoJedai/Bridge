@@ -39,60 +39,60 @@ namespace Bridge.Html5
         InlineBlock,
 
         /// <summary>
-        /// The inline-table value does not have a direct mapping in HTML. It behaves like a <table> HTML element, but as an inline box, rather than a block-level box. Inside the table box is a block-level context.
+        /// The inline-table value does not have a direct mapping in HTML. It behaves like a &lt;table&gt; HTML element, but as an inline box, rather than a block-level box. Inside the table box is a block-level context.
         /// </summary>
         [Name("inline-table")]
         InlineTable,
 
         /// <summary>
-        /// Behaves like the <table> HTML element. It defines a block-level box.
+        /// Behaves like the &lt;table&gt; HTML element. It defines a block-level box.
         /// </summary>
         Table,
 
         /// <summary>
-        /// Behaves like the <caption> HTML element.
+        /// Behaves like the &lt;caption&gt; HTML element.
         /// </summary>
         [Name("table-caption")]
         TableCaption,
 
         /// <summary>
-        /// Behaves like the <td> HTML element
+        /// Behaves like the &lt;td&gt; HTML element
         /// </summary>
         [Name("table-cell")]
         TableCell,
 
         /// <summary>
-        /// These elements behave like the corresponding <col> HTML elements.
+        /// These elements behave like the corresponding &lt;col&gt; HTML elements.
         /// </summary>
         [Name("table-column")]
         TableColumn,
 
         /// <summary>
-        /// These elements behave like the corresponding <colgroup> HTML elements.
+        /// These elements behave like the corresponding &lt;colgroup&gt; HTML elements.
         /// </summary>
         [Name("table-column-group")]
         TableColumnGroup,
 
         /// <summary>
-        /// These elements behave like the corresponding <tfoot> HTML elements
+        /// These elements behave like the corresponding &lt;tfoot&gt; HTML elements
         /// </summary>
         [Name("table-footer-group")]
         TableFooterGroup,
 
         /// <summary>
-        /// These elements behave like the corresponding <thead> HTML elements
+        /// These elements behave like the corresponding &lt;thead&gt; HTML elements
         /// </summary>
         [Name("table-header-group")]
         TableHeaderGroup,
         
         /// <summary>
-        /// Behaves like the <tr> HTML element
+        /// Behaves like the &lt;tr&gt; HTML element
         /// </summary>
         [Name("table-row")]
         TableRow,
 
         /// <summary>
-        /// These elements behave like the corresponding <tbody> HTML elements
+        /// These elements behave like the corresponding &lt;tbody&gt; HTML elements
         /// </summary>
         [Name("table-row-group")]
         TableRowGroup,

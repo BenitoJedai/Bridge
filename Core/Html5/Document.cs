@@ -164,6 +164,7 @@ namespace Bridge.Html5
         {
         }
 
+        /// <summary>
         /// Dispatches the specified event to the current element.
         /// To create an event object use the createEvent method in Firefox, Opera, Google Chrome, Safari and Internet Explorer from version 9. After the new event is created, initialize it first (for details, see the page for the createEvent method). When the event is initialized, it is ready for dispatching.
         /// </summary>
@@ -934,7 +935,7 @@ namespace Bridge.Html5
         public static readonly DocumentType Doctype;
 
         /// <summary>
-        /// Returns the Element that is the root element of the document (for example, the <html> element for HTML documents).
+        /// Returns the Element that is the root element of the document (for example, the &lt;html&gt; element for HTML documents).
         /// </summary>
         public static readonly Element DocumentElement;
 

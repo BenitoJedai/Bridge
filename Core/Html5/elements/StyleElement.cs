@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLStyleElement interface represents a <style> element. It inherits properties and methods from its parent, HTMLElement, and from LinkStyle.
+    /// The HTMLStyleElement interface represents a &lt;style&gt; element. It inherits properties and methods from its parent, HTMLElement, and from LinkStyle.
     /// This interface doesn't allow to manipulate the CSS it contains (in most case). To manipulate CSS, see Using dynamic styling information for an overview of the objects used to manipulate specified CSS properties using the DOM.
     /// </summary>
     [Ignore]

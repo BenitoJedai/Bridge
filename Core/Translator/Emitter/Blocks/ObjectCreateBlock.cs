@@ -218,7 +218,7 @@ namespace Bridge.NET
                 string name = namedExression != null ? namedExression.Name : namedArgumentExpression.Name;
                 if (changeCase)
                 {
-                    name = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name);
+                    name = Object.Net.Utilities.StringUtils.ToLowerCamelCase(name);
                 }
                 Expression expression = namedExression != null ? namedExression.Expression : namedArgumentExpression.Expression;
 

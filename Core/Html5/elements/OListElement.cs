@@ -37,7 +37,7 @@ namespace Bridge.Html5
     }
 
     /// <summary>
-    /// Defines the kind of marker to be used to display with an <ol>. Reflects to the <ol>'s type attribute.
+    /// Defines the kind of marker to be used to display with an &lt;ol&gt;. Reflects to the &lt;ol&gt;'s type attribute.
     /// </summary>
     [Ignore]
     [Enum(Emit.StringName)]
@@ -45,31 +45,31 @@ namespace Bridge.Html5
     public enum OListType
     {
         /// <summary>
-        /// Reflects to '1' value of the <ol>'s type attribute meaning that decimal numbers are used: 1, 2, 3, 4, 5, …
+        /// Reflects to '1' value of the &lt;ol&gt;'s type attribute meaning that decimal numbers are used: 1, 2, 3, 4, 5, …
         /// </summary>
         [Name("1")]
         DecimalNumbers,
 
         /// <summary>
-        /// Reflects to 'a' value of the <ol>'s type attribute meaning that the lowercase latin alphabet is used:  a, b, c, d, e, …
+        /// Reflects to 'a' value of the &lt;ol&gt;'s type attribute meaning that the lowercase latin alphabet is used:  a, b, c, d, e, …
         /// </summary>
         [Name("a")]
         LowercaseLatinAlphabet,
 
         /// <summary>
-        /// Reflects to 'A' value of the <ol>'s type attribute meaning that the uppercase latin alphabet is used: A, B, C, D, E, …
+        /// Reflects to 'A' value of the &lt;ol&gt;'s type attribute meaning that the uppercase latin alphabet is used: A, B, C, D, E, …
         /// </summary>
         [Name("A")]
         UppercaseLatinAlphabet,
 
         /// <summary>
-        /// Reflects to 'i' value of the <ol>'s type attribute meaning that the lowercase latin numerals are used: i, ii, iii, iv, v, …
+        /// Reflects to 'i' value of the &lt;ol&gt;'s type attribute meaning that the lowercase latin numerals are used: i, ii, iii, iv, v, …
         /// </summary>
         [Name("i")]
         LowercaseLatinNumerals,
 
         /// <summary>
-        /// Reflects to 'I' value of the <ol>'s type attribute meaning that the uppercase latin numerals are used: I, II, III, IV, V, …
+        /// Reflects to 'I' value of the &lt;ol&gt;'s type attribute meaning that the uppercase latin numerals are used: I, II, III, IV, V, …
         /// </summary>
         [Name("I")]
         UppercaseLatinNumerals

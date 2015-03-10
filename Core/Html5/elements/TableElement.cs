@@ -16,32 +16,32 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Is an HTMLTableCaptionElement representing the first <caption> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <caption>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree as the first child of this element and the first <caption> that is a child of this element is removed from the tree, if any.
+        /// Is an HTMLTableCaptionElement representing the first &lt;caption&gt; that is a child of the element, or null if none is found. When set, if the object doesn't represent a &lt;caption&gt;, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree as the first child of this element and the first &lt;caption&gt; that is a child of this element is removed from the tree, if any.
         /// </summary>
         public TableCaptionElement Caption;
 
         /// <summary>
-        /// Is an HTMLTableSectionElement representing the first <thead> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <thead>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a <caption>, nor a <colgroup>, or as the last child if there is no such element, and the first <thead> that is a child of this element is removed from the tree, if any.
+        /// Is an HTMLTableSectionElement representing the first &lt;thead&gt; that is a child of the element, or null if none is found. When set, if the object doesn't represent a &lt;thead&gt;, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a &lt;caption&gt;, nor a &lt;colgroup&gt;, or as the last child if there is no such element, and the first &lt;thead&gt; that is a child of this element is removed from the tree, if any.
         /// </summary>
         public TableSectionElement THead;
 
         /// <summary>
-        /// Is an HTMLTableSectionElement representing the first <tfoot> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <tfoot>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a <caption>, a <colgroup>, nor a <thead>, or as the last child if there is no such element, and the first <tfoot> that is a child of this element is removed from the tree, if any.
+        /// Is an HTMLTableSectionElement representing the first &lt;tfoot&gt; that is a child of the element, or null if none is found. When set, if the object doesn't represent a &lt;tfoot&gt;, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a &lt;caption&gt;, a &lt;colgroup&gt;, nor a &lt;thead&gt;, or as the last child if there is no such element, and the first &lt;tfoot&gt; that is a child of this element is removed from the tree, if any.
         /// </summary>
         public TableSectionElement TFoot;
 
         /// <summary>
-        /// Returns a live HTMLCollection containing all the rows of the element, that is all <tr> that are a child of the element, or a child or one of its <thead>, <tbody> and <tfoot> children. The rows members of a <thead> appear first, in tree order, and those members of a <tbody> last, also in tree order. The HTMLCollection is live and is automatically updated when the HTMLTableElement changes.
+        /// Returns a live HTMLCollection containing all the rows of the element, that is all &lt;tr&gt; that are a child of the element, or a child or one of its &lt;thead&gt;, &lt;tbody&gt; and &lt;tfoot&gt; children. The rows members of a &lt;thead&gt; appear first, in tree order, and those members of a &lt;tbody&gt; last, also in tree order. The HTMLCollection is live and is automatically updated when the HTMLTableElement changes.
         /// </summary>
         public readonly HTMLCollection<TableRowElement> Rows;
 
         /// <summary>
-        /// Returns a live HTMLCollection containing all the <tbody> of the element. The HTMLCollection is live and is automatically updated when the HTMLTableElement changes.
+        /// Returns a live HTMLCollection containing all the &lt;tbody&gt; of the element. The HTMLCollection is live and is automatically updated when the HTMLTableElement changes.
         /// </summary>
         public readonly HTMLCollection<TableSectionElement> TBodies;
 
         /// <summary>
-        /// Returns an HTMLElement representing the first <thead> that is a child of the element. If none is found, a new one is created and inserted in the tree immediately before the first element that is neither a <caption>, nor a <colgroup>, or as the last child if there is no such element.
+        /// Returns an HTMLElement representing the first &lt;thead&gt; that is a child of the element. If none is found, a new one is created and inserted in the tree immediately before the first element that is neither a &lt;caption&gt;, nor a &lt;colgroup&gt;, or as the last child if there is no such element.
         /// </summary>
         public virtual TableSectionElement CreateTHead()
         {
@@ -49,14 +49,14 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Removes the first <thead> that is a child of the element.
+        /// Removes the first &lt;thead&gt; that is a child of the element.
         /// </summary>
         public virtual void DeleteTHead()
         {
         }
 
         /// <summary>
-        /// Returns an HTMLElement representing the first <tfoot> that is a child of the element. If none is found, a new one is created and inserted in the tree immediately before the first element that is neither a <caption>, a <colgroup>, nor a <thead>, or as the last child if there is no such element.
+        /// Returns an HTMLElement representing the first &lt;tfoot&gt; that is a child of the element. If none is found, a new one is created and inserted in the tree immediately before the first element that is neither a &lt;caption&gt;, a &lt;colgroup&gt;, nor a &lt;thead&gt;, or as the last child if there is no such element.
         /// </summary>
         public virtual TableSectionElement CreateTFoot()
         {
@@ -64,14 +64,14 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Removes the first <tfoot> that is a child of the element.
+        /// Removes the first &lt;tfoot&gt; that is a child of the element.
         /// </summary>
         public virtual void DeleteTFoot()
         {
         }
 
         /// <summary>
-        /// Returns an HTMLElement representing the first <caption> that is a child of the element. If none is found, a new one is created and inserted in the tree as the first child of the <table> element.
+        /// Returns an HTMLElement representing the first &lt;caption&gt; that is a child of the element. If none is found, a new one is created and inserted in the tree as the first child of the &lt;table&gt; element.
         /// </summary>
         public virtual TableCaptionElement CreateCaption()
         {
@@ -79,7 +79,7 @@ namespace Bridge.Html5
         }
 
         /// <summary>
-        /// Removes the first <caption> that is a child of the element.
+        /// Removes the first &lt;caption&gt; that is a child of the element.
         /// </summary>
         public virtual void DeleteCaption()
         {

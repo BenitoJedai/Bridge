@@ -5,7 +5,7 @@ using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
 using System.Collections.Generic;
 using System.Text;
-using Ext.Net.Utilities;
+using Object.Net.Utilities;
 using Bridge.Contract;
 
 namespace Bridge.NET
@@ -143,7 +143,7 @@ namespace Bridge.NET
                                 switch (enumMode)
                                 {
                                     case 3:
-                                        enumStringName = Ext.Net.Utilities.StringUtils.ToLowerCamelCase(member.Member.Name);
+                                        enumStringName = Object.Net.Utilities.StringUtils.ToLowerCamelCase(member.Member.Name);
                                         break;
                                     case 4:
                                         break;

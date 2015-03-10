@@ -75,28 +75,28 @@ namespace Bridge.Html5
 
         /// <summary>
         /// The containing form element, if this element is in a form. If this element is not contained in a form element:
-        /// HTML5 this can be the id attribute of any <form> element in the same document. Even if the attribute is set on <input>, this property will be null, if it isn't the id of a <form> element.
+        /// HTML5 this can be the id attribute of any &lt;form&gt; element in the same document. Even if the attribute is set on &lt;input&gt;, this property will be null, if it isn't the id of a &lt;form&gt; element.
         /// HTML 4 this must be null.
         /// </summary>
         public readonly FormElement Form;
 
         /// <summary>
-        /// Reflects the formaction HTML attribute, containing the URI of a program that processes information submitted by the element. If specified, this attribute overrides the action attribute of the <form> element that owns this element.
+        /// Reflects the formaction HTML attribute, containing the URI of a program that processes information submitted by the element. If specified, this attribute overrides the action attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormAction;
 
         /// <summary>
-        /// Reflects the formenctype HTML attribute, containing the type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the <form> element that owns this element.
+        /// Reflects the formenctype HTML attribute, containing the type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormEncType;
 
         /// <summary>
-        /// Reflects the formmethod HTML attribute, containing the HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the <form> element that owns this element.
+        /// Reflects the formmethod HTML attribute, containing the HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public string FormMethod;
         
         /// <summary>
-        /// Reflects the formnovalidate HTML attribute, indicating that the form is not to be validated when it is submitted. If specified, this attribute overrides the novalidate attribute of the <form> element that owns this element.
+        /// Reflects the formnovalidate HTML attribute, indicating that the form is not to be validated when it is submitted. If specified, this attribute overrides the novalidate attribute of the &lt;form&gt; element that owns this element.
         /// </summary>
         public bool FormNoValidate;
 
@@ -116,12 +116,12 @@ namespace Bridge.Html5
         public bool Indeterminate;
 
         /// <summary>
-        /// A list of <label> elements that are labels for this element.
+        /// A list of &lt;label&gt; elements that are labels for this element.
         /// </summary>
         public readonly NodeList Labels;
 
         /// <summary>
-        /// Identifies a list of pre-defined options to suggest to the user. The value must be the id of a <datalist> element in the same document. The browser displays only options that are valid values for this input element. This attribute is ignored when the type attribute's value is hidden, checkbox, radio, file, or a button type.
+        /// Identifies a list of pre-defined options to suggest to the user. The value must be the id of a &lt;datalist&gt; element in the same document. The browser displays only options that are valid values for this input element. This attribute is ignored when the type attribute's value is hidden, checkbox, radio, file, or a button type.
         /// </summary>
         public Element List;
 

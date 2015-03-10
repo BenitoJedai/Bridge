@@ -53,12 +53,12 @@ namespace Bridge.Html5
         public readonly ValidityState Validity;
 
         /// <summary>
-        /// Always false because <fieldset> objects are never candidates for constraint validation.
+        /// Always false because &lt;fieldset&gt; objects are never candidates for constraint validation.
         /// </summary>
         public bool WillValidate;
 
         /// <summary>
-        /// Always returns true because <fieldset> objects are never candidates for constraint validation.
+        /// Always returns true because &lt;fieldset&gt; objects are never candidates for constraint validation.
         /// </summary>
         public virtual bool CheckValidity()
         {

@@ -46,7 +46,7 @@ namespace Bridge.NET
         protected virtual void EmitNameExpression(string name, Expression namedExpression, Expression expression)
         {
             var resolveResult = this.Emitter.Resolver.ResolveNode(namedExpression, this.Emitter);
-            var lowerCaseName = this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            var lowerCaseName = this.Emitter.ChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
 
             if (resolveResult != null && resolveResult is MemberResolveResult)
             {

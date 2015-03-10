@@ -4,7 +4,7 @@ using Bridge.Foundation;
 namespace Bridge.Html5
 {
     /// <summary>
-    /// The HTMLParamElement interface provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <param> elements, representing a pair of a key and a value that acts as a parameter for an <object> element.
+    /// The HTMLParamElement interface provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating &lt;param&gt; elements, representing a pair of a key and a value that acts as a parameter for an &lt;object&gt; element.
     /// </summary>
     [Ignore]
     [Name("HTMLParamElement")]
