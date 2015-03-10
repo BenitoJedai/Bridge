@@ -5,7 +5,7 @@
     <AdditionalExplicitAssemblyReferences />
     <DocumentationFile>bin\$(Configuration)\$(MSBuildProjectName).xml</DocumentationFile>
     <PostBuildEvent>@for %%x in ("dll" "pdb" "xml") do @(
- @copy /Y $(MSBuildProjectName).%%x $(MSBuildThisFileDirectory).
+ @copy /Y "$(MSBuildProjectName).%%x" "$(MSBuildThisFileDirectory)".
 )</PostBuildEvent>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>

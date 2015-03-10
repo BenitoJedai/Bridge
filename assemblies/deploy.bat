@@ -4,11 +4,13 @@ rem Bridge.NET assembly dir.
 rem Example usage from VS's PostBuildEvent: 
 rem @call $(SolutionDir)\assemblies\deploy.bat "$(MSBuildProjectName)" "$(SolutionDir)\assemblies"
 
-if not "%1" == "" if not "%2" == "" (
+set par1=%~1
+set par2=%~2
+if not "%par1%" == "" if not "%par2%" == "" (
+ echo "noif" >> debug.txt
  for %%x in (exe dll pdb xml) do (
-  rem echo %1.%%x
-  if exist "%1.%%x" (
-   copy /y "%1.%%x" "%2assemblies\."
+  if exist "%par1%.%%x" (
+   copy /y "%par1%.%%x" "%par2%assemblies\."
   )
  )
 )
