@@ -245,7 +245,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
+                    this.Write(this.Emitter.ShortenTypeName(Helpers.GetScriptFullName(baseType)), ".prototype.", this.Emitter.ChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(baseMethod) : baseMethod);
                 }
 
                 if (!isIgnore && argsInfo.TypeArguments != null && argsInfo.TypeArguments.Length > 0)

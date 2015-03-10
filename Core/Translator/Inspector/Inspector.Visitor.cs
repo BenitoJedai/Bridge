@@ -2,7 +2,7 @@
 using ICSharpCode.NRefactory.TypeSystem;
 using System;
 using System.Collections.Generic;
-using Ext.Net.Utilities;
+using Object.Net.Utilities;
 using System.Linq;
 using ICSharpCode.NRefactory.Semantics;
 using Bridge.Contract;

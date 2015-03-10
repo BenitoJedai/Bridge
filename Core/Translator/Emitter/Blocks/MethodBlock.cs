@@ -6,7 +6,7 @@ using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Text;
 using Mono.Cecil;
-using Ext.Net.Utilities;
+using Object.Net.Utilities;
 using ICSharpCode.NRefactory.Semantics;
 using Bridge.Contract;
 
@@ -221,7 +221,7 @@ namespace Bridge.NET
             }
             else
             {
-                fieldName = this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
+                fieldName = this.Emitter.ChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
             }
             return fieldName;
         }

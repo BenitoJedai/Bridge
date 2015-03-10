@@ -6,7 +6,7 @@ using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem;
 using System.Text;
 using Mono.Cecil;
-using Ext.Net.Utilities;
+using Object.Net.Utilities;
 using Bridge.Contract;
 
 namespace Bridge.NET

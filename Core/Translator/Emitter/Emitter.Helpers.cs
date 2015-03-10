@@ -258,7 +258,7 @@ namespace Bridge.NET
                 changeCase = (bool)value;
             }
 
-            name = changeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            name = changeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
             if (isReserved)
             {
                 name = "$" + name;
@@ -290,7 +290,7 @@ namespace Bridge.NET
                 changeCase = (bool)value;
             }
 
-            name = changeCase && !cancelChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            name = changeCase && !cancelChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
 
             if (isReserved)
             {
@@ -334,7 +334,7 @@ namespace Bridge.NET
                 changeCase = (bool)expr.Value;
             }
 
-            name = changeCase && !cancelChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+            name = changeCase && !cancelChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
 
             if (isReserved)
             {

@@ -108,7 +108,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    name = (changeCase && isField) ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
+                    name = (changeCase && isField) ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
                     if (Bridge.NET.Emitter.IsReservedStaticName(name))
                     {
                         name = "$" + name;
@@ -238,7 +238,7 @@ namespace Bridge.NET
                 }
                 else
                 {
-                    fieldName = this.Emitter.ChangeCase ? Ext.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+                    fieldName = this.Emitter.ChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
                 }
 
                 this.Write(fieldName);
