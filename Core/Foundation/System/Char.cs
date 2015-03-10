@@ -32,13 +32,7 @@ namespace System
 		public static char Parse(string s) 
         {
 			return '\0';
-		}
-
-		[Template("String.fromCharCode({ch})")]
-		public static explicit operator String(char ch) 
-        {
-			return null;
-		}
+		}       
 
 		[Template("String.fromCharCode({this})")]
 		public override string ToString() 
@@ -111,5 +105,11 @@ namespace System
         {
 			return false;
 		}
+
+        [Template("String.fromCharCode({this})")]
+        public static implicit operator String(char ch)
+        {
+            return null;
+        }
 	}
 }

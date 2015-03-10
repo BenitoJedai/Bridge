@@ -1,36 +1,62 @@
 Bridge.String = {
     format : function (format) {
-        var _formatRe = /\{\{|\}\}|\{(\d+)(?:,(-?\d+))?(?:\:([\w\s\.]*))?\}/g,
-            args = Array.prototype.slice.call(arguments, 1);
+        var me = this,
+            _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
+            args = Array.prototype.slice.call(arguments, 1),
+            fn = this.decodeBraceSequence;
 
-        return format.replace(_formatRe, function (m, idx, alignment, formatStr) {
-            if (m === "{{" || m === "}}") {
-                return m.charAt(0);
+        return format.replace(_formatRe, function (m, openBrace, elementContent, index, align, format, closeBrace, repeatOpenBrace, repeatCloseBrace) {
+            if (repeatOpenBrace) {
+                return fn(repeatOpenBrace);
             }
 
-            var replaceValue = args[parseInt(idx, 10)],
-                values,
-                match;
-
-            if (!Bridge.isDefined(replaceValue, true)) {
-                return "";
+            if (repeatCloseBrace) {
+                return fn(repeatCloseBrace);
             }
 
-            if (alignment) {
-                alignment = parseInt(alignment, 10);
-                if (!Bridge.isNumber(alignment)) {
-                    alignment = null;
-                }
+            if (openBrace.length % 2 == 0 || closeBrace.length % 2 == 0) {
+                return fn(openBrace) + elementContent + fn(closeBrace);
             }
 
-            if (formatStr && Bridge.is(replaceValue, Bridge.IFormattable)) {
-                values = [replaceValue];
-
-                return Bridge.String.alignString(Bridge.format(replaceValue, formatStr), alignment);
-            }
-
-            return Bridge.String.alignString(replaceValue.toString(), alignment);
+            return fn(openBrace, true) + me.handleElement(index, align, format, args) + fn(closeBrace, true);
         });
+    },
+
+    handleElement: function (index, alignment, formatStr, args) {
+        var value;
+
+        index = parseInt(index, 10)
+
+        if (index > args.length - 1) {
+            throw new Bridge.FormatException("Input string was not in a correct format.");
+        }
+
+        value = args[index];
+
+        if (value == null)
+        {
+            value = "";
+        }
+
+        if (formatStr && Bridge.is(value, Bridge.IFormattable)) {            
+            value = Bridge.format(value, formatStr);
+        }
+        else {
+            value = "" + value;
+        }        
+
+        if (alignment) {
+            alignment = parseInt(alignment, 10);
+            if (!Bridge.isNumber(alignment)) {
+                alignment = null;
+            }
+        }
+
+        return Bridge.String.alignString(value.toString(), alignment);
+    },
+
+    decodeBraceSequence: function (braces, remove) {        
+        return braces.substr(0, (braces.length + (remove ? 0 : 1)) / 2);
     },
 
     alignString : function (str, alignment, pad, dir) {
@@ -43,7 +69,7 @@ Bridge.String = {
         }
 
         if (!dir) {
-            dir = alignment < 0 ? 2 : 1;
+            dir = alignment < 0 ? 1 : 2;
         }
 
         alignment = Math.abs(alignment);

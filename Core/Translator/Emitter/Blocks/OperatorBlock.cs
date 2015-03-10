@@ -39,7 +39,7 @@ namespace Bridge.NET
 
             if (methods.Count > 1)
             {
-                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, operatorDeclaration.Parameters, null, methods, operatorDeclaration.ReturnType);
+                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, operatorDeclaration.Parameters, null, methods, operatorDeclaration.ReturnType, typeDef);
                 string name = Helpers.GetOverloadName(this.Emitter, methodDef, methods);
                 this.Write(name);
             }

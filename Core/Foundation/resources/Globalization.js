@@ -56,7 +56,7 @@
     getFormat: function (type) {
         switch (type) {
             case Bridge.DateTimeFormatInfo:
-                return this.dateTimeFormat;
+                return this;
             default:
                 return null;
         }
@@ -166,10 +166,10 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
     statics: {
         constructor: function () {
             this.numberNegativePatterns =  ["(n)", "-n", "- n", "n-", "n -"];
-            this.currencyNegativePattern = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
-            this.currencyPositivePattern = ["$n", "n$", "$ n", "n $"];
-            this.percentNegativePattern = ["-n %", "-n%", "-%n", "%-n", "%n-", "n-%", "n%-", "-% n", "n %-", "% n-", "% -n", "n- %"];
-            this.percentPositivePattern = ["n %", "n%", "%n", "% n"];
+            this.currencyNegativePatterns = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
+            this.currencyPositivePatterns = ["$n", "n$", "$ n", "n $"];
+            this.percentNegativePatterns = ["-n %", "-n%", "-%n", "%-n", "%n-", "n-%", "n%-", "-% n", "n %-", "% n-", "% -n", "n- %"];
+            this.percentPositivePatterns = ["n %", "n%", "%n", "% n"];
 
             this.invariantInfo = Bridge.merge(new Bridge.NumberFormatInfo(), {
                 naNSymbol: "NaN",
@@ -206,7 +206,7 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
     getFormat: function (type) {
         switch (type) {
             case Bridge.NumberFormatInfo:
-                return this.numberFormat;
+                return this;
             default:
                 return null;
         }

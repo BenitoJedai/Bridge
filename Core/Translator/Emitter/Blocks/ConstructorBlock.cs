@@ -209,7 +209,7 @@ namespace Bridge.NET
                 {
                     var methodsDef = typeDef.Methods.Where(m => m.IsConstructor && m.Parameters.Count > 0).ToList();
                     Helpers.SortMethodOverloads(methodsDef, this.Emitter);
-                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null);
+                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null, typeDef);
                     ctorName += "$";
                     ctorName += (methodsDef.IndexOf(methodDef) + 1).ToString();
                 }

@@ -104,6 +104,12 @@ namespace System
         {
             return null;
         }
+
+        [Template("{T}.prototype")]
+        public static dynamic GetPrototype<T>()
+        {
+            return null;
+        }
     }
 
     [Ignore]

@@ -322,7 +322,7 @@ namespace Bridge.Contract
                 return methods.Count == 1 ? methods[0] : null;
             }
 
-            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods, methodDeclaration.ReturnType);
+            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods, methodDeclaration.ReturnType, type);
         }
 
         public static MethodDefinition GetMethodDefinition(IEmitter emitter, OperatorDeclaration operatorDeclaration, TypeDefinition type)
@@ -335,10 +335,10 @@ namespace Bridge.Contract
                 return ops.Count == 1 ? ops[0] : null;
             }
 
-            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, ops, operatorDeclaration.ReturnType);
+            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, ops, operatorDeclaration.ReturnType, type);
         }
 
-        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IList<IParameter> parameters, IList<IType> typeParameters, List<MethodDefinition> group, IType returnType)
+        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IList<IParameter> parameters, IList<IType> typeParameters, List<MethodDefinition> group, IType returnType, TypeDefinition typeDef)
         {
             var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
             foreach (var method in group)
@@ -346,6 +346,12 @@ namespace Bridge.Contract
                 if (parameters.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
                 {
                     bool match = method.Parameters.Count == 0;
+
+                    if (typeDef != null && method.DeclaringType != typeDef)
+                    {
+                        match = false;
+                        continue;
+                    }
 
                     if (returnType != null)
                     {
@@ -378,7 +384,7 @@ namespace Bridge.Contract
             return null;
         }
 
-        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group, AstType returnType)
+        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IEnumerable<ParameterDeclaration> parameters, IEnumerable<TypeParameterDeclaration> typeParameters, IEnumerable<MethodDefinition> group, AstType returnType, TypeDefinition typeDef)
         {
             var args = new List<ParameterDeclaration>(parameters);
             var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
@@ -388,6 +394,12 @@ namespace Bridge.Contract
                 {
                     bool match = method.Parameters.Count == 0;
 
+                    if (typeDef != null && method.DeclaringType != typeDef)
+                    {
+                        match = false;
+                        continue;
+                    }
+
                     if (returnType != null)
                     {
                         var resolveResult = emitter.Resolver.ResolveNode(returnType, emitter);
@@ -396,7 +408,7 @@ namespace Bridge.Contract
                             match = false;
                             continue;
                         }
-                    }
+                    }                    
 
                     for (int i = 0; i < method.Parameters.Count; i++)
                     {

@@ -698,37 +698,63 @@ Bridge.nullable = {
 Bridge.hasValue = Bridge.nullable.hasValue;
 Bridge.String = {
     format : function (format) {
-        var _formatRe = /\{\{|\}\}|\{(\d+)(?:,(-?\d+))?(?:\:([\w\s\.]*))?\}/g,
-            args = Array.prototype.slice.call(arguments, 1);
+        var me = this,
+            _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
+            args = Array.prototype.slice.call(arguments, 1),
+            fn = this.decodeBraceSequence;
 
-        return format.replace(_formatRe, function (m, idx, alignment, formatStr) {
-            if (m === "{{" || m === "}}") {
-                return m.charAt(0);
+        return format.replace(_formatRe, function (m, openBrace, elementContent, index, align, format, closeBrace, repeatOpenBrace, repeatCloseBrace) {
+            if (repeatOpenBrace) {
+                return fn(repeatOpenBrace);
             }
 
-            var replaceValue = args[parseInt(idx, 10)],
-                values,
-                match;
-
-            if (!Bridge.isDefined(replaceValue, true)) {
-                return "";
+            if (repeatCloseBrace) {
+                return fn(repeatCloseBrace);
             }
 
-            if (alignment) {
-                alignment = parseInt(alignment, 10);
-                if (!Bridge.isNumber(alignment)) {
-                    alignment = null;
-                }
+            if (openBrace.length % 2 == 0 || closeBrace.length % 2 == 0) {
+                return fn(openBrace) + elementContent + fn(closeBrace);
             }
 
-            if (formatStr && Bridge.is(replaceValue, Bridge.IFormattable)) {
-                values = [replaceValue];
-
-                return Bridge.String.alignString(Bridge.format(replaceValue, formatStr), alignment);
-            }
-
-            return Bridge.String.alignString(replaceValue.toString(), alignment);
+            return fn(openBrace, true) + me.handleElement(index, align, format, args) + fn(closeBrace, true);
         });
+    },
+
+    handleElement: function (index, alignment, formatStr, args) {
+        var value;
+
+        index = parseInt(index, 10)
+
+        if (index > args.length - 1) {
+            throw new Bridge.FormatException("Input string was not in a correct format.");
+        }
+
+        value = args[index];
+
+        if (value == null)
+        {
+            value = "";
+        }
+
+        if (formatStr && Bridge.is(value, Bridge.IFormattable)) {            
+            value = Bridge.format(value, formatStr);
+        }
+        else {
+            value = "" + value;
+        }        
+
+        if (alignment) {
+            alignment = parseInt(alignment, 10);
+            if (!Bridge.isNumber(alignment)) {
+                alignment = null;
+            }
+        }
+
+        return Bridge.String.alignString(value.toString(), alignment);
+    },
+
+    decodeBraceSequence: function (braces, remove) {        
+        return braces.substr(0, (braces.length + (remove ? 0 : 1)) / 2);
     },
 
     alignString : function (str, alignment, pad, dir) {
@@ -741,7 +767,7 @@ Bridge.String = {
         }
 
         if (!dir) {
-            dir = alignment < 0 ? 2 : 1;
+            dir = alignment < 0 ? 1 : 2;
         }
 
         alignment = Math.abs(alignment);
@@ -1391,7 +1417,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
     getFormat: function (type) {
         switch (type) {
             case Bridge.DateTimeFormatInfo:
-                return this.dateTimeFormat;
+                return this;
             default:
                 return null;
         }
@@ -1501,10 +1527,10 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
     statics: {
         constructor: function () {
             this.numberNegativePatterns =  ["(n)", "-n", "- n", "n-", "n -"];
-            this.currencyNegativePattern = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
-            this.currencyPositivePattern = ["$n", "n$", "$ n", "n $"];
-            this.percentNegativePattern = ["-n %", "-n%", "-%n", "%-n", "%n-", "n-%", "n%-", "-% n", "n %-", "% n-", "% -n", "n- %"];
-            this.percentPositivePattern = ["n %", "n%", "%n", "% n"];
+            this.currencyNegativePatterns = ["($n)", "-$n", "$-n", "$n-", "(n$)", "-n$", "n-$", "n$-", "-n $", "-$ n", "n $-", "$ n-", "$ -n", "n- $", "($ n)", "(n $)"];
+            this.currencyPositivePatterns = ["$n", "n$", "$ n", "n $"];
+            this.percentNegativePatterns = ["-n %", "-n%", "-%n", "%-n", "%n-", "n-%", "n%-", "-% n", "n %-", "% n-", "% -n", "n- %"];
+            this.percentPositivePatterns = ["n %", "n%", "%n", "% n"];
 
             this.invariantInfo = Bridge.merge(new Bridge.NumberFormatInfo(), {
                 naNSymbol: "NaN",
@@ -1541,7 +1567,7 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
     getFormat: function (type) {
         switch (type) {
             case Bridge.NumberFormatInfo:
-                return this.numberFormat;
+                return this;
             default:
                 return null;
         }
@@ -1657,8 +1683,386 @@ Bridge.Class.define('Bridge.Int', {
             return 0;
         },
 
-        format : function (num, format, provider) {            
-            var nf = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo);
+        format : function (number, format, provider) {            
+            var nf = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo),
+                decimalSeparator = nf.numberDecimalSeparator,
+                groupSeparator = nf.numberGroupSeparator,
+                match,
+                precision,
+                groups,
+                fs;
+            
+            if (!isFinite(number)) {
+                return Number.NEGATIVE_INFINITY == number ? nf.negativeInfinitySymbol : nf.positiveInfinitySymbol;
+            }
+            
+            if (!format) {
+                return this.defaultFormat(number, 0, 0, 15, nf, true);
+            }
+            
+            match = format.match(/^([a-zA-Z])(\d*)$/);
+            if (match) {
+                fs = match[1].toUpperCase();
+                precision = parseInt(match[2], 10);
+                precision = precision > 15 ? 15 : precision;
+
+                switch (fs) {
+                    case "D":
+                        return this.defaultFormat(number, isNaN(precision) ? 1 : precision, 0, 0, nf, true);
+                    case "F":
+                    case "N":
+                        if (isNaN(precision)) {
+                            precision = nf.numberDecimalDigits;
+                        }
+                        return this.defaultFormat(number, 1, precision, precision, nf, fs == "F");
+                    case "G":
+                    case "E":
+                        var exponent = 0,
+                            coefficient = Math.abs(number),
+                            exponentPrefix = match[1],
+                            exponentPrecision = 3,
+                            minDecimals, 
+                            maxDecimals;
+
+                        while (coefficient >= 10) {
+                            coefficient /= 10;
+                            exponent++;
+                        }
+
+                        while (coefficient < 1) {
+                            coefficient *= 10;
+                            exponent--;
+                        }
+
+                        if (fs == "G") {
+                            if (exponent > -5 && (!precision || exponent < precision)) {
+                                minDecimals = precision ? precision - (exponent > 0 ? exponent + 1 : 1) : 0;
+                                maxDecimals = precision ? precision - (exponent > 0 ? exponent + 1 : 1) : 10;
+                                return this.defaultFormat(number, 1, minDecimals, maxDecimals, nf, true);
+                            }
+
+                            exponentPrefix = exponentPrefix == "G" ? "E" : "e";
+                            exponentPrecision = 2;
+                            minDecimals = (precision || 1) - 1;
+                            maxDecimals = (precision || 11) - 1;
+                        } else {
+                            minDecimals = maxDecimals = isNaN(precision) ? 6 : precision;
+                        }
+
+                        if (exponent >= 0) {
+                            exponentPrefix += nf.positiveSign;
+                        }
+                        else {
+                            exponentPrefix += nf.negativeSign;
+                            exponent = -exponent;
+                        }
+
+                        if (number < 0) {
+                            coefficient *= -1;
+                        }
+
+                        return this.defaultFormat(coefficient, 1, minDecimals, maxDecimals, nf) + exponentPrefix + this.defaultFormat(exponent, exponentPrecision, 0, 0, nf, true);
+                    case "P":
+                        if (isNaN(precision)) {
+                            precision = nf.percentDecimalDigits;
+                        }
+                        return this.defaultFormat(number * 100, 1, precision, precision, nf, false, "percent");
+                    case "X":
+                        var result = Math.round(number).toString(16);
+
+                        if (match[1] == "X") {
+                            result = result.toUpperCase();
+                        }
+                        
+                        precision -= result.length;
+                        while (precision-- > 0) {
+                            result = "0" + result;
+                        }
+
+                        return result;
+                    case "C":
+                        if (isNaN(precision)) {
+                            precision = nf.currencyDecimalDigits;
+                        }
+                        return this.defaultFormat(number, 1, precision, precision, nf, false, "currency");
+                    case "R":
+                        return "" + number;
+                }
+            }
+
+            if (format.indexOf(",.") !== -1 || Bridge.String.endsWith(format, ",")) {
+                var count = 0,
+                    index = format.indexOf(",.");
+
+                if (index == -1) {
+                    index = format.length - 1;
+                }
+
+                while (index > -1 && format.charAt(index) == ",") {
+                    count++;
+                    index--;
+                }
+
+                number /= Math.pow(1000, count);
+            }
+
+            if (format.indexOf("%") !== -1) {
+                number *= 100;
+            }
+
+            groups = format.split(";");
+            if (number < 0 && groups.length > 1) {
+                number *= -1;
+                format = groups[1];
+            } else {
+                format = groups[!number && groups.length > 2 ? 2 : 0];
+            }
+
+            return this.customFormat(number, format, nf, !format.match(/^[^\.]*[0#],[0#]/));
+        },
+
+        defaultFormat: function (number, minIntLen, minDecLen, maxDecLen, provider, noGroup, name) {
+            name = name || "number";
+
+            var nf = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo),
+                str,
+                decimalIndex,
+                negPattern,
+                roundingFactor,
+                groupIndex,
+                groupSize,
+                groups = nf[name + "GroupSizes"],
+                decimalPart,
+                index,
+                done,
+                startIndex,
+                length,
+                part,
+                sep,
+                buffer = "";        
+            
+            roundingFactor = Math.pow(10, maxDecLen);
+            str = "" + (Math.round(Math.abs(number) * roundingFactor) / roundingFactor);
+
+            decimalIndex = str.indexOf(".");
+            if (decimalIndex > 0) {
+                decimalPart = nf[name + "DecimalSeparator"] + str.substr(decimalIndex + 1);
+                str = str.substr(0, decimalIndex);
+            }
+
+            if (str.length < minIntLen) {
+                str = Array(minIntLen - str.length + 1).join("0") + str;
+            }
+
+            if (decimalPart) {
+                if ((decimalPart.length - 1) < minDecLen) {
+                    decimalPart += Array(minDecLen - decimalPart.length + 2).join("0");
+                }
+
+                if (maxDecLen == 0) {
+                    decimalPart = null;
+                }
+                else if ((decimalPart.length - 1) > maxDecLen) {
+                    decimalPart = decimalPart.substr(0, maxDecLen + 1);
+                }
+            }
+
+            groupIndex = 0;
+            groupSize = groups[groupIndex];
+            if (str.length < groupSize) {
+                buffer = str;
+
+                if (decimalPart) {
+                    buffer += decimalPart;
+                }
+            }
+            else {
+                index = str.length;
+                done = false;
+                sep = noGroup ? "" : nf[name + "GroupSeparator"];
+                while (!done) {
+                    length = groupSize;
+                    startIndex = index - length;
+                    if (startIndex < 0) {
+                        groupSize += startIndex;
+                        length += startIndex;
+                        startIndex = 0;
+                        done = true;
+                    }
+
+                    if (!length) {
+                        break;
+                    }
+
+                    part = str.substr(startIndex, length);
+                    if (buffer.length) {
+                        buffer = part + sep + buffer;
+                    }
+                    else {
+                        buffer = part;
+                    }
+                    index -= length;
+
+                    if (groupIndex < groups.length - 1) {
+                        groupIndex++;
+                        groupSize = groups[groupIndex];
+                    }
+                }
+
+                if (decimalPart) {
+                    buffer += decimalPart;
+                }
+            }            
+
+            if (number < 0) {
+                negPattern = Bridge.NumberFormatInfo[name + "NegativePatterns"][nf[name + "NegativePattern"]];                
+                return negPattern.replace("-", nf.negativeSign).replace("%", nf.percentSymbol).replace("$", nf.currencySymbol).replace("n", buffer);
+            }
+            else if (Bridge.NumberFormatInfo[name + "PositivePatterns"]) {
+                negPattern = Bridge.NumberFormatInfo[name + "PositivePatterns"][nf[name + "PositivePattern"]];
+                return negPattern.replace("%", nf.percentSymbol).replace("$", nf.currencySymbol).replace("n", buffer);
+            }
+        
+            return buffer;
+        },
+
+        customFormat: function (number, format, nf, noGroup) {        
+            var digits = 0,
+                forcedDigits = -1,
+                integralDigits = -1,
+                decimals = 0,
+                forcedDecimals = -1,
+                atDecimals = 0,
+                unused = 1,
+                c, i, f,
+                endIndex,
+                roundingFactor,
+                decimalIndex,
+                isNegative = false,
+                name,
+                groupCfg,
+                buffer = "";
+
+            name = "number";
+            if (format.indexOf("%") !== -1) {
+                name = "percent";
+            }
+            else if (format.indexOf("$") !== -1) {
+                name = "currency";
+            }
+
+            for (i = 0; i < format.length; i++) {
+                c = format.charAt(i);
+            
+                if (c == "'" || c == '"') {                
+                    i = format.indexOf(c, i + 1);
+                    if (i < 0) {
+                        break;
+                    }
+                } else if (c == "\\") {
+                    i++;                
+                } else {
+                    if (c == "0" || c == "#") {
+                        decimals += atDecimals;
+
+                        if (c == "0") {                            
+                            if (atDecimals) {
+                                forcedDecimals = decimals;
+                            } else if (forcedDigits < 0) {
+                                forcedDigits = digits;
+                            }
+                        }
+
+                        digits += !atDecimals;
+                    }
+
+                    atDecimals = atDecimals || c == ".";
+                }
+            }
+            forcedDigits = forcedDigits < 0 ? 1 : digits - forcedDigits;
+
+            if (number < 0) {
+                isNegative = true;
+            }
+
+            roundingFactor = Math.pow(10, decimals);
+            number = "" + (Math.round(Math.abs(number) * roundingFactor) / roundingFactor);
+
+            decimalIndex = number.indexOf(".");
+            integralDigits = decimalIndex < 0 ? number.length : decimalIndex;            
+            i = integralDigits - digits;
+
+            groupCfg = {
+                groupIndex: Math.max(integralDigits, forcedDigits),
+                sep: noGroup ? "" : nf[name + "GroupSeparator"]
+            };
+
+            inString = 0;
+        
+            for (f = 0; f < format.length; f++) {
+                c = format.charAt(f);        
+                if (c == "'" || c == '"') {
+                    endIndex = format.indexOf(c, f + 1);
+                
+                    buffer += format.substring(f + 1, endIndex < 0 ? format.length : endIndex);
+                
+                    if (endIndex < 0) {
+                        break;
+                    }
+                    f = endIndex;                    
+                } else if (c == "\\") {
+                    buffer += format.charAt(f + 1);
+                    f++;
+                } else if (c == "#" || c == "0") {
+                    groupCfg.buffer = buffer;
+                    if (i < integralDigits) {
+                        if (i >= 0) {
+                            if (unused) {
+                                this.groupedAppend(number.substr(0, i), groupCfg);
+                            }
+                            this.groupedAppend(number.charAt(i), groupCfg);
+                        } else if (i >= integralDigits - forcedDigits) {
+                            this.groupedAppend("0", groupCfg);
+                        }
+                        unused = 0;
+                    } else if (forcedDecimals-- > 0 || i < number.length) {                        
+                        this.groupedAppend(i >= number.length ? "0" : number.charAt(i), groupCfg);
+                    }
+
+                    buffer = groupCfg.buffer;
+
+                    i++;
+                } else if (c == ".") {
+                    if (number.length > ++i || forcedDecimals > 0) {
+                        buffer += nf[name + "DecimalSeparator"];
+                    }
+                } else if (c !== ",") {
+                    buffer += c;
+                }
+            }
+
+            if (isNegative < 0) {
+                buffer = "-" + buffer;
+            }
+        
+            return buffer;
+        },
+
+        groupedAppend: function (value, cfg) {
+            var buffer = cfg.buffer,
+                sep = cfg.sep,
+                groupIndex = cfg.groupIndex;
+
+            for (var i = 0, length = value.length; i < length; i++) {
+                buffer += value.charAt(i);
+
+                if (sep && groupIndex > 1 && groupIndex-- % 3 == 1) {
+                    buffer += sep;
+                }
+            }
+
+            cfg.buffer = buffer;
+            cfg.groupIndex = groupIndex;
         },
 
         parseFloat: function (str, provider) {

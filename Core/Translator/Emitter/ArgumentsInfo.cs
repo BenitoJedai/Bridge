@@ -99,6 +99,17 @@ namespace Bridge.NET
             }            
         }
 
+        public ArgumentsInfo(IEmitter emitter, Expression expression)
+        {
+            this.Emitter = emitter;
+            this.Expression = expression;
+
+            this.ArgumentsExpressions = new Expression[] { expression };
+            this.ArgumentsNames = new string[] { "{this}" };
+            this.ThisArgument = expression;
+            this.CreateNamedExpressions(this.ArgumentsNames, this.ArgumentsExpressions);
+        }
+
         public ArgumentsInfo(IEmitter emitter, ObjectCreateExpression objectCreateExpression)
         {
             this.Emitter = emitter;

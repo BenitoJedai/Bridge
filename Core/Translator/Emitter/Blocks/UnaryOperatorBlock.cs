@@ -81,6 +81,12 @@ namespace Bridge.NET
             var resolveOperator = this.Emitter.Resolver.ResolveNode(unaryOperatorExpression, this.Emitter);
             OperatorResolveResult orr = resolveOperator as OperatorResolveResult;
 
+            if (resolveOperator is ConstantResolveResult)
+            {
+                this.WriteScript(((ConstantResolveResult)resolveOperator).ConstantValue);
+                return;
+            }
+
             if (this.ResolveOperator(unaryOperatorExpression, orr))
             {
                 return;

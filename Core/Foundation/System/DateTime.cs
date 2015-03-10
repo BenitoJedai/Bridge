@@ -361,13 +361,13 @@ namespace System
 			return false;
 		}
 
-		[Template("new Date({dt}.valueOf())")]
+		[Template("new Date({this}.valueOf())")]
 		public static explicit operator DateTime(Date dt) 
         {
 			return default(DateTime);
 		}
 
-		[Template("new Date({dt}.valueOf())")]
+		[Template("new Date({this}.valueOf())")]
 		public static explicit operator Date(DateTime dt) 
         {
 			return null;

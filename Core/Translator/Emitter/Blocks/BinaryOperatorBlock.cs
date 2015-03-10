@@ -78,6 +78,13 @@ namespace Bridge.NET
         {
             BinaryOperatorExpression binaryOperatorExpression = this.BinaryOperatorExpression;
             var resolveOperator = this.Emitter.Resolver.ResolveNode(binaryOperatorExpression, this.Emitter);
+
+            if (resolveOperator is ConstantResolveResult)
+            {
+                this.WriteScript(((ConstantResolveResult)resolveOperator).ConstantValue);
+                return;
+            }
+
             OperatorResolveResult orr = resolveOperator as OperatorResolveResult;
 
             var delegateOperator = false;

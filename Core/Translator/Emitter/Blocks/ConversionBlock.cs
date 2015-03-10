@@ -12,19 +12,42 @@ namespace Bridge.NET
         public sealed override void Emit()
         {
             var expression = this.GetExpression();
+            if (expressionInWork.Contains(expression))
+            {
+                this.EmitConversionExpression();
+                return;
+            }
+
+            expressionInWork.Add(expression);
+
             var isConversion = false;
             bool check = expression != null && !expression.IsNull && expression.Parent != null;
             if (check)
             {
                 isConversion = this.CheckConversion(expression);   
             }
-            
+
+            if (this.DisableEmitConversionExpression)
+            {
+                expressionInWork.Remove(expression);
+                return;
+            }
+
             this.EmitConversionExpression();
- 
+            expressionInWork.Remove(expression);
+
             if (isConversion)
             {
                 this.Write(")");
             }
+        }
+
+        private static List<Expression> expressionInWork = new List<Expression>();
+
+        protected virtual bool DisableEmitConversionExpression
+        {
+            get;
+            set;
         }
 
         protected virtual bool CheckConversion(Expression expression)
@@ -53,11 +76,12 @@ namespace Bridge.NET
             return false;
         }
 
-        public static bool CheckConversion(AbstractEmitterBlock block, Expression expression)
+        public static bool CheckConversion(ConversionBlock block, Expression expression)
         {
             Conversion conversion = null;
             try
             {
+                var rr = block.Emitter.Resolver.ResolveNode(expression, null);
                 conversion = block.Emitter.Resolver.Resolver.GetConversion(expression);
 
                 if (conversion == null)
@@ -75,14 +99,51 @@ namespace Bridge.NET
                     block.Write("Bridge.nullable.lift(");
                 }
 
-                if (conversion.IsUserDefined)
+                if (conversion.IsUserDefined && !conversion.IsExplicit)
                 {
                     var method = conversion.Method;
 
-                    block.Write(block.Emitter.ShortenTypeName(method.DeclaringType.FullName));
-                    block.WriteDot();
+                    string inline = block.Emitter.GetInline(method);
+                    if (!string.IsNullOrWhiteSpace(inline))
+                    {
+                        if (expression is InvocationExpression)
+                        {
+                            new InlineArgumentsBlock(block.Emitter, new ArgumentsInfo(block.Emitter, (InvocationExpression)expression), inline).Emit();
+                        }
+                        else if (expression is ObjectCreateExpression)
+                        {
+                            new InlineArgumentsBlock(block.Emitter, new ArgumentsInfo(block.Emitter, (InvocationExpression)expression), inline).Emit();
+                        }
+                        else if (expression is UnaryOperatorExpression) 
+                        {
+                            var unaryExpression = (UnaryOperatorExpression)expression;
+                            var resolveOperator = block.Emitter.Resolver.ResolveNode(unaryExpression, block.Emitter);
+                            OperatorResolveResult orr = resolveOperator as OperatorResolveResult;
+                            new InlineArgumentsBlock(block.Emitter, new ArgumentsInfo(block.Emitter, unaryExpression, orr), inline).Emit();
+                        }
+                        else if (expression is BinaryOperatorExpression)
+                        {
+                            var binaryExpression = (BinaryOperatorExpression)expression;
+                            var resolveOperator = block.Emitter.Resolver.ResolveNode(binaryExpression, block.Emitter);
+                            OperatorResolveResult orr = resolveOperator as OperatorResolveResult;
+                            new InlineArgumentsBlock(block.Emitter, new ArgumentsInfo(block.Emitter, binaryExpression, orr), inline).Emit();
+                        }
+                        else
+                        {                            
+                            new InlineArgumentsBlock(block.Emitter, new ArgumentsInfo(block.Emitter, expression), inline).Emit();
+                        }
 
-                    block.Write(block.Emitter.GetMemberOverloadName(method.MemberDefinition as IMethod));
+                        block.DisableEmitConversionExpression = true;
+                        return false;
+                    }
+                    else
+                    {
+
+                        block.Write(block.Emitter.ShortenTypeName(method.DeclaringType.FullName));
+                        block.WriteDot();
+
+                        block.Write(block.Emitter.GetMemberOverloadName(method.MemberDefinition as IMethod));
+                    }
 
                     if (conversion.IsLifted)
                     {

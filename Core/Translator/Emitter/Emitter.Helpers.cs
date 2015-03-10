@@ -487,7 +487,7 @@ namespace Bridge.NET
 
                 if (methods.Count > 1)
                 {
-                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this, method.Parameters, method.TypeArguments, methods, method.ReturnType);
+                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this, method.Parameters, method.TypeArguments, methods, method.ReturnType, typeDef);
                     return Helpers.GetOverloadName(this, methodDef, methods);
                 }
             }            
