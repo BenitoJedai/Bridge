@@ -193,8 +193,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <PostBuildEvent>call $(SolutionDir)\assemblies\deploy.bat "$(MSBuildProjectName)" "$(SolutionDir)"
+@for %25%25a in (AjaxMin Ext.Net.Utilities ICSharpCode Mono Newtonsoft) do @(
+ @for %25%25x in (dll pdb xml) do @(
+  @if exist %25%25a*.%25%25x @(
+   @copy /y %25%25a*.%25%25x "$(SolutionDir)\assemblies\."
+  )
+ )
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

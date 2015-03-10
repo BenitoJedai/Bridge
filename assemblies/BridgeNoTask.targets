@@ -4,12 +4,17 @@
 	<AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
     <AdditionalExplicitAssemblyReferences />
     <DocumentationFile>bin\$(Configuration)\$(MSBuildProjectName).xml</DocumentationFile>
+    <PostBuildEvent>@for %%x in ("dll" "pdb" "xml") do @(
+ @copy /Y $(MSBuildProjectName).%%x $(MSBuildThisFileDirectory).
+)</PostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Bridge.Foundation.dll">
-      <HintPath>$(MSBuildThisFileDirectory)Bridge.Foundation.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\Core\Foundation\Bridge.Foundation.csproj">
+      <Project>{de78b8b7-c0f5-415b-a70b-02194433f450}</Project>
+      <Name>Bridge.Foundation</Name>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
