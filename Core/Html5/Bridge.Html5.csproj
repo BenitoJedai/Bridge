@@ -279,7 +279,7 @@
     <Compile Include="WindowInstance.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\assemblies\BridgeNoTask.targets" />
+  <Import Project="..\..\assemblies\BridgeProjectRefs.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
