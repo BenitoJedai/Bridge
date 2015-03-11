@@ -15,7 +15,7 @@ namespace Bridge.Contract
     {
         System.Collections.Generic.List<IModuleDependency> Dependencies { get; set; }
         string FileName { get; set; }
-        TypesSplit FilesHierrarchy { get; set; }
+        TypesSplit FilesHierarchy { get; set; }
         string Module { get; set; }
         string OutputDir { get; set; }
         int StartIndexInName { get; set; }
