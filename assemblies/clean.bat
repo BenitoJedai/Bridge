@@ -7,3 +7,8 @@ rem as once you rebuild, the files will be overwritten here.
 for %%x in (exe dll xml pdb) do (
  if exist "*.%%x" del /q "*.%%x"
 )
+
+if exist Extensions (
+ del /q Extensions
+ rmdir Extensions
+)
