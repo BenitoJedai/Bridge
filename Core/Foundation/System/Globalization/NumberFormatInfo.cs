@@ -19,6 +19,7 @@ namespace System.Globalization
 			}
 		}
 
+        [Name("nanSymbol")]
         [FieldProperty]
         public string NaNSymbol
         {

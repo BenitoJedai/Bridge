@@ -120,6 +120,11 @@ namespace Bridge.NET
             new TypeBlock(this, simpleType).Emit();
         }
 
+        public override void VisitMemberType(MemberType memberType)
+        {
+            new TypeBlock(this, memberType).Emit();
+        }
+
         public override void VisitNamedExpression(NamedExpression namedExpression)
         {
             new NameBlock(this, namedExpression).Emit();

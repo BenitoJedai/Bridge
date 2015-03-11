@@ -344,15 +344,15 @@
                     if (i < integralDigits) {
                         if (i >= 0) {
                             if (unused) {
-                                this.groupedAppend(number.substr(0, i), groupCfg);
+                                this.addGroup(number.substr(0, i), groupCfg);
                             }
-                            this.groupedAppend(number.charAt(i), groupCfg);
+                            this.addGroup(number.charAt(i), groupCfg);
                         } else if (i >= integralDigits - forcedDigits) {
-                            this.groupedAppend("0", groupCfg);
+                            this.addGroup("0", groupCfg);
                         }
                         unused = 0;
                     } else if (forcedDecimals-- > 0 || i < number.length) {                        
-                        this.groupedAppend(i >= number.length ? "0" : number.charAt(i), groupCfg);
+                        this.addGroup(i >= number.length ? "0" : number.charAt(i), groupCfg);
                     }
 
                     buffer = groupCfg.buffer;
@@ -374,7 +374,7 @@
             return buffer;
         },
 
-        groupedAppend: function (value, cfg) {
+        addGroup: function (value, cfg) {
             var buffer = cfg.buffer,
                 sep = cfg.sep,
                 groupIndex = cfg.groupIndex;
@@ -399,7 +399,7 @@
             var nfInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo),
                 result = parseFloat(str.replace(nfInfo.numberDecimalSeparator, '.'));
 
-            if (isNaN(result) && str !== nfInfo.naNSymbol) {
+            if (isNaN(result) && str !== nfInfo.nanSymbol) {
                 if (str == nfInfo.negativeInfinitySymbol) {
                     return Number.NEGATIVE_INFINITY;
                 }
@@ -422,7 +422,7 @@
             var nfInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo);
             result.v = parseFloat(str.replace(nfInfo.numberDecimalSeparator, '.'));
 
-            if (isNaN(result.v) && str !== nfInfo.naNSymbol) {
+            if (isNaN(result.v) && str !== nfInfo.nanSymbol) {
                 if (str == nfInfo.negativeInfinitySymbol) {
                     result.v = Number.NEGATIVE_INFINITY;
                     return true;

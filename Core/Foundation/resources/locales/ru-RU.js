@@ -47,7 +47,7 @@
         monthGenitiveNames: ["января", "февраля", "марта", "апрелф", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря", ""],
         monthNames:  ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь", ""],
         pmDesignator: "",
-        rFC1123: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
+        rfc1123: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
         shortDatePattern: "dd.MM.yyyy",
         shortestDayNames: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
         shortTimePattern: "H:mm",
