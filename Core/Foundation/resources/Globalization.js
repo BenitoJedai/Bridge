@@ -13,8 +13,8 @@
             "M": "monthDayPattern",
             "o": "roundtripFormat",
             "O": "roundtripFormat",
-            "r": "rFC1123",
-            "R": "rFC1123",
+            "r": "rfc1123",
+            "R": "rfc1123",
             "s": "sortableDateTimePattern",
             "t": "shortTimePattern",
             "T": "longTimePattern",
@@ -40,7 +40,7 @@
                 monthGenitiveNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
                 monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
                 pmDesignator: "PM",
-                rFC1123: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
+                rfc1123: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
                 shortDatePattern: "M/d/yyyy",
                 shortestDayNames: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
                 shortTimePattern: "h:mm tt",
@@ -76,7 +76,7 @@
         return this.abbreviatedMonthNames[month - 1];
     },
 
-    getAllDateTimePatterns: function (format) {
+    getAllDateTimePatterns: function (format, returnNull) {
         var f = Bridge.DateTimeFormatInfo.$allStandardFormats,
             formats,
             names,
@@ -86,6 +86,9 @@
 
         if (format) {
             if (!f[format]) {
+                if (returnNull) {
+                    return null;
+                }
                 throw new Bridge.ArgumentException(null, "format");
             }
 
@@ -147,7 +150,7 @@
             "monthGenitiveNames",
             "monthNames",
             "pmDesignator",
-            "rFC1123",
+            "rfc1123",
             "shortDatePattern",
             "shortestDayNames",
             "shortTimePattern",
@@ -172,7 +175,7 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
             this.percentPositivePatterns = ["n %", "n%", "%n", "% n"];
 
             this.invariantInfo = Bridge.merge(new Bridge.NumberFormatInfo(), {
-                naNSymbol: "NaN",
+                nanSymbol: "NaN",
                 negativeSign: "-",
                 positiveSign: "+",
                 negativeInfinitySymbol: "-Infinity",
@@ -214,7 +217,7 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
 
     clone: function () {
         return Bridge.copy(new Bridge.NumberFormatInfo(), this, [
-            "naNSymbol",
+            "nanSymbol",
             "negativeSign",
             "positiveSign",
             "negativeInfinitySymbol",
