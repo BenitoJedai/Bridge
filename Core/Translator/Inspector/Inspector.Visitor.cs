@@ -407,8 +407,8 @@ namespace Bridge.NET
 
         protected virtual bool ReadFileHierarchyInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.Foundation_ASSEMBLY + ".FilesHierrarchy")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".FilesHierrarchyAttribute")))
+            if ((name == (Translator.Foundation_ASSEMBLY + ".FilesHierarchy")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Foundation_ASSEMBLY + ".FilesHierarchyAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {
@@ -416,7 +416,7 @@ namespace Bridge.NET
 
                     if (nameObj != null)
                     {
-                        this.AssemblyInfo.FilesHierrarchy = (TypesSplit)Enum.ToObject(typeof(TypesSplit), nameObj);
+                        this.AssemblyInfo.FilesHierarchy = (TypesSplit)Enum.ToObject(typeof(TypesSplit), nameObj);
                     }
 
                     if (attr.Arguments.Count > 1)

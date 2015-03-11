@@ -28,13 +28,13 @@ namespace Bridge.Foundation
 
     [Ignore]
     [AttributeUsage(AttributeTargets.Assembly)]
-    public sealed class FilesHierrarchyAttribute : Attribute
+    public sealed class FilesHierarchyAttribute : Attribute
     {
-        public FilesHierrarchyAttribute(TypesSplit splitBy)
+        public FilesHierarchyAttribute(TypesSplit splitBy)
         {
         }
 
-        public FilesHierrarchyAttribute(TypesSplit splitBy, int startIndexInName)
+        public FilesHierarchyAttribute(TypesSplit splitBy, int startIndexInName)
         {
         }
     }

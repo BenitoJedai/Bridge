@@ -24,16 +24,16 @@ namespace Bridge.NET
             set;
         }
 
-        private TypesSplit filesHierrarchy = TypesSplit.None;
-        public TypesSplit FilesHierrarchy
+        private TypesSplit filesHierarchy = TypesSplit.None;
+        public TypesSplit FilesHierarchy
         {
             get
             {
-                return this.filesHierrarchy;
+                return this.filesHierarchy;
             }
             set
             {
-                this.filesHierrarchy = value;
+                this.filesHierarchy = value;
             }
         }
 
