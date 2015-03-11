@@ -5,6 +5,7 @@ packages/*
 Libs/NRefactory/packages/*
 !Libs/NRefactory/packages/repositories.config
 
+Bridge.NET.sln.ide/*
 Bridge.NET.dev.sln
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
