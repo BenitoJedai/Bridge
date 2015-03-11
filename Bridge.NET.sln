@@ -34,11 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Contract", "Core\Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{179F9E02-670B-41FB-BFF6-F24F822812F7}"
 	ProjectSection(SolutionItems) = preProject
-		assemblies\Bridge.targets = assemblies\Bridge.targets
-		assemblies\BridgeNoTask.targets = assemblies\BridgeNoTask.targets
-		assemblies\BridgeProjectRefs.targets = assemblies\BridgeProjectRefs.targets
-		assemblies\clean.bat = assemblies\clean.bat
-		assemblies\deploy.bat = assemblies\deploy.bat
+		Build\assemblies\Bridge.targets = Build\assemblies\Bridge.targets
+		Build\assemblies\BridgeNoTask.targets = Build\assemblies\BridgeNoTask.targets
+		Build\assemblies\BridgeProjectRefs.targets = Build\assemblies\BridgeProjectRefs.targets
+		Build\assemblies\clean.bat = Build\assemblies\clean.bat
+		Build\assemblies\deploy.bat = Build\assemblies\deploy.bat
 	EndProjectSection
 EndProject
 Global

@@ -2,8 +2,8 @@
 packages/*
 !packages/repositories.config
 
-Libs/NRefactory/packages/*
-!Libs/NRefactory/packages/repositories.config
+Build/Libs/NRefactory/packages/*
+!Build/Libs/NRefactory/packages/repositories.config
 
 Bridge.NET.sln.ide/*
 Bridge.NET.dev.sln
@@ -115,9 +115,9 @@ Backup*/
 UpgradeLog*.XML
 
 
-/assemblies/*
-!/assemblies/*.targets
-!/assemblies/*.bat
+/Build/assemblies/*
+!/Build/assemblies/*.targets
+!/Build/assemblies/*.bat
 
 /Sandbox/Bridge.TestLibrary/build/*.js
 /Sandbox/CompanyX/Build/*.js

@@ -41,31 +41,31 @@
     </Reference>
     <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\ICSharpCode.NRefactory.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.Cecil, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\ICSharpCode.NRefactory.Cecil.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\ICSharpCode.NRefactory.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.CSharp, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\ICSharpCode.NRefactory.CSharp.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\ICSharpCode.NRefactory.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -194,11 +194,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <PostBuildEvent>call "$(SolutionDir)\assemblies\deploy.bat" "$(MSBuildProjectName)" "$(SolutionDir)"
+    <PostBuildEvent>call "$(SolutionDir)Build\assemblies\deploy.bat" "$(MSBuildProjectName)" "$(SolutionDir)"
 @for %25%25a in (AjaxMin Object.Net.Utilities ICSharpCode Mono Newtonsoft) do @(
  @for %25%25x in (dll pdb xml) do @(
   @if exist %25%25a*.%25%25x @(
-   @copy /y %25%25a*.%25%25x "$(SolutionDir)\assemblies\."
+   @copy /y %25%25a*.%25%25x "$(SolutionDir)Build\assemblies\."
   )
  )
 )</PostBuildEvent>
