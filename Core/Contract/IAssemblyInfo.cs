@@ -19,7 +19,7 @@ namespace Bridge.Contract
         string Module { get; set; }
         string OutputDir { get; set; }
         int StartIndexInName { get; set; }
-        string BeforeEvent { get; set; }
-        string AfterEvent { get; set; }
+        string BeforeBuild { get; set; }
+        string AfterBuild { get; set; }
     }
 }

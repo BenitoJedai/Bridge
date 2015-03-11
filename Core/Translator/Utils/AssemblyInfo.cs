@@ -56,13 +56,13 @@ namespace Bridge.NET
         }
 
 
-        public string BeforeEvent
+        public string BeforeBuild
         {
             get;
             set;
         }
 
-        public string AfterEvent
+        public string AfterBuild
         {
             get;
             set;

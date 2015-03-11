@@ -25,9 +25,9 @@ namespace Bridge.NET
         {
             var config = this.ReadConfig(null);
 
-            if (config != null && !string.IsNullOrWhiteSpace(config.BeforeEvent))
+            if (config != null && !string.IsNullOrWhiteSpace(config.BeforeBuild))
             {
-                this.RunEvent(config.BeforeEvent);
+                this.RunEvent(config.BeforeBuild);
             }
             
             this.Plugins = Bridge.NET.Plugins.GetPlugins(this);

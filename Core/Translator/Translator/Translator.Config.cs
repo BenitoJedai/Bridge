@@ -52,14 +52,14 @@ namespace Bridge.NET
                     mergeConfig.StartIndexInName = assemblyInfo.StartIndexInName;
                 }
 
-                if (string.IsNullOrWhiteSpace(mergeConfig.BeforeEvent))
+                if (string.IsNullOrWhiteSpace(mergeConfig.BeforeBuild))
                 {
-                    mergeConfig.BeforeEvent = assemblyInfo.BeforeEvent;
+                    mergeConfig.BeforeBuild = assemblyInfo.BeforeBuild;
                 }
 
-                if (string.IsNullOrWhiteSpace(mergeConfig.AfterEvent))
+                if (string.IsNullOrWhiteSpace(mergeConfig.AfterBuild))
                 {
-                    mergeConfig.AfterEvent = assemblyInfo.AfterEvent;
+                    mergeConfig.AfterBuild = assemblyInfo.AfterBuild;
                 }
             }
             catch(Exception e)
