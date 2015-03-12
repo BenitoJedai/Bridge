@@ -109,7 +109,7 @@ namespace Bridge.NET
                 else
                 {
                     name = (changeCase && isField) ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(fieldName) : fieldName;
-                    if (Bridge.NET.Emitter.IsReservedStaticName(name))
+                    if (Bridge.NET.Emitter.IsReservedStaticName(name) || Helpers.IsReservedWord(name))
                     {
                         name = "$" + name;
                     }
@@ -239,6 +239,10 @@ namespace Bridge.NET
                 else
                 {
                     fieldName = this.Emitter.ChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
+                    if (Helpers.IsReservedWord(fieldName))
+                    {
+                        fieldName = "$" + fieldName;
+                    }
                 }
 
                 this.Write(fieldName);

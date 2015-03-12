@@ -110,8 +110,8 @@ return str.match(suffix+"$")!==null;}};
 (function(){var initializing=false;Bridge.Class=function(){};Bridge.Class.cache={};Bridge.Class.initCtor=function(){var value=arguments[0];if(this.$multipleCtors&&arguments.length>0&&typeof value=='string'){value=value==="constructor"?"$constructor":value;if((value==="$constructor"||Bridge.String.startsWith(value,"constructor\\$"))&&Bridge.isFunction(this[value])){this[value].apply(this,Array.prototype.slice.call(arguments,1));return;}}
 if(this.$constructor){this.$constructor.apply(this,arguments);}};Bridge.Class.initConfig=function(extend,base,config,statics,scope){scope.$initMembers=function(){var name;if(extend&&!statics&&base.$initMembers){base.$initMembers.apply(this,arguments);}
 if(config.fields){for(name in config.fields){this[name]=config.fields[name];}}
-if(config.properties){for(name in config.properties){this[name]=config.properties[name];var cap=name.charAt(0).toUpperCase()+name.slice(1);this["get"+cap]=(function(name){return function(){return this[name];};})(name);this["set"+cap]=(function(name){return function(value){this[name]=value;};})(name);}}
-if(config.events){for(name in config.events){this[name]=config.events[name];this["add"+name]=(function(name){return function(value){this[name]=Bridge.fn.combine(this[name],value);};})(name);this["remove"+name]=(function(name){return function(value){this[name]=Bridge.fn.remove(this[name],value);};})(name);}}
+if(config.properties){for(name in config.properties){this[name]=config.properties[name];var rs=name.charAt(0)=="$",cap=name.charAt(rs?1:0).toUpperCase()+name.slice(rs?2:1);this["get"+cap]=(function(name){return function(){return this[name];};})(name);this["set"+cap]=(function(name){return function(value){this[name]=value;};})(name);}}
+if(config.events){for(name in config.events){this[name]=config.events[name];var rs=name.charAt(0)=="$",cap=rs?name.slice(1):name;this["add"+cap]=(function(name){return function(value){this[name]=Bridge.fn.combine(this[name],value);};})(name);this["remove"+cap]=(function(name){return function(value){this[name]=Bridge.fn.remove(this[name],value);};})(name);}}
 if(config.init){config.init.apply(this,arguments);}};};Bridge.Class.define=function(className,prop){var extend=prop.$extend||prop.extend,statics=prop.$statics||prop.statics,base=extend?extend[0].prototype:this.prototype,prototype,nameParts,scope=prop.$scope||window,i,v,ctorCounter,isCtor,name;if(Bridge.isFunction(extend)){extend=null;}
 else if(prop.$extend){delete prop.$extend;}
 else{delete prop.extend;}
@@ -157,7 +157,7 @@ Bridge.Class.define('Bridge.IFormattable',{statics:{$is:function(obj){if(Bridge.
 if(Bridge.isDate(obj)){return true;}
 return Bridge.is(obj,Bridge.IFormattable,true);}}});Bridge.Class.define('Bridge.IComparable',{});Bridge.Class.define('Bridge.IFormatProvider',{});Bridge.Class.define('Bridge.ICloneable',{});Bridge.Class.generic('Bridge.IComparable$1',function(T){var $$name=Bridge.Class.genericName('Bridge.IComparable$1',T);return Bridge.Class.cache[$$name]||(Bridge.Class.cache[$$name]=Bridge.Class.define($$name,{}));});Bridge.Class.generic('Bridge.IEquatable$1',function(T){var $$name=Bridge.Class.genericName('Bridge.IEquatable$1',T);return Bridge.Class.cache[$$name]||(Bridge.Class.cache[$$name]=Bridge.Class.define($$name,{}));});
 
-Bridge.Class.define("Bridge.DateTimeFormatInfo",{extend:[Bridge.IFormatProvider,Bridge.ICloneable],statics:{$allStandardFormats:{"d":"shortDatePattern","D":"longDatePattern","f":"longDatePattern shortTimePattern","F":"longDatePattern longTimePattern","g":"shortDatePattern shortTimePattern","G":"shortDatePattern longTimePattern","m":"monthDayPattern","M":"monthDayPattern","o":"roundtripFormat","O":"roundtripFormat","r":"rfc1123","R":"rfc1123","s":"sortableDateTimePattern","t":"shortTimePattern","T":"longTimePattern","u":"universalSortableDateTimePattern","U":"longDatePattern longTimePattern","y":"yearMonthPattern","Y":"yearMonthPattern"},constructor:function(){this.invariantInfo=Bridge.merge(new Bridge.DateTimeFormatInfo(),{abbreviatedDayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],abbreviatedMonthGenitiveNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",""],abbreviatedMonthNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",""],amDesignator:"AM",dateSeparator:"/",dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],firstDayOfWeek:0,fullDateTimePattern:"dddd, MMMM dd, yyyy h:mm:ss tt",longDatePattern:"dddd, MMMM dd, yyyy",longTimePattern:"h:mm:ss tt",monthDayPattern:"MMMM dd",monthGenitiveNames:["January","February","March","April","May","June","July","August","September","October","November","December",""],monthNames:["January","February","March","April","May","June","July","August","September","October","November","December",""],pmDesignator:"PM",rfc1123:"ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",shortDatePattern:"M/d/yyyy",shortestDayNames:["Su","Mo","Tu","We","Th","Fr","Sa"],shortTimePattern:"h:mm tt",sortableDateTimePattern:"yyyy'-'MM'-'dd'T'HH':'mm':'ss",timeSeparator:":",universalSortableDateTimePattern:"yyyy'-'MM'-'dd HH':'mm':'ss'Z'",yearMonthPattern:"MMMM, yyyy",roundtripFormat:"yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffK"});}},getFormat:function(type){switch(type){case Bridge.DateTimeFormatInfo:return this;default:return null;}},getAbbreviatedDayName:function(dayofweek){if(dayofweek<0||dayofweek>6){throw new Bridge.ArgumentOutOfRangeException("dayofweek");}
+Bridge.Class.define("Bridge.DateTimeFormatInfo",{extend:[Bridge.IFormatProvider,Bridge.ICloneable],statics:{$allStandardFormats:{"d":"shortDatePattern","D":"longDatePattern","f":"longDatePattern shortTimePattern","F":"longDatePattern longTimePattern","g":"shortDatePattern shortTimePattern","G":"shortDatePattern longTimePattern","m":"monthDayPattern","M":"monthDayPattern","o":"roundtripFormat","O":"roundtripFormat","r":"rfc1123","R":"rfc1123","s":"sortableDateTimePattern","t":"shortTimePattern","T":"longTimePattern","u":"universalSortableDateTimePattern","U":"longDatePattern longTimePattern","y":"yearMonthPattern","Y":"yearMonthPattern"},constructor:function(){this.invariantInfo=Bridge.merge(new Bridge.DateTimeFormatInfo(),{abbreviatedDayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],abbreviatedMonthGenitiveNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",""],abbreviatedMonthNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",""],amDesignator:"AM",dateSeparator:"/",dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],firstDayOfWeek:0,fullDateTimePattern:"dddd, MMMM dd, yyyy h:mm:ss tt",longDatePattern:"dddd, MMMM dd, yyyy",longTimePattern:"h:mm:ss tt",monthDayPattern:"MMMM dd",monthGenitiveNames:["January","February","March","April","May","June","July","August","September","October","November","December",""],monthNames:["January","February","March","April","May","June","July","August","September","October","November","December",""],pmDesignator:"PM",rfc1123:"ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",shortDatePattern:"M/d/yyyy",shortestDayNames:["Su","Mo","Tu","We","Th","Fr","Sa"],shortTimePattern:"h:mm tt",sortableDateTimePattern:"yyyy'-'MM'-'dd'T'HH':'mm':'ss",timeSeparator:":",universalSortableDateTimePattern:"yyyy'-'MM'-'dd HH':'mm':'ss'Z'",yearMonthPattern:"MMMM, yyyy",roundtripFormat:"yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffff"});}},getFormat:function(type){switch(type){case Bridge.DateTimeFormatInfo:return this;default:return null;}},getAbbreviatedDayName:function(dayofweek){if(dayofweek<0||dayofweek>6){throw new Bridge.ArgumentOutOfRangeException("dayofweek");}
 return this.abbreviatedDayNames[dayofweek];},getAbbreviatedMonthName:function(month){if(month<1||month>13){throw new Bridge.ArgumentOutOfRangeException("month");}
 return this.abbreviatedMonthNames[month-1];},getAllDateTimePatterns:function(format,returnNull){var f=Bridge.DateTimeFormatInfo.$allStandardFormats,formats,names,pattern,i,result=[];if(format){if(!f[format]){if(returnNull){return null;}
 throw new Bridge.ArgumentException(null,"format");}
@@ -245,9 +245,10 @@ for(i=index+tokenLen;i<format.length&&format[i]!=patternToMatch;i++){}
 if(i<format.length){repeat=0;while(++i<format.length&&format[i]==patternToMatch){repeat++;}
 if(repeat<=1){return true;}}
 return false;},format:function(date,format,provider){var me=this,df=(provider||Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),year=date.getFullYear(),month=date.getMonth(),dayOfMonth=date.getDate(),dayOfWeek=date.getDay(),hour=date.getHours(),minute=date.getMinutes(),second=date.getSeconds(),millisecond=date.getMilliseconds,timezoneOffset=date.getTimezoneOffset(),formats;format=format||"G";if(format.length==1){formats=df.getAllDateTimePatterns(format,true);format=formats?formats[0]:format;}
+else if(format.length==2&&format.charAt(0)=="%"){format=format.charAt(1);}
 return format.replace(/(\\.|'[^']*'|"[^"]*"|d{1,4}|M{1,4}|yyyy|yy|y|HH?|hh?|mm?|ss?|tt?|f{1,3}|z{1,3}|\:|\/)/g,function(match,group,index){var part=match;switch(match){case"dddd":part=df.dayNames[dayOfWeek];break;case"ddd":part=df.abbreviatedDayNames[dayOfWeek];break;case"dd":part=dayOfMonth<10?"0"+dayOfMonth:dayOfMonth;break;case"d":part=dayOfMonth;break;case"MMMM":if(me.isUseGenitiveForm(format,index,4,"d")){part=df.monthGenitiveNames[month];}
 else{part=df.monthNames[month];}
-break;case"MMM":if(me.isUseGenitiveForm(format,index,4,"d")){part=df.abbreviatedMonthGenitiveNames[month];}
+break;case"MMM":if(me.isUseGenitiveForm(format,index,3,"d")){part=df.abbreviatedMonthGenitiveNames[month];}
 else{part=df.abbreviatedMonthNames[month];}
 break;case"MM":part=(month+1)<10?"0"+(month+1):(month+1);break;case"M":part=month+1;break;case"yyyy":part=year;break;case"yy":part=(year%100).toString();if(part.length==1){part="0"+part;}
 break;case"y":part=year%100;break;case"h":case"hh":part=hour%12;if(!part){part="12";}
@@ -261,7 +262,73 @@ if(match=="ff"){part=part.substr(0,2);}
 else if(match=="f"){part=part.charAt(0);}
 break;case"z":part=timezoneOffset/60;part=((part>=0)?"-":"+")+Math.floor(Math.abs(part));break;case"zz":case"zzz":part=timezoneOffset/60;part=((part>=0)?"-":"+")+Bridge.String.alignString(Math.floor(Math.abs(part)).toString(),2,"0",2);if(match=="zzz"){part+=df.timeSeparator+Bridge.String.alignString(Math.floor(Math.abs(timezoneOffset%60)).toString(),2,"0",2);}
 break;case":":part=df.timeSeparator;break;case"/":part=df.dateSeparator;break;default:part=match.substr(1,match.length-1-(match.charAt(0)!="\\"));break;}
-return part;});},parse:function(value,provider){throw new Bridge.NotImplementedException();},parseExact:function(value,format,provider){throw new Bridge.NotImplementedException();},tryParse:function(value,provider,result){throw new Bridge.NotImplementedException();},tryParseExact:function(value,format,provider,result){throw new Bridge.NotImplementedException();},isDaylightSavingTime:function(dt){var temp=Bridge.Date.today();temp.setMonth(0);temp.setDate(1);return temp.getTimezoneOffset()!=dt.getTimezoneOffset();},toUTC:function(date){return new Date(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),date.getUTCHours(),date.getUTCMinutes(),date.getUTCSeconds(),date.getUTCMilliseconds());},toLocal:function(date){return new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds(),date.getMilliseconds()));}};
+return part;});},parse:function(value,provider){return this.parseExact(value,null,provider);},parseExact:function(str,format,provider,silent){var df=(provider||Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),am=df.amDesignator,pm=df.pmDesignator,int=0,index=0,i,c,token,year=0,month=1,date=1,hh=0,mm=0,ss=0,ff=0,tt="",zzh=0,zzm=0,zzi,sign,neg,names,name,invalid=false;if(str==null){throw new Bridge.ArgumentNullException("str");}
+format=format||"G";if(format.length==1){formats=df.getAllDateTimePatterns(format,true);format=formats?formats[0]:format;}
+else if(format.length==2&&format.charAt(0)=="%"){format=format.charAt(1);}
+while(index<format.length){c=format.charAt(index);token="";while((format.charAt(index)==c)&&(index<format.length)){token+=c;index++}
+if(token=="yyyy"||token=="yy"||token=="y"){if(token=="yyyy"){year=this.subparseInt(str,int,4,4);}
+else if(token=="yy"){year=this.subparseInt(str,int,2,2);}
+else if(token=="y"){year=this.subparseInt(str,int,2,4);}
+if(year==null){invalid=true;break;}
+int+=year.length;if(year.length==2){year=~~year;year=(year>30?1900:2000)+year;}}
+else if(token=="MMM"||token=="MMMM"){month=0;if(token==="MMM"){if(me.isUseGenitiveForm(format,index,3,"d")){names=df.abbreviatedMonthGenitiveNames;}
+else{names=df.abbreviatedMonthNames;}}
+else{if(me.isUseGenitiveForm(format,index,4,"d")){names=df.monthGenitiveNames;}
+else{names=df.monthNames;}}
+for(i=0;i<names.length;i++){name=names[i];if(str.substring(int,int+name.length).toLowerCase()==name.toLowerCase()){month=(i%12)+1;int+=name.length;break;}}
+if((month<1)||(month>12)){invalid=true;break;}}
+else if(token=="MM"||token=="M"){month=this.subparseInt(str,int,token.length,2);if(month==null||month<1||month>12){invalid=true;break;}
+int+=month.length;}
+else if(token=="dddd"||token=="ddd"){names=token==="ddd"?df.abbreviatedDayNames:df.dayNames;for(i=0;i<names.length;i++){name=names[i];if(str.substring(int,int+name.length).toLowerCase()==name.toLowerCase()){int+=name.length;break;}}}
+else if(token=="dd"||token=="d"){date=this.subparseInt(str,int,token.length,2);if(date==null||date<1||date>31){invalid=true;break;}
+int+=date.length;}
+else if(token=="hh"||token=="h"){hh=this.subparseInt(str,int,token.length,2);if(hh==null||hh<1||hh>12){invalid=true;break;}
+int+=hh.length;}
+else if(token=="HH"||token=="H"){hh=this.subparseInt(str,int,token.length,2);if(hh==null||hh<0||hh>23){invalid=true;break;}
+int+=hh.length;}
+else if(token=="mm"||token=="m"){mm=this.subparseInt(str,int,token.length,2);if(mm==null||mm<0||mm>59){return null;}
+int+=mm.length;}
+else if(token=="ss"||token=="s"){ss=this.subparseInt(str,int,token.length,2);if(ss==null||ss<0||ss>59){invalid=true;break;}
+int+=ss.length;}
+else if(token=="fff"||token=="ff"||token=="f"){ff=this.subparseInt(str,int,token.length,3);if(ff==null){invalid=true;break;}
+int+=ff.length;}
+else if(token=="t"){if(str.substring(int,int+1).toLowerCase()==am.charAt(0).toLowerCase()){tt=am;}
+else if(str.substring(int,int+1).toLowerCase()==pm.charAt(0).toLowerCase()){tt=pm;}
+else{invalid=true;break;}
+int+=1;}
+else if(token=="tt"){if(str.substring(int,int+2).toLowerCase()==am.toLowerCase()){tt=am;}
+else if(str.substring(int,int+2).toLowerCase()==pm.toLowerCase()){tt=pm;}
+else{invalid=true;break;}
+int+=2;}
+else if(token=="z"||token=="zz"){sign=str.charAt(int);if(sign=="-"){neg=true;}
+else if(sign=="+"){neg=false;}
+else{invalid=true;break;}
+int++;zzh=this.subparseInt(str,int,1,2);if(zzh==null||zzh>14){invalid=true;break;}
+int+=zzh.length;if(neg){zzh=-zzh;}}
+else if(token=="zzz"){name=str.substring(int,int+6);int+=6;if(name.length!=6){invalid=true;break;}
+sign=name.charAt(0);if(sign=="-"){neg=true;}
+else if(sign=="+"){neg=false;}
+else{invalid=true;break;}
+zzi=1;zzh=this.subparseInt(name,zzi,1,2);if(zzh==null||zzh>14){invalid=true;break;}
+zzi+=zzh.length;if(neg){zzh=-zzh;}
+if(name.charAt(zzi)!=df.timeSeparator){invalid=true;break;}
+zzi++;zzm=this.subparseInt(name,zzi,1,2);if(zzm==null||zzh>59){invalid=true;break;}}
+else{name=str.substring(int,int+token.length);if((token==":"&&name!=df.timeSeparator)||(token=="/"&&name!=df.dateSeparator)||(name!=token&&token!="'")){invalid=true;break;}
+if(token!="'"){int+=token.length;}}}
+if(!invalid){if(int!=str.length){invalid=true;}
+else if(month==2){if(((year%4==0)&&(year%100!=0))||(year%400==0)){if(date>29){invalid=true;}}
+else if(date>28){invalid=true;}}
+else if((month==4)||(month==6)||(month==9)||(month==11)){if(date>30){invalid=true;}}}
+if(invalid){if(silent){return null;}
+throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");}
+if(hh<12&&tt==pm){hh=hh-0+12;}
+else if(hh>11&&tt==am){hh-=12;}
+if(zzh==0&&zzm==0){return new Date(year,month-1,date,hh,mm,ss,ff);}
+return new Date(Date.UTC(year,month-1,date,hh-zzh,mm-zzm,ss,ff));},subparseInt:function(str,index,min,max){var x,token;for(x=max;x>=min;x--){token=str.substring(index,index+x);if(token.length<min){return null;}
+if(/^\d+$/.test(token)){return token;}}
+return null;},tryParse:function(value,provider,result){result.v=this.parseExact(value,null,provider,true);if(result.v==null){result.v=new Date(-864e13);return false;}
+return true;},tryParseExact:function(value,format,provider,result){result.v=this.parseExact(value,format,provider,true);if(result.v==null){result.v=new Date(-864e13);return false;}
+return true;},isDaylightSavingTime:function(dt){var temp=Bridge.Date.today();temp.setMonth(0);temp.setDate(1);return temp.getTimezoneOffset()!=dt.getTimezoneOffset();},toUTC:function(date){return new Date(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),date.getUTCHours(),date.getUTCMinutes(),date.getUTCSeconds(),date.getUTCMilliseconds());},toLocal:function(date){return new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds(),date.getMilliseconds()));}};
 
 Bridge.Class.define('Bridge.TimeSpan',{extend:[Bridge.IComparable],statics:{fromDays:function(value){return new Bridge.TimeSpan(value*864e9);},fromHours:function(value){return new Bridge.TimeSpan(value*36e9);},fromMilliseconds:function(value){return new Bridge.TimeSpan(value*1e4);},fromMinutes:function(value){return new Bridge.TimeSpan(value*6e8);},fromSeconds:function(value){return new Bridge.TimeSpan(value*1e7);},fromTicks:function(value){return new Bridge.TimeSpan(value);},constructor:function(){this.zero=new Bridge.TimeSpan(0);this.maxValue=new Bridge.TimeSpan(864e13);this.minValue=new Bridge.TimeSpan(-864e13);},getDefaultValue:function(){return new Bridge.TimeSpan(0);}},config:{fields:{ticks:0}},constructor:function(){if(arguments.length==1){this.ticks=arguments[0];}
 else if(arguments.length==3){this.ticks=(((arguments[0]*60+arguments[1])*60)+arguments[2])*1e7;}

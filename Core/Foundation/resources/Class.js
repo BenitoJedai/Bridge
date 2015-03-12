@@ -45,7 +45,10 @@
             if (config.properties) {
                 for (name in config.properties) {
                     this[name] = config.properties[name];
-                    var cap = name.charAt(0).toUpperCase() + name.slice(1);
+                    
+                    var rs = name.charAt(0) == "$",
+                        cap = name.charAt(rs ? 1 : 0).toUpperCase() + name.slice(rs ? 2 : 1);
+
                     this["get" + cap] = (function (name) {
                         return function () {
                             return this[name];
@@ -62,12 +65,16 @@
             if (config.events) {
                 for (name in config.events) {
                     this[name] = config.events[name];
-                    this["add" + name] = (function (name) {
+
+                    var rs = name.charAt(0) == "$",
+                        cap = rs ? name.slice(1) : name;
+
+                    this["add" + cap] = (function (name) {
                         return function (value) {
                             this[name] = Bridge.fn.combine(this[name], value);
                         };
                     })(name);
-                    this["remove" + name] = (function (name) {
+                    this["remove" + cap] = (function (name) {
                         return function (value) {
                             this[name] = Bridge.fn.remove(this[name], value);
                         };

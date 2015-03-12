@@ -239,7 +239,7 @@ namespace Bridge.NET
             bool changeCase = !this.IsNativeMember(method.FullName) ? this.ChangeCase : true;
             string attrName = Translator.Foundation_ASSEMBLY + ".NameAttribute";
             var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == attrName);
-            bool isReserved = method.IsStatic && Emitter.IsReservedStaticName(method.Name) && !this.Validator.IsIgnoreType(method.DeclaringType);
+            bool isIgnore = this.Validator.IsIgnoreType(method.DeclaringType);            
             string name = method.Name;
 
             if (attr != null)
@@ -248,7 +248,9 @@ namespace Bridge.NET
                 if (value is string)
                 {
                     name = value.ToString();
-                    if (isReserved)
+                    if (!isIgnore &&
+                        ((method.IsStatic && Emitter.IsReservedStaticName(name)) ||
+                        Helpers.IsReservedWord(name)))
                     {
                         name = "$" + name;
                     }
@@ -259,7 +261,9 @@ namespace Bridge.NET
             }
 
             name = changeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
-            if (isReserved)
+            if (!isIgnore &&
+                ((method.IsStatic && Emitter.IsReservedStaticName(name)) ||
+                Helpers.IsReservedWord(name)))
             {
                 name = "$" + name;
             }
@@ -271,7 +275,7 @@ namespace Bridge.NET
         {
             bool changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true;
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.Foundation_ASSEMBLY + ".NameAttribute");
-            bool isReserved = member.IsStatic && Emitter.IsReservedStaticName(member.Name) && !this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);
+            bool isIgnore = this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);            
             string name = member.Name;
 
             if (attr != null)
@@ -280,7 +284,7 @@ namespace Bridge.NET
                 if (value is string)
                 {
                     name = value.ToString();
-                    if (isReserved)
+                    if (!isIgnore && ((member.IsStatic && Emitter.IsReservedStaticName(name)) || Helpers.IsReservedWord(name)))
                     {
                         name = "$" + name;
                     }
@@ -292,7 +296,7 @@ namespace Bridge.NET
 
             name = changeCase && !cancelChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
 
-            if (isReserved)
+            if (!isIgnore && ((member.IsStatic && Emitter.IsReservedStaticName(name)) || Helpers.IsReservedWord(name)))
             {
                 name = "$" + name;
             }
@@ -315,8 +319,7 @@ namespace Bridge.NET
                 name = this.GetEventName((EventDeclaration)entity);
             }
 
-            bool isReserved = entity.HasModifier(Modifiers.Static) && Emitter.IsReservedStaticName(name);
-
+            bool isStatic = entity.HasModifier(Modifiers.Static) || entity.HasModifier(Modifiers.Const);            
 
             if (attr != null)
             {
@@ -324,7 +327,7 @@ namespace Bridge.NET
                 if (expr.Value is string)
                 {
                     name = expr.Value.ToString();
-                    if (isReserved)
+                    if ((isStatic && Emitter.IsReservedStaticName(name)) || Helpers.IsReservedWord(name))
                     {
                         name = "$" + name;
                     }
@@ -336,7 +339,7 @@ namespace Bridge.NET
 
             name = changeCase && !cancelChangeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
 
-            if (isReserved)
+            if ((isStatic && Emitter.IsReservedStaticName(name)) || Helpers.IsReservedWord(name))
             {
                 name = "$" + name;
             }

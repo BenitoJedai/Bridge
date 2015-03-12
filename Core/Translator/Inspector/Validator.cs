@@ -521,33 +521,9 @@ namespace Bridge.NET
             return result.Type.Kind == ICSharpCode.NRefactory.TypeSystem.TypeKind.Delegate || result is LambdaResolveResult;
         }
 
-        private static HashSet<string> InvalidIdentifiers = new HashSet<string>(new[] 
-        { 
-            "_", 
-            "arguments",
-            "boolean", 
-            "debugger", 
-            "delete", 
-            "export", 
-            "extends", 
-            "final", 
-            "function",
-            "implements", 
-            "import", 
-            "instanceof", 
-            "native", 
-            "package", 
-            "super",
-            "synchronized", 
-            "throws", 
-            "transient", 
-            "var", 
-            "with"                
-        });
-
         public virtual void CheckIdentifier(string name, AstNode context)
         {
-            if (Validator.InvalidIdentifiers.Contains(name))
+            if (Helpers.IsReservedWord(name))
             {
                 Bridge.NET.Exception.Throw("Cannot use '{0}' as identifier {1}: {2}", name, context.StartLocation, context.ToString());
             }
