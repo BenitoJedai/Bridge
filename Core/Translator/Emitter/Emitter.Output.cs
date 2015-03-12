@@ -70,7 +70,7 @@ namespace Bridge.NET
                             moduleOutput.Append(",");
                         });
                     }
-                    moduleOutput.Remove(moduleOutput.Length - 1, 1); // remove trailing coma
+                    moduleOutput.Remove(moduleOutput.Length - 1, 1); // remove trailing comma
                     moduleOutput.Append("], ");
 
 
@@ -84,7 +84,7 @@ namespace Bridge.NET
                             moduleOutput.Append(",");
                         });
                     }
-                    moduleOutput.Remove(moduleOutput.Length - 1, 1); // remove trailing coma
+                    moduleOutput.Remove(moduleOutput.Length - 1, 1); // remove trailing comma
                     moduleOutput.AppendLine(") {");
 
                     moduleOutput.Append("    ");
