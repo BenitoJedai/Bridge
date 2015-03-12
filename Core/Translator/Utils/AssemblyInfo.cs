@@ -12,57 +12,89 @@ namespace Bridge.NET
             this.Dependencies = new List<IModuleDependency>();                        
         }
 
+        /// <summary>
+        /// A file name where JavaScript is generated to. If omitted, it is [Project_Name].js by default.
+        /// Example: "MyBridgeNetLibrary.js"
+        /// Tip. You can decorate a class with a [FileName('MyClass.js')] attribute. A class script will be generated to the defined file. It supersedes a global bridge.json fileName.
+        /// </summary>
         public string FileName
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The output folder path for generated JavaScript. A non-absolute path is concatenated with a project's root. 
+        /// Examples: "Bridge\\output\\", "..\\Bridge\\output\\", "c:\\Bridge\\output\\"
+        /// </summary>
         public string OutputDir
         {
             get;
             set;
         }
 
-        private TypesSplit filesHierrarchy = TypesSplit.None;
-        public TypesSplit FilesHierrarchy
+        private TypesSplit filesHierarchy = TypesSplit.None;
+
+        /// <summary>
+        /// The option to manage JavaScript output folders and files.
+        /// See TypesSplit enum for more details.
+        /// </summary>
+        public TypesSplit FilesHierarchy
         {
             get
             {
-                return this.filesHierrarchy;
+                return this.filesHierarchy;
             }
             set
             {
-                this.filesHierrarchy = value;
+                this.filesHierarchy = value;
             }
         }
 
+        /// <summary>
+        /// Substrings the file name starting with the defined index. 
+        /// For example, it might be useful to get rid of the first namespace in the chain if use ByFullName or ByNamespace FilesHierarchy.
+        /// </summary>
         public int StartIndexInName
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The global Module setting. The entire project is considered as one Module.
+        /// Though, you are still able to define a Module attribute on the class level.
+        /// </summary>
         public string Module
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The list of module dependencies.
+        /// </summary>
         public List<IModuleDependency> Dependencies
         {
             get;
             set;
         }
 
-
-        public string BeforeEvent
+        /// <summary>
+        /// The executable file to be launched before building. The path will be concatenated with the project's root. 
+        /// For example, it might be used for cleaning up the output directory - "Bridge\\builder\\clean.bat".
+        /// </summary>
+        public string BeforeBuild
         {
             get;
             set;
         }
 
-        public string AfterEvent
+        /// <summary>
+        /// The executable file to be launched after building. The path will be concatenated with the project's root. 
+        /// For example, it might be used for copying the generated JavaScript files to a Web application - "Bridge\\builder\\copy.bat"
+        /// </summary>
+        public string AfterBuild
         {
             get;
             set;

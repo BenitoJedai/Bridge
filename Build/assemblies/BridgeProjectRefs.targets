@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(MSBuildThisFileDirectory)..\Core\Foundation\Bridge.Foundation.csproj">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\Core\Foundation\Bridge.Foundation.csproj">
       <Project>{de78b8b7-c0f5-415b-a70b-02194433f450}</Project>
       <Name>Bridge.Foundation</Name>
     </ProjectReference>

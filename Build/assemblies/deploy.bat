@@ -12,7 +12,7 @@ rem Additional directory name (if an Extension, for example)
 set extdirname=%~3
 
 rem Build full destination path name (appending extension dir name if needed)
-set asmpath=%destroot%assemblies\
+set asmpath=%destroot%Build\assemblies\
 if not "%extdirname%" == "" set asmpath=%asmpath%%extdirname%\
 
 if not "%projfilename%" == "" if not "%destroot%" == "" (

@@ -32,31 +32,31 @@
   <ItemGroup>
     <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\ICSharpCode.NRefactory.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.Cecil, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\ICSharpCode.NRefactory.Cecil.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\ICSharpCode.NRefactory.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.CSharp, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\ICSharpCode.NRefactory.CSharp.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\ICSharpCode.NRefactory.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\NRefactory\Ready\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>..\..\Build\Libs\NRefactory\Ready\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,7 +93,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <PostBuildEvent>call "$(SolutionDir)assemblies\deploy.bat" "$(MSBuildProjectName)" "$(SolutionDir)"</PostBuildEvent>
+    <PostBuildEvent>call "$(SolutionDir)Build\assemblies\deploy.bat" "$(MSBuildProjectName)" "$(SolutionDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

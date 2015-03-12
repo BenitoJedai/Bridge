@@ -45,9 +45,9 @@ namespace Bridge.NET
 
             var fileName = typeInfo.FileName;
 
-            if (fileName.IsEmpty() && this.Emitter.AssemblyInfo.FilesHierrarchy != TypesSplit.None)
+            if (fileName.IsEmpty() && this.Emitter.AssemblyInfo.FilesHierarchy != TypesSplit.None)
             {
-                switch (this.Emitter.AssemblyInfo.FilesHierrarchy)
+                switch (this.Emitter.AssemblyInfo.FilesHierarchy)
                 {
                     case TypesSplit.ByFullName:
                         fileName = typeInfo.FullName;
