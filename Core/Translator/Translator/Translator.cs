@@ -8,6 +8,7 @@ using Bridge.Contract;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
+using Microsoft.Ajax.Utilities;
 
 namespace Bridge.NET
 {
@@ -85,14 +86,22 @@ namespace Bridge.NET
 
             string keyPath = this.Outputs.First().Key;
             string path = Path.Combine(outputDir, keyPath.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
-            var file = new System.IO.FileInfo(path);
+            var minifier = new Minifier();
+            
+            var file = new System.IO.FileInfo(path);            
+            file.Directory.Create();
+            File.WriteAllText(file.FullName, minifier.MinifyJavaScript(builder.ToString()), System.Text.UTF8Encoding.UTF8);
 
+            string fileName = Path.GetFileNameWithoutExtension(path);
+            path = Path.GetDirectoryName(path) + ("\\" + fileName + "-debug") + Path.GetExtension(path);
+            file = new System.IO.FileInfo(path);
             file.Directory.Create();
             File.WriteAllText(file.FullName, builder.ToString(), System.Text.UTF8Encoding.UTF8);
         }
 
         public virtual void SaveTo(string dir, string defaultFileName)
         {
+            var minifier = new Minifier();
             foreach (var item in this.Outputs)
             {
                 string fileName = item.Key;
@@ -111,6 +120,12 @@ namespace Bridge.NET
                 string filePath = Path.Combine(dir, fileName);
 
                 var file = new System.IO.FileInfo(filePath);
+                file.Directory.Create();
+                File.WriteAllText(file.FullName, minifier.MinifyJavaScript(code), System.Text.UTF8Encoding.UTF8);
+
+                string fn = Path.GetFileNameWithoutExtension(filePath);
+                filePath = Path.GetDirectoryName(filePath) + ("\\" + fn + "-debug") + Path.GetExtension(filePath);
+                file = new System.IO.FileInfo(filePath);
                 file.Directory.Create();
                 File.WriteAllText(file.FullName, code, System.Text.UTF8Encoding.UTF8);
             }            

@@ -200,7 +200,26 @@
     },    
 
     parseExact: function (str, format, provider, silent) {
-        var df = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),        
+        if (!format) {
+            format = ["G", "g", "F", "f", "D", "d", "R", "r", "s", "U", "u", "O", "o", "Y", "y", "M", "m", "T", "t"];
+        }
+
+        if (Bridge.isArray(format)) {
+            var i, d;
+            for (i = 0; i < format.length; i++) {
+                d = Bridge.Date.parseExact(str, format[i], provider, true);
+                if (d != null) {
+                    return d;
+                }
+            }
+
+            if (silent) {
+                return null;
+            }
+            throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
+        }
+
+        var df = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),
             am = df.amDesignator,
             pm = df.pmDesignator,
             int = 0,
@@ -274,7 +293,7 @@
                 month = 0;
 
                 if (token === "MMM") {
-                    if (me.isUseGenitiveForm(format, index, 3, "d")) {
+                    if (this.isUseGenitiveForm(format, index, 3, "d")) {
                         names = df.abbreviatedMonthGenitiveNames;
                     }
                     else {
@@ -282,7 +301,7 @@
                     }
                 }
                 else {
-                    if (me.isUseGenitiveForm(format, index, 4, "d")) {
+                    if (this.isUseGenitiveForm(format, index, 4, "d")) {
                         names = df.monthGenitiveNames;
                     }
                     else {

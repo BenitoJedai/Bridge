@@ -260,8 +260,20 @@ namespace System
             return default(DateTime);
 		}
 
+        [Template("Bridge.Date.parseExact({value}, {formats})")]
+        public static DateTime ParseExact(string value, string[] formats)
+        {
+            return default(DateTime);
+        }
+
         [Template("Bridge.Date.parseExact({value}, {format}, {provider})")]
         public static DateTime ParseExact(string value, string format, IFormatProvider provider)
+        {
+            return default(DateTime);
+        }
+
+        [Template("Bridge.Date.parseExact({value}, {formats}, {provider})")]
+        public static DateTime ParseExact(string value, string[] formats, IFormatProvider provider)
         {
             return default(DateTime);
         }
@@ -273,8 +285,22 @@ namespace System
             return false;
         }
 
+        [Template("Bridge.Date.tryParseExact({value}, {formats}, null, {result})")]
+        public static bool TryParseExact(string value, string[] formats, out DateTime result)
+        {
+            result = default(DateTime);
+            return false;
+        }
+
         [Template("Bridge.Date.tryParseExact({value}, {format}, {provider}, {result})")]
         public static bool TryParseExact(string value, string format, IFormatProvider provider, out DateTime result)
+        {
+            result = default(DateTime);
+            return false;
+        }
+
+        [Template("Bridge.Date.tryParseExact({value}, {formats}, {provider}, {result})")]
+        public static bool TryParseExact(string value, string[] formats, IFormatProvider provider, out DateTime result)
         {
             result = default(DateTime);
             return false;
