@@ -116,7 +116,7 @@ namespace Bridge.NET
                 resolveResult = this.Emitter.Resolver.ResolveNode(identifierExpression, this.Emitter);
             }
             var id = identifierExpression.Identifier;
-            this.Emitter.Validator.CheckIdentifier(id, identifierExpression);
+            //this.Emitter.Validator.CheckIdentifier(id, identifierExpression);
 
             var isResolved = resolveResult != null && !(resolveResult is ErrorResolveResult);
             var memberResult = resolveResult as MemberResolveResult;

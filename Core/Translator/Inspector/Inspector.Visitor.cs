@@ -110,7 +110,7 @@ namespace Bridge.NET
         public override void VisitFieldDeclaration(FieldDeclaration fieldDeclaration)
         {
             bool isStatic = this.CurrentType.ClassType == ClassType.Enum
-                || fieldDeclaration.HasModifier(Modifiers.Static)
+                || fieldDeclaration.HasModifier(Modifiers.Static) 
                 || fieldDeclaration.HasModifier(Modifiers.Const);
 
             foreach (var item in fieldDeclaration.Variables)
