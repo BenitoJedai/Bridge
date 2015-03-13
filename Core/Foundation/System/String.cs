@@ -13,6 +13,9 @@ namespace System
     {
         public readonly int Length = 0;
 
+        [InlineConst]
+        public const string Empty = "";
+
         /// <summary>
         /// The String global object is a constructor for strings, or a sequence of characters.
         /// </summary>
