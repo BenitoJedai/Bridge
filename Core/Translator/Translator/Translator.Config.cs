@@ -10,7 +10,7 @@ namespace Bridge.NET
     {
         protected virtual IAssemblyInfo ReadConfig(IAssemblyInfo mergeConfig)
         {
-            var path = Path.GetDirectoryName(this.Location) + "\\bridge.json";
+            var path = Path.GetDirectoryName(this.Location) + "\\Bridge\\bridge.json";
 
             if (!File.Exists(path))
             {
