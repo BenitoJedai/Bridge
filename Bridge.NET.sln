@@ -21,9 +21,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frameworks", "Frameworks", "{7C762820-1165-4EB4-B7A3-3BB45DF33CE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Builder", "Builder", "{47D6D365-36CE-43C2-91D0-5A071928C62A}"
-	ProjectSection(SolutionItems) = preProject
-		AssembliesMerger.ps1 = AssembliesMerger.ps1
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.jQuery2", "..\Frameworks\jQuery2\Bridge.jQuery2.csproj", "{BCCFB816-2F7F-4693-A16B-2BC0A7B39085}"
 EndProject
