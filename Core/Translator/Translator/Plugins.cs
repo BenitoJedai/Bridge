@@ -13,7 +13,7 @@ namespace Bridge.NET
     {
         public static IPlugins GetPlugins(ITranslator translator)
         {            
-            var path = System.IO.Path.GetDirectoryName(translator.FoundationLocation) + @"\plugins\";
+            var path = System.IO.Path.GetDirectoryName(translator.BridgeLocation) + @"\plugins\";
             
             if (!System.IO.Directory.Exists(path)) 
             {

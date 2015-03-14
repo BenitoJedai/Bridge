@@ -229,7 +229,7 @@ namespace Bridge.NET
 
         public virtual IEnumerable<string> GetScript(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, Translator.Foundation_ASSEMBLY + ".Script");
+            var attr = this.GetAttribute(method.Attributes, Translator.Bridge_ASSEMBLY + ".Script");
 
             return this.GetScriptArguments(attr);
         }
@@ -237,7 +237,7 @@ namespace Bridge.NET
         public virtual string GetMethodName(MethodDefinition method)
         {
             bool changeCase = !this.IsNativeMember(method.FullName) ? this.ChangeCase : true;
-            string attrName = Translator.Foundation_ASSEMBLY + ".NameAttribute";
+            string attrName = Translator.Bridge_ASSEMBLY + ".NameAttribute";
             var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == attrName);
             bool isIgnore = this.Validator.IsIgnoreType(method.DeclaringType);            
             string name = method.Name;
@@ -274,7 +274,7 @@ namespace Bridge.NET
         public virtual string GetEntityName(IEntity member, bool cancelChangeCase = false)
         {
             bool changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true;
-            var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.Foundation_ASSEMBLY + ".NameAttribute");
+            var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.Bridge_ASSEMBLY + ".NameAttribute");
             bool isIgnore = this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);            
             string name = member.Name;
 
@@ -307,7 +307,7 @@ namespace Bridge.NET
         public virtual string GetEntityName(EntityDeclaration entity, bool cancelChangeCase = false)
         {
             bool changeCase = this.ChangeCase;
-            var attr = this.GetAttribute(entity.Attributes, Translator.Foundation_ASSEMBLY + ".Name");
+            var attr = this.GetAttribute(entity.Attributes, Translator.Bridge_ASSEMBLY + ".Name");
 
             string name = entity.Name;
             if (entity is FieldDeclaration)
@@ -379,21 +379,21 @@ namespace Bridge.NET
 
         public virtual string GetInline(ICustomAttributeProvider provider)
         {
-            var attr = this.GetAttribute(provider.CustomAttributes, Translator.Foundation_ASSEMBLY + ".TemplateAttribute");
+            var attr = this.GetAttribute(provider.CustomAttributes, Translator.Bridge_ASSEMBLY + ".TemplateAttribute");
 
             return attr != null ? ((string)attr.ConstructorArguments.First().Value) : null;
         }
 
         public virtual string GetInline(EntityDeclaration method)
         {
-            var attr = this.GetAttribute(method.Attributes, Translator.Foundation_ASSEMBLY + ".Template");
+            var attr = this.GetAttribute(method.Attributes, Translator.Bridge_ASSEMBLY + ".Template");
 
             return attr != null ? ((string)((PrimitiveExpression)attr.Arguments.First()).Value) : null;
         }
 
         public virtual string GetInline(IEntity entity)
         {
-            string attrName = Translator.Foundation_ASSEMBLY + ".TemplateAttribute";
+            string attrName = Translator.Bridge_ASSEMBLY + ".TemplateAttribute";
 
             if (entity.SymbolKind == SymbolKind.Property)
             {
@@ -417,7 +417,7 @@ namespace Bridge.NET
 
         protected virtual bool IsInlineMethod(IEntity entity)
         {
-            string attrName = Translator.Foundation_ASSEMBLY + ".TemplateAttribute";
+            string attrName = Translator.Bridge_ASSEMBLY + ".TemplateAttribute";
 
             if (entity != null)
             {
@@ -453,7 +453,7 @@ namespace Bridge.NET
 
         public virtual bool IsNativeMember(string fullName)
         {
-            return fullName.Contains(Translator.Foundation_ASSEMBLY) || fullName.StartsWith("System");
+            return fullName.Contains(Translator.Bridge_ASSEMBLY) || fullName.StartsWith("System");
         }
 
         public virtual bool IsMemberConst(IMember member)
@@ -467,7 +467,7 @@ namespace Bridge.NET
 
             if (isConst)
             {
-                var attr = this.GetAttribute(member.Attributes, Translator.Foundation_ASSEMBLY + ".InlineConstAttribute");
+                var attr = this.GetAttribute(member.Attributes, Translator.Bridge_ASSEMBLY + ".InlineConstAttribute");
 
                 if (attr != null)
                 {

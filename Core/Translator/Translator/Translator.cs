@@ -14,7 +14,7 @@ namespace Bridge.NET
 {
     public partial class Translator : ITranslator
     {
-        public const string Foundation_ASSEMBLY = "Bridge.Foundation";
+        public const string Bridge_ASSEMBLY = "Bridge";
         
         public Translator(string location)
         {
@@ -149,7 +149,7 @@ namespace Bridge.NET
         public static void ExtractCore(string clrPath, string outputDir, bool nodebug)
         {
             var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(clrPath);
-            var resourceName = "Bridge.Foundation.resources.bridge.js";
+            var resourceName = "Bridge.resources.bridge.js";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {
@@ -161,7 +161,7 @@ namespace Bridge.NET
 
             if (!nodebug)
             {
-                resourceName = "Bridge.Foundation.resources.bridge-debug.js";
+                resourceName = "Bridge.resources.bridge-debug.js";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {

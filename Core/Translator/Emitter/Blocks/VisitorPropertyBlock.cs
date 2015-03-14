@@ -38,7 +38,7 @@ namespace Bridge.NET
         {
             var memberResult = this.Emitter.Resolver.ResolveNode(propertyDeclaration, this.Emitter) as MemberResolveResult;
 
-            if (memberResult != null && memberResult.Member.Attributes.Any(a => a.AttributeType.FullName == "Bridge.Foundation.FieldPropertyAttribute"))
+            if (memberResult != null && memberResult.Member.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute"))
             {
                 return;
             }

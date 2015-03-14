@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Bridge.Foundation;
+using Bridge;
 using System.Collections;
 
 namespace Bridge.Html5 

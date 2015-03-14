@@ -1,7 +1,7 @@
 ﻿// PositionOptions WebAPI by Mozilla Contributors is licensed under CC-BY-SA 2.5.
 // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
 
-using Bridge.Foundation;
+using Bridge;
 
 namespace Bridge.Html5
 {

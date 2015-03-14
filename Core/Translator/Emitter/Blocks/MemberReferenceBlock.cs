@@ -1,12 +1,11 @@
-﻿using ICSharpCode.NRefactory.CSharp;
+﻿using Bridge.Contract;
+using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.CSharp.Resolver;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem.Implementation;
-using System.Collections.Generic;
-using System.Text;
 using Object.Net.Utilities;
-using Bridge.Contract;
+using System.Text;
 
 namespace Bridge.NET
 {
@@ -132,7 +131,7 @@ namespace Bridge.NET
                         if (enumMode >= 3)
                         {
                             string enumStringName = member.Member.Name;
-                            var attr = this.Emitter.GetAttribute(member.Member.Attributes, Translator.Foundation_ASSEMBLY + ".NameAttribute");
+                            var attr = this.Emitter.GetAttribute(member.Member.Attributes, Translator.Bridge_ASSEMBLY + ".NameAttribute");
 
                             if (attr != null)
                             {

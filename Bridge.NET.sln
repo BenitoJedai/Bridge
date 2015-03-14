@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Translator", "Core\T
 		{DE78B8B7-C0F5-415B-A70B-02194433F450} = {DE78B8B7-C0F5-415B-A70B-02194433F450}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Foundation", "Core\Foundation\Bridge.Foundation.csproj", "{DE78B8B7-C0F5-415B-A70B-02194433F450}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge", "Core\Bridge\Bridge.csproj", "{DE78B8B7-C0F5-415B-A70B-02194433F450}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Html5", "Core\Html5\Bridge.Html5.csproj", "{99DECD28-D3E3-4EA7-ACAE-AB5DFC9913BD}"
 	ProjectSection(ProjectDependencies) = postProject

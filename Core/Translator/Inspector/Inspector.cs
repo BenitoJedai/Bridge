@@ -42,22 +42,22 @@ namespace Bridge.NET
 
         protected virtual bool IsObjectLiteral(EntityDeclaration declaration)
         {
-            return this.HasAttribute(declaration, Translator.Foundation_ASSEMBLY + ".ObjectLiteral");
+            return this.HasAttribute(declaration, Translator.Bridge_ASSEMBLY + ".ObjectLiteral");
         }
 
         protected virtual bool HasIgnore(EntityDeclaration declaration) 
         {
-            return this.HasAttribute(declaration, Translator.Foundation_ASSEMBLY + ".Ignore") || this.IsObjectLiteral(declaration);
+            return this.HasAttribute(declaration, Translator.Bridge_ASSEMBLY + ".Ignore") || this.IsObjectLiteral(declaration);
         }
 
         protected virtual bool HasInline(EntityDeclaration declaration) 
         {
-            return this.HasAttribute(declaration, Translator.Foundation_ASSEMBLY + ".Template");
+            return this.HasAttribute(declaration, Translator.Bridge_ASSEMBLY + ".Template");
         }
 
         protected virtual bool HasScript(EntityDeclaration declaration)
         {
-            return this.HasAttribute(declaration, Translator.Foundation_ASSEMBLY + ".Script");
+            return this.HasAttribute(declaration, Translator.Bridge_ASSEMBLY + ".Script");
         }
 
         private Expression GetDefaultFieldInitializer(AstType type) 

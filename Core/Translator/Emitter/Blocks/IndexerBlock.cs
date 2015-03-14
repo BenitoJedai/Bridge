@@ -42,7 +42,7 @@ namespace Bridge.NET
                 {
                     var specProp = (SpecializedProperty)member;
                     var method = this.Emitter.IsAssignment ? specProp.Setter : specProp.Getter;
-                    inlineAttr = this.Emitter.GetAttribute(method.Attributes, Translator.Foundation_ASSEMBLY + ".TemplateAttribute");
+                    inlineAttr = this.Emitter.GetAttribute(method.Attributes, Translator.Bridge_ASSEMBLY + ".TemplateAttribute");
                 }
             }
 

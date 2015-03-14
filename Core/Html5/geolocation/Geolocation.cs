@@ -3,7 +3,7 @@
 
 using System;
 
-using Bridge.Foundation;
+using Bridge;
 
 namespace Bridge.Html5
 {

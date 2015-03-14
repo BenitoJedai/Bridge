@@ -2,7 +2,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/History
 // https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history
 
-using Bridge.Foundation;
+using Bridge;
 
 namespace Bridge.Html5
 {

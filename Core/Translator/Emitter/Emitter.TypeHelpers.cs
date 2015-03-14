@@ -310,7 +310,7 @@ namespace Bridge.NET
         {
             var attr = type.CustomAttributes.FirstOrDefault(a =>
             {
-                return a.AttributeType.FullName == "Bridge.Foundation.SerializationPriorityAttribute";
+                return a.AttributeType.FullName == "Bridge.SerializationPriorityAttribute";
             });
 
             if (attr != null)

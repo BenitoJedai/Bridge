@@ -476,7 +476,7 @@ namespace Bridge.Contract
         public static string GetOverloadName(IEmitter emitter, MethodDefinition methodDef, List<MethodDefinition> methods)
         {
             var name = emitter.GetMethodName(methodDef);
-            var attr = emitter.GetAttribute(methodDef.CustomAttributes, "Bridge.Foundation.Name");
+            var attr = emitter.GetAttribute(methodDef.CustomAttributes, "Bridge.Name");
 
             if (attr != null)
             {
@@ -561,7 +561,7 @@ namespace Bridge.Contract
             if (emitter.TypeDefinitions.ContainsKey(fullname))
             {
                 var typeDef = emitter.TypeDefinitions[fullname];
-                if (emitter.Validator.HasAttribute(typeDef.CustomAttributes, "Bridge.Foundation.IgnoreGenericAttribute"))
+                if (emitter.Validator.HasAttribute(typeDef.CustomAttributes, "Bridge.IgnoreGenericAttribute"))
                 {
                     return true;
                 }
@@ -576,7 +576,7 @@ namespace Bridge.Contract
             if (emitter.TypeDefinitions.ContainsKey(fullname))
             {
                 var typeDef = emitter.TypeDefinitions[fullname];
-                if (emitter.Validator.HasAttribute(typeDef.CustomAttributes, "Bridge.Foundation.IgnoreCastAttribute"))
+                if (emitter.Validator.HasAttribute(typeDef.CustomAttributes, "Bridge.IgnoreCastAttribute"))
                 {
                     return true;
                 }
@@ -656,13 +656,13 @@ namespace Bridge.Contract
 
         public static bool IsFieldProperty(IMember property)
         {
-            return property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.Foundation.FieldPropertyAttribute");
+            return property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute");
         }
 
         public static string GetPropertyRef(IMember property, IEmitter emitter, bool isSetter = false)
         {
             var name = emitter.GetEntityName(property);
-            if (property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.Foundation.FieldPropertyAttribute"))
+            if (property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute"))
             {
                 return name;
             }

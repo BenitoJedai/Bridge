@@ -12,7 +12,7 @@ namespace Bridge.Contract
         IAssemblyInfo AssemblyInfo { get; set; }
         string AssemblyLocation { get; }
         bool ChangeCase { get; set; }
-        string FoundationLocation { get; set; }
+        string BridgeLocation { get; set; }
         string Configuration { get; set; }
         string GetCode();
         string Location { get; }

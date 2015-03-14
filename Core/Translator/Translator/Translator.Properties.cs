@@ -31,7 +31,7 @@ namespace Bridge.NET
             private set;
         }
 
-        public string FoundationLocation
+        public string BridgeLocation
         {
             get;
             set;
