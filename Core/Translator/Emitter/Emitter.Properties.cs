@@ -222,7 +222,7 @@ namespace Bridge.NET
             set;
         }
 
-        public List<IModuleDependency> CurrentDependencies
+        public List<IPluginDependency> CurrentDependencies
         {
             get;
             set;

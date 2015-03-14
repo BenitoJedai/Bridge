@@ -175,7 +175,7 @@ namespace Bridge.Contract
             set;
         }
 
-        List<IModuleDependency> Dependencies
+        List<IPluginDependency> Dependencies
         {
             get;
             set;

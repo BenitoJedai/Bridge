@@ -20,7 +20,7 @@ namespace Bridge.Contract
         bool ChangeCase { get; set; }
         bool Comma { get; set; }
         int CompareTypeInfos(ITypeInfo x, ITypeInfo y);
-        System.Collections.Generic.List<IModuleDependency> CurrentDependencies { get; set; }
+        System.Collections.Generic.List<IPluginDependency> CurrentDependencies { get; set; }
         System.Collections.Generic.Dictionary<string, string> Emit();
         bool EnableSemicolon { get; set; }
         ICSharpCode.NRefactory.TypeSystem.IAttribute GetAttribute(System.Collections.Generic.IEnumerable<ICSharpCode.NRefactory.TypeSystem.IAttribute> attributes, string name);

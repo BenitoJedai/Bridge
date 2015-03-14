@@ -40,7 +40,7 @@ namespace Bridge.Contract
 
     public interface IAssemblyInfo
     {
-        System.Collections.Generic.List<IModuleDependency> Dependencies { get; set; }
+        System.Collections.Generic.List<IPluginDependency> Dependencies { get; set; }
         string FileName { get; set; }
         TypesSplit FilesHierarchy { get; set; }
         string Module { get; set; }

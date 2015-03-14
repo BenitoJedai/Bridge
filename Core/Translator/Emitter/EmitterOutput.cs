@@ -12,7 +12,7 @@ namespace Bridge.NET
             this.FileName = fileName;
             this.ModuleOutput = new Dictionary<string, StringBuilder>();
             this.NonModuletOutput = new StringBuilder();
-            this.ModuleDependencies = new Dictionary<string, List<IModuleDependency>>();
+            this.ModuleDependencies = new Dictionary<string, List<IPluginDependency>>();
         }
         
         public string FileName
@@ -33,7 +33,7 @@ namespace Bridge.NET
             set;
         }
 
-        public Dictionary<string, List<IModuleDependency>> ModuleDependencies
+        public Dictionary<string, List<IPluginDependency>> ModuleDependencies
         {
             get;
             set;

@@ -9,7 +9,7 @@ namespace Bridge.NET
         
         public AssemblyInfo()
         {
-            this.Dependencies = new List<IModuleDependency>();                        
+            this.Dependencies = new List<IPluginDependency>();                        
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Bridge.NET
         /// <summary>
         /// The list of module dependencies.
         /// </summary>
-        public List<IModuleDependency> Dependencies
+        public List<IPluginDependency> Dependencies
         {
             get;
             set;

@@ -19,7 +19,7 @@ namespace Bridge.NET
             this.FieldsDeclarations = new Dictionary<string, FieldDeclaration>();
             this.Events = new List<EventDeclaration>();
             this.StaticEvents = new List<EventDeclaration>();
-            this.Dependencies = new List<IModuleDependency>();
+            this.Dependencies = new List<IPluginDependency>();
             this.Ctors = new List<ConstructorDeclaration>();
             this.Operators = new Dictionary<OperatorType, List<OperatorDeclaration>>();
             this.AutoProperties = new List<string>();
@@ -248,7 +248,7 @@ namespace Bridge.NET
             set;
         }
 
-        public List<IModuleDependency> Dependencies
+        public List<IPluginDependency> Dependencies
         {
             get;
             set;

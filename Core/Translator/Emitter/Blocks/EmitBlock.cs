@@ -28,7 +28,7 @@ namespace Bridge.NET
             this.Emitter.IsNewLine = true;
             this.Emitter.EnableSemicolon = true;
             this.Emitter.Comma = false;
-            this.Emitter.CurrentDependencies = new List<IModuleDependency>();
+            this.Emitter.CurrentDependencies = new List<IPluginDependency>();
         }
 
         protected virtual StringBuilder GetOutputForType(ITypeInfo typeInfo)
@@ -116,7 +116,7 @@ namespace Bridge.NET
 
             StringBuilder moduleOutput = new StringBuilder();
             output.ModuleOutput.Add(module, moduleOutput);
-            var dependencies = new List<IModuleDependency>();
+            var dependencies = new List<IPluginDependency>();
             output.ModuleDependencies.Add(module, dependencies);
 
             if (typeInfo.Dependencies.Count > 0)

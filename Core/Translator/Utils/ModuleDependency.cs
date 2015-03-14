@@ -1,7 +1,7 @@
 ﻿using Bridge.Contract;
 namespace Bridge.NET
 {
-    public class ModuleDependency : IModuleDependency
+    public class ModuleDependency : IPluginDependency
     {
         public string DependencyName
         {
