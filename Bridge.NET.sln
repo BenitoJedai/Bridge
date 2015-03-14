@@ -18,20 +18,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Html5", "Core\Html5\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{32B4E540-81E6-4E3F-8383-5813786DC899}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{7C762820-1165-4EB4-B7A3-3BB45DF33CE7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frameworks", "Frameworks", "{7C762820-1165-4EB4-B7A3-3BB45DF33CE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Builder", "Builder", "{47D6D365-36CE-43C2-91D0-5A071928C62A}"
 	ProjectSection(SolutionItems) = preProject
 		AssembliesMerger.ps1 = AssembliesMerger.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.jQuery2", "..\Plugins\jQuery2\Bridge.jQuery2.csproj", "{BCCFB816-2F7F-4693-A16B-2BC0A7B39085}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.jQuery2", "..\Frameworks\jQuery2\Bridge.jQuery2.csproj", "{BCCFB816-2F7F-4693-A16B-2BC0A7B39085}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Build", "..\Builder\Build\Bridge.Build.csproj", "{28703D12-116A-4968-BD85-F26D7F7E7DA4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Builder", "..\Builder\Builder\Bridge.Builder.csproj", "{243BB709-3912-4C65-82D4-787A5E2201D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Bootstrap3", "..\Plugins\Bootstrap3\Bridge.Bootstrap3.csproj", "{E2C8A4F9-8525-40E6-A076-38F91F602975}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Bootstrap3", "..\Frameworks\Bootstrap3\Bridge.Bootstrap3.csproj", "{E2C8A4F9-8525-40E6-A076-38F91F602975}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Contract", "Core\Contract\Bridge.Contract.csproj", "{52AE9E3E-6929-4720-AB7A-F9F22B9A8972}"
 EndProject
