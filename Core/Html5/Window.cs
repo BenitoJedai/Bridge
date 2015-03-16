@@ -347,6 +347,13 @@ namespace Bridge.Html5
         /// <summary>
         /// The Window.alert() method displays an alert dialog with the optional specified content and an OK button.
         /// </summary>
+        public static void Alert()
+        {
+        }
+
+        /// <summary>
+        /// The Window.alert() method displays an alert dialog with the optional specified content and an OK button.
+        /// </summary>
         /// <param name="message">message is an optional string of text you want to display in the alert dialog, or, alternatively, an object that is converted into a string and displayed.</param>
         public static void Alert(string message)
         {
