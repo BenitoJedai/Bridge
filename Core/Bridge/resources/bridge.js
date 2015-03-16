@@ -3005,7 +3005,7 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
         }
     },
 
-    length: function () {
+    getLength: function () {
         if (this.buffer.length < 2) {
             return (this.buffer[0]) ? this.buffer[0].length : 0;
         }
