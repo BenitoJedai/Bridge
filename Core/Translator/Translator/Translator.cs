@@ -90,13 +90,13 @@ namespace Bridge.NET
             
             var file = new System.IO.FileInfo(path);            
             file.Directory.Create();
-            File.WriteAllText(file.FullName, minifier.MinifyJavaScript(builder.ToString()), System.Text.UTF8Encoding.UTF8);
+            File.WriteAllText(file.FullName, builder.ToString(), System.Text.UTF8Encoding.UTF8);
 
             string fileName = Path.GetFileNameWithoutExtension(path);
-            path = Path.GetDirectoryName(path) + ("\\" + fileName + "-debug") + Path.GetExtension(path);
+            path = Path.GetDirectoryName(path) + ("\\" + fileName + ".min") + Path.GetExtension(path);
             file = new System.IO.FileInfo(path);
             file.Directory.Create();
-            File.WriteAllText(file.FullName, builder.ToString(), System.Text.UTF8Encoding.UTF8);
+            File.WriteAllText(file.FullName, minifier.MinifyJavaScript(builder.ToString()), System.Text.UTF8Encoding.UTF8);
         }
 
         public virtual void SaveTo(string dir, string defaultFileName)
@@ -161,13 +161,13 @@ namespace Bridge.NET
 
             if (!nodebug)
             {
-                resourceName = "Bridge.resources.bridge-debug.js";
+                resourceName = "Bridge.resources.bridge.min.js";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        File.WriteAllText(Path.Combine(outputDir, "bridge-debug.js"), reader.ReadToEnd());
+                        File.WriteAllText(Path.Combine(outputDir, "bridge.min.js"), reader.ReadToEnd());
                     }
                 }
             }
