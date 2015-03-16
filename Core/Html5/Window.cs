@@ -347,6 +347,13 @@ namespace Bridge.Html5
         /// <summary>
         /// The Window.alert() method displays an alert dialog with the optional specified content and an OK button.
         /// </summary>
+        public static void Alert()
+        {
+        }
+
+        /// <summary>
+        /// The Window.alert() method displays an alert dialog with the optional specified content and an OK button.
+        /// </summary>
         /// <param name="message">message is an optional string of text you want to display in the alert dialog, or, alternatively, an object that is converted into a string and displayed.</param>
         public static void Alert(string message)
         {
@@ -422,9 +429,8 @@ namespace Bridge.Html5
         /// <summary>
         /// The Window.confirm() method displays a modal dialog with an optional message and two buttons, OK and Cancel.
         /// </summary>
-        /// <param name="message">message is the optional string to be displayed in the dialog.</param>
         /// <returns>result is a boolean value indicating whether OK or Cancel was selected (true means OK).</returns>
-        public static bool Confirm(string message)
+        public static bool Confirm()
         {
             return false;
         }
@@ -432,8 +438,9 @@ namespace Bridge.Html5
         /// <summary>
         /// The Window.confirm() method displays a modal dialog with an optional message and two buttons, OK and Cancel.
         /// </summary>
+        /// <param name="message">message is the optional string to be displayed in the dialog.</param>
         /// <returns>result is a boolean value indicating whether OK or Cancel was selected (true means OK).</returns>
-        public static bool Confirm()
+        public static bool Confirm(string message)
         {
             return false;
         }

@@ -174,8 +174,8 @@
     <Content Include="resources\Nullable.js" />
     <Content Include="resources\Core.js" />
     <Content Include="resources\Validation.js" />
-    <EmbeddedResource Include="resources\bridge-debug.js" />
     <EmbeddedResource Include="resources\bridge.js" />
+    <EmbeddedResource Include="resources\bridge.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
