@@ -45,20 +45,20 @@ namespace Bridge.NET
 
             var fileName = typeInfo.FileName;
 
-            if (fileName.IsEmpty() && this.Emitter.AssemblyInfo.FilesHierarchy != TypesSplit.None)
+            if (fileName.IsEmpty() && this.Emitter.AssemblyInfo.OutputBy != OutputBy.Namespace)
             {
-                switch (this.Emitter.AssemblyInfo.FilesHierarchy)
+                switch (this.Emitter.AssemblyInfo.OutputBy)
                 {
-                    case TypesSplit.ByFullName:
+                    case OutputBy.ClassPath:
                         fileName = typeInfo.FullName;
                         break;
-                    case TypesSplit.ByName:
+                    case OutputBy.Class:
                         fileName = typeInfo.Name;
                         break;
-                    case TypesSplit.ByModule:
+                    case OutputBy.Module:
                         fileName = module;
                         break;
-                    case TypesSplit.ByNamespace:
+                    case OutputBy.NamespacePath:
                         fileName = typeInfo.Namespace;
                         break;
                     default:

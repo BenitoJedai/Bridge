@@ -74,7 +74,7 @@ namespace Bridge.NET
             return builder.ToString();
         }
 
-        public virtual void SaveToFile(string outputDir, string defaultFileName)
+        public virtual void SaveToFile(string outputPath, string defaultFileName)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -85,7 +85,7 @@ namespace Bridge.NET
             }
 
             string keyPath = this.Outputs.First().Key;
-            string path = Path.Combine(outputDir, keyPath.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
+            string path = Path.Combine(outputPath, keyPath.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
             var minifier = new Minifier();
             
             var file = new System.IO.FileInfo(path);            
@@ -99,7 +99,7 @@ namespace Bridge.NET
             File.WriteAllText(file.FullName, minifier.MinifyJavaScript(builder.ToString()), System.Text.UTF8Encoding.UTF8);
         }
 
-        public virtual void SaveTo(string dir, string defaultFileName)
+        public virtual void SaveTo(string path, string defaultFileName)
         {
             var minifier = new Minifier();
             foreach (var item in this.Outputs)
@@ -117,7 +117,7 @@ namespace Bridge.NET
                     fileName = Path.ChangeExtension(fileName, "js");
                 }
 
-                string filePath = Path.Combine(dir, fileName);
+                string filePath = Path.Combine(path, fileName);
 
                 var file = new System.IO.FileInfo(filePath);
                 file.Directory.Create();
@@ -141,12 +141,12 @@ namespace Bridge.NET
             return new Validator();
         }
 
-        public static void ExtractCore(string clrPath, string outputDir)
+        public static void ExtractCore(string clrPath, string outputPath)
         {
-            Translator.ExtractCore(clrPath, outputDir, false);
+            Translator.ExtractCore(clrPath, outputPath, false);
         }
 
-        public static void ExtractCore(string clrPath, string outputDir, bool nodebug)
+        public static void ExtractCore(string clrPath, string outputPath, bool nodebug)
         {
             var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(clrPath);
             var resourceName = "Bridge.resources.bridge.js";
@@ -155,7 +155,7 @@ namespace Bridge.NET
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    File.WriteAllText(Path.Combine(outputDir, "bridge.js"), reader.ReadToEnd());
+                    File.WriteAllText(Path.Combine(outputPath, "bridge.js"), reader.ReadToEnd());
                 }
             }
 
@@ -167,7 +167,7 @@ namespace Bridge.NET
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        File.WriteAllText(Path.Combine(outputDir, "bridge.min.js"), reader.ReadToEnd());
+                        File.WriteAllText(Path.Combine(outputPath, "bridge.min.js"), reader.ReadToEnd());
                     }
                 }
             }

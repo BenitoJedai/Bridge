@@ -3,48 +3,49 @@
 namespace Bridge.Contract
 {
     /// <summary>
-    /// The options to manage JavaScript output folders and files.
+    /// Format options for the generated JavaScript file name and folder name paths. 
     /// </summary>
-    public enum TypesSplit
+    public enum OutputBy
     {
         /// <summary>
-        /// No files hierarchy. 
-        /// All scripts are generated to [Project_Name].js by default. 
-        /// It might be overridden by fileName option in bridge.json or by FileName attribute on the assembly or class levels.
+        /// The class name will be the file name. If there are classes with same names in different namespaces, the generated JavaScript will be combined into one file. For example, if the class name is "Helpers", the file name will be "Helpers.js".
         /// </summary>
-        None = 0,
+        Class = 1,
 
         /// <summary>
-        /// The files hierarchy will be constructed by the class full name. 
-        /// Each word in the class namespace is an individual folder.
-        /// The class name is a file name.
+        /// A folder hierarchy is created using the class name, and a folder is created for each unique word (split by '.') in the class namespace. For example, if the class "Helpers" is within the "Demo" namespace, the file path and name will be "Demo/Helpers.js".
         /// </summary>
-        ByFullName = 1,
+        ClassPath = 2,
 
         /// <summary>
-        /// The class name is a file name. 
-        /// If there are classes with same names in different namespaces it will be merged in one file.
+        /// The ModuleAttribute value is used as the file name if set on a class. For example, if [Module("MyModuleName")] is set, the file name will be "MyModuleName.js".
         /// </summary>
-        ByName = 2,
+        Module = 3,
 
         /// <summary>
-        /// If the class is associated with a Module (by [Module("Module_Name")] attribute, for example), the script goes to [Module_Name].js file.
+        /// The full namespace is used as the file name. For example, if "Demo.Utilities" is the namespace, the file name will be "Demo.Utilities.js". 
         /// </summary>
-        ByModule = 3,
+        Namespace = 4,
 
         /// <summary>
-        /// The class namespace is split into words by dot. The last one becomes a file name, each other becomes an individual folder.
+        /// The class namespace is split (by '.') and a folder is created for each individual value, except the last value which becomes the file name. For example, if "Demo.Utilities" is the namespace, the file path and name will be "/Demo/Utilities.js".
         /// </summary>
-        ByNamespace = 4
+        NamespacePath = 5,
+
+        /// <summary>
+        /// All generated JavaScript for the project is added to one [ProjectName].js file. For example, if the project name is "MyUtilities", the file name will be "MyUtilities.js".
+        /// This can be overridden by setting the fileName option within bridge.json, or by using the [FileName] Attribute on the assembly or class levels.
+        /// </summary>
+        Project = 6
     }
 
     public interface IAssemblyInfo
     {
         System.Collections.Generic.List<IPluginDependency> Dependencies { get; set; }
         string FileName { get; set; }
-        TypesSplit FilesHierarchy { get; set; }
+        OutputBy OutputBy { get; set; }
         string Module { get; set; }
-        string OutputDir { get; set; }
+        string Output { get; set; }
         int StartIndexInName { get; set; }
         string BeforeBuild { get; set; }
         string AfterBuild { get; set; }

@@ -32,9 +32,9 @@ namespace Bridge.NET
                     mergeConfig.FileName = assemblyInfo.FileName;
                 }
 
-                if (mergeConfig.FilesHierarchy == TypesSplit.None)
+                if (mergeConfig.OutputBy == OutputBy.Namespace)
                 {
-                    mergeConfig.FilesHierarchy = assemblyInfo.FilesHierarchy;
+                    mergeConfig.OutputBy = assemblyInfo.OutputBy;
                 }
 
                 if (string.IsNullOrWhiteSpace(mergeConfig.Module))
@@ -42,9 +42,9 @@ namespace Bridge.NET
                     mergeConfig.Module = assemblyInfo.Module;
                 }
 
-                if (string.IsNullOrWhiteSpace(mergeConfig.OutputDir))
+                if (string.IsNullOrWhiteSpace(mergeConfig.Output))
                 {
-                    mergeConfig.OutputDir = assemblyInfo.OutputDir;
+                    mergeConfig.Output = assemblyInfo.Output;
                 }
 
                 if (mergeConfig.StartIndexInName == 0)

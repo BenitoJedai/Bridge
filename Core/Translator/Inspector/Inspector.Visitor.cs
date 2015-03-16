@@ -336,7 +336,7 @@ namespace Bridge.NET
                 var handled = //this.ReadAspect(attr, name, resolveResult, AttributeTargets.Assembly, null) ||
                               this.ReadModuleInfo(attr, name, resolveResult) ||
                               this.ReadFileNameInfo(attr, name, resolveResult) ||
-                              this.ReadOutputDirInfo(attr, name, resolveResult) ||
+                              this.ReadOutputPathInfo(attr, name, resolveResult) ||
                               this.ReadFileHierarchyInfo(attr, name, resolveResult) ||
                               this.ReadModuleDependency(attr, name, resolveResult);
             }
@@ -384,10 +384,10 @@ namespace Bridge.NET
             return false;
         }
 
-        protected virtual bool ReadOutputDirInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
+        protected virtual bool ReadOutputPathInfo(ICSharpCode.NRefactory.CSharp.Attribute attr, string name, ResolveResult resolveResult)
         {
-            if ((name == (Translator.Bridge_ASSEMBLY + ".OutputDir")) ||
-                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Bridge_ASSEMBLY + ".OutputDirAttribute")))
+            if ((name == (Translator.Bridge_ASSEMBLY + ".Output")) ||
+                (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == (Translator.Bridge_ASSEMBLY + ".OutputPathAttribute")))
             {
                 if (attr.Arguments.Count > 0)
                 {
@@ -395,7 +395,7 @@ namespace Bridge.NET
 
                     if (nameObj is string)
                     {
-                        this.AssemblyInfo.OutputDir = nameObj.ToString();
+                        this.AssemblyInfo.Output = nameObj.ToString();
                     }
                 }
 
@@ -416,7 +416,7 @@ namespace Bridge.NET
 
                     if (nameObj != null)
                     {
-                        this.AssemblyInfo.FilesHierarchy = (TypesSplit)Enum.ToObject(typeof(TypesSplit), nameObj);
+                        this.AssemblyInfo.OutputBy = (OutputBy)Enum.ToObject(typeof(OutputBy), nameObj);
                     }
 
                     if (attr.Arguments.Count > 1)

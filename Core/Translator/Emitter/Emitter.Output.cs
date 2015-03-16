@@ -28,9 +28,9 @@ namespace Bridge.NET
                     output.NonModuletOutput.AppendLine(moduleOutput.Value.ToString());
                 }
 
-                if (this.AssemblyInfo.OutputDir.IsNotEmpty())
+                if (this.AssemblyInfo.Output.IsNotEmpty())
                 {
-                    //fileName = Path.Combine(this.AssemblyInfo.OutputDir, fileName);
+                    //fileName = Path.Combine(this.AssemblyInfo.Output, fileName);
                 }
 
                 result.Add(fileName, output.NonModuletOutput.ToString());

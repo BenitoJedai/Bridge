@@ -27,19 +27,19 @@ namespace Bridge.NET
         /// The output folder path for generated JavaScript. A non-absolute path is concatenated with a project's root. 
         /// Examples: "Bridge\\output\\", "..\\Bridge\\output\\", "c:\\Bridge\\output\\"
         /// </summary>
-        public string OutputDir
+        public string Output
         {
             get;
             set;
         }
 
-        private TypesSplit filesHierarchy = TypesSplit.None;
+        private OutputBy filesHierarchy = OutputBy.Namespace;
 
         /// <summary>
         /// The option to manage JavaScript output folders and files.
         /// See TypesSplit enum for more details.
         /// </summary>
-        public TypesSplit FilesHierarchy
+        public OutputBy OutputBy
         {
             get
             {
