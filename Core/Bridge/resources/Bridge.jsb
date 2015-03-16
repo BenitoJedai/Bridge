@@ -10,6 +10,7 @@
   <file name="Integer.js" />
   <file name="Date.js" />
   <file name="TimeSpan.js" />
+  <file name="text/StringBuilder.js" />
   <file name="collections/Interfaces.js" path="collections" />
   <file name="collections/CustomEnumerator.js" path="collections" />
   <file name="collections/ArrayEnumerator.js" path="collections" />
@@ -32,6 +33,7 @@
     <include name="Integer.js" />
     <include name="Date.js" />
     <include name="TimeSpan.js" />
+    <include name="text/StringBuilder.js" />
     <include name="Browser.js" />
     <include name="collections/Interfaces.js" />
     <include name="collections/CustomEnumerator.js" />

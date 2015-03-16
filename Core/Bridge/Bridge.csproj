@@ -87,6 +87,7 @@
     <Compile Include="System\Byte.cs" />
     <Compile Include="System\Int16.cs" />
     <Compile Include="System\Single.cs" />
+    <Compile Include="System\Text\StringBuilder.cs" />
     <Compile Include="System\UInt16.cs" />
     <Compile Include="System\Int32.cs" />
     <Compile Include="System\Int64.cs" />
@@ -164,6 +165,7 @@
     <Content Include="resources\INotifyPropertyChanged.js" />
     <Content Include="resources\Date.js" />
     <Content Include="resources\locales\ru-RU.js" />
+    <Content Include="resources\text\StringBuilder.js" />
     <Content Include="resources\TimeSpan.js" />
     <Content Include="resources\Integer.js" />
     <Content Include="resources\Interfaces.js" />
