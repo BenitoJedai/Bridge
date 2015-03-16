@@ -121,13 +121,13 @@ namespace Bridge.NET
 
                 var file = new System.IO.FileInfo(filePath);
                 file.Directory.Create();
-                File.WriteAllText(file.FullName, minifier.MinifyJavaScript(code), System.Text.UTF8Encoding.UTF8);
+                File.WriteAllText(file.FullName, code, System.Text.UTF8Encoding.UTF8);
 
                 string fn = Path.GetFileNameWithoutExtension(filePath);
-                filePath = Path.GetDirectoryName(filePath) + ("\\" + fn + "-debug") + Path.GetExtension(filePath);
+                filePath = Path.GetDirectoryName(filePath) + ("\\" + fn + ".min") + Path.GetExtension(filePath);
                 file = new System.IO.FileInfo(filePath);
                 file.Directory.Create();
-                File.WriteAllText(file.FullName, code, System.Text.UTF8Encoding.UTF8);
+                File.WriteAllText(file.FullName, minifier.MinifyJavaScript(code), System.Text.UTF8Encoding.UTF8);
             }            
         }
 
