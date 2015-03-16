@@ -43,8 +43,7 @@ namespace Bridge.NET
 
         protected virtual string GetOutputPath(XmlDocument doc, XmlNamespaceManager manager, string configuration)
         {
-            var nodes = doc.SelectNodes("//my:PropertyGroup[contains(@Condition,'" + configuration + "')]/my:Output", manager);
-
+            var nodes = doc.SelectNodes("//my:PropertyGroup[contains(@Condition,'" + configuration + "')]/my:OutputPath", manager);
             if (nodes.Count != 1)
             {
                 Bridge.NET.Exception.Throw("Unable to determine output path");
