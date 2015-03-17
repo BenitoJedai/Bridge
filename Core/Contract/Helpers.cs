@@ -403,7 +403,7 @@ namespace Bridge.Contract
             {
                 if (args.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
                 {
-                    bool match = method.Parameters.Count == 0;
+                    bool match = true;
 
                     if (typeDef != null && method.DeclaringType != typeDef)
                     {
@@ -430,9 +430,9 @@ namespace Bridge.Contract
                         var resolveResult = emitter.Resolver.ResolveNode(type, emitter);
                         var typeRef = method.Parameters[i].ParameterType;
 
-                        if (Helpers.TypeIsMatch(emitter, resolveResult, type, typeRef))
+                        if (!Helpers.TypeIsMatch(emitter, resolveResult, type, typeRef))
                         {
-                            match = true;
+                            match = false;
                             break;
                         }
                     }
