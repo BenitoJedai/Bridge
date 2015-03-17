@@ -45,7 +45,7 @@ namespace Bridge.NET
 
             var fileName = typeInfo.FileName;
 
-            if (fileName.IsEmpty() && this.Emitter.AssemblyInfo.OutputBy != OutputBy.Namespace)
+            if (fileName.IsEmpty() && this.Emitter.AssemblyInfo.OutputBy != OutputBy.Project)
             {
                 switch (this.Emitter.AssemblyInfo.OutputBy)
                 {
@@ -59,13 +59,16 @@ namespace Bridge.NET
                         fileName = module;
                         break;
                     case OutputBy.NamespacePath:
+                    case OutputBy.Namespace:
                         fileName = typeInfo.Namespace;
                         break;
                     default:
                         break;
                 }
 
-                if (fileName.IsNotEmpty())
+                var isPathRelated = this.Emitter.AssemblyInfo.OutputBy == OutputBy.ClassPath ||
+                                    this.Emitter.AssemblyInfo.OutputBy == OutputBy.NamespacePath;
+                if (fileName.IsNotEmpty() && isPathRelated)
                 {
                     fileName = fileName.Replace('.', System.IO.Path.DirectorySeparatorChar);
                     if (this.Emitter.AssemblyInfo.StartIndexInName > 0)

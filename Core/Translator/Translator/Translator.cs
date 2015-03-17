@@ -24,11 +24,11 @@ namespace Bridge.NET
 
         public Dictionary<string, string> Translate()
         {
-            var config = this.ReadConfig(null);
+            this.AssemblyInfo = this.ReadConfig(null);
 
-            if (config != null && !string.IsNullOrWhiteSpace(config.BeforeBuild))
+            if (this.AssemblyInfo != null && !string.IsNullOrWhiteSpace(this.AssemblyInfo.BeforeBuild))
             {
-                this.RunEvent(config.BeforeBuild);
+                this.RunEvent(this.AssemblyInfo.BeforeBuild);
             }
             
             this.Plugins = Bridge.NET.Plugins.GetPlugins(this);

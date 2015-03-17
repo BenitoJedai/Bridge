@@ -104,7 +104,6 @@ namespace Bridge.NET
                 inspector.VisitSyntaxTree(this.GetSyntaxTree(this.SourceFiles[i]));
             }
 
-            this.AssemblyInfo = this.ReadConfig(inspector.AssemblyInfo);
             this.Types = inspector.Types;
         }
 
