@@ -845,8 +845,8 @@ namespace Bridge.Contract
 
         protected virtual IMemberDefinition FindDefinition(MethodDeclaration methodDeclaration)
         {
-            var parameters = methodDeclaration.Parameters.ToList();            
-            return Helpers.FindMethodDefinitionInGroup(this.Emitter, parameters, null, this.AllMethods, methodDeclaration.ReturnType, this.Emitter.GetTypeDefinition());
+            var parameters = methodDeclaration.Parameters.ToList();
+            return Helpers.FindMethodDefinitionInGroup(this.Emitter, parameters, methodDeclaration.TypeParameters, this.AllMethods, methodDeclaration.ReturnType, this.Emitter.GetTypeDefinition());
         }
 
         protected virtual IMemberDefinition FindDefinition(ConstructorDeclaration declaration)

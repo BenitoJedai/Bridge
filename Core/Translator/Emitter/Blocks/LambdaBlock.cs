@@ -137,11 +137,11 @@ namespace Bridge.NET
 
             if (!block && !this.IsAsync)
             {
-                this.WriteOpenBrace();
-                this.WriteSpace();
+                this.BeginBlock();
             }
 
-            if (body.Parent is LambdaExpression && !block && !this.IsAsync)
+            bool isSimpleLambda = body.Parent is LambdaExpression && !block && !this.IsAsync;
+            if (isSimpleLambda)
             {                
                 this.WriteReturn(true);
             }
@@ -155,10 +155,15 @@ namespace Bridge.NET
                 body.AcceptVisitor(this.Emitter);
             }
 
+            if (isSimpleLambda)
+            {
+                this.WriteSemiColon();
+            }
+
             if (!block && !this.IsAsync)
             {
-                this.WriteSpace();
-                this.WriteCloseBrace();
+                this.WriteNewLine();
+                this.EndBlock();
             }
 
             if (this.Emitter.ThisRefCounter > savedThisCount)
