@@ -62,7 +62,7 @@ namespace Bridge.NET
                 }
             }
 
-            if (fieldNames.Count > 0 || this.TypeInfo.StaticEvents.Count > 0)
+            if (fieldNames.Count > 0)
             {
                 this.WriteStaticObject("fields", fieldNames);
                 this.Emitter.Comma = true;
@@ -165,7 +165,7 @@ namespace Bridge.NET
                 }
             }
 
-            if (fieldNames.Count > 0 || this.TypeInfo.Events.Count > 0)
+            if (fieldNames.Count > 0)
             {
                 this.WriteObject("fields", fieldNames);
                 this.Emitter.Comma = true;
@@ -200,7 +200,7 @@ namespace Bridge.NET
                 foreach (var evtVar in evt.Variables)
                 {
                     this.EnsureComma();
-                    string name = this.Emitter.GetEntityName(evt);
+                    string name = OverloadsCollection.Create(this.Emitter, evt).GetOverloadName();
 
                     this.Write(name);
                     this.WriteColon();
@@ -234,7 +234,11 @@ namespace Bridge.NET
 
                 if (this.TypeInfo.FieldsDeclarations.ContainsKey(name))
                 {
-                    fieldName = this.Emitter.GetEntityName(this.TypeInfo.FieldsDeclarations[name]);
+                    fieldName = OverloadsCollection.Create(this.Emitter, this.TypeInfo.FieldsDeclarations[name]).GetOverloadName();
+                }
+                else if (this.TypeInfo.InstanceProperties.ContainsKey(name))
+                {
+                    fieldName = OverloadsCollection.Create(this.Emitter, (PropertyDeclaration)this.TypeInfo.InstanceProperties[name], false).GetOverloadName();
                 }
                 else
                 {

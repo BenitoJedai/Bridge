@@ -75,7 +75,7 @@ namespace Bridge.NET
         {
             if (this.CastExpression != null)
             {
-                return this.CastExpression;
+                return this.CastExpression.Expression;
             }
             else if (this.AsExpression != null)
             {

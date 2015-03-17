@@ -11,6 +11,7 @@ namespace Bridge.NET
         public AssemblyInfo()
         {
             this.Dependencies = new List<IPluginDependency>();
+            this.AutoPropertyToField = true;        
         }
 
         /// <summary>
@@ -96,6 +97,11 @@ namespace Bridge.NET
         /// For example, it might be used for copying the generated JavaScript files to a Web application - "Bridge\\builder\\copy.bat"
         /// </summary>
         public string AfterBuild
+        {
+            get;
+            set;
+        }
+        public bool AutoPropertyToField
         {
             get;
             set;

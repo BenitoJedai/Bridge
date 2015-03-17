@@ -53,7 +53,7 @@ namespace Bridge.NET
                     this.Write(this.Emitter.ShortenTypeName(method.DeclaringType.FullName));
                     this.WriteDot();
 
-                    this.Write(this.Emitter.GetMemberOverloadName(method.MemberDefinition as IMethod));
+                    this.Write(OverloadsCollection.Create(this.Emitter, method).GetOverloadName());
 
                     if (orr.IsLiftedOperator)
                     {

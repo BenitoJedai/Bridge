@@ -28,6 +28,18 @@ namespace Bridge.NET
 
         private static List<string> reservedStaticNames = new List<string> { "Name", "Arguments", "Caller", "Length", "Prototype" };        
 
+        private Dictionary<string, OverloadsCollection> overloadsCache;
+        public Dictionary<string, OverloadsCollection> OverloadsCache 
+        { 
+            get 
+            {
+                if (this.overloadsCache == null)
+                {
+                    this.overloadsCache = new Dictionary<string, OverloadsCollection>();
+                }
+                return this.overloadsCache;
+            }
+        }
         public IValidator Validator
         {
             get;

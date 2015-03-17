@@ -24,14 +24,14 @@ namespace Bridge.NET
 
         public Dictionary<string, string> Translate()
         {
-            this.AssemblyInfo = this.ReadConfig(null);
+            this.Plugins = Bridge.NET.Plugins.GetPlugins(this);
+            var config = this.ReadConfig();
 
-            if (this.AssemblyInfo != null && !string.IsNullOrWhiteSpace(this.AssemblyInfo.BeforeBuild))
+            if (config != null && !string.IsNullOrWhiteSpace(config.BeforeBuild))
             {
-                this.RunEvent(this.AssemblyInfo.BeforeBuild);
+                this.RunEvent(config.BeforeBuild);
             }
             
-            this.Plugins = Bridge.NET.Plugins.GetPlugins(this);
             this.ReadProjectFile();
 
             if (this.Rebuild || !File.Exists(this.AssemblyLocation))
@@ -43,7 +43,7 @@ namespace Bridge.NET
 
             var resolver = new MemberResolver(this.SourceFiles, Emitter.ToAssemblyReferences(references));
 
-            this.InspectTypes(resolver);
+            this.InspectTypes(resolver, config);
             
             resolver.CanFreeze = true;
             var emitter = this.CreateEmitter();

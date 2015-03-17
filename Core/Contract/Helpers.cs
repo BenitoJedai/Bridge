@@ -10,7 +10,7 @@ using ICSharpCode.NRefactory.TypeSystem.Implementation;
 
 namespace Bridge.Contract
 {
-    public static class Helpers 
+    public static partial class Helpers 
     {
         public static string GetOperatorMethodName(BinaryOperatorType op)
         {
@@ -312,6 +312,17 @@ namespace Bridge.Contract
             return type.Properties.FirstOrDefault(p => p.Name == propertyDeclaration.Name);
         }
 
+        public static MethodDefinition GetMethodDefinition(IEmitter emitter, IParameterizedMember member, TypeDefinition type)
+        {
+            var imethod = member as IMethod;
+            var parameters = member.Parameters.ToList();
+            var methods = type.Methods.Where(m => m.Name == member.Name && m.Parameters.Count == parameters.Count && ((imethod != null && m.GenericParameters.Count == imethod.TypeParameters.Count) || imethod == null)).ToList();
+            if (methods.Count <= 1)
+            {
+                return methods.Count == 1 ? methods[0] : null;
+            }
+            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods, member.ReturnType, type);
+        }
         public static MethodDefinition GetMethodDefinition(IEmitter emitter, MethodDeclaration methodDeclaration, TypeDefinition type)
         {
             var parameters = methodDeclaration.Parameters.ToList();
@@ -402,11 +413,14 @@ namespace Bridge.Contract
 
                     if (returnType != null)
                     {
+                        if (!(returnType.IsNull && method.ReturnType.MetadataType == MetadataType.Void))
+                        {
                         var resolveResult = emitter.Resolver.ResolveNode(returnType, emitter);
                         if (!Helpers.TypeIsMatch(emitter, resolveResult, returnType, method.ReturnType))
                         {
                             match = false;
                             continue;
+                            }
                         }
                     }                    
 
@@ -471,36 +485,6 @@ namespace Bridge.Contract
             }
 
             return match;
-        }
-
-        public static string GetOverloadName(IEmitter emitter, MethodDefinition methodDef, List<MethodDefinition> methods)
-        {
-            var name = emitter.GetMethodName(methodDef);
-            var attr = emitter.GetAttribute(methodDef.CustomAttributes, "Bridge.Name");
-
-            if (attr != null)
-            {
-                return name;
-            }
-
-            if (methodDef.IsConstructor)
-            {
-                name = "constructor";
-            }
-
-            var index = Helpers.GetMethodIndex(methods, methodDef);
-
-            if (index > 0)
-            {
-                name += "$" + index;
-            }
-
-            return name;
-        }
-
-        public static int GetMethodIndex(IEnumerable<MethodDefinition> methods, MethodDefinition method)
-        {
-            return methods.ToList().IndexOf(method);
         }
 
         public static string TranslateTypeReference(AstType astType, IEmitter emitter)
@@ -654,20 +638,151 @@ namespace Bridge.Contract
             }
         }
 
-        public static bool IsFieldProperty(IMember property)
+        public static bool IsAutoProperty(PropertyDefinition propDef)
         {
-            return property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute");
+            var typeDef = propDef.DeclaringType;
+            if (propDef != null)
+            {
+                if (propDef.GetMethod == null || propDef.SetMethod == null)
+                {
+                    return false;
+                }
+                if (propDef.GetMethod.CustomAttributes.Any(a => a.AttributeType.FullName == "System.Runtime.CompilerServices.CompilerGeneratedAttribute"))
+                {
+                    return true;
+                }
+            }
+            return typeDef.Fields.Any(f => !f.IsPublic && !f.IsStatic && f.Name.Contains("BackingField") && f.Name.Contains("<" + propDef.Name + ">"));
+        }
+        public static bool IsFieldProperty(IMember property, IEmitter emitter)
+        {
+            bool isAuto = property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute");            
+            if (!isAuto && emitter.AssemblyInfo.AutoPropertyToField)
+            {
+                var typeDef = emitter.GetTypeDefinition(property.DeclaringType);
+                var propDef = typeDef.Properties.FirstOrDefault(p => p.Name == property.Name);
+                return Helpers.IsAutoProperty(propDef);
+            }
+            return isAuto;
         }
 
-        public static string GetPropertyRef(IMember property, IEmitter emitter, bool isSetter = false)
+        public static bool IsFieldProperty(IMemberDefinition property, IEmitter emitter)
+        {
+            bool isAuto = property.CustomAttributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute");
+            if (!isAuto && emitter.AssemblyInfo.AutoPropertyToField)
+            {
+                return Helpers.IsAutoProperty((PropertyDefinition)property);
+            }
+            return isAuto;
+        }
+        public static bool IsFieldProperty(PropertyDeclaration property, IEmitter emitter)
+        {            
+            string name = "Bridge.FieldProperty";
+            string name1 = name + "Attribute";
+            foreach (var i in property.Attributes)
+            {
+                foreach (var j in i.Attributes)
+                {
+                    if (j.Type.ToString() == name || j.Type.ToString() == name1)
+                    {
+                        return true;
+                    }
+                    var resolveResult = emitter.Resolver.ResolveNode(j, emitter);
+                    if (resolveResult != null && resolveResult.Type != null && resolveResult.Type.FullName == name1)
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (!emitter.AssemblyInfo.AutoPropertyToField) 
+            {
+                return false;
+            }
+            var typeDef = emitter.GetTypeDefinition();
+            var propDef = typeDef.Properties.FirstOrDefault(p => p.Name == property.Name);
+            return Helpers.IsAutoProperty(propDef);
+        }
+        public static string GetPropertyRef(PropertyDeclaration property, IEmitter emitter, bool isSetter = false, bool noOverload = false)
         {
             var name = emitter.GetEntityName(property);
-            if (property.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute"))
+            if (Helpers.IsFieldProperty(property, emitter))
+            {
+                return name;
+            }
+            if (emitter.AssemblyInfo.AutoPropertyToField)
+            {
+                var typeDef = emitter.GetTypeDefinition();
+                var propDef = typeDef.Properties.FirstOrDefault(p => p.Name == property.Name);
+                if (Helpers.IsAutoProperty(propDef))
+                {
+                    return name;
+                }
+            }
+            if (noOverload)
+            {
+                name = property.Name;
+            }
+            else
+            {
+                var overloads = OverloadsCollection.Create(emitter, property, isSetter);
+                name = overloads.HasOverloads ? overloads.GetOverloadName() : property.Name;
+            }
+            return (isSetter ? "set" : "get") + name;
+        }
+        public static string GetPropertyRef(IMember property, IEmitter emitter, bool isSetter = false, bool noOverload = false)
+        {
+            var name = emitter.GetEntityName(property);
+            if (Helpers.IsFieldProperty(property, emitter))
+            {
+                return name;
+            }
+            if (emitter.AssemblyInfo.AutoPropertyToField)
+            {
+                var typeDef = emitter.GetTypeDefinition(property.DeclaringType);
+                var propDef = typeDef.Properties.FirstOrDefault(p => p.Name == property.Name);
+                if (Helpers.IsAutoProperty(propDef))
+                {
+                    return name;
+                }
+            }
+            if (noOverload)
+            {
+                name = property.Name;
+            }
+            else
+            {
+                var overloads = OverloadsCollection.Create(emitter, property, isSetter);
+                name = overloads.HasOverloads ? overloads.GetOverloadName() : property.Name;
+            }
+            return (isSetter ? "set" : "get") + name;
+        }
+        public static string GetPropertyRef(PropertyDefinition property, IEmitter emitter, bool isSetter = false, bool noOverload = false)
+        {
+            var name = emitter.GetDefinitionName(property);
+            if (Helpers.IsFieldProperty(property, emitter))
             {
                 return name;
             }
 
-            return (isSetter ? "set" : "get") + property.Name;
+            if (emitter.AssemblyInfo.AutoPropertyToField)
+            {
+                var typeDef = property.DeclaringType;
+                var propDef = typeDef.Properties.FirstOrDefault(p => p.Name == property.Name);
+                if (Helpers.IsAutoProperty(propDef))
+                {
+                    return name;
+                }
+            }
+            if (noOverload)
+            {
+                name = property.Name;
+            }
+            else
+            {
+                var overloads = OverloadsCollection.Create(emitter, property, isSetter);
+                name = overloads.HasOverloads ? overloads.GetOverloadName() : property.Name;
+            }
+            return (isSetter ? "set" : "get") + name;
         }
 
         public static List<MethodDefinition> GetMethods(TypeDefinition typeDef, IEmitter emitter, List<MethodDefinition> list = null)
@@ -690,61 +805,6 @@ namespace Bridge.Contract
 
             return list;
         }
-
-        public static List<MethodDefinition> GetMethodOverloads(TypeDefinition typeDef, IEmitter emitter, string name, int genericCount, bool inherited, List<MethodDefinition> list = null)
-        {
-            var methods = typeDef.Methods.Where(m => m.Name == name/* && m.GenericParameters.Count == genericCount*/);
-
-            if (list == null)
-            {
-                list = new List<MethodDefinition>(methods);
-            }
-            else
-            {
-                list.AddRange(methods);
-            }
-
-            if (inherited)
-            {
-                var baseTypeDefinition = Helpers.ToTypeDefinition(typeDef.BaseType, emitter);
-
-                if (baseTypeDefinition != null)
-                {
-                    Helpers.GetMethodOverloads(baseTypeDefinition, emitter, name, genericCount, inherited, list);
-                }
-            }
-
-            return list;
-        }
-
-        public static void SortMethodOverloads(List<MethodDefinition> methods, IEmitter emitter)
-        {            
-            methods.Sort((m1, m2)=>{
-                if (m1.DeclaringType != m2.DeclaringType)
-                {
-                    return Helpers.IsSubclassOf(m1.DeclaringType, m2.DeclaringType, emitter) ? 1 : -1;
-                }                
-
-                return string.Compare(Helpers.MethodToString(m1), Helpers.MethodToString(m2));
-            });
-        }
-
-        private static string MethodToString(MethodDefinition m)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(m.ReturnType.ToString()).Append(" ");
-            sb.Append(m.Name).Append(" ");
-            sb.Append(m.GenericParameters.Count).Append(" ");            
-
-            foreach (var p in m.Parameters)
-            {
-                sb.Append(p.ParameterType.ToString()).Append(" ");
-            }
-
-            return sb.ToString();
-        }
-
         private static readonly string[] reservedWords = new string[] { "abstract", "arguments", "as", "boolean", "break", "byte", "case", "catch", "char", "class", "continue", "const", "constructor", "debugger", "default", "delete", "do", "double", "else", "enum", "eval", "export", "extends", "false", "final", "finally", "float", "for", "function", "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "is", "let", "long", "namespace", "native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "use", "var", "void", "volatile", "while", "with", "yield" };
 
         public static bool IsReservedWord(string word)

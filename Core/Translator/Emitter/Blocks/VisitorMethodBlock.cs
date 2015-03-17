@@ -1,5 +1,6 @@
 ﻿using Bridge.Contract;
 using ICSharpCode.NRefactory.CSharp;
+using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
@@ -34,13 +35,11 @@ namespace Bridge.NET
             this.AddLocals(methodDeclaration.Parameters);
 
             var typeDef = this.Emitter.GetTypeDefinition();
-            var methods = Helpers.GetMethodOverloads(typeDef, this.Emitter, methodDeclaration.Name, methodDeclaration.TypeParameters.Count, true);
-            Helpers.SortMethodOverloads(methods, this.Emitter);
+            var overloads = OverloadsCollection.Create(this.Emitter, methodDeclaration);
 
-            if (methods.Count > 1)
+            if (overloads.HasOverloads)
             {
-                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, methodDeclaration.Parameters, methodDeclaration.TypeParameters, methods, methodDeclaration.ReturnType, typeDef);
-                string name = Helpers.GetOverloadName(this.Emitter, methodDef, methods);
+                string name = overloads.GetOverloadName();
                 this.Write(name);
             }
             else

@@ -103,6 +103,14 @@ namespace System
             } 
         }
 
+        public static DateTime UtcNow 
+        {
+            [Template("Bridge.Date.utcNow()")] 
+            get 
+            { 
+                return default(DateTime); 
+            } 
+        }
 		public static DateTime Today 
         { 
             [Template("Bridge.Date.today()")] 

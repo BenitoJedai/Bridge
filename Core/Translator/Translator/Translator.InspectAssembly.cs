@@ -81,8 +81,6 @@ namespace Bridge.NET
                 this.ReadTypes(item);
             }
 
-            this.Validator.CheckDuplicateNames(this.TypeDefinitions);
-
             var prefix = Path.GetDirectoryName(this.Location);
 
             for (int i = 0; i < this.SourceFiles.Count; i++)
@@ -93,10 +91,11 @@ namespace Bridge.NET
             return references;
         }
 
-        protected virtual void InspectTypes(MemberResolver resolver)
+        protected virtual void InspectTypes(MemberResolver resolver, IAssemblyInfo config)
         {
             
             Inspector inspector = this.CreateInspector();
+            inspector.AssemblyInfo = config;
             inspector.Resolver = resolver;
 
             for (int i = 0; i < this.SourceFiles.Count; i++)
@@ -104,6 +103,7 @@ namespace Bridge.NET
                 inspector.VisitSyntaxTree(this.GetSyntaxTree(this.SourceFiles[i]));
             }
 
+            this.AssemblyInfo = inspector.AssemblyInfo;
             this.Types = inspector.Types;
         }
 

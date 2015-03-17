@@ -234,14 +234,46 @@ namespace Bridge.NET
             return this.GetScriptArguments(attr);
         }
 
-        public virtual string GetMethodName(MethodDefinition method)
+        public virtual string GetDefinitionName(IMemberDefinition member, bool changeCase = true)
         {
-            bool changeCase = !this.IsNativeMember(method.FullName) ? this.ChangeCase : true;
+            if (changeCase)
+            {                
+                changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true;
+                if (member is FieldDefinition && ((FieldDefinition)member).HasConstant)
+                {
+                    changeCase = false;
+                }
+            }
             string attrName = Translator.Bridge_ASSEMBLY + ".NameAttribute";
-            var attr = method.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == attrName);
-            bool isIgnore = this.Validator.IsIgnoreType(method.DeclaringType);            
-            string name = method.Name;
+            var attr = member.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == attrName);
+            bool isIgnore = this.Validator.IsIgnoreType(member.DeclaringType);
+            string name = member.Name;
+            bool isStatic = false;
 
+            if (member is MethodDefinition)
+            {
+                var method = (MethodDefinition)member;
+                isStatic = method.IsStatic;
+                if (method.IsConstructor)
+                {
+                    name = "constructor";
+                }
+            }
+            else if (member is FieldDefinition)
+            {
+                isStatic = ((FieldDefinition)member).IsStatic;
+            }
+            else if (member is PropertyDefinition)
+            {
+                var prop = (PropertyDefinition)member;
+                var accessor = prop.GetMethod ?? prop.SetMethod;
+                isStatic = prop.GetMethod != null ? prop.GetMethod.IsStatic : false;
+            }
+            else if (member is EventDefinition)
+            {
+                var ev = (EventDefinition)member;
+                isStatic = ev.AddMethod != null ? ev.AddMethod.IsStatic : false ;
+            }
             if (attr != null)
             {
                 var value = attr.ConstructorArguments.First().Value;
@@ -249,7 +281,7 @@ namespace Bridge.NET
                 {
                     name = value.ToString();
                     if (!isIgnore &&
-                        ((method.IsStatic && Emitter.IsReservedStaticName(name)) ||
+                        ((isStatic && Emitter.IsReservedStaticName(name)) ||
                         Helpers.IsReservedWord(name)))
                     {
                         name = "$" + name;
@@ -262,7 +294,7 @@ namespace Bridge.NET
 
             name = changeCase ? Object.Net.Utilities.StringUtils.ToLowerCamelCase(name) : name;
             if (!isIgnore &&
-                ((method.IsStatic && Emitter.IsReservedStaticName(name)) ||
+                ((isStatic && Emitter.IsReservedStaticName(name)) ||
                 Helpers.IsReservedWord(name)))
             {
                 name = "$" + name;
@@ -274,9 +306,17 @@ namespace Bridge.NET
         public virtual string GetEntityName(IEntity member, bool cancelChangeCase = false)
         {
             bool changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true;
+            if (member is IMember && this.IsMemberConst((IMember)member))
+            {
+                changeCase = false;
+            }
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.Bridge_ASSEMBLY + ".NameAttribute");
             bool isIgnore = this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);            
             string name = member.Name;
+            if (member is IMethod && ((IMethod)member).IsConstructor)
+            {
+                name = "constructor";
+            }
 
             if (attr != null)
             {
@@ -312,11 +352,20 @@ namespace Bridge.NET
             string name = entity.Name;
             if (entity is FieldDeclaration)
             {
-                name = this.GetFieldName((FieldDeclaration)entity);
+                var fieldDec = (FieldDeclaration)entity;
+                if (fieldDec.HasModifier(Modifiers.Const))
+                {
+                    changeCase = false;
+                }
+                name = this.GetFieldName(fieldDec);
             }
             else if (entity is EventDeclaration)
             {
                 name = this.GetEventName((EventDeclaration)entity);
+            }
+            else if (entity is ConstructorDeclaration)
+            {
+                name = "constructor";
             }
 
             bool isStatic = entity.HasModifier(Modifiers.Static) || entity.HasModifier(Modifiers.Const);            
@@ -347,7 +396,7 @@ namespace Bridge.NET
             return name;
         }
 
-        protected virtual string GetFieldName(FieldDeclaration field)
+        public virtual string GetFieldName(FieldDeclaration field)
         {
             if (!string.IsNullOrEmpty(field.Name))
             {
@@ -362,7 +411,7 @@ namespace Bridge.NET
             return null;
         }
 
-        protected virtual string GetEventName(EventDeclaration evt)
+        public virtual string GetEventName(EventDeclaration evt)
         {
             if (!string.IsNullOrEmpty(evt.Name))
             {
@@ -478,35 +527,10 @@ namespace Bridge.NET
             return false;
         }
 
-        public virtual string GetMemberOverloadName(IParameterizedMember member)
-        {
-            var method = member as IMethod;
-            var typeDef = this.GetTypeDefinition(member.DeclaringType);           
 
-            if (typeDef != null && !this.Validator.IsIgnoreType(typeDef))
-            {
-                var methods = Helpers.GetMethodOverloads(typeDef, this, member.Name, 0, !method.IsConstructor);
-                Helpers.SortMethodOverloads(methods, this);
 
-                if (methods.Count > 1)
-                {
-                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this, method.Parameters, method.TypeArguments, methods, method.ReturnType, typeDef);
-                    return Helpers.GetOverloadName(this, methodDef, methods);
-                }
-            }            
 
-            string name = this.GetEntityName(member);
-            if (name.StartsWith(".ctor"))
-            {
-                name = "constructor";
-            }
 
-            return name;
-        }
 
-        public int GetMethodIndex(IEnumerable<IMethod> methods, IMethod method)
-        {
-            return methods.ToList().IndexOf(method);
-        }
     }
 }

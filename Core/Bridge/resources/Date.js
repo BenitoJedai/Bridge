@@ -1,4 +1,8 @@
 ﻿Bridge.Date = {    
+    utcNow:  function() {
+        var d = new Date();
+        return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
+    },
     today : function() {
         var d = new Date();
         return new Date(d.getFullYear(), d.getMonth(), d.getDate());

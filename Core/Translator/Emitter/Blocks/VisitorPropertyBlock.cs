@@ -38,7 +38,9 @@ namespace Bridge.NET
         {
             var memberResult = this.Emitter.Resolver.ResolveNode(propertyDeclaration, this.Emitter) as MemberResolveResult;
 
-            if (memberResult != null && memberResult.Member.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute"))
+            if (memberResult != null && 
+                (memberResult.Member.Attributes.Any(a => a.AttributeType.FullName == "Bridge.FieldPropertyAttribute") ||
+                (propertyDeclaration.Getter.IsNull && propertyDeclaration.Setter.IsNull)))
             {
                 return;
             }
@@ -54,7 +56,13 @@ namespace Bridge.NET
                     this.AddLocals(new ParameterDeclaration[] { new ParameterDeclaration { Name = "value" } });
                 }
 
-                this.Write((setter ? "set" : "get") + propertyDeclaration.Name);
+                var overloads = OverloadsCollection.Create(this.Emitter, propertyDeclaration, setter);
+                string name = propertyDeclaration.Name;
+                if (overloads.HasOverloads)
+                {
+                    name = overloads.GetOverloadName();
+                }
+                this.Write((setter ? "set" : "get") + name);
                 this.WriteColon();
                 this.WriteFunction();
                 this.WriteOpenParentheses();
@@ -66,33 +74,11 @@ namespace Bridge.NET
 
                 if (script == null)
                 {
-                    if (!accessor.Body.IsNull)
-                    {
                         accessor.Body.AcceptVisitor(this.Emitter);
-                    }
-                    else
-                    {
-                        bool isReserved = propertyDeclaration.HasModifier(Modifiers.Static) && Bridge.NET.Emitter.IsReservedStaticName(propertyDeclaration.Name);
 
-                        this.BeginBlock();
 
-                        if (setter)
-                        {
-                            this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase() + " = value;");
-                        }
-                        else
-                        {
-                            this.WriteReturn(true);
-                            this.Write("this." + (isReserved ? "$" : "") + propertyDeclaration.Name.ToLowerCamelCase());
 
-                            var resolveResult = this.Emitter.Resolver.ResolveNode(propertyDeclaration.ReturnType, this.Emitter);
-                            Helpers.CheckValueTypeClone(resolveResult, null, this);
-                            this.WriteSemiColon();
-                        }
 
-                        this.WriteNewLine();
-                        this.EndBlock();
-                    }
                 }
                 else
                 {

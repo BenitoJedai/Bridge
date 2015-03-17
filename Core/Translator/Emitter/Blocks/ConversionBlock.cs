@@ -60,6 +60,7 @@ namespace Bridge.NET
             Conversion conversion = null;
             try
             {
+                var rr = block.Emitter.Resolver.ResolveNode(expression, null);
                 conversion = block.Emitter.Resolver.Resolver.GetConversion(expression);
 
                 if (conversion == null)
@@ -99,11 +100,15 @@ namespace Bridge.NET
                     block.Write("Bridge.nullable.lift(");
                 }
 
-                if (conversion.IsUserDefined && !conversion.IsExplicit)
+                if (conversion.IsUserDefined)
                 {
                     var method = conversion.Method;
 
                     string inline = block.Emitter.GetInline(method);
+                    if (conversion.IsExplicit && !string.IsNullOrWhiteSpace(inline))
+                    {
+                        return false;
+                    }
                     if (!string.IsNullOrWhiteSpace(inline))
                     {
                         if (expression is InvocationExpression)
@@ -142,7 +147,7 @@ namespace Bridge.NET
                         block.Write(block.Emitter.ShortenTypeName(method.DeclaringType.FullName));
                         block.WriteDot();
 
-                        block.Write(block.Emitter.GetMemberOverloadName(method.MemberDefinition as IMethod));
+                        block.Write(OverloadsCollection.Create(block.Emitter, method).GetOverloadName());
                     }
 
                     if (conversion.IsLifted)

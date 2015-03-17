@@ -163,13 +163,6 @@ namespace Bridge.NET
             }
         }
 
-        public virtual void VisitUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression)
-        {
-            if (this.ThrowException)
-            {
-                throw (Exception)this.CreateException(unaryOperatorExpression);
-            }
-        }
         
         public override void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
         {
@@ -290,7 +283,10 @@ namespace Bridge.NET
                     this.CurrentType.InstanceFields.Add(propertyDeclaration.Name.ToLowerCamelCase(), initializer);
                 }
 
+                if (!this.AssemblyInfo.AutoPropertyToField)
+                {
                 this.CurrentType.AutoProperties.Add(propertyDeclaration.Name.ToLowerCamelCase());
+                }
             }
         }
 

@@ -34,8 +34,7 @@ namespace Bridge.Contract
         string GetInline(ICSharpCode.NRefactory.TypeSystem.IEntity entity);
         string GetInline(Mono.Cecil.ICustomAttributeProvider provider);
         Tuple<bool, bool, string> GetInlineCode(ICSharpCode.NRefactory.CSharp.InvocationExpression node);
-        string GetMethodName(Mono.Cecil.MethodDefinition method);
-        string GetMemberOverloadName(IParameterizedMember member);
+        string GetDefinitionName(IMemberDefinition member, bool changeCase = true);        
         System.Collections.Generic.IEnumerable<string> GetScript(ICSharpCode.NRefactory.CSharp.EntityDeclaration method);
         int GetSerializationPriority(Mono.Cecil.TypeDefinition type);
         Mono.Cecil.TypeDefinition GetTypeDefinition();
@@ -86,5 +85,8 @@ namespace Bridge.Contract
         IVisitorException CreateException(AstNode node);
         IVisitorException CreateException(AstNode node, string message);
         IPlugins Plugins { get; set; }
+        Dictionary<string, OverloadsCollection> OverloadsCache { get; }
+        string GetFieldName(FieldDeclaration field);
+        string GetEventName(EventDeclaration evt);
     }
 }

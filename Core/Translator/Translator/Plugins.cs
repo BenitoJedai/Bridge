@@ -41,6 +41,13 @@ namespace Bridge.NET
             }
         }
 
+        public void OnConfigRead(IAssemblyInfo config)
+        {
+            foreach (var plugin in this.Parts)
+            {
+                plugin.OnConfigRead(config);
+            }
+        }
         public void BeforeEmit(IEmitter emitter, ITranslator translator)
         {
             foreach (var plugin in this.Parts)

@@ -165,6 +165,7 @@ namespace Bridge.NET
 
                 new ClassBlock(this.Emitter, this.Emitter.TypeInfo).Emit();
             }
+            this.RemovePenultimateEmptyLines(true);
         }
     }
 }

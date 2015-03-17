@@ -182,7 +182,6 @@ namespace Bridge.NET
                 return;
             }
 
-            this.EnsureComma();
 
             var baseType = this.Emitter.GetBaseTypeDefinition();
             var typeDef = this.Emitter.GetTypeDefinition();
@@ -207,11 +206,8 @@ namespace Bridge.NET
 
                 if (this.TypeInfo.Ctors.Count > 1 && ctor.Parameters.Count > 0)
                 {
-                    var methodsDef = typeDef.Methods.Where(m => m.IsConstructor && m.Parameters.Count > 0).ToList();
-                    Helpers.SortMethodOverloads(methodsDef, this.Emitter);
-                    MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, ctor.Parameters, null, methodsDef, null, typeDef);
-                    ctorName += "$";
-                    ctorName += (methodsDef.IndexOf(methodDef) + 1).ToString();
+                    var overloads = OverloadsCollection.Create(this.Emitter, ctor);                    
+                    ctorName = overloads.GetOverloadName();
                 }
 
                 this.Write(ctorName);
@@ -284,7 +280,15 @@ namespace Bridge.NET
             if (initializer.ConstructorInitializerType == ConstructorInitializerType.Base)
             {
                 var baseType = this.Emitter.GetBaseTypeDefinition();
-                var baseName = (ctor.Initializer != null && !ctor.Initializer.IsNull) ? this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member) : "constructor";
+                var baseName = "constructor";
+                if (ctor.Initializer != null && !ctor.Initializer.IsNull) 
+                {
+                    var member = ((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member;
+                    var overloads = OverloadsCollection.Create(this.Emitter, member);
+                    if (overloads.HasOverloads) {
+                        baseName = overloads.GetOverloadName();
+                    }
+                }
 
                 if (baseName == "constructor")
                 {
@@ -301,7 +305,13 @@ namespace Bridge.NET
                 this.WriteThis();
                 this.WriteDot();
 
-                var baseName = this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member);
+                var baseName = "constructor";
+                var member = ((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(ctor.Initializer, this.Emitter)).Member;
+                var overloads = OverloadsCollection.Create(this.Emitter, member);
+                if (overloads.HasOverloads)
+                {
+                    baseName = overloads.GetOverloadName();
+                }
 
                 if (baseName == "constructor")
                 {

@@ -291,30 +291,7 @@ namespace Bridge.NET
 
         public virtual void CheckMethodArguments(MethodDefinition method) 
         {
-            /*foreach(ParameterDefinition param in method.Parameters) 
-            {
-                if (param.ParameterType is ByReferenceType)
-                {
-                    Exception.Throw("Reference parameters are not supported: {0}", method);
-                }
-            }*/
         }
-
-        public virtual void CheckDuplicateNames(IDictionary<string, TypeDefinition> allTypes) 
-        {
-            var parents = this.GetParentTypes(allTypes);
-
-            foreach(var name in allTypes.Keys) 
-            {
-                if (parents.Contains(name))
-                {
-                    continue;
-                }
-
-                this.CheckDuplicateNames(allTypes, allTypes[name]);
-            }
-        }
-
         public virtual HashSet<string> GetParentTypes(IDictionary<string, TypeDefinition> allTypes) 
         {
             var result = new HashSet<string>();
@@ -337,78 +314,6 @@ namespace Bridge.NET
                 }
             }
             return result;
-        }
-
-        public virtual void CheckDuplicateNames(IDictionary<string, TypeDefinition> allTypes, TypeDefinition leaf) 
-        {
-            if (this.CanIgnoreType(leaf))
-            {
-                return;
-            }
-
-            var instanceMethods = new Dictionary<string, MethodDefinition>();
-            var staticMethods = new Dictionary<string, MethodDefinition>();
-            var instanceFields = new Dictionary<string, FieldDefinition>();
-            var signatureTable = new Dictionary<string, string>();
-
-            while(true) 
-            {
-                foreach(FieldDefinition field in leaf.Fields) 
-                {
-                    if (field.IsStatic)
-                    {
-                        continue;
-                    }
-                    
-                    if (instanceFields.ContainsKey(field.Name))
-                    {
-                        Bridge.NET.Exception.Throw("All instance fields within an hierarchy must have unique names: {0} and {1}", field, instanceFields[field.Name]);
-                    }
-
-                    if (instanceMethods.ContainsKey(field.Name))
-                    {
-                        Bridge.NET.Exception.Throw("A field and a method cannot have the same name: {0} and {1}", field, instanceMethods[field.Name]);
-                    }
-
-                    instanceFields.Add(field.Name, field);
-                }
-
-                foreach(MethodDefinition method in leaf.Methods) 
-                {
-                    if (method.IsConstructor)
-                    {
-                        continue;
-                    }
-
-                    if (!string.IsNullOrEmpty(this.GetInlineCode(method)))
-                    {
-                        continue;
-                    }
-
-                    string key = Helpers.GetScriptName(method, false);
-
-                    if(!method.IsStatic)                     
-                    {
-                        if (instanceFields.ContainsKey(key))
-                        {
-                            Bridge.NET.Exception.Throw("A field and a method cannot have the same name: {0} and {1}", instanceFields[key], method);
-                        }
-                       
-                        if(!instanceMethods.ContainsKey(key)) 
-                        {
-                            instanceMethods.Add(key, method);
-                            signatureTable.Add(key, this.GetMethodSignatureKey(method));
-                        }
-                    }
-                }
-
-                if (leaf.BaseType == null)
-                {
-                    break;
-                }
-
-                leaf = allTypes[leaf.BaseType.FullName];
-            }
         }
 
         public virtual string GetMethodSignatureKey(MethodDefinition method) 

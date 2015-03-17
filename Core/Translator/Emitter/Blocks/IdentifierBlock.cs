@@ -204,11 +204,11 @@ namespace Bridge.NET
                     if (resolveResult is InvocationResolveResult)
                     {
                         InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                        this.Write(this.Emitter.GetMemberOverloadName(invocationResult.Member));
+                        this.Write(OverloadsCollection.Create(this.Emitter, invocationResult.Member).GetOverloadName());
                     }
                     else
                     {
-                        this.Write(this.Emitter.GetMethodName(method));
+                        this.Write(this.Emitter.GetDefinitionName(method));
                     }
 
                     if (appendAdditionalCode != null)
@@ -224,10 +224,15 @@ namespace Bridge.NET
                     {
                         this.WriteScript(memberResult.ConstantValue);
                     }
+                    else if (memberResult != null && memberResult.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
+                    {
+                        this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
+                        this.Write(OverloadsCollection.Create(this.Emitter, memberResult.Member).GetOverloadName());
+                        this.WriteOpenParentheses();
+                    }
                     else
                     {
-                        bool changeCase = (!this.Emitter.IsNativeMember(memberResult.Member.FullName) ? this.Emitter.ChangeCase : true) && !isConst;
-                        this.Write(this.Emitter.GetEntityName(memberResult.Member, !changeCase));
+                        this.Write(OverloadsCollection.Create(this.Emitter, memberResult.Member).GetOverloadName());
                     }
                 }
 
@@ -303,7 +308,7 @@ namespace Bridge.NET
                 {
                     this.Write(inlineCode);
                 }
-                else if (Helpers.IsFieldProperty(memberResult.Member))
+                else if (Helpers.IsFieldProperty(memberResult.Member, this.Emitter))
                 {
                     this.Write(Helpers.GetPropertyRef(memberResult.Member, this.Emitter));
                 }
@@ -329,7 +334,7 @@ namespace Bridge.NET
                 else
                 {
                     this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
-                    this.Write(memberResult.Member.Name);
+                    this.Write(OverloadsCollection.Create(this.Emitter, memberResult.Member).GetOverloadName());
                 }
 
                 this.WriteOpenParentheses();

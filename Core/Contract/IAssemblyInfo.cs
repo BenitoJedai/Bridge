@@ -49,5 +49,6 @@ namespace Bridge.Contract
         int StartIndexInName { get; set; }
         string BeforeBuild { get; set; }
         string AfterBuild { get; set; }
+        bool AutoPropertyToField { get; set; }
     }
 }

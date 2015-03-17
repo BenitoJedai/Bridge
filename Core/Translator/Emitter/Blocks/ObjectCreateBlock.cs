@@ -118,7 +118,7 @@ namespace Bridge.NET
 
                     if (!this.Emitter.Validator.IsIgnoreType(type) && type.Methods.Count(m => m.IsConstructor && !m.IsStatic) > (type.IsValueType ? 0 : 1))
                     {
-                        this.WriteScript(this.Emitter.GetMemberOverloadName(((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(objectCreateExpression, this.Emitter)).Member));
+                        this.WriteScript(OverloadsCollection.Create(this.Emitter, ((InvocationResolveResult)this.Emitter.Resolver.ResolveNode(objectCreateExpression, this.Emitter)).Member).GetOverloadName());
 
                         if (objectCreateExpression.Arguments.Count > 0)
                         {

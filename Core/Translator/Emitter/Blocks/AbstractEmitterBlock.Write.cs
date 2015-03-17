@@ -508,7 +508,7 @@ namespace Bridge.NET
                         }
                         else
                         {                            
-                            start = i + 1;
+                            start = i;
                         }
                     }
 

@@ -34,13 +34,11 @@ namespace Bridge.NET
             this.AddLocals(operatorDeclaration.Parameters);
 
             var typeDef = this.Emitter.GetTypeDefinition();
-            var methods = Helpers.GetMethodOverloads(typeDef, this.Emitter, operatorDeclaration.Name, 0, true);
-            Helpers.SortMethodOverloads(methods, this.Emitter);
+            var overloads = OverloadsCollection.Create(this.Emitter, operatorDeclaration);            
 
-            if (methods.Count > 1)
+            if (overloads.HasOverloads)
             {
-                MethodDefinition methodDef = Helpers.FindMethodDefinitionInGroup(this.Emitter, operatorDeclaration.Parameters, null, methods, operatorDeclaration.ReturnType, typeDef);
-                string name = Helpers.GetOverloadName(this.Emitter, methodDef, methods);
+                string name = overloads.GetOverloadName();
                 this.Write(name);
             }
             else

@@ -207,7 +207,7 @@ namespace Bridge.NET
 
                     this.WriteDot();
 
-                    this.Write(this.Emitter.GetMemberOverloadName((IMethod)member.Member));
+                    this.Write(OverloadsCollection.Create(this.Emitter, member.Member).GetOverloadName());
                     if (!isStatic)
                     {
                         this.Write(")");
@@ -242,7 +242,7 @@ namespace Bridge.NET
                 }
                 else if (member.Member.SymbolKind == SymbolKind.Property && member.TargetResult.Type.Kind != TypeKind.Anonymous && !this.Emitter.Validator.IsObjectLiteral(member.Member.DeclaringTypeDefinition))
                 {
-                    if (Helpers.IsFieldProperty(member.Member))
+                    if (Helpers.IsFieldProperty(member.Member, this.Emitter))
                     {
                         this.Write(Helpers.GetPropertyRef(member.Member, this.Emitter));
                     }
@@ -267,19 +267,18 @@ namespace Bridge.NET
                     }
                     else
                     {
-                        bool changeCase = (!this.Emitter.IsNativeMember(member.Member.FullName) ? this.Emitter.ChangeCase : true) && !isConst;
-                        this.Write(this.Emitter.GetEntityName(member.Member, !changeCase));                        
+                        this.Write(OverloadsCollection.Create(this.Emitter, member.Member).GetOverloadName());                        
                     }
                 }
                 else if (resolveResult is InvocationResolveResult)
                 {
                     InvocationResolveResult invocationResult = (InvocationResolveResult)resolveResult;
-                    this.Write(this.Emitter.GetMemberOverloadName(invocationResult.Member));
+                    this.Write(OverloadsCollection.Create(this.Emitter, invocationResult.Member).GetOverloadName());
                 }
                 else if (member.Member is DefaultResolvedEvent && this.Emitter.IsAssignment && (this.Emitter.AssignmentType == AssignmentOperatorType.Add || this.Emitter.AssignmentType == AssignmentOperatorType.Subtract))
                 {
                     this.Write(this.Emitter.AssignmentType == AssignmentOperatorType.Add ? "add" : "remove");
-                    this.Write(member.Member.Name);
+                    this.Write(OverloadsCollection.Create(this.Emitter, member.Member).GetOverloadName());
                     this.WriteOpenParentheses();                    
                 }
                 else

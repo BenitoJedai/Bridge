@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers.Cecil.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IAbstractEmitterBlock.cs" />
     <Compile Include="IAssemblyInfo.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="IValidator.cs" />
     <Compile Include="IVisitorException.cs" />
     <Compile Include="IWriterInfo.cs" />
+    <Compile Include="OverloadsCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITypeInfo.cs" />
   </ItemGroup>

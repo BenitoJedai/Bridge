@@ -8,66 +8,48 @@ namespace Bridge.NET
 {
     public partial class Translator
     {
-        protected virtual IAssemblyInfo ReadConfig(IAssemblyInfo mergeConfig)
+        protected virtual IAssemblyInfo ReadConfig()
         {
             var path = Path.GetDirectoryName(this.Location) + "\\Bridge\\bridge.json";
 
             if (!File.Exists(path))
             {
-                return mergeConfig;
+                path = Path.GetDirectoryName(this.Location) + "\\bridge.json";
             }
 
-            try
+            if (!File.Exists(path))
             {
+                path = Path.GetDirectoryName(this.Location) + "\\Bridge.NET\\bridge.json";
+
+                }
+
+            if (!File.Exists(path))
+                {
+                var config = new AssemblyInfo();
+
+
+                this.Plugins.OnConfigRead(config);
+                return config;
+                }
+
+            try
+                {
                 var json = File.ReadAllText(path);
                 IAssemblyInfo assemblyInfo = JsonConvert.DeserializeObject<AssemblyInfo>(json);
 
-                if (mergeConfig == null)
+                if (assemblyInfo == null)
                 {
-                    return assemblyInfo;
+                    assemblyInfo = new AssemblyInfo();
                 }
 
-                if (string.IsNullOrWhiteSpace(mergeConfig.FileName))
-                {
-                    mergeConfig.FileName = assemblyInfo.FileName;
-                }
-
-                if (mergeConfig.OutputBy == OutputBy.Namespace)
-                {
-                    mergeConfig.OutputBy = assemblyInfo.OutputBy;
-                }
-
-                if (string.IsNullOrWhiteSpace(mergeConfig.Module))
-                {
-                    mergeConfig.Module = assemblyInfo.Module;
-                }
-
-                if (string.IsNullOrWhiteSpace(mergeConfig.Output))
-                {
-                    mergeConfig.Output = assemblyInfo.Output;
-                }
-
-                if (mergeConfig.StartIndexInName == 0)
-                {
-                    mergeConfig.StartIndexInName = assemblyInfo.StartIndexInName;
-                }
-
-                if (string.IsNullOrWhiteSpace(mergeConfig.BeforeBuild))
-                {
-                    mergeConfig.BeforeBuild = assemblyInfo.BeforeBuild;
-                }
-
-                if (string.IsNullOrWhiteSpace(mergeConfig.AfterBuild))
-                {
-                    mergeConfig.AfterBuild = assemblyInfo.AfterBuild;
-                }
+                this.Plugins.OnConfigRead(assemblyInfo);
+                return assemblyInfo;
             }
             catch(Exception e)
             {
                 throw new InvalidOperationException("Cannot read bridge.json", e);                
             }
 
-            return mergeConfig;
         }
 
         public virtual void RunEvent(string e)

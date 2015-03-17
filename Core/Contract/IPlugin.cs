@@ -12,5 +12,6 @@ namespace Bridge.Contract
         void BeforeEmit(IEmitter emitter, ITranslator translator);
         IEnumerable<string> GetConstructorInjectors(IConstructorBlock constructorBlock);
         bool HasConstructorInjectors(IConstructorBlock constructorBlock);
+        void OnConfigRead(IAssemblyInfo config);
     }
 }

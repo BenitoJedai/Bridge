@@ -5,8 +5,6 @@ namespace Bridge.Contract
     {
         bool CanIgnoreType(Mono.Cecil.TypeDefinition type);
         void CheckConstructors(Mono.Cecil.TypeDefinition type, ITranslator translator);
-        void CheckDuplicateNames(System.Collections.Generic.IDictionary<string, Mono.Cecil.TypeDefinition> allTypes);
-        void CheckDuplicateNames(System.Collections.Generic.IDictionary<string, Mono.Cecil.TypeDefinition> allTypes, Mono.Cecil.TypeDefinition leaf);
         void CheckFields(Mono.Cecil.TypeDefinition type, ITranslator translator);
         void CheckFileName(Mono.Cecil.TypeDefinition type, ITranslator translator);
         void CheckIdentifier(string name, ICSharpCode.NRefactory.CSharp.AstNode context);
