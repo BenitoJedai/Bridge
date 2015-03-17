@@ -112,9 +112,9 @@ namespace Bridge.NET
                     fileName = fileName.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName);
                 }
 
-                if (!Path.HasExtension(fileName))
+                if (!fileName.ToLower().EndsWith("." + Bridge.NET.AssemblyInfo.JAVASCRIPT_EXTENSION))
                 {
-                    fileName = Path.ChangeExtension(fileName, "js");
+                    fileName += "." + Bridge.NET.AssemblyInfo.JAVASCRIPT_EXTENSION;
                 }
 
                 string filePath = Path.Combine(path, fileName);
