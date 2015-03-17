@@ -7,10 +7,10 @@ namespace Bridge.NET
     {
         public const string DEFAULT_FILENAME = "---";
         public const string JAVASCRIPT_EXTENSION = "js";
-        
+
         public AssemblyInfo()
         {
-            this.Dependencies = new List<IPluginDependency>();                        
+            this.Dependencies = new List<IPluginDependency>();
         }
 
         /// <summary>
@@ -34,21 +34,21 @@ namespace Bridge.NET
             set;
         }
 
-        private OutputBy filesHierarchy = OutputBy.Namespace;
+        private OutputBy outputBy = OutputBy.Namespace;
 
         /// <summary>
         /// The option to manage JavaScript output folders and files.
-        /// See TypesSplit enum for more details.
+        /// See the OutputBy enum for more details.
         /// </summary>
         public OutputBy OutputBy
         {
             get
             {
-                return this.filesHierarchy;
+                return this.outputBy;
             }
             set
             {
-                this.filesHierarchy = value;
+                this.outputBy = value;
             }
         }
 
