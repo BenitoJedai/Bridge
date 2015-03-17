@@ -282,7 +282,7 @@ namespace Bridge.NET
                     {
                         if (paramsArg == null && (parameters.Count > (i + shift)) && parameters[i + shift].IsParams)
                         {
-                            if (!this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition))
+                            if (resolvedMethod.DeclaringTypeDefinition == null || !this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition))
                             {
                                 paramsArg = arg;
                             }

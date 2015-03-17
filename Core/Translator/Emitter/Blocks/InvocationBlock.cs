@@ -189,7 +189,7 @@ namespace Bridge.NET
                             else
                             {
                                 string name = this.Emitter.ShortenTypeName(Helpers.ReplaceSpecialChars(resolvedMethod.DeclaringType.FullName)) + "." + this.Emitter.GetEntityName(resolvedMethod);
-                                var isIgnoreClass = this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition);
+                                var isIgnoreClass = resolvedMethod.DeclaringTypeDefinition != null && this.Emitter.Validator.IsIgnoreType(resolvedMethod.DeclaringTypeDefinition);
 
                                 this.Write(name);
 
@@ -305,7 +305,7 @@ namespace Bridge.NET
                 {
                     var isIgnore = false;
 
-                    if(invocationResolveResult != null && this.Emitter.Validator.IsIgnoreType(invocationResolveResult.Member.DeclaringTypeDefinition))
+                    if(invocationResolveResult != null && invocationResolveResult.Member.DeclaringTypeDefinition != null && this.Emitter.Validator.IsIgnoreType(invocationResolveResult.Member.DeclaringTypeDefinition))
                     {
                         isIgnore = true;
                     }

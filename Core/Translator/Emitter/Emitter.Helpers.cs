@@ -311,7 +311,7 @@ namespace Bridge.NET
                 changeCase = false;
             }
             var attr = member.Attributes.FirstOrDefault(a => a.AttributeType.FullName == Translator.Bridge_ASSEMBLY + ".NameAttribute");
-            bool isIgnore = this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);            
+            bool isIgnore = member.DeclaringTypeDefinition != null && this.Validator.IsIgnoreType(member.DeclaringTypeDefinition);            
             string name = member.Name;
             if (member is IMethod && ((IMethod)member).IsConstructor)
             {
