@@ -34,7 +34,7 @@ namespace Bridge.NET
             set;
         }
 
-        private OutputBy filesHierarchy = OutputBy.Project;
+        private OutputBy filesHierarchy = OutputBy.Namespace;
 
         /// <summary>
         /// The option to manage JavaScript output folders and files.
