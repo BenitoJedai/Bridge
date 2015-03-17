@@ -193,7 +193,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <PostBuildEvent>call "$(SolutionDir)Build\assemblies\deploy.bat" "$(MSBuildProjectName)" "$(SolutionDir)"
 @for %25%25a in (AjaxMin Object.Net.Utilities ICSharpCode Mono Newtonsoft) do @(
  @for %25%25x in (dll pdb xml) do @(
