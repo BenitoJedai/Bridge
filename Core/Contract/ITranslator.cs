@@ -21,7 +21,6 @@ namespace Bridge.Contract
         System.Collections.Generic.Dictionary<string, string> Outputs { get; }
         bool Rebuild { get; set; }
         void SaveTo(string path, string defaultFileName);
-        void SaveToFile(string outputPath, string defaultFileName);
         System.Collections.Generic.IList<string> SourceFiles { get; }
         System.Collections.Generic.Dictionary<string, string> Translate();
         System.Collections.Generic.Dictionary<string, ITypeInfo> TypeInfoDefinitions { get; set; }

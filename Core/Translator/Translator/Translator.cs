@@ -74,31 +74,6 @@ namespace Bridge.NET
             return builder.ToString();
         }
 
-        public virtual void SaveToFile(string outputPath, string defaultFileName)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            foreach (var item in this.Outputs)
-            {
-                string code = item.Value;
-                builder.AppendLine(code);
-            }
-
-            string keyPath = this.Outputs.First().Key;
-            string path = Path.Combine(outputPath, keyPath.Replace(Bridge.NET.AssemblyInfo.DEFAULT_FILENAME, defaultFileName));
-            var minifier = new Minifier();
-            
-            var file = new System.IO.FileInfo(path);            
-            file.Directory.Create();
-            File.WriteAllText(file.FullName, builder.ToString(), System.Text.UTF8Encoding.UTF8);
-
-            string fileName = Path.GetFileNameWithoutExtension(path);
-            path = Path.GetDirectoryName(path) + ("\\" + fileName + ".min") + Path.GetExtension(path);
-            file = new System.IO.FileInfo(path);
-            file.Directory.Create();
-            File.WriteAllText(file.FullName, minifier.MinifyJavaScript(builder.ToString()), System.Text.UTF8Encoding.UTF8);
-        }
-
         public virtual void SaveTo(string path, string defaultFileName)
         {
             var minifier = new Minifier();
