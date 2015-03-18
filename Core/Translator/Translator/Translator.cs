@@ -92,6 +92,15 @@ namespace Bridge.NET
                     fileName += "." + Bridge.NET.AssemblyInfo.JAVASCRIPT_EXTENSION;
                 }
 
+                // Ensure filename contains no ":". It could be used like "c:/absolute/path"
+                fileName = fileName.Replace(":", "_");
+
+                // Trim heading slash/backslash off file names until it does not start/end with slash.
+                while (Path.IsPathRooted(fileName))
+                {
+                    fileName = fileName.TrimStart('/', '\\');
+                }
+
                 string filePath = Path.Combine(path, fileName);
 
                 var file = new System.IO.FileInfo(filePath);
