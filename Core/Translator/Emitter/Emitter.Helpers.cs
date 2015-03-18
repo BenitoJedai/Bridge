@@ -239,7 +239,7 @@ namespace Bridge.NET
             if (changeCase)
             {                
                 changeCase = !this.IsNativeMember(member.FullName) ? this.ChangeCase : true;
-                if (member is FieldDefinition && ((FieldDefinition)member).HasConstant)
+                if (member is FieldDefinition && ((FieldDefinition)member).HasConstant && !member.DeclaringType.IsEnum)
                 {
                     changeCase = false;
                 }

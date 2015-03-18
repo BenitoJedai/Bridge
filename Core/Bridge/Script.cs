@@ -162,6 +162,17 @@ namespace Bridge
         }
 
         /// <summary>
+        /// The eval() method evaluates JavaScript code represented as a string.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">A string representing a JavaScript expression, statement, or sequence of statements. The expression can include variables and properties of existing objects.</param>
+        /// <returns></returns>
+        [Template("eval({0})")]
+        public static void Eval(string expression)
+        {
+        }
+
+        /// <summary>
         /// The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.
         /// </summary>
         /// <param name="testValue">The value to be tested for finiteness.</param>
