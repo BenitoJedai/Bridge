@@ -449,42 +449,25 @@ namespace Bridge.Contract
 
         public static bool TypeIsMatch(IEmitter emitter, ResolveResult resolveResult, AstType type, TypeReference typeRef)
         {
-            var match = true;
-            if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
-            {
-                if (((TypeResolveResult)resolveResult).Type.ReflectionName != typeRef.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
-                {
-                    match = false;
-                }
+            if (typeRef.IsGenericParameter)
+            {                
+                return true;
             }
-            else
-            {
-                var isArray = typeRef.ToString().Contains("[]");
+            
+            var type1 = emitter.GetTypeDefinition(type);
 
-                var typeName = isArray ? typeRef.ToString().Replace("[]", "") : typeRef.ToString();
-                var name = emitter.ResolveType(typeName, type);
-
-                var typeDef = emitter.TypeDefinitions[name];
-
-                if ((typeDef.FullName + (isArray ? "[]" : "")) != typeRef.FullName)
-                {
-                    match = false;
-                }
-            }
-
-            return match;
+            return Helpers.TypeMatch(type1, typeRef);
         }
 
         public static bool TypeIsMatch(IEmitter emitter, IType type, TypeReference typeRef)
         {
-            var match = true;
-            
-            if (type.ReflectionName != typeRef.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
+            if (typeRef.IsGenericParameter)
             {
-                match = false;
+                return true;
             }
 
-            return match;
+            var type1 = emitter.GetTypeDefinition(type);
+            return Helpers.TypeMatch(type1, typeRef);
         }
 
         public static string TranslateTypeReference(AstType astType, IEmitter emitter)

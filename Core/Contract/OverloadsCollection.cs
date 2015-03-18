@@ -994,7 +994,7 @@ namespace Bridge.Contract
             {
                 if (parameters.Count == method.Parameters.Count && method.GenericParameters.Count == typeParametersCount)
                 {
-                    bool match = method.Parameters.Count == 0;
+                    bool match = true;
 
                     if (typeDef != null && method.DeclaringType != typeDef)
                     {
@@ -1016,9 +1016,9 @@ namespace Bridge.Contract
                         var type = parameters[i].Type;
                         var typeRef = method.Parameters[i].ParameterType;
 
-                        if (Helpers.TypeIsMatch(this.Emitter, type, typeRef))
+                        if (!Helpers.TypeIsMatch(this.Emitter, type, typeRef))
                         {
-                            match = true;
+                            match = false;
                             break;
                         }
                     }
