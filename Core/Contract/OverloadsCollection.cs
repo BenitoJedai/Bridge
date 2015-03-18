@@ -196,7 +196,13 @@ namespace Bridge.Contract
         {
             get;
             private set;
-        }        
+        }
+
+        public IMember Member 
+        { 
+            get; 
+            private set; 
+        }
 
         private OverloadsCollection(IEmitter emitter, MethodDefinition methodDef)
         {
@@ -362,8 +368,9 @@ namespace Bridge.Contract
             else
             {
                 this.JsName = this.Emitter.GetEntityName(member);
-            }            
-            
+            }
+
+            this.Member = member;
             this.IsSetter = isSetter;
             this.InitMembers();
             this.MemberDefinition = this.GetMemberDefinition(member);
@@ -745,6 +752,11 @@ namespace Bridge.Contract
         private string overloadName;
         public string GetOverloadName()
         {
+            if (this.MemberDefinition == null)
+            {
+                return this.JsName;
+            }
+
             if (this.overloadName == null && this.MemberDefinition != null)
             {
                 this.overloadName = this.GetOverloadName(this.MemberDefinition);
@@ -1004,7 +1016,7 @@ namespace Bridge.Contract
 
                     if (returnType != null)
                     {
-                        if (!Helpers.TypeIsMatch(this.Emitter, returnType, method.ReturnType))
+                        if (!Helpers.TypeIsMatch(this.Emitter, returnType, method.ReturnType, this.Member, -1))
                         {
                             match = false;
                             continue;
@@ -1016,7 +1028,7 @@ namespace Bridge.Contract
                         var type = parameters[i].Type;
                         var typeRef = method.Parameters[i].ParameterType;
 
-                        if (!Helpers.TypeIsMatch(this.Emitter, type, typeRef))
+                        if (!Helpers.TypeIsMatch(this.Emitter, type, typeRef, this.Member, i))
                         {
                             match = false;
                             break;
@@ -1043,7 +1055,7 @@ namespace Bridge.Contract
             {
                 if (field.Name == name && 
                     field.DeclaringType == typeDef &&
-                    Helpers.TypeIsMatch(this.Emitter, type, field.FieldType))
+                    Helpers.TypeIsMatch(this.Emitter, type, field.FieldType, this.Member, -1))
                 {
                     return field;
                 }
@@ -1062,7 +1074,7 @@ namespace Bridge.Contract
             {
                 if (ev.Name == name &&
                     ev.DeclaringType == typeDef &&
-                    Helpers.TypeIsMatch(this.Emitter, type, ev.FieldType))
+                    Helpers.TypeIsMatch(this.Emitter, type, ev.FieldType, this.Member, -1))
                 {
                     return ev;
                 }
@@ -1081,7 +1093,7 @@ namespace Bridge.Contract
             {
                 if (prop.Name == name &&
                     prop.DeclaringType == typeDef &&
-                    Helpers.TypeIsMatch(this.Emitter, type, prop.PropertyType))
+                    Helpers.TypeIsMatch(this.Emitter, type, prop.PropertyType, this.Member, -1))
                 {
                     return prop;
                 }
@@ -1107,6 +1119,6 @@ namespace Bridge.Contract
             }
 
             return null;
-        }
+        }        
     }
 }

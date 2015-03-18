@@ -38,7 +38,7 @@ namespace Bridge.Contract
         System.Collections.Generic.IEnumerable<string> GetScript(ICSharpCode.NRefactory.CSharp.EntityDeclaration method);
         int GetSerializationPriority(Mono.Cecil.TypeDefinition type);
         Mono.Cecil.TypeDefinition GetTypeDefinition();
-        Mono.Cecil.TypeDefinition GetTypeDefinition(ICSharpCode.NRefactory.CSharp.AstType reference);
+        Mono.Cecil.TypeDefinition GetTypeDefinition(ICSharpCode.NRefactory.CSharp.AstType reference, bool safe = false);
         Mono.Cecil.TypeDefinition GetTypeDefinition(IType type);
         string GetTypeHierarchy();
         ICSharpCode.NRefactory.CSharp.AstNode IgnoreBlock { get; set; }        

@@ -63,6 +63,7 @@
     <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\ScriptAttribute.cs" />
+    <Compile Include="IBridgeClass.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Activator.cs" />

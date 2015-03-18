@@ -321,7 +321,7 @@ namespace Bridge.Contract
             {
                 return methods.Count == 1 ? methods[0] : null;
             }
-            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods, member.ReturnType, type);
+            return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, methods, member.ReturnType, type, member);
         }
         public static MethodDefinition GetMethodDefinition(IEmitter emitter, MethodDeclaration methodDeclaration, TypeDefinition type)
         {
@@ -349,7 +349,7 @@ namespace Bridge.Contract
             return Helpers.FindMethodDefinitionInGroup(emitter, parameters, null, ops, operatorDeclaration.ReturnType, type);
         }
 
-        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IList<IParameter> parameters, IList<IType> typeParameters, List<MethodDefinition> group, IType returnType, TypeDefinition typeDef)
+        public static MethodDefinition FindMethodDefinitionInGroup(IEmitter emitter, IList<IParameter> parameters, IList<IType> typeParameters, List<MethodDefinition> group, IType returnType, TypeDefinition typeDef, IMember member)
         {
             var typeParametersCount = typeParameters != null ? typeParameters.Count() : 0;
             foreach (var method in group)
@@ -366,7 +366,7 @@ namespace Bridge.Contract
 
                     if (returnType != null)
                     {
-                        if (!Helpers.TypeIsMatch(emitter, returnType, method.ReturnType))
+                        if (!Helpers.TypeIsMatch(emitter, returnType, method.ReturnType, member, -1))
                         {
                             match = false;
                             continue;
@@ -378,7 +378,7 @@ namespace Bridge.Contract
                         var type = parameters[i].Type;
                         var typeRef = method.Parameters[i].ParameterType;
 
-                        if (Helpers.TypeIsMatch(emitter, type, typeRef))
+                        if (Helpers.TypeIsMatch(emitter, type, typeRef, member, i))
                         {
                             match = true;
                             break;
@@ -453,21 +453,65 @@ namespace Bridge.Contract
             {                
                 return true;
             }
-            
-            var type1 = emitter.GetTypeDefinition(type);
 
-            return Helpers.TypeMatch(type1, typeRef);
+            var match = true;
+            if (!(resolveResult is ErrorResolveResult) && resolveResult is TypeResolveResult)
+            {
+                if (((TypeResolveResult)resolveResult).Type.ReflectionName != typeRef.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
+                {
+                    match = false;
+                }
+            }
+            else
+            {
+                var isArray = typeRef.ToString().Contains("[]");
+
+                var typeName = isArray ? typeRef.ToString().Replace("[]", "") : typeRef.ToString();
+                var name = emitter.ResolveType(typeName, type);
+
+                var typeDef = emitter.TypeDefinitions[name];
+
+                if ((typeDef.FullName + (isArray ? "[]" : "")) != typeRef.FullName)
+                {
+                    match = false;
+                }
+            }
+
+            if (match)
+            {
+                return true;
+            }
+            
+            var type1 = emitter.GetTypeDefinition(type, true);
+
+            if (type1 != null)
+            {
+                return Helpers.TypeMatch(type1, typeRef);    
+            }
+
+            return true;
         }
 
-        public static bool TypeIsMatch(IEmitter emitter, IType type, TypeReference typeRef)
+        public static bool TypeIsMatch(IEmitter emitter, IType type, TypeReference typeRef, IMember member, int index)
         {
-            if (typeRef.IsGenericParameter)
+            if (type.ReflectionName == typeRef.FullName.Replace("<", "[[").Replace(">", "]]").Replace(",", "],["))
             {
                 return true;
             }
 
+            if (typeRef.IsGenericParameter)
+            {
+                return true;
+            }            
+
             var type1 = emitter.GetTypeDefinition(type);
-            return Helpers.TypeMatch(type1, typeRef);
+
+            if (type1 != null)
+            {
+                return Helpers.TypeMatch(type1, typeRef);
+            }
+
+            return true;
         }
 
         public static string TranslateTypeReference(AstType astType, IEmitter emitter)

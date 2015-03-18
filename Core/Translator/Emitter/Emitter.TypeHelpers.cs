@@ -81,7 +81,7 @@ namespace Bridge.NET
             return null;
         }
 
-        public virtual TypeDefinition GetTypeDefinition(AstType reference)
+        public virtual TypeDefinition GetTypeDefinition(AstType reference, bool safe = false)
         {
             string name = Helpers.GetScriptName(reference, true);
             name = this.ResolveType(name, reference);
@@ -106,10 +106,25 @@ namespace Bridge.NET
                     }
                 }
 
+                if (safe)
+                {
+                    return null;
+                }
+
                 throw new Exception("Type cannot be resolved: " + reference.ToString());
             }
 
-            return this.TypeDefinitions[name];
+            if (this.TypeDefinitions.ContainsKey(name))
+            {
+                return this.TypeDefinitions[name];
+            }
+
+            if (safe)
+            {
+                return null;
+            }
+
+            throw new Exception("Type cannot be resolved: " + reference.ToString());
         }
 
         public virtual TypeDefinition GetBaseTypeDefinition()
