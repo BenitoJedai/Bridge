@@ -1,0 +1,841 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bridge</name>
+    </assembly>
+    <members>
+        <member name="T:Bridge.TemplateAttribute">
+            <summary>
+            TemplateAttribute is instruction to replace method calling (in expression) by required code
+            </summary>
+        </member>
+        <member name="T:Bridge.ModuleDependencyAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Bridge.ModuleAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Bridge.InlineConstAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Bridge.FileNameAttribute">
+            <summary>
+            The file name where JavaScript is generated to.
+            </summary>
+        </member>
+        <member name="T:Bridge.OutputAttribute">
+            <summary>
+            The output folder path for generated JavaScript. A non-absolute path is concatenated with a project's root. 
+            Examples: "Bridge\\output\\", "..\\Bridge\\output\\", "c:\\output\\"
+            </summary>
+        </member>
+        <member name="T:Bridge.OutputByAttribute">
+            <summary>
+            The option to manage JavaScript output folders and files.
+            See TypesSplit enum for more details.
+            </summary>
+        </member>
+        <member name="T:Bridge.OutputBy">
+            <summary>
+            The options to manage JavaScript output folders and files.
+            </summary>
+        </member>
+        <member name="F:Bridge.OutputBy.Class">
+            <summary>
+            The class name will be the file name. If there are classes with same names in different namespaces, the generated JavaScript will be combined into one file. For example, if the class name is "Helpers", the file name will be "Helpers.js".
+            </summary>
+        </member>
+        <member name="F:Bridge.OutputBy.ClassPath">
+            <summary>
+            A folder hierarchy is created using the class name, and a folder is created for each unique word (split by '.') in the class namespace. For example, if the class "Helpers" is within the "Demo" namespace, the file path and name will be "Demo/Helpers.js".
+            </summary>
+        </member>
+        <member name="F:Bridge.OutputBy.Module">
+            <summary>
+            The ModuleAttribute value is used as the file name if set on a class. For example, if [Module("MyModuleName")] is set, the file name will be "MyModuleName.js".
+            </summary>
+        </member>
+        <member name="F:Bridge.OutputBy.Namespace">
+            <summary>
+            The full namespace is used as the file name. For example, if "Demo.Utilities" is the namespace, the file name will be "Demo.Utilities.js". 
+            </summary>
+        </member>
+        <member name="F:Bridge.OutputBy.NamespacePath">
+            <summary>
+            The class namespace is split (by '.') and a folder is created for each individual value, except the last value which becomes the file name. For example, if "Demo.Utilities" is the namespace, the file path and name will be "/Demo/Utilities.js".
+            </summary>
+        </member>
+        <member name="F:Bridge.OutputBy.Project">
+            <summary>
+            All generated JavaScript for the project is added to one [ProjectName].js file. For example, if the project name is "MyUtilities", the file name will be "MyUtilities.js".
+            This can be overridden by setting the fileName option within bridge.json, or by using the [FileName] Attribute on the assembly or class levels.
+            </summary>
+        </member>
+        <member name="T:Bridge.ScriptAttribute">
+            <summary>
+            ScriptAttribute is instruction how to convert method declaration (signature + implementation) to javascript
+            </summary>
+        </member>
+        <member name="M:Bridge.Script.Write``1(System.String)">
+            <summary>
+            Inject javascript code
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.Write(System.String)">
+            <summary>
+            Inject javascript code
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Bridge.Script.Arguments">
+            <summary>
+            An Array-like object corresponding to the arguments passed to a function.
+            </summary>
+        </member>
+        <member name="F:Bridge.Script.Undefined">
+            <summary>
+            The global undefined property represents the value undefined.
+            </summary>
+        </member>
+        <member name="F:Bridge.Script.NaN">
+            <summary>
+            The global NaN property is a value representing Not-A-Number.
+            </summary>
+        </member>
+        <member name="F:Bridge.Script.Infinity">
+            <summary>
+            The global Infinity property is a numeric value representing infinity.
+            </summary>
+        </member>
+        <member name="M:Bridge.Script.Eval``1(System.String)">
+            <summary>
+            The eval() method evaluates JavaScript code represented as a string.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="expression">A string representing a JavaScript expression, statement, or sequence of statements. The expression can include variables and properties of existing objects.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.Eval(System.String)">
+            <summary>
+            The eval() method evaluates JavaScript code represented as a string.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="expression">A string representing a JavaScript expression, statement, or sequence of statements. The expression can include variables and properties of existing objects.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.IsFinite(System.Object)">
+            <summary>
+            The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.
+            </summary>
+            <param name="testValue">The value to be tested for finiteness.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.ParseFloat(System.String)">
+            <summary>
+            The parseFloat() function parses a string argument and returns a floating point number.
+            </summary>
+            <param name="value">A string that represents the value you want to parse.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.ParseInt(System.String)">
+            <summary>
+            The parseInt() function parses a string argument and returns an integer of the specified radix or base.
+            </summary>
+            <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.ParseInt(System.String,System.Int32)">
+            <summary>
+            The parseInt() function parses a string argument and returns an integer of the specified radix or base.
+            </summary>
+            <param name="value">The value to parse. If string is not a string, then it is converted to one. Leading whitespace in the string is ignored.</param>
+            <param name="radix">An integer that represents the radix of the above mentioned string. Always specify this parameter to eliminate reader confusion and to guarantee predictable behavior. Different implementations produce different results when a radix is not specified.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.IsNaN(System.Object)">
+            <summary>
+            The isNaN() function determines whether a value is NaN or not. Be careful, this function is broken. You may be interested in Number.isNaN() as defined in ECMAScript 6 or you can use typeof to determine if the value is Not-A-Number.
+            </summary>
+            <param name="testValue">The value to be tested.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.DecodeURI(System.String)">
+            <summary>
+            The decodeURI() function decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.
+            </summary>
+            <param name="encodedURI">A complete, encoded Uniform Resource Identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.DecodeURIComponent(System.String)">
+            <summary>
+            The decodeURIComponent() method decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.
+            </summary>
+            <param name="encodedURI">An encoded component of a Uniform Resource Identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.EncodeURI(System.String)">
+            <summary>
+            The encodeURI() method encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two "surrogate" characters).
+            </summary>
+            <param name="uri">A complete Uniform Resource Identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bridge.Script.EncodeURIComponent(System.String)">
+            <summary>
+            The encodeURIComponent() method encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two "surrogate" characters).
+            </summary>
+            <param name="component">A component of a URI.</param>
+            <returns></returns>
+        </member>
+        <member name="P:System.Exception.Data">
+            <summary>
+            Gets a collection of key/value pairs that provide additional user-defined information about the exception.
+            </summary>
+        </member>
+        <member name="P:System.Exception.Message">
+            <summary>
+            Gets a message that describes the current exception.
+            </summary>
+        </member>
+        <member name="P:System.Exception.InnerException">
+            <summary>
+            Gets the Exception instance that caused the current exception.
+            </summary>
+        </member>
+        <member name="P:System.Exception.StackTrace">
+            <summary>
+            Gets a string representation of the immediate frames on the call stack.
+            </summary>
+        </member>
+        <member name="P:System.ArgumentException.ParamName">
+            <summary>
+            Gets the name of the parameter that causes this exception.
+            </summary>
+        </member>
+        <member name="M:System.Array.IndexOf(System.String)">
+            <summary>
+            The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present.
+            </summary>
+            <param name="searchElement"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Array.IndexOf(System.String,System.Int32)">
+            <summary>
+            The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present.
+            </summary>
+            <param name="searchElement"></param>
+            <param name="fromIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Array.LastIndexOf(System.String)">
+            <summary>
+            The lastIndexOf() method returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex.
+            </summary>
+            <param name="searchString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Array.LastIndexOf(System.String,System.Int32)">
+            <summary>
+            The lastIndexOf() method returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex.
+            </summary>
+            <param name="searchString"></param>
+            <param name="fromIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTime.#ctor(System.Int64)">
+            <summary>
+            Double value representing the number of milliseconds since 1 January 1970 00:00:00 UTC (Unix Epoch).
+            </summary>
+            <param name="value">The numberof milliseconds since 1 January 1970 00:00:00 UTC (Unix Epoch)</param>
+        </member>
+        <member name="M:System.DateTime.#ctor(System.String)">
+            <summary>
+            String value representing a date. The string should be in a format recognized by the Date.parse() method (IETF-compliant RFC 2822 timestamps and also a version of ISO8601).
+            </summary>
+            <param name="dateString"></param>
+        </member>
+        <member name="T:System.DayOfWeek">
+            <summary>
+            Specifies the day of the week.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Sunday">
+            <summary>
+            Indicates Sunday.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Monday">
+            <summary>
+            Indicates Monday.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Tuesday">
+            <summary>
+            Indicates Tuesday.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Wednesday">
+            <summary>
+            Indicates Wednesday.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Thursday">
+            <summary>
+            Indicates Thursday.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Friday">
+            <summary>
+            Indicates Friday.
+            </summary>
+        </member>
+        <member name="F:System.DayOfWeek.Saturday">
+            <summary>
+            Indicates Saturday.
+            </summary>
+        </member>
+        <member name="T:System.Error">
+            <summary>
+            The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types.
+            </summary>
+        </member>
+        <member name="T:System.LocaleOptions">
+            <summary>
+            An object with some or all of the following properties:
+            </summary>
+        </member>
+        <member name="F:System.LocaleOptions.LocaleMatcher">
+            <summary>
+            The locale matching algorithm to use. Possible values are "lookup" and "best fit"; the default is "best fit". For information about this option, see the Intl page.
+            </summary>
+        </member>
+        <member name="F:System.LocaleOptions.Usage">
+            <summary>
+            Whether the comparison is for sorting or for searching for matching strings. Possible values are "sort" and "search"; the default is "sort".
+            </summary>
+        </member>
+        <member name="F:System.LocaleOptions.Sensitivity">
+            <summary>
+            Which differences in the strings should lead to non-zero result values. 
+            </summary>
+        </member>
+        <member name="F:System.LocaleOptions.IgnorePunctuation">
+            <summary>
+            Whether punctuation should be ignored. Possible values are true and false; the default is false.
+            </summary>
+        </member>
+        <member name="F:System.LocaleOptions.Numeric">
+            <summary>
+            Whether numeric collation should be used, such that "1" &lt; "2" &lt; "10". Possible values are true and false; the default is false. This option can be set through an options property or through a Unicode extension key; if both are provided, the options property takes precedence. Implementations are not required to support this property.
+            </summary>
+        </member>
+        <member name="F:System.LocaleOptions.CaseFirst">
+            <summary>
+            Whether upper case or lower case should sort first. Possible values are "upper", "lower", or "false" (use the locale's default); the default is "false". This option can be set through an options property or through a Unicode extension key; if both are provided, the options property takes precedence. Implementations are not required to support this property.
+            </summary>
+        </member>
+        <member name="T:System.CaseFirst">
+            <summary>
+            Whether upper case or lower case should sort first. Possible values are "upper", "lower", or "false" (use the locale's default); the default is "false". This option can be set through an options property or through a Unicode extension key; if both are provided, the options property takes precedence. Implementations are not required to support this property.
+            </summary>
+        </member>
+        <member name="T:System.Sensitivity">
+            <summary>
+            Which differences in the strings should lead to non-zero result values.
+            </summary>
+        </member>
+        <member name="F:System.Sensitivity.Base">
+            <summary>
+            Only strings that differ in base letters compare as unequal. Examples: a ≠ b, a = á, a = A.
+            </summary>
+        </member>
+        <member name="F:System.Sensitivity.Accent">
+            <summary>
+            Only strings that differ in base letters or accents and other diacritic marks compare as unequal. Examples: a ≠ b, a ≠ á, a = A.
+            </summary>
+        </member>
+        <member name="F:System.Sensitivity.Case">
+            <summary>
+            Only strings that differ in base letters or case compare as unequal. Examples: a ≠ b, a = á, a ≠ A.
+            </summary>
+        </member>
+        <member name="F:System.Sensitivity.Variant">
+            <summary>
+            Strings that differ in base letters, accents and other diacritic marks, or case compare as unequal. Other differences may also be taken into consideration. Examples: a ≠ b, a ≠ á, a ≠ A.
+            </summary>
+        </member>
+        <member name="T:System.Usage">
+            <summary>
+            Whether the comparison is for sorting or for searching for matching strings. Possible values are "sort" and "search"; the default is "sort".
+            </summary>
+        </member>
+        <member name="T:System.LocaleMatcher">
+            <summary>
+            The locale matching algorithm to use. Possible values are "lookup" and "best fit"; the default is "best fit". For information about this option, see the Intl page.
+            </summary>
+        </member>
+        <member name="F:System.LocaleMatcher.Lookup">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:System.LocaleMatcher.BestFit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:System.Date.#ctor(System.Double)">
+            <summary>
+            Double value representing the number of milliseconds since 1 January 1970 00:00:00 UTC (Unix Epoch).
+            </summary>
+            <param name="value">The numberof milliseconds since 1 January 1970 00:00:00 UTC (Unix Epoch)</param>
+        </member>
+        <member name="M:System.Date.#ctor(System.String)">
+            <summary>
+            String value representing a date. The string should be in a format recognized by the Date.parse() method (IETF-compliant RFC 2822 timestamps and also a version of ISO8601).
+            </summary>
+            <param name="dateString"></param>
+        </member>
+        <member name="T:System.String">
+            <summary>
+            The String global object is a constructor for strings, or a sequence of characters.
+            </summary>
+        </member>
+        <member name="M:System.String.#ctor">
+            <summary>
+            The String global object is a constructor for strings, or a sequence of characters.
+            </summary>
+        </member>
+        <member name="M:System.String.#ctor(System.Object)">
+            <summary>
+            The String global object is a constructor for strings, or a sequence of characters.
+            </summary>
+            <param name="thing">Anything to be converted to a string.</param>
+        </member>
+        <member name="M:System.String.FromCharCode(System.Int32[])">
+            <summary>
+            The static String.fromCharCode() method returns a string created by using the specified sequence of Unicode values.
+            </summary>
+            <param name="numbers">A sequence of numbers that are Unicode values.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.CharAt(System.Int32)">
+            <summary>
+            The charAt() method returns the specified character from a string.
+            </summary>
+            <param name="index">An integer between 0 and 1-less-than the length of the string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.CharCodeAt(System.Int32)">
+            <summary>
+            The charCodeAt() method returns the numeric Unicode value of the character at the given index (except for unicode codepoints > 0x10000).
+            </summary>
+            <param name="index">An integer greater than or equal to 0 and less than the length of the string; if it is not a number, it defaults to 0.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.String,System.String)">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="string2">Strings to concatenate to this string.</param>
+            <param name="string3">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.String,System.String,System.String)">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="string2">Strings to concatenate to this string.</param>
+            <param name="string3">Strings to concatenate to this string.</param>
+            <param name="string4">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.String,System.String,System.String,System.String)">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="string2">Strings to concatenate to this string.</param>
+            <param name="string3">Strings to concatenate to this string.</param>
+            <param name="string4">Strings to concatenate to this string.</param>
+            <param name="string5">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.String[])">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="strings">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.Object,System.Object)">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="object1">Strings to concatenate to this string.</param>
+            <param name="object2">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.Object,System.Object,System.Object)">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="object1">Strings to concatenate to this string.</param>
+            <param name="object2">Strings to concatenate to this string.</param>
+            <param name="object3">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="object1">Strings to concatenate to this string.</param>
+            <param name="object2">Strings to concatenate to this string.</param>
+            <param name="object3">Strings to concatenate to this string.</param>
+            <param name="object4">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Concat(System.Object[])">
+            <summary>
+            The concat() method combines the text of two or more strings and returns a new string.
+            </summary>
+            <param name="objects">Strings to concatenate to this string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.IndexOf(System.String)">
+            <summary>
+            The indexOf() method returns the index within the calling String object of the first occurrence of the specified value, starting the search at fromIndex. Returns -1 if the value is not found.
+            </summary>
+            <param name="searchValue">A string representing the value to search for.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.IndexOf(System.String,System.Int32)">
+            <summary>
+            The indexOf() method returns the index within the calling String object of the first occurrence of the specified value, starting the search at fromIndex. Returns -1 if the value is not found.
+            </summary>
+            <param name="searchValue">A string representing the value to search for.</param>
+            <param name="fromIndex">The location within the calling string to start the search from. It can be any integer. The default value is 0. If fromIndex &lt; 0 the entire string is searched (same as passing 0). If fromIndex &gt;= searchValue.length, the method will return -1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.LastIndexOf(System.String)">
+            <summary>
+            The lastIndexOf() method returns the index within the calling String object of the last occurrence of the specified value, or -1 if not found. The calling string is searched backward, starting at fromIndex.
+            </summary>
+            <param name=" searchValue">A string representing the value to search for.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.LastIndexOf(System.String,System.Int32)">
+            <summary>
+            The lastIndexOf() method returns the index within the calling String object of the last occurrence of the specified value, or -1 if not found. The calling string is searched backward, starting at fromIndex.
+            </summary>
+            <param name=" searchValue">A string representing the value to search for.</param>
+            <param name="fromIndex">The location within the calling string to start the search at, indexed from left to right. It can be any integer. The default value is searchValue.length - 1. If fromIndex &lt; 0 or fromIndex &gt;= searchValue.length, the method will return -1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.LocaleCompare(System.String)">
+            <summary>
+            The localeCompare() method returns a number indicating whether a reference string comes before or after or is the same as the given string in sort order.
+            The new locales and options arguments let applications specify the language whose sort order should be used and customize the behavior of the function. In older implementations, which ignore the locales and options arguments, the locale and sort order used are entirely implementation dependent.
+            </summary>
+            <param name="compareString">The string against which the referring string is comparing</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.LocaleCompare(System.String,System.String)">
+            <summary>
+            The localeCompare() method returns a number indicating whether a reference string comes before or after or is the same as the given string in sort order.
+            The new locales and options arguments let applications specify the language whose sort order should be used and customize the behavior of the function. In older implementations, which ignore the locales and options arguments, the locale and sort order used are entirely implementation dependent.
+            </summary>
+            <param name="compareString">The string against which the referring string is comparing</param>
+            <param name="locales">A string with a BCP 47 language tag, or an array of such strings. For the general form and interpretation of the locales argument, see the Intl page. The following Unicode extension keys are allowed:</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.LocaleCompare(System.String,System.String,System.LocaleOptions)">
+            <summary>
+            The localeCompare() method returns a number indicating whether a reference string comes before or after or is the same as the given string in sort order.
+            The new locales and options arguments let applications specify the language whose sort order should be used and customize the behavior of the function. In older implementations, which ignore the locales and options arguments, the locale and sort order used are entirely implementation dependent.
+            </summary>
+            <param name="compareString">The string against which the referring string is comparing</param>
+            <param name="locales">A string with a BCP 47 language tag, or an array of such strings. For the general form and interpretation of the locales argument, see the Intl page. The following Unicode extension keys are allowed:</param>
+            <param name="options">An object with some or all of the following properties:</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Match(System.Text.RegularExpressions.Regex)">
+            <summary>
+            The match() method retrieves the matches when matching a string against a regular expression.
+            </summary>
+            <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Match(System.String)">
+            <summary>
+            The match() method retrieves the matches when matching a string against a regular expression.
+            </summary>
+            <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
+            <param name="newSubStr">The String that replaces the substring received from parameter #1. A number of special replacement patterns are supported; see the "Specifying a string as a parameter" section below.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.Text.RegularExpressions.Regex,System.Delegate)">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.Text.RegularExpressions.Regex,System.Func{System.String,System.String})">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.Text.RegularExpressions.Regex,System.Func{System.String,System.Int32,System.String})">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.Text.RegularExpressions.Regex,System.Func{System.String,System.Int32,System.String,System.String})">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="Regex">A Regex object. The match is replaced by the return value of parameter #2.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.String,System.String)">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="substr">A String that is to be replaced by newSubStr.</param>
+            <param name="newSubStr">The String that replaces the substring received from parameter #1. A number of special replacement patterns are supported; see the "Specifying a string as a parameter" section below.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.String,System.Delegate)">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="substr">A String that is to be replaced by newSubStr.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.String,System.Func{System.String,System.String})">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="substr">A String that is to be replaced by newSubStr.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.String,System.Func{System.String,System.Int32,System.String})">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="substr">A String that is to be replaced by newSubStr.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Replace(System.String,System.Func{System.String,System.Int32,System.String,System.String})">
+            <summary>
+            The replace() method returns a new string with some or all matches of a pattern replaced by a replacement.  The pattern can be a string or a Regex, and the replacement can be a string or a function to be called for each match.
+            </summary>
+            <param name="substr">A String that is to be replaced by newSubStr.</param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Search(System.Text.RegularExpressions.Regex)">
+            <summary>
+            The search() method executes a search for a match between a regular expression and this String object.
+            </summary>
+            <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Search(System.String)">
+            <summary>
+            The search() method executes a search for a match between a regular expression and this String object.
+            </summary>
+            <param name="Regex">A regular expression object. If a non-Regex object obj is passed, it is implicitly converted to a Regex by using new Regex(obj).</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Slice(System.Int32)">
+            <summary>
+            The slice() method extracts a section of a string and returns a new string.
+            </summary>
+            <param name="beginSlice">The zero-based index at which to begin extraction. If negative, it is treated as (sourceLength-beginSlice) where sourceLength is the length of the string (for example, if beginSlice is -3 it is treated as sourceLength-3).</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Slice(System.Int32,System.Int32)">
+            <summary>
+            The slice() method extracts a section of a string and returns a new string.
+            </summary>
+            <param name="beginSlice">The zero-based index at which to begin extraction. If negative, it is treated as (sourceLength-beginSlice) where sourceLength is the length of the string (for example, if beginSlice is -3 it is treated as sourceLength-3).</param>
+            <param name="endSlice">The zero-based index at which to end extraction. If omitted, slice extracts to the end of the string. If negative, it is treated as (sourceLength-endSlice) where sourceLength is the length of the string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Split(System.String)">
+            <summary>
+            The split() method splits a String object into an array of strings by separating the string into substrings.
+            </summary>
+            <param name="separator">Specifies the character(s) to use for separating the string. The separator is treated as a string or a regular expression. If separator is omitted, the array returned contains one element consisting of the entire string. If separator is an empty string, str is converted to an array of characters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Split(System.Text.RegularExpressions.Regex)">
+            <summary>
+            The split() method splits a String object into an array of strings by separating the string into substrings.
+            </summary>
+            <param name="separator">Specifies the character(s) to use for separating the string. The separator is treated as a string or a regular expression. If separator is omitted, the array returned contains one element consisting of the entire string. If separator is an empty string, str is converted to an array of characters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Split(System.String,System.Int32)">
+            <summary>
+            The split() method splits a String object into an array of strings by separating the string into substrings.
+            </summary>
+            <param name="separator">Specifies the character(s) to use for separating the string. The separator is treated as a string or a regular expression. If separator is omitted, the array returned contains one element consisting of the entire string. If separator is an empty string, str is converted to an array of characters.</param>
+            <param name="limit">Integer specifying a limit on the number of splits to be found. The split method still splits on every match of separator, but it truncates the returned array to at most limit elements.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Split(System.Text.RegularExpressions.Regex,System.Int32)">
+            <summary>
+            The split() method splits a String object into an array of strings by separating the string into substrings.
+            </summary>
+            <param name="separator">Specifies the character(s) to use for separating the string. The separator is treated as a string or a regular expression. If separator is omitted, the array returned contains one element consisting of the entire string. If separator is an empty string, str is converted to an array of characters.</param>
+            <param name="limit">Integer specifying a limit on the number of splits to be found. The split method still splits on every match of separator, but it truncates the returned array to at most limit elements.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Substring(System.Int32)">
+            <summary>
+            The substring() method returns a subset of a string between one index and another, or through the end of the string.
+            </summary>
+            <param name="indexA">An integer between 0 and the length of the string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Substring(System.Int32,System.Int32)">
+            <summary>
+            The substring() method returns a subset of a string between one index and another, or through the end of the string.
+            </summary>
+            <param name="indexA">An integer between 0 and the length of the string.</param>
+            <param name="indexB">An integer between 0 and the length of the string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Substr(System.Int32)">
+            <summary>
+            The substr() method returns the characters in a string beginning at the specified location through the specified number of characters.
+            </summary>
+            <param name="start">Location at which to begin extracting characters. If a negative number is given, it is treated as strLength+start where strLength = to the length of the string (for example, if start is -3 it is treated as strLength-3.)</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.Substr(System.Int32,System.Int32)">
+            <summary>
+            The substr() method returns the characters in a string beginning at the specified location through the specified number of characters.
+            </summary>
+            <param name="start">Location at which to begin extracting characters. If a negative number is given, it is treated as strLength+start where strLength = to the length of the string (for example, if start is -3 it is treated as strLength-3.)</param>
+            <param name="length">The number of characters to extract.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.ToLowerCase">
+            <summary>
+            The toLowerCase() method returns the calling string value converted to lowercase.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.ToLocaleLowerCase">
+            <summary>
+            The toLocaleLowerCase() method returns the calling string value converted to lower case, according to any locale-specific case mappings.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.ToUpperCase">
+            <summary>
+            The toUpperCase() method returns the calling string value converted to uppercase.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.String.ToLocaleUpperCase">
+            <summary>
+            The toLocaleUpperCase() method returns the calling string value converted to upper case, according to any locale-specific case mappings.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:System.Threading.Tasks.IPromise">
+            <summary>
+            CommonJS Promise/A interface
+            http://wiki.commonjs.org/wiki/Promises/A
+            </summary>
+        </member>
+        <member name="M:System.Threading.Tasks.IPromise.Then(System.Delegate)">
+            <summary>
+            Adds a fulfilledHandler to be called for completion of a promise.
+            </summary>
+            <param name="fulfilledHandler">The fulfilledHandler is called when the promise is fulfilled</param>
+        </member>
+        <member name="M:System.Threading.Tasks.IPromise.Then(System.Delegate,System.Delegate)">
+            <summary>
+            Adds a fulfilledHandler, errorHandler to be called for completion of a promise.
+            </summary>
+            <param name="fulfilledHandler">The fulfilledHandler is called when the promise is fulfilled</param>
+            <param name="errorHandler">The errorHandler is called when a promise fails.</param>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.Created">
+            <summary> 
+            The task has been initialized but has not yet been scheduled.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.WaitingForActivation">
+            <summary> 
+            The task is waiting to be activated and scheduled internally by the .NET Framework infrastructure.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.WaitingToRun">
+            <summary>
+            The task has been scheduled for execution but has not yet begun executing.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.Running">
+            <summary>
+            The task is running but has not yet completed.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.WaitingForChildrenToComplete">
+            <summary>
+            The task has finished executing and is implicitly waiting for
+            attached child tasks to complete.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.RanToCompletion">
+            <summary>
+            The task completed execution successfully.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.Canceled">
+            <summary>
+            The task acknowledged cancellation by throwing an OperationCanceledException with its own CancellationToken
+            while the token was in signaled state, or the task's CancellationToken was already signaled before the
+            task started executing.
+            </summary>
+        </member>
+        <member name="F:System.Threading.Tasks.TaskStatus.Faulted">
+            <summary>
+            The task completed due to an unhandled exception.
+            </summary>
+        </member>
+    </members>
+</doc>
