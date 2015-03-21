@@ -17,12 +17,24 @@ namespace System
             return null; 
         }
 
+        public virtual object Apply()
+        {
+            return null;
+        }
         public virtual object Apply(object thisArg, Array args) 
         { 
             return null; 
         }
 
         public virtual object Call(object thisArg, params object[] args) 
+        { 
+            return null; 
+        }
+        public virtual object Call(object thisArg)
+        {
+            return null;
+        }
+        public virtual object Call()
         { 
             return null; 
         }

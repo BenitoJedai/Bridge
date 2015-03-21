@@ -866,7 +866,7 @@ Bridge.String = {
                     this[name] = config.properties[name];
                     
                     var rs = name.charAt(0) == "$",
-                        cap = name.charAt(rs ? 1 : 0).toUpperCase() + name.slice(rs ? 2 : 1);
+                        cap = rs ? name.slice(1) : name;
 
                     this["get" + cap] = (function (name) {
                         return function () {
@@ -898,6 +898,13 @@ Bridge.String = {
                             this[name] = Bridge.fn.remove(this[name], value);
                         };
                     })(name);
+                }
+            }
+            if (config.alias) {
+                for (name in config.alias) {
+                    if (this[name]) {
+                        this[name] = this[config.alias[name]];
+                    }
                 }
             }
 
@@ -2177,6 +2184,10 @@ Bridge.Class.define('Bridge.Int', {
 });
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);
 Bridge.Date = {    
+    utcNow:  function() {
+        var d = new Date();
+        return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
+    },
     today : function() {
         var d = new Date();
         return new Date(d.getFullYear(), d.getMonth(), d.getDate());
