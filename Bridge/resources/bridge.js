@@ -1423,7 +1423,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
                 timeSeparator: ":",
                 universalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
                 yearMonthPattern: "MMMM, yyyy",
-                roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffff"
+                roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffzzz"
             });
         }
     },
@@ -2431,7 +2431,8 @@ Bridge.Date = {
             neg,
             names,
             name,
-            invalid = false;
+            invalid = false,
+            inQuotes = false;
 
         if (str == null) {
             throw new Bridge.ArgumentNullException("str");
@@ -2570,8 +2571,8 @@ Bridge.Date = {
                 }
                 int += ss.length;
             }
-            else if (token == "fff" || token == "ff" || token == "f") {
-                ff = this.subparseInt(str, int, token.length, 3);
+            else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
+                ff = this.subparseInt(str, int, token.length, 7);
                 if (ff == null) {
                     invalid = true;
                     break;
@@ -2678,8 +2679,8 @@ Bridge.Date = {
             else {
                 name = str.substring(int, int + token.length);
 
-                if ((token == ":" && name != df.timeSeparator) ||
-                    (token == "/" && name != df.dateSeparator) ||
+                if ((!inQuotes && ((token == ":" && name != df.timeSeparator) ||
+                    (token == "/" && name != df.dateSeparator))) ||
                     (name != token && token != "'")) {
                     invalid = true;
                     break;
@@ -2687,6 +2688,9 @@ Bridge.Date = {
 
                 if (token != "'") {
                     int += token.length;
+                }
+                else {
+                    inQuotes = !inQuotes;
                 }
             }
         }
