@@ -1,5 +1,5 @@
 {
-    output: "bridge\\output"
+    output: "Bridge\\output"
     
     // Uncomment the following option to clean the output folder of JavaScript files.
     //, beforeBuild: "bridge\\build\\clean.bat"
