@@ -152,46 +152,34 @@
     <Compile Include="System\Void.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\Attribute.js" />
-    <Content Include="resources\Browser.js" />
-    <Content Include="resources\Class.js" />
-    <Content Include="resources\collections\EqualityComparer.js" />
-    <Content Include="resources\collections\List.js" />
-    <Content Include="resources\collections\ArrayEnumerator.js" />
-    <Content Include="resources\collections\CustomEnumerator.js" />
-    <Content Include="resources\collections\Dictionary.js" />
-    <Content Include="resources\collections\Interfaces.js" />
-    <Content Include="resources\Globalization.js" />
-    <Content Include="resources\Exception.js" />
-    <Content Include="resources\INotifyPropertyChanged.js" />
-    <Content Include="resources\Date.js" />
-    <Content Include="resources\locales\ru-RU.js" />
-    <Content Include="resources\text\StringBuilder.js" />
-    <Content Include="resources\TimeSpan.js" />
-    <Content Include="resources\Integer.js" />
-    <Content Include="resources\Interfaces.js" />
-    <Content Include="resources\String.js" />
-    <Content Include="resources\Task.js" />
-    <Content Include="resources\Nullable.js" />
-    <Content Include="resources\Core.js" />
-    <Content Include="resources\Validation.js" />
-    <EmbeddedResource Include="resources\bridge.js" />
-    <EmbeddedResource Include="resources\bridge.min.js" />
+    <Content Include="Resources\Attribute.js" />
+    <Content Include="Resources\Browser.js" />
+    <Content Include="Resources\Class.js" />
+    <Content Include="Resources\Collections\EqualityComparer.js" />
+    <Content Include="Resources\Collections\List.js" />
+    <Content Include="Resources\Collections\ArrayEnumerator.js" />
+    <Content Include="Resources\Collections\CustomEnumerator.js" />
+    <Content Include="Resources\Collections\Dictionary.js" />
+    <Content Include="Resources\Collections\Interfaces.js" />
+    <Content Include="Resources\Globalization.js" />
+    <Content Include="Resources\Exception.js" />
+    <Content Include="Resources\INotifyPropertyChanged.js" />
+    <Content Include="Resources\Date.js" />
+    <Content Include="Resources\Locales\ru-RU.js" />
+    <Content Include="Resources\Text\StringBuilder.js" />
+    <Content Include="Resources\TimeSpan.js" />
+    <Content Include="Resources\Integer.js" />
+    <Content Include="Resources\Interfaces.js" />
+    <Content Include="Resources\String.js" />
+    <Content Include="Resources\Task.js" />
+    <Content Include="Resources\Nullable.js" />
+    <Content Include="Resources\Core.js" />
+    <Content Include="Resources\Validation.js" />
+    <EmbeddedResource Include="Resources\bridge.js" />
+    <EmbeddedResource Include="Resources\bridge.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

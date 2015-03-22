@@ -10,13 +10,13 @@
   <file name="Integer.js" />
   <file name="Date.js" />
   <file name="TimeSpan.js" />
-  <file name="text/StringBuilder.js" />
-  <file name="collections/Interfaces.js" path="collections" />
-  <file name="collections/CustomEnumerator.js" path="collections" />
-  <file name="collections/ArrayEnumerator.js" path="collections" />
-  <file name="collections/EqualityComparer.js" path="collections" />
-  <file name="collections/Dictionary.js" path="collections" />
-  <file name="collections/List.js" path="collections" />
+  <file name="Text/StringBuilder.js" />
+  <file name="Collections/Interfaces.js" path="Collections" />
+  <file name="Collections/CustomEnumerator.js" path="Collections" />
+  <file name="Collections/ArrayEnumerator.js" path="Collections" />
+  <file name="Collections/EqualityComparer.js" path="Collections" />
+  <file name="Collections/Dictionary.js" path="Collections" />
+  <file name="Collections/List.js" path="Collections" />
   <file name="Browser.js" />
   <file name="Task.js" />
   <file name="Validation.js" />
@@ -33,14 +33,14 @@
     <include name="Integer.js" />
     <include name="Date.js" />
     <include name="TimeSpan.js" />
-    <include name="text/StringBuilder.js" />
+    <include name="Text/StringBuilder.js" />
     <include name="Browser.js" />
-    <include name="collections/Interfaces.js" />
-    <include name="collections/CustomEnumerator.js" />
-    <include name="collections/ArrayEnumerator.js" />
-    <include name="collections/EqualityComparer.js" />
-    <include name="collections/Dictionary.js" />
-    <include name="collections/List.js" />
+    <include name="Collections/Interfaces.js" />
+    <include name="Collections/CustomEnumerator.js" />
+    <include name="Collections/ArrayEnumerator.js" />
+    <include name="Collections/EqualityComparer.js" />
+    <include name="Collections/Dictionary.js" />
+    <include name="Collections/List.js" />
     <include name="Task.js" />
     <include name="Validation.js" />
     <include name="Attribute.js" />
