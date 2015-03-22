@@ -1220,6 +1220,7 @@ Bridge.Class.define('Bridge.ArgumentNullException', {
     constructor: function (paramName, message, innerException) {
         if (!message) {
             message = 'Value cannot be null.';
+
             if (paramName) {
                 message += '\nParameter name: ' + paramName;
             }
@@ -1257,6 +1258,7 @@ Bridge.Class.define('Bridge.CultureNotFoundException', {
     constructor: function (paramName, invalidCultureName, message, innerException) {
         if (!message) {
             message = 'Culture is not supported.';
+
             if (paramName) {
                 message += '\nParameter name: ' + paramName;
             }
