@@ -1,8 +1,8 @@
 /*
  * @version   : 1.0.0 - Bridge.NET
  * @author    : Object.NET, Inc. http://www.bridge.net/
- * @date      : 2015-03-11
- * @copyright : Copyright (c) 2008-2014, Object.NET, Inc. (http://www.object.net/). All rights reserved.
+ * @date      : 2015-03-23
+ * @copyright : Copyright (c) 2008-2015, Object.NET, Inc. (http://www.object.net/). All rights reserved.
  * @license   : See license.txt and https://github.com/bridgedotnet/Bridge.NET/blob/master/LICENSE.
  */
 
@@ -837,8 +837,10 @@ Bridge.String = {
         var value = arguments[0];
         if (this.$multipleCtors && arguments.length > 0 && typeof value == 'string') {
             value = value === "constructor" ? "$constructor" : value;
+
             if ((value === "$constructor" || Bridge.String.startsWith(value, "constructor\\$")) && Bridge.isFunction(this[value])) {
                 this[value].apply(this, Array.prototype.slice.call(arguments, 1));
+
                 return;
             }            
         }
@@ -851,6 +853,7 @@ Bridge.String = {
     Bridge.Class.initConfig = function (extend, base, config, statics, scope) {                
         scope.$initMembers = function () {
             var name;
+
             if (extend && !statics && base.$initMembers) {
                 base.$initMembers.apply(this, arguments);
             }
@@ -873,6 +876,7 @@ Bridge.String = {
                             return this[name];
                         };                        
                     })(name);
+
                     this["set" + cap] = (function (name) {
                         return function (value) {
                             this[name] = value;
@@ -893,6 +897,7 @@ Bridge.String = {
                             this[name] = Bridge.fn.combine(this[name], value);
                         };
                     })(name);
+
                     this["remove" + cap] = (function (name) {
                         return function (value) {
                             this[name] = Bridge.fn.remove(this[name], value);
@@ -976,6 +981,7 @@ Bridge.String = {
 
         if (statics) {
             var staticsConfig = statics.$config || statics.config;
+
             if (staticsConfig && !Bridge.isFunction(staticsConfig)) {
                 Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
 
@@ -989,6 +995,7 @@ Bridge.String = {
         }        
 
         var instanceConfig = prop.$config || prop.config;
+
         if (instanceConfig && !Bridge.isFunction(instanceConfig)) {
             Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
 
@@ -1009,9 +1016,11 @@ Bridge.String = {
 
         // Copy the properties over onto the new prototype
         ctorCounter = 0;
+
         for (name in prop) {            
             v = prop[name];
             isCtor = name === "constructor";
+
             if (Bridge.isFunction(v) && (isCtor || Bridge.String.startsWith(name, "constructor\\$"))) {
                 ctorCounter++;
             }
@@ -1106,9 +1115,11 @@ Bridge.String = {
 
     Bridge.Class.genericName = function () {
         var name = arguments[0];
+
         for (var i = 1; i < arguments.length; i++) {
             name += '$' + Bridge.getTypeName(arguments[i]);
         }
+
         return name;
     };
 
@@ -1119,6 +1130,7 @@ Bridge.String = {
         }
 
         Bridge.Class.set(scope, className, fn);
+
         return fn;
     };
 })();
@@ -1223,6 +1235,7 @@ Bridge.Class.define('Bridge.ArgumentOutOfRangeException', {
     constructor: function (paramName, message, innerException, actualValue) {
         if (!message) {
             message = 'Value is out of range.';
+
             if (paramName) {
                 message += '\nParameter name: ' + paramName;
             }
@@ -1247,6 +1260,7 @@ Bridge.Class.define('Bridge.CultureNotFoundException', {
             if (paramName) {
                 message += '\nParameter name: ' + paramName;
             }
+
             if (invalidCultureName) {
                 message += '\n' + invalidCultureName + ' is an invalid culture identifier.';
             }            
@@ -1440,7 +1454,8 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
     getAbbreviatedDayName: function (dayofweek) {
         if (dayofweek < 0 || dayofweek > 6) {
             throw new Bridge.ArgumentOutOfRangeException("dayofweek");
-        }        
+        }
+
         return this.abbreviatedDayNames[dayofweek];
     },
 
@@ -1448,6 +1463,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
         if (month < 1 || month > 13) {
             throw new Bridge.ArgumentOutOfRangeException("month");
         }
+
         return this.abbreviatedMonthNames[month - 1];
     },
 
@@ -1464,6 +1480,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
                 if (returnNull) {
                     return null;
                 }
+
                 throw new Bridge.ArgumentException(null, "format");
             }
 
@@ -1477,6 +1494,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
         for (f in formats) {
             names = formats[f].split(" ");
             pattern = "";
+
             for (i = 0; i < names.length; i++) {
                 pattern = (i == 0 ? "" : (pattern + " ")) + this[names[i]];
             }
@@ -1499,6 +1517,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
         if (month < 1 || month > 13) {
             throw new Bridge.ArgumentOutOfRangeException("month");
         }
+
         return this.monthNames[month-1];
     },
 
@@ -1506,6 +1525,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
         if (dayOfWeek < 0 || dayOfWeek > 6) {
             throw new Bridge.ArgumentOutOfRangeException("dayOfWeek");
         }
+
         return this.shortestDayNames[dayOfWeek];
     },
 
@@ -1649,6 +1669,7 @@ Bridge.Class.define("Bridge.CultureInfo", {
             if (!name) {
                 throw new Bridge.ArgumentNullException("name");
             }
+
             return this.cultures[name];
         },
 
@@ -1656,6 +1677,7 @@ Bridge.Class.define("Bridge.CultureInfo", {
             var names = Bridge.getPropertyNames(this.cultures),
                 result = [],
                 i;
+
             for (i = 0; i < names.length; i++) {
                 result.push(this.cultures[names[i]]);
             }
@@ -1792,6 +1814,7 @@ Bridge.Class.define('Bridge.Int', {
                         }
                         
                         precision -= result.length;
+
                         while (precision-- > 0) {
                             result = "0" + result;
                         }
@@ -1801,6 +1824,7 @@ Bridge.Class.define('Bridge.Int', {
                         if (isNaN(precision)) {
                             precision = nf.currencyDecimalDigits;
                         }
+
                         return this.defaultFormat(number, 1, precision, precision, nf, false, "currency");
                     case "R":
                         return "" + number;
@@ -1828,6 +1852,7 @@ Bridge.Class.define('Bridge.Int', {
             }
 
             groups = format.split(";");
+
             if (number < 0 && groups.length > 1) {
                 number *= -1;
                 format = groups[1];
@@ -1886,6 +1911,7 @@ Bridge.Class.define('Bridge.Int', {
 
             groupIndex = 0;
             groupSize = groups[groupIndex];
+
             if (str.length < groupSize) {
                 buffer = str;
 
@@ -1897,9 +1923,11 @@ Bridge.Class.define('Bridge.Int', {
                 index = str.length;
                 done = false;
                 sep = noGroup ? "" : nf[name + "GroupSeparator"];
+
                 while (!done) {
                     length = groupSize;
                     startIndex = index - length;
+
                     if (startIndex < 0) {
                         groupSize += startIndex;
                         length += startIndex;
@@ -1912,12 +1940,14 @@ Bridge.Class.define('Bridge.Int', {
                     }
 
                     part = str.substr(startIndex, length);
+
                     if (buffer.length) {
                         buffer = part + sep + buffer;
                     }
                     else {
                         buffer = part;
                     }
+
                     index -= length;
 
                     if (groupIndex < groups.length - 1) {
@@ -1933,10 +1963,12 @@ Bridge.Class.define('Bridge.Int', {
 
             if (number < 0) {
                 negPattern = Bridge.NumberFormatInfo[name + "NegativePatterns"][nf[name + "NegativePattern"]];                
+
                 return negPattern.replace("-", nf.negativeSign).replace("%", nf.percentSymbol).replace("$", nf.currencySymbol).replace("n", buffer);
             }
             else if (Bridge.NumberFormatInfo[name + "PositivePatterns"]) {
                 negPattern = Bridge.NumberFormatInfo[name + "PositivePatterns"][nf[name + "PositivePattern"]];
+
                 return negPattern.replace("%", nf.percentSymbol).replace("$", nf.currencySymbol).replace("n", buffer);
             }
         
@@ -1961,6 +1993,7 @@ Bridge.Class.define('Bridge.Int', {
                 buffer = "";
 
             name = "number";
+
             if (format.indexOf("%") !== -1) {
                 name = "percent";
             }
@@ -1973,6 +2006,7 @@ Bridge.Class.define('Bridge.Int', {
             
                 if (c == "'" || c == '"') {                
                     i = format.indexOf(c, i + 1);
+
                     if (i < 0) {
                         break;
                     }
@@ -2017,7 +2051,8 @@ Bridge.Class.define('Bridge.Int', {
             inString = 0;
         
             for (f = 0; f < format.length; f++) {
-                c = format.charAt(f);        
+                c = format.charAt(f);
+
                 if (c == "'" || c == '"') {
                     endIndex = format.indexOf(c, f + 1);
                 
@@ -2026,17 +2061,20 @@ Bridge.Class.define('Bridge.Int', {
                     if (endIndex < 0) {
                         break;
                     }
-                    f = endIndex;                    
+
+                    f = endIndex;
                 } else if (c == "\\") {
                     buffer += format.charAt(f + 1);
                     f++;
                 } else if (c == "#" || c == "0") {
                     groupCfg.buffer = buffer;
+
                     if (i < integralDigits) {
                         if (i >= 0) {
                             if (unused) {
                                 this.addGroup(number.substr(0, i), groupCfg);
                             }
+
                             this.addGroup(number.charAt(i), groupCfg);
                         } else if (i >= integralDigits - forcedDigits) {
                             this.addGroup("0", groupCfg);
@@ -2107,10 +2145,13 @@ Bridge.Class.define('Bridge.Int', {
 
         tryParseFloat: function (str, provider, result) {
             result.v = 0;
+
             if (str == null) {
                 return false;
             }
+
             var nfInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo);
+
             result.v = parseFloat(str.replace(nfInfo.numberDecimalSeparator, '.'));
 
             if (isNaN(result.v) && str !== nfInfo.nanSymbol) {
@@ -2138,7 +2179,9 @@ Bridge.Class.define('Bridge.Int', {
             if (!/^[+-]?[0-9]+$/.test(str)) {
                 throw new Bridge.FormatException("Input string was not in a correct format.");
             }
+
             var result = parseInt(str, radix || 10);
+
             if (isNaN(result)) {
                 throw new Bridge.FormatException("Input string was not in a correct format.");
             }
@@ -2146,18 +2189,23 @@ Bridge.Class.define('Bridge.Int', {
             if (result < min || result > max) {
                 throw new Bridge.OverflowException();
             }
+
             return result;
         },
 
         tryParseInt: function (str, result, min, max, radix) {
             result.v = 0;
+
             if (!/^[+-]?[0-9]+$/.test(str)) {
                 return false;
             }
+
             result.v = parseInt(str, radix || 10);
+
             if (result.v < min || result.v > max) {
                 return false;
             }
+
             return true;
         },
 
@@ -2182,14 +2230,18 @@ Bridge.Class.define('Bridge.Int', {
         }
     }
 });
+
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);
 Bridge.Date = {    
     utcNow:  function () {
         var d = new Date();
+
         return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
     },
+
     today: function () {
         var d = new Date();
+
         return new Date(d.getFullYear(), d.getMonth(), d.getDate());
     },
 
@@ -2204,6 +2256,7 @@ Bridge.Date = {
             while (--i >= 0 && format[i] == patternToMatch) {
                 repeat++;
             }
+
             if (repeat <= 1) {
                 return true;
             }
@@ -2213,10 +2266,12 @@ Bridge.Date = {
         }
 
         if (i < format.length) {
-            repeat = 0;                
+            repeat = 0;
+
             while (++i < format.length && format[i] == patternToMatch) {
                 repeat++;
             }
+
             if (repeat <= 1) {
                 return true;
             }
@@ -2251,18 +2306,23 @@ Bridge.Date = {
         return format.replace(/(\\.|'[^']*'|"[^"]*"|d{1,4}|M{1,4}|yyyy|yy|y|HH?|hh?|mm?|ss?|tt?|f{1,3}|z{1,3}|\:|\/)/g,
 			function (match, group, index) {
 			    var part = match;
+
 			    switch (match) {
 			        case "dddd":
 			            part = df.dayNames[dayOfWeek];
+
 			            break;
 			        case "ddd":
 			            part = df.abbreviatedDayNames[dayOfWeek];
+
 			            break;
 			        case "dd":
 			            part = dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth;
+
 			            break;
 			        case "d":
 			            part = dayOfMonth;
+
 			            break;
 			        case "MMMM":
 			            if (me.isUseGenitiveForm(format, index, 4, "d")) {
@@ -2271,6 +2331,7 @@ Bridge.Date = {
 			            else {
 			                part = df.monthNames[month];
 			            }
+
 			            break;
 			        case "MMM":
 			            if (me.isUseGenitiveForm(format, index, 3, "d")) {
@@ -2279,58 +2340,74 @@ Bridge.Date = {
 			            else {
 			                part = df.abbreviatedMonthNames[month];
 			            }
+
 			            break;
 			        case "MM":
 			            part = (month + 1) < 10 ? "0" + (month + 1) : (month + 1);
+
 			            break;
 			        case "M":
 			            part = month + 1;
+
 			            break;
 			        case "yyyy":
 			            part = year;
+
 			            break;
 			        case "yy":
 			            part = (year % 100).toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "y":
 			            part = year % 100;
+
 			            break;
 			        case "h":
 			        case "hh":
 			            part = hour % 12;
+
 			            if (!part) {
 			                part = "12";
 			            }
 			            else if (match == "hh" && part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "HH":
 			            part = hour.toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "H":
 			            part = hour;
 			            break;
 			        case "mm":
 			            part = minute.toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "m":
 			            part = minute;
+
 			            break;
 			        case "ss":
 			            part = second.toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "s":
 			            part = second;
@@ -2338,14 +2415,17 @@ Bridge.Date = {
 			        case "t":
 			        case "tt":
 			            part = (hour < 12) ? df.amDesignator : df.pmDesignator;
+
 			            if (match == "t") {
 			                part = part.charAt(0);
 			            }
+
 			            break;
 			        case "f":
 			        case "ff":
 			        case "fff":
 			            part = millisecond.toString();
+
 			            if (part.length < 3) {
 			                part = Array(3 - part.length).join("0") + part;
 			            }
@@ -2356,27 +2436,34 @@ Bridge.Date = {
 			            else if (match == "f") {
 			                part = part.charAt(0);
 			            }
+
 			            break;
 			        case "z":
 			            part = timezoneOffset / 60;
 			            part = ((part >= 0) ? "-" : "+") + Math.floor(Math.abs(part));
+
 			            break;
 			        case "zz":
 			        case "zzz":
 			            part = timezoneOffset / 60;			            
 			            part = ((part >= 0) ? "-" : "+") + Bridge.String.alignString(Math.floor(Math.abs(part)).toString(), 2, "0", 2);
+
 			            if (match == "zzz") {
 			                part += df.timeSeparator + Bridge.String.alignString(Math.floor(Math.abs(timezoneOffset % 60)).toString(), 2, "0", 2);
 			            }
+
 			            break;
 			        case ":":
 			            part = df.timeSeparator;
+
 			            break;
 			        case "/":
 			            part = df.dateSeparator;
+
 			            break;
 			        default:
 			            part = match.substr(1, match.length - 1 - (match.charAt(0) != "\\"));
+
 			            break;
 			    }
 
@@ -2394,9 +2481,12 @@ Bridge.Date = {
         }
 
         if (Bridge.isArray(format)) {
-            var i, d;
+            var i,
+                d;
+
             for (i = 0; i < format.length; i++) {
                 d = Bridge.Date.parseExact(str, format[i], provider, true);
+
                 if (d != null) {
                     return d;
                 }
@@ -2405,6 +2495,7 @@ Bridge.Date = {
             if (silent) {
                 return null;
             }
+
             throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
         }
 
@@ -2474,6 +2565,7 @@ Bridge.Date = {
                 }
 
                 int += year.length;
+
                 if (year.length == 2) {
                     year = ~~year;
                     year = (year > 30 ? 1900 : 2000) + year;
@@ -2501,24 +2593,30 @@ Bridge.Date = {
                 
                 for (i = 0; i < names.length; i++) {
                     name = names[i];
+
                     if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {
                         month = (i % 12) + 1;
                         int += name.length;
+
                         break;
                     }
                 }
 
                 if ((month < 1) || (month > 12)) {
                     invalid = true;
+
                     break;
                 }
             }
             else if (token == "MM" || token == "M") {
                 month = this.subparseInt(str, int, token.length, 2);
+
                 if (month == null || month < 1 || month > 12) {
                     invalid = true;
+
                     break;
                 }
+
                 int += month.length;
             }
             else if (token == "dddd" || token == "ddd") {
@@ -2526,57 +2624,76 @@ Bridge.Date = {
 
                 for (i = 0; i < names.length; i++) {
                     name = names[i];
+
                     if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {                        
                         int += name.length;
+
                         break;
                     }
                 }
             }
             else if (token == "dd" || token == "d") {
                 date = this.subparseInt(str, int, token.length, 2);
+
                 if (date == null || date < 1 || date > 31) {
                     invalid = true;
+
                     break;
                 }
+
                 int += date.length;
             }
             else if (token == "hh" || token == "h") {
                 hh = this.subparseInt(str, int, token.length, 2);
+
                 if (hh == null || hh < 1 || hh > 12) {
                     invalid = true;
+
                     break;
                 }
+
                 int += hh.length;
             }
             else if (token == "HH" || token == "H") {
                 hh = this.subparseInt(str, int, token.length, 2);
+
                 if (hh == null || hh < 0 || hh > 23) {
                     invalid = true;
+
                     break;
                 }
+
                 int += hh.length;
             }
             else if (token == "mm" || token == "m") {
                 mm = this.subparseInt(str, int, token.length, 2);
+
                 if (mm == null || mm < 0 || mm > 59) {
                     return null;
                 }
+
                 int += mm.length;
             }
             else if (token == "ss" || token == "s") {
                 ss = this.subparseInt(str, int, token.length, 2);
+
                 if (ss == null || ss < 0 || ss > 59) {
                     invalid = true;
+
                     break;
                 }
+
                 int += ss.length;
             }
             else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
                 ff = this.subparseInt(str, int, token.length, 7);
+
                 if (ff == null) {
                     invalid = true;
+
                     break;
                 }
+
                 int += ff.length;
             }
             else if (token == "t") {
@@ -2588,8 +2705,10 @@ Bridge.Date = {
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
+
                 int += 1;
             }
             else if (token == "tt") {
@@ -2601,12 +2720,15 @@ Bridge.Date = {
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
+
                 int += 2;
             }
             else if (token == "z" || token == "zz") {
                 sign = str.charAt(int);
+
                 if (sign == "-") {
                     neg = true;
                 }
@@ -2615,15 +2737,20 @@ Bridge.Date = {
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
+
                 int++;
 
                 zzh = this.subparseInt(str, int, 1, 2);
+
                 if (zzh == null || zzh > 14) {
                     invalid = true;
+
                     break;
                 }
+
                 int += zzh.length;
 
                 if (neg) {
@@ -2636,10 +2763,12 @@ Bridge.Date = {
 
                 if (name.length != 6) {
                     invalid = true;
+
                     break;
                 }
 
                 sign = name.charAt(0);
+
                 if (sign == "-") {
                     neg = true;
                 }
@@ -2648,15 +2777,19 @@ Bridge.Date = {
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
 
                 zzi = 1;
                 zzh = this.subparseInt(name, zzi, 1, 2);
+
                 if (zzh == null || zzh > 14) {
                     invalid = true;
+
                     break;
                 }
+
                 zzi += zzh.length;
 
                 if (neg) {
@@ -2665,14 +2798,17 @@ Bridge.Date = {
 
                 if (name.charAt(zzi) != df.timeSeparator) {
                     invalid = true;
+
                     break;
                 }
 
                 zzi++;
 
                 zzm = this.subparseInt(name, zzi, 1, 2);
+
                 if (zzm == null || zzh > 59) {
                     invalid = true;
+
                     break;
                 }                
             }
@@ -2683,6 +2819,7 @@ Bridge.Date = {
                     (token == "/" && name != df.dateSeparator))) ||
                     (name != token && token != "'")) {
                     invalid = true;
+
                     break;
                 }
 
@@ -2720,6 +2857,7 @@ Bridge.Date = {
             if (silent) {
                 return null;
             }
+
             throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
         }
         
@@ -2743,13 +2881,16 @@ Bridge.Date = {
 
         for (x = max; x >= min; x--) {
             token = str.substring(index, index + x);
+
             if (token.length < min) {
                 return null;
             }
+
             if (/^\d+$/.test(token)) {
                 return token;
             }
         }
+
         return null;
     },
 
@@ -2758,6 +2899,7 @@ Bridge.Date = {
         
         if (result.v == null) {
             result.v = new Date(-864e13);
+
             return false;
         }
 
@@ -2769,6 +2911,7 @@ Bridge.Date = {
 
         if (result.v == null) {
             result.v = new Date(-864e13);
+
             return false;
         }
 
@@ -2777,6 +2920,7 @@ Bridge.Date = {
 
     isDaylightSavingTime: function (dt) {
         var temp = Bridge.Date.today();
+
         temp.setMonth(0);
         temp.setDate(1);
 
@@ -3022,16 +3166,20 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
 
     getLength: function () {
         if (this.buffer.length < 2) {
-            return (this.buffer[0]) ? this.buffer[0].length : 0;
+            return this.buffer[0] ? this.buffer[0].length : 0;
         }
+
         var s = this.buffer.join('');
+
         this.buffer = [];
         this.buffer[0] = s;
+
         return s.length;
     },
 
     toString: function () {
         var s = this.buffer.join('');
+
         this.buffer = [];    
         this.buffer[0] = s;
 
@@ -3040,8 +3188,10 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
                 length = arguments[1];
             
             this.checkLimits(s, startIndex, length);
+
             return s.substr(startIndex, length);
         }
+
         return s;
     },
 
@@ -3054,11 +3204,13 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
             // append a char repeated count times
             var count = arguments[1];
 
-            if (count == 0)
+            if (count == 0) {
                 return this;
+            }
             else if (count < 0) {
                 throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
             }
+
             value = Array(count + 1).join(value).toString();
         }
         else if (arguments.length == 3) {
@@ -3066,14 +3218,16 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
             var startIndex = arguments[1],
                 count = arguments[2];
             
-            if (count == 0)
+            if (count == 0) {
                 return this;
+            }
 
             this.checkLimits(value, startIndex, count);
             value = value.substr(startIndex, count);
         }
 
         this.buffer[this.buffer.length] = value;
+
         return this;
     },
 
@@ -3083,6 +3237,7 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
 
     clear: function () {
         this.buffer = [];
+
         return this;
     },
 
@@ -3090,15 +3245,20 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
         if (arguments.length == 1) {
             this.append(arguments[0]);
         }
+
         return this.append("\r\n");
     },
 
     equals: function (sb) {
-        if (sb == null)
+        if (sb == null) {
             return false;
-        if (sb == this)
+        }
+
+        if (sb == this) {
             return true;
-        return (this.toString() === sb.toString());
+        }
+
+        return this.toString() === sb.toString();
     },
 
     remove: function (startIndex, length) {
@@ -3116,6 +3276,7 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
             this.buffer[0] = s.substring(0, startIndex);
             this.buffer[1] = s.substring(startIndex + length, s.length);
         }
+
         return this;
     },
 
@@ -3127,11 +3288,14 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
         if (arguments.length == 3) {
             // insert value repeated count times 
             var count = arguments[2];
-            if (count == 0)
+
+            if (count == 0) {
                 return this;
+            }
             else if (count < 0) {
                 throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
             }
+
             value = Array(count + 1).join(value).toString();
         }
 
@@ -3151,6 +3315,7 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
             this.buffer[1] = value;
             this.buffer[2] = s.substring(index, s.length);
         }
+
         return this;
     },
 
@@ -3162,11 +3327,11 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
 
         if (arguments.length == 4) {
             var startIndex = arguments[2],
-                count = arguments[3];
+                count = arguments[3],
+                b = s.substr(startIndex, count);
 
             this.checkLimits(s, startIndex, count);
 
-            var b = s.substr(startIndex, count);
             this.buffer[0] = s.substring(0, startIndex);
             this.buffer[1] = b.replace(r, newValue);
             this.buffer[2] = s.substring(startIndex + count, s.length);
@@ -3174,6 +3339,7 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
         else {
             this.buffer[0] = s.replace(r, newValue);
         }
+
         return this;
     },
 
@@ -3195,126 +3361,126 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
 // @source resources/Browser.js
 
 (function () {
-  var check = function (regex) {
-    return regex.test(navigator.userAgent);
-  },
+    var check = function (regex) {
+        return regex.test(navigator.userAgent);
+    },
 
-  isStrict = document.compatMode == 'CSS1Compat',
+    isStrict = document.compatMode == 'CSS1Compat',
 
-  version = function (is, regex) {
-    var m;
+    version = function (is, regex) {
+        var m;
 
-    return (is && (m = regex.exec(navigator.userAgent))) ? parseFloat(m[1]) : 0;
-  },
+        return (is && (m = regex.exec(navigator.userAgent))) ? parseFloat(m[1]) : 0;
+    },
 
-  docMode = document.documentMode,
-  isOpera = check(/opera/),
-  isOpera10_5 = isOpera && check(/version\/10\.5/),
-  isChrome = check(/\bchrome\b/),
-  isWebKit = check(/webkit/),
-  isSafari = !isChrome && check(/safari/),
-  isSafari2 = isSafari && check(/applewebkit\/4/),
-  isSafari3 = isSafari && check(/version\/3/),
-  isSafari4 = isSafari && check(/version\/4/),
-  isSafari5_0 = isSafari && check(/version\/5\.0/),
-  isSafari5 = isSafari && check(/version\/5/),
-  isIE = !isOpera && (check(/msie/) || check(/trident/)),
-  isIE7 = isIE && ((check(/msie 7/) && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 7),
-  isIE8 = isIE && ((check(/msie 8/) && docMode != 7 && docMode != 9 && docMode != 10) || docMode == 8),
-  isIE9 = isIE && ((check(/msie 9/) && docMode != 7 && docMode != 8 && docMode != 10) || docMode == 9),
-  isIE10 = isIE && ((check(/msie 10/) && docMode != 7 && docMode != 8 && docMode != 9) || docMode == 10),
-  isIE11 = isIE && ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
-  isIE6 = isIE && check(/msie 6/),
-  isGecko = !isWebKit && !isIE && check(/gecko/),
-  isGecko3 = isGecko && check(/rv:1\.9/),
-  isGecko4 = isGecko && check(/rv:2\.0/),
-  isGecko5 = isGecko && check(/rv:5\./),
-  isGecko10 = isGecko && check(/rv:10\./),
-  isFF3_0 = isGecko3 && check(/rv:1\.9\.0/),
-  isFF3_5 = isGecko3 && check(/rv:1\.9\.1/),
-  isFF3_6 = isGecko3 && check(/rv:1\.9\.2/),
-  isWindows = check(/windows|win32/),
-  isMac = check(/macintosh|mac os x/),
-  isLinux = check(/linux/),
-  scrollbarSize = null,
-  chromeVersion = version(true, /\bchrome\/(\d+\.\d+)/),
-  firefoxVersion = version(true, /\bfirefox\/(\d+\.\d+)/),
-  ieVersion = version(isIE, /msie (\d+\.\d+)/),
-  operaVersion = version(isOpera, /version\/(\d+\.\d+)/),
-  safariVersion = version(isSafari, /version\/(\d+\.\d+)/),
-  webKitVersion = version(isWebKit, /webkit\/(\d+\.\d+)/),
-  isSecure = /^https/i.test(window.location.protocol),
-  isiPhone = /iPhone/i.test(navigator.platform),
-  isiPod = /iPod/i.test(navigator.platform),
-  isiPad = /iPad/i.test(navigator.userAgent),
-  isBlackberry = /Blackberry/i.test(navigator.userAgent),
-  isAndroid = /Android/i.test(navigator.userAgent),
-  isDesktop = isMac || isWindows || (isLinux && !isAndroid),
-  isTablet = isiPad,
-  isPhone = !isDesktop && !isTablet;
+    docMode = document.documentMode,
+    isOpera = check(/opera/),
+    isOpera10_5 = isOpera && check(/version\/10\.5/),
+    isChrome = check(/\bchrome\b/),
+    isWebKit = check(/webkit/),
+    isSafari = !isChrome && check(/safari/),
+    isSafari2 = isSafari && check(/applewebkit\/4/),
+    isSafari3 = isSafari && check(/version\/3/),
+    isSafari4 = isSafari && check(/version\/4/),
+    isSafari5_0 = isSafari && check(/version\/5\.0/),
+    isSafari5 = isSafari && check(/version\/5/),
+    isIE = !isOpera && (check(/msie/) || check(/trident/)),
+    isIE7 = isIE && ((check(/msie 7/) && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 7),
+    isIE8 = isIE && ((check(/msie 8/) && docMode != 7 && docMode != 9 && docMode != 10) || docMode == 8),
+    isIE9 = isIE && ((check(/msie 9/) && docMode != 7 && docMode != 8 && docMode != 10) || docMode == 9),
+    isIE10 = isIE && ((check(/msie 10/) && docMode != 7 && docMode != 8 && docMode != 9) || docMode == 10),
+    isIE11 = isIE && ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
+    isIE6 = isIE && check(/msie 6/),
+    isGecko = !isWebKit && !isIE && check(/gecko/),
+    isGecko3 = isGecko && check(/rv:1\.9/),
+    isGecko4 = isGecko && check(/rv:2\.0/),
+    isGecko5 = isGecko && check(/rv:5\./),
+    isGecko10 = isGecko && check(/rv:10\./),
+    isFF3_0 = isGecko3 && check(/rv:1\.9\.0/),
+    isFF3_5 = isGecko3 && check(/rv:1\.9\.1/),
+    isFF3_6 = isGecko3 && check(/rv:1\.9\.2/),
+    isWindows = check(/windows|win32/),
+    isMac = check(/macintosh|mac os x/),
+    isLinux = check(/linux/),
+    scrollbarSize = null,
+    chromeVersion = version(true, /\bchrome\/(\d+\.\d+)/),
+    firefoxVersion = version(true, /\bfirefox\/(\d+\.\d+)/),
+    ieVersion = version(isIE, /msie (\d+\.\d+)/),
+    operaVersion = version(isOpera, /version\/(\d+\.\d+)/),
+    safariVersion = version(isSafari, /version\/(\d+\.\d+)/),
+    webKitVersion = version(isWebKit, /webkit\/(\d+\.\d+)/),
+    isSecure = /^https/i.test(window.location.protocol),
+    isiPhone = /iPhone/i.test(navigator.platform),
+    isiPod = /iPod/i.test(navigator.platform),
+    isiPad = /iPad/i.test(navigator.userAgent),
+    isBlackberry = /Blackberry/i.test(navigator.userAgent),
+    isAndroid = /Android/i.test(navigator.userAgent),
+    isDesktop = isMac || isWindows || (isLinux && !isAndroid),
+    isTablet = isiPad,
+    isPhone = !isDesktop && !isTablet;
 
-  Bridge.Browser = {
-    isStrict: isStrict,
-    isIEQuirks: isIE && (!isStrict && (isIE6 || isIE7 || isIE8 || isIE9)),
-    isOpera: isOpera,
-    isOpera10_5: isOpera10_5,
-    isWebKit: isWebKit,
-    isChrome: isChrome,
-    isSafari: isSafari,
-    isSafari3: isSafari3,
-    isSafari4: isSafari4,
-    isSafari5: isSafari5,
-    isSafari5_0: isSafari5_0,
-    isSafari2: isSafari2,
-    isIE: isIE,
-    isIE6: isIE6,
-    isIE7: isIE7,
-    isIE7m: isIE6 || isIE7,
-    isIE7p: isIE && !isIE6,
-    isIE8: isIE8,
-    isIE8m: isIE6 || isIE7 || isIE8,
-    isIE8p: isIE && !(isIE6 || isIE7),
-    isIE9: isIE9,
-    isIE9m: isIE6 || isIE7 || isIE8 || isIE9,
-    isIE9p: isIE && !(isIE6 || isIE7 || isIE8),
-    isIE10: isIE10,
-    isIE10m: isIE6 || isIE7 || isIE8 || isIE9 || isIE10,
-    isIE10p: isIE && !(isIE6 || isIE7 || isIE8 || isIE9),
-    isIE11: isIE11,
-    isIE11m: isIE6 || isIE7 || isIE8 || isIE9 || isIE10 || isIE11,
-    isIE11p: isIE && !(isIE6 || isIE7 || isIE8 || isIE9 || isIE10),
-    isGecko: isGecko,
-    isGecko3: isGecko3,
-    isGecko4: isGecko4,
-    isGecko5: isGecko5,
-    isGecko10: isGecko10,
-    isFF3_0: isFF3_0,
-    isFF3_5: isFF3_5,
-    isFF3_6: isFF3_6,
-    isFF4: 4 <= firefoxVersion && firefoxVersion < 5,
-    isFF5: 5 <= firefoxVersion && firefoxVersion < 6,
-    isFF10: 10 <= firefoxVersion && firefoxVersion < 11,
-    isLinux: isLinux,
-    isWindows: isWindows,
-    isMac: isMac,
-    chromeVersion: chromeVersion,
-    firefoxVersion: firefoxVersion,
-    ieVersion: ieVersion,
-    operaVersion: operaVersion,
-    safariVersion: safariVersion,
-    webKitVersion: webKitVersion,
-    isSecure: isSecure,
-    isiPhone: isiPhone,
-    isiPod: isiPod,
-    isiPad: isiPad,
-    isBlackberry: isBlackberry,
-    isAndroid: isAndroid,
-    isDesktop: isDesktop,
-    isTablet: isTablet,
-    isPhone: isPhone,
-    iOS: isiPhone || isiPad || isiPod,
-    standalone: !!window.navigator.standalone
-  };
+    Bridge.Browser = {
+        isStrict: isStrict,
+        isIEQuirks: isIE && (!isStrict && (isIE6 || isIE7 || isIE8 || isIE9)),
+        isOpera: isOpera,
+        isOpera10_5: isOpera10_5,
+        isWebKit: isWebKit,
+        isChrome: isChrome,
+        isSafari: isSafari,
+        isSafari3: isSafari3,
+        isSafari4: isSafari4,
+        isSafari5: isSafari5,
+        isSafari5_0: isSafari5_0,
+        isSafari2: isSafari2,
+        isIE: isIE,
+        isIE6: isIE6,
+        isIE7: isIE7,
+        isIE7m: isIE6 || isIE7,
+        isIE7p: isIE && !isIE6,
+        isIE8: isIE8,
+        isIE8m: isIE6 || isIE7 || isIE8,
+        isIE8p: isIE && !(isIE6 || isIE7),
+        isIE9: isIE9,
+        isIE9m: isIE6 || isIE7 || isIE8 || isIE9,
+        isIE9p: isIE && !(isIE6 || isIE7 || isIE8),
+        isIE10: isIE10,
+        isIE10m: isIE6 || isIE7 || isIE8 || isIE9 || isIE10,
+        isIE10p: isIE && !(isIE6 || isIE7 || isIE8 || isIE9),
+        isIE11: isIE11,
+        isIE11m: isIE6 || isIE7 || isIE8 || isIE9 || isIE10 || isIE11,
+        isIE11p: isIE && !(isIE6 || isIE7 || isIE8 || isIE9 || isIE10),
+        isGecko: isGecko,
+        isGecko3: isGecko3,
+        isGecko4: isGecko4,
+        isGecko5: isGecko5,
+        isGecko10: isGecko10,
+        isFF3_0: isFF3_0,
+        isFF3_5: isFF3_5,
+        isFF3_6: isFF3_6,
+        isFF4: 4 <= firefoxVersion && firefoxVersion < 5,
+        isFF5: 5 <= firefoxVersion && firefoxVersion < 6,
+        isFF10: 10 <= firefoxVersion && firefoxVersion < 11,
+        isLinux: isLinux,
+        isWindows: isWindows,
+        isMac: isMac,
+        chromeVersion: chromeVersion,
+        firefoxVersion: firefoxVersion,
+        ieVersion: ieVersion,
+        operaVersion: operaVersion,
+        safariVersion: safariVersion,
+        webKitVersion: webKitVersion,
+        isSecure: isSecure,
+        isiPhone: isiPhone,
+        isiPod: isiPod,
+        isiPad: isiPad,
+        isBlackberry: isBlackberry,
+        isAndroid: isAndroid,
+        isDesktop: isDesktop,
+        isTablet: isTablet,
+        isPhone: isPhone,
+        iOS: isiPhone || isiPad || isiPod,
+        standalone: !!window.navigator.standalone
+    };
 })();
 Bridge.Class.define('Bridge.IEnumerable', {});
 Bridge.Class.define('Bridge.IEnumerator', {});
@@ -3325,6 +3491,7 @@ Bridge.Class.define('Bridge.ICollection', {
 
 Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerator$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IEnumerator]
     }));
@@ -3332,6 +3499,7 @@ Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
 
 Bridge.Class.generic('Bridge.IEnumerable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerable$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IEnumerable]
     }));
@@ -3339,6 +3507,7 @@ Bridge.Class.generic('Bridge.IEnumerable$1', function (T) {
 
 Bridge.Class.generic('Bridge.ICollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.ICollection$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IEnumerable$1(T)]
     }));
@@ -3346,6 +3515,7 @@ Bridge.Class.generic('Bridge.ICollection$1', function (T) {
 
 Bridge.Class.generic('Bridge.IEqualityComparer$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEqualityComparer$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IEqualityComparer]
     }));
@@ -3353,6 +3523,7 @@ Bridge.Class.generic('Bridge.IEqualityComparer$1', function (T) {
 
 Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.IDictionary$2', TKey, TValue);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IEnumerable$1(Bridge.KeyValuePair$2(TKey, TValue))],
     }));
@@ -3375,6 +3546,7 @@ Bridge.Class.define("Bridge.CustomEnumerator", {
         }
         catch (ex) {
             this.dispose.call(this.scope);
+
             throw ex;
         }
     },
@@ -3394,7 +3566,6 @@ Bridge.Class.define("Bridge.CustomEnumerator", {
             this.$dispose.call(this.scope);
     }
 });
-
 Bridge.Class.define('Bridge.ArrayEnumerator', {
     constructor: function (array) {
         this.array = array;
@@ -3403,6 +3574,7 @@ Bridge.Class.define('Bridge.ArrayEnumerator', {
 
     moveNext: function () {
         this.index++;
+
         return this.index < this.array.length;
     },
 
@@ -3416,6 +3588,7 @@ Bridge.Class.define('Bridge.ArrayEnumerator', {
 });
 Bridge.Class.generic('Bridge.EqualityComparer$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.EqualityComparer$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IEqualityComparer$1(T)],
 
@@ -3437,6 +3610,7 @@ Bridge.Class.generic('Bridge.EqualityComparer$1', function (T) {
 Bridge.EqualityComparer$1.default = new Bridge.EqualityComparer$1(Object)();
 Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.KeyValuePair$2', TKey, TValue);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         constructor: function (key, value) {
             this.key = key;
@@ -3447,6 +3621,7 @@ Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
 
 Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.Dictionary$2', TKey, TValue);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.IDictionary$2(TKey, TValue)],
 
@@ -3466,6 +3641,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
             else if (Object.prototype.toString.call(obj) === '[object Object]') {
                 var names = Bridge.getPropertyNames(obj),
                     name;
+
                 for (var i = 0; i < names.length; i++) {
                     name = names[i];
                     this.add(name, obj[name]);
@@ -3493,6 +3669,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
             if (Bridge.isDefined(this.entries[hash])) {
                 entries = this.entries[hash];
+
                 for (i = 0; i < entries.length; i++) {
                     if (this.comparer.equals(entries[i].key, key)) {
                         return entries[i];
@@ -3511,6 +3688,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
             for (e in this.entries) {
                 if (this.entries.hasOwnProperty(e)) {
                     var entries = this.entries[e];
+
                     for (i = 0; i < entries.length; i++) {
                         if (this.comparer.equals(entries[i].value, value)) {
                             return true;
@@ -3572,13 +3750,17 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
             }
 
             entries = this.entries[hash];
+
             for (i = 0; i < entries.length; i++) {
                 if (this.comparer.equals(entries[i].key, key)) {
                     entries.splice(i, 1);
+
                     if (entries.length == 0) {
                         delete this.entries[hash];
                     }
+
                     this.count--;
+
                     return true;
                 }
             }
@@ -3596,7 +3778,9 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
         tryGetValue: function (key, value) {
             var entry = this.findEntry(key);
+
             value.v = entry ? entry.value : Bridge.getDefaultValue(TValue);
+
             return !!entry;
         },
 
@@ -3610,11 +3794,13 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
                     keyIndex = -1;
                     hashIndex++;
                 }
+
                 if (hashIndex >= hashes.length) {
                     return false;
                 }
                     
                 keyIndex++;
+
                 return true;
             }, function () {
                 return fn(this.entries[hashes[hashIndex]][keyIndex]);
@@ -3631,6 +3817,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 
 Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.DictionaryCollection$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.ICollection$1(T)],
 
@@ -3670,6 +3857,7 @@ Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
 });
 Bridge.Class.generic('Bridge.List$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.List$1', T);
+
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
         extend: [Bridge.ICollection$1(T), Bridge.ICollection],
         constructor: function (obj) {
@@ -3856,7 +4044,6 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
         }
     }));
 });
-
 
 // @source resources/Task.js
 
@@ -4322,6 +4509,7 @@ Bridge.Validation = {
 };
 Bridge.Class.define('Bridge.Attribute', { });
 Bridge.Class.define('Bridge.INotifyPropertyChanged', {});
+
 Bridge.Class.define('Bridge.PropertyChangedEventArgs', {
     constructor: function (propertyName) {
         this.propertyName = propertyName;
