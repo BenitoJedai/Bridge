@@ -18,8 +18,10 @@
         var value = arguments[0];
         if (this.$multipleCtors && arguments.length > 0 && typeof value == 'string') {
             value = value === "constructor" ? "$constructor" : value;
+
             if ((value === "$constructor" || Bridge.String.startsWith(value, "constructor\\$")) && Bridge.isFunction(this[value])) {
                 this[value].apply(this, Array.prototype.slice.call(arguments, 1));
+
                 return;
             }            
         }
@@ -32,6 +34,7 @@
     Bridge.Class.initConfig = function (extend, base, config, statics, scope) {                
         scope.$initMembers = function () {
             var name;
+
             if (extend && !statics && base.$initMembers) {
                 base.$initMembers.apply(this, arguments);
             }
@@ -54,6 +57,7 @@
                             return this[name];
                         };                        
                     })(name);
+
                     this["set" + cap] = (function (name) {
                         return function (value) {
                             this[name] = value;
@@ -74,6 +78,7 @@
                             this[name] = Bridge.fn.combine(this[name], value);
                         };
                     })(name);
+
                     this["remove" + cap] = (function (name) {
                         return function (value) {
                             this[name] = Bridge.fn.remove(this[name], value);
@@ -157,6 +162,7 @@
 
         if (statics) {
             var staticsConfig = statics.$config || statics.config;
+
             if (staticsConfig && !Bridge.isFunction(staticsConfig)) {
                 Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
 
@@ -170,6 +176,7 @@
         }        
 
         var instanceConfig = prop.$config || prop.config;
+
         if (instanceConfig && !Bridge.isFunction(instanceConfig)) {
             Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
 
@@ -190,9 +197,11 @@
 
         // Copy the properties over onto the new prototype
         ctorCounter = 0;
+
         for (name in prop) {            
             v = prop[name];
             isCtor = name === "constructor";
+
             if (Bridge.isFunction(v) && (isCtor || Bridge.String.startsWith(name, "constructor\\$"))) {
                 ctorCounter++;
             }
@@ -287,9 +296,11 @@
 
     Bridge.Class.genericName = function () {
         var name = arguments[0];
+
         for (var i = 1; i < arguments.length; i++) {
             name += '$' + Bridge.getTypeName(arguments[i]);
         }
+
         return name;
     };
 
@@ -300,6 +311,7 @@
         }
 
         Bridge.Class.set(scope, className, fn);
+
         return fn;
     };
 })();

@@ -3,7 +3,7 @@
 window.Bridge = {
     emptyFn: function () { },
 
-    copy : function (to, from, keys, toIf) {
+    copy: function (to, from, keys, toIf) {
         if (typeof keys === 'string') {
             keys = keys.split(/[,;\s]+/);
         }
@@ -73,7 +73,7 @@ window.Bridge = {
         }
     },
 
-    getHashCode : function (value) {
+    getHashCode: function (value) {
         if (Bridge.isEmpty(value, true)) {
             throw new Bridge.InvalidOperationException('HashCode cannot be calculated for empty value');
         }
@@ -110,7 +110,7 @@ window.Bridge = {
         return value.$$hashCode || (value.$$hashCode = (Math.random() * 0x100000000) | 0);
     },
 
-    getDefaultValue : function (type) {
+    getDefaultValue: function (type) {
         if (Bridge.isFunction(type.getDefaultValue)) {
             return type.getDefaultValue();
         }
@@ -131,7 +131,7 @@ window.Bridge = {
         return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
     },
 
-    is : function (obj, type, ignoreFn) {
+    is: function (obj, type, ignoreFn) {
 	    if (typeof type == "string") {
             type = Bridge.unroll(type);
 	    }
@@ -173,11 +173,11 @@ window.Bridge = {
         return false;
 	},
 	
-    as : function (obj, type) {
+    as: function (obj, type) {
 	    return Bridge.is(obj, type) ? obj : null;
     },
 	
-    cast : function(obj, type) {
+    cast: function (obj, type) {
 	    var result = Bridge.as(obj, type);
 
 	    if (result == null) {
@@ -187,7 +187,7 @@ window.Bridge = {
 	    return result;
     },
 	
-	apply : function (obj, values) {
+	apply: function (obj, values) {
 	    var names = Bridge.getPropertyNames(values, false);
 
 	    for (var i = 0; i < names.length; i++) {
@@ -257,7 +257,7 @@ window.Bridge = {
 	    throw new Bridge.InvalidOperationException('Cannot create enumerator');
 	},
 
-	getPropertyNames : function(obj, includeFunctions) {
+	getPropertyNames: function (obj, includeFunctions) {
 	    var names = [],
 	        name;
 
@@ -359,7 +359,7 @@ window.Bridge = {
         return a === b;
     },
 
-    compare : function (a, b) {
+    compare: function (a, b) {
         if (!Bridge.isDefined(a, true)) {
             throw new Bridge.NullReferenceException();
         }
@@ -373,7 +373,7 @@ window.Bridge = {
         return a.compareTo(b);
     },
 
-    equalsT : function (a, b) {
+    equalsT: function (a, b) {
         if (!Bridge.isDefined(a, true)) {
             throw new Bridge.NullReferenceException();
         }
@@ -398,7 +398,7 @@ window.Bridge = {
         return obj.format(formatString);
     },
 
-    getType : function (instance) {
+    getType: function (instance) {
         if (!Bridge.isDefined(instance, true)) {
             throw new Bridge.NullReferenceException('instance is null');
         }

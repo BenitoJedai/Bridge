@@ -6,6 +6,7 @@
 
     moveNext: function () {
         this.index++;
+
         return this.index < this.array.length;
     },
 

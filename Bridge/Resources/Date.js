@@ -1,14 +1,17 @@
 ﻿Bridge.Date = {    
-    utcNow:  function() {
+    utcNow:  function () {
         var d = new Date();
+
         return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
     },
-    today : function() {
+
+    today: function () {
         var d = new Date();
+
         return new Date(d.getFullYear(), d.getMonth(), d.getDate());
     },
 
-    isUseGenitiveForm: function(format, index, tokenLen, patternToMatch) {
+    isUseGenitiveForm: function (format, index, tokenLen, patternToMatch) {
 	    var i,
             repeat = 0;
         
@@ -19,6 +22,7 @@
             while (--i >= 0 && format[i] == patternToMatch) {
                 repeat++;
             }
+
             if (repeat <= 1) {
                 return true;
             }
@@ -28,10 +32,12 @@
         }
 
         if (i < format.length) {
-            repeat = 0;                
+            repeat = 0;
+
             while (++i < format.length && format[i] == patternToMatch) {
                 repeat++;
             }
+
             if (repeat <= 1) {
                 return true;
             }
@@ -66,18 +72,23 @@
         return format.replace(/(\\.|'[^']*'|"[^"]*"|d{1,4}|M{1,4}|yyyy|yy|y|HH?|hh?|mm?|ss?|tt?|f{1,3}|z{1,3}|\:|\/)/g,
 			function (match, group, index) {
 			    var part = match;
+
 			    switch (match) {
 			        case "dddd":
 			            part = df.dayNames[dayOfWeek];
+
 			            break;
 			        case "ddd":
 			            part = df.abbreviatedDayNames[dayOfWeek];
+
 			            break;
 			        case "dd":
 			            part = dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth;
+
 			            break;
 			        case "d":
 			            part = dayOfMonth;
+
 			            break;
 			        case "MMMM":
 			            if (me.isUseGenitiveForm(format, index, 4, "d")) {
@@ -86,6 +97,7 @@
 			            else {
 			                part = df.monthNames[month];
 			            }
+
 			            break;
 			        case "MMM":
 			            if (me.isUseGenitiveForm(format, index, 3, "d")) {
@@ -94,58 +106,74 @@
 			            else {
 			                part = df.abbreviatedMonthNames[month];
 			            }
+
 			            break;
 			        case "MM":
 			            part = (month + 1) < 10 ? "0" + (month + 1) : (month + 1);
+
 			            break;
 			        case "M":
 			            part = month + 1;
+
 			            break;
 			        case "yyyy":
 			            part = year;
+
 			            break;
 			        case "yy":
 			            part = (year % 100).toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "y":
 			            part = year % 100;
+
 			            break;
 			        case "h":
 			        case "hh":
 			            part = hour % 12;
+
 			            if (!part) {
 			                part = "12";
 			            }
 			            else if (match == "hh" && part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "HH":
 			            part = hour.toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "H":
 			            part = hour;
 			            break;
 			        case "mm":
 			            part = minute.toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "m":
 			            part = minute;
+
 			            break;
 			        case "ss":
 			            part = second.toString();
+
 			            if (part.length == 1) {
 			                part = "0" + part;
 			            }
+
 			            break;
 			        case "s":
 			            part = second;
@@ -153,14 +181,17 @@
 			        case "t":
 			        case "tt":
 			            part = (hour < 12) ? df.amDesignator : df.pmDesignator;
+
 			            if (match == "t") {
 			                part = part.charAt(0);
 			            }
+
 			            break;
 			        case "f":
 			        case "ff":
 			        case "fff":
 			            part = millisecond.toString();
+
 			            if (part.length < 3) {
 			                part = Array(3 - part.length).join("0") + part;
 			            }
@@ -171,27 +202,34 @@
 			            else if (match == "f") {
 			                part = part.charAt(0);
 			            }
+
 			            break;
 			        case "z":
 			            part = timezoneOffset / 60;
 			            part = ((part >= 0) ? "-" : "+") + Math.floor(Math.abs(part));
+
 			            break;
 			        case "zz":
 			        case "zzz":
 			            part = timezoneOffset / 60;			            
 			            part = ((part >= 0) ? "-" : "+") + Bridge.String.alignString(Math.floor(Math.abs(part)).toString(), 2, "0", 2);
+
 			            if (match == "zzz") {
 			                part += df.timeSeparator + Bridge.String.alignString(Math.floor(Math.abs(timezoneOffset % 60)).toString(), 2, "0", 2);
 			            }
+
 			            break;
 			        case ":":
 			            part = df.timeSeparator;
+
 			            break;
 			        case "/":
 			            part = df.dateSeparator;
+
 			            break;
 			        default:
 			            part = match.substr(1, match.length - 1 - (match.charAt(0) != "\\"));
+
 			            break;
 			    }
 
@@ -209,9 +247,12 @@
         }
 
         if (Bridge.isArray(format)) {
-            var i, d;
+            var i,
+                d;
+
             for (i = 0; i < format.length; i++) {
                 d = Bridge.Date.parseExact(str, format[i], provider, true);
+
                 if (d != null) {
                     return d;
                 }
@@ -220,6 +261,7 @@
             if (silent) {
                 return null;
             }
+
             throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
         }
 
@@ -289,6 +331,7 @@
                 }
 
                 int += year.length;
+
                 if (year.length == 2) {
                     year = ~~year;
                     year = (year > 30 ? 1900 : 2000) + year;
@@ -316,24 +359,30 @@
                 
                 for (i = 0; i < names.length; i++) {
                     name = names[i];
+
                     if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {
                         month = (i % 12) + 1;
                         int += name.length;
+
                         break;
                     }
                 }
 
                 if ((month < 1) || (month > 12)) {
                     invalid = true;
+
                     break;
                 }
             }
             else if (token == "MM" || token == "M") {
                 month = this.subparseInt(str, int, token.length, 2);
+
                 if (month == null || month < 1 || month > 12) {
                     invalid = true;
+
                     break;
                 }
+
                 int += month.length;
             }
             else if (token == "dddd" || token == "ddd") {
@@ -341,57 +390,76 @@
 
                 for (i = 0; i < names.length; i++) {
                     name = names[i];
+
                     if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {                        
                         int += name.length;
+
                         break;
                     }
                 }
             }
             else if (token == "dd" || token == "d") {
                 date = this.subparseInt(str, int, token.length, 2);
+
                 if (date == null || date < 1 || date > 31) {
                     invalid = true;
+
                     break;
                 }
+
                 int += date.length;
             }
             else if (token == "hh" || token == "h") {
                 hh = this.subparseInt(str, int, token.length, 2);
+
                 if (hh == null || hh < 1 || hh > 12) {
                     invalid = true;
+
                     break;
                 }
+
                 int += hh.length;
             }
             else if (token == "HH" || token == "H") {
                 hh = this.subparseInt(str, int, token.length, 2);
+
                 if (hh == null || hh < 0 || hh > 23) {
                     invalid = true;
+
                     break;
                 }
+
                 int += hh.length;
             }
             else if (token == "mm" || token == "m") {
                 mm = this.subparseInt(str, int, token.length, 2);
+
                 if (mm == null || mm < 0 || mm > 59) {
                     return null;
                 }
+
                 int += mm.length;
             }
             else if (token == "ss" || token == "s") {
                 ss = this.subparseInt(str, int, token.length, 2);
+
                 if (ss == null || ss < 0 || ss > 59) {
                     invalid = true;
+
                     break;
                 }
+
                 int += ss.length;
             }
             else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
                 ff = this.subparseInt(str, int, token.length, 7);
+
                 if (ff == null) {
                     invalid = true;
+
                     break;
                 }
+
                 int += ff.length;
             }
             else if (token == "t") {
@@ -403,8 +471,10 @@
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
+
                 int += 1;
             }
             else if (token == "tt") {
@@ -416,12 +486,15 @@
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
+
                 int += 2;
             }
             else if (token == "z" || token == "zz") {
                 sign = str.charAt(int);
+
                 if (sign == "-") {
                     neg = true;
                 }
@@ -430,15 +503,20 @@
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
+
                 int++;
 
                 zzh = this.subparseInt(str, int, 1, 2);
+
                 if (zzh == null || zzh > 14) {
                     invalid = true;
+
                     break;
                 }
+
                 int += zzh.length;
 
                 if (neg) {
@@ -451,10 +529,12 @@
 
                 if (name.length != 6) {
                     invalid = true;
+
                     break;
                 }
 
                 sign = name.charAt(0);
+
                 if (sign == "-") {
                     neg = true;
                 }
@@ -463,15 +543,19 @@
                 }
                 else {
                     invalid = true;
+
                     break;
                 }
 
                 zzi = 1;
                 zzh = this.subparseInt(name, zzi, 1, 2);
+
                 if (zzh == null || zzh > 14) {
                     invalid = true;
+
                     break;
                 }
+
                 zzi += zzh.length;
 
                 if (neg) {
@@ -480,14 +564,17 @@
 
                 if (name.charAt(zzi) != df.timeSeparator) {
                     invalid = true;
+
                     break;
                 }
 
                 zzi++;
 
                 zzm = this.subparseInt(name, zzi, 1, 2);
+
                 if (zzm == null || zzh > 59) {
                     invalid = true;
+
                     break;
                 }                
             }
@@ -498,6 +585,7 @@
                     (token == "/" && name != df.dateSeparator))) ||
                     (name != token && token != "'")) {
                     invalid = true;
+
                     break;
                 }
 
@@ -535,6 +623,7 @@
             if (silent) {
                 return null;
             }
+
             throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
         }
         
@@ -558,13 +647,16 @@
 
         for (x = max; x >= min; x--) {
             token = str.substring(index, index + x);
+
             if (token.length < min) {
                 return null;
             }
+
             if (/^\d+$/.test(token)) {
                 return token;
             }
         }
+
         return null;
     },
 
@@ -573,6 +665,7 @@
         
         if (result.v == null) {
             result.v = new Date(-864e13);
+
             return false;
         }
 
@@ -584,6 +677,7 @@
 
         if (result.v == null) {
             result.v = new Date(-864e13);
+
             return false;
         }
 
@@ -592,13 +686,14 @@
 
     isDaylightSavingTime: function (dt) {
         var temp = Bridge.Date.today();
+
         temp.setMonth(0);
         temp.setDate(1);
 
         return temp.getTimezoneOffset() != dt.getTimezoneOffset();
     },
 
-    toUTC: function(date) {
+    toUTC: function (date) {
         return new Date(date.getUTCFullYear(), 
                         date.getUTCMonth(), 
                         date.getUTCDate(), 
@@ -608,7 +703,7 @@
                         date.getUTCMilliseconds());
     },
 
-    toLocal: function(date) {
+    toLocal: function (date) {
         return new Date(Date.UTC(date.getFullYear(),
                                  date.getMonth(),
                                  date.getDate(),

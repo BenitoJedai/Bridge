@@ -19,16 +19,20 @@
 
     getLength: function () {
         if (this.buffer.length < 2) {
-            return (this.buffer[0]) ? this.buffer[0].length : 0;
+            return this.buffer[0] ? this.buffer[0].length : 0;
         }
+
         var s = this.buffer.join('');
+
         this.buffer = [];
         this.buffer[0] = s;
+
         return s.length;
     },
 
     toString: function () {
         var s = this.buffer.join('');
+
         this.buffer = [];    
         this.buffer[0] = s;
 
@@ -37,8 +41,10 @@
                 length = arguments[1];
             
             this.checkLimits(s, startIndex, length);
+
             return s.substr(startIndex, length);
         }
+
         return s;
     },
 
@@ -51,11 +57,13 @@
             // append a char repeated count times
             var count = arguments[1];
 
-            if (count == 0)
+            if (count == 0) {
                 return this;
+            }
             else if (count < 0) {
                 throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
             }
+
             value = Array(count + 1).join(value).toString();
         }
         else if (arguments.length == 3) {
@@ -63,14 +71,16 @@
             var startIndex = arguments[1],
                 count = arguments[2];
             
-            if (count == 0)
+            if (count == 0) {
                 return this;
+            }
 
             this.checkLimits(value, startIndex, count);
             value = value.substr(startIndex, count);
         }
 
         this.buffer[this.buffer.length] = value;
+
         return this;
     },
 
@@ -80,6 +90,7 @@
 
     clear: function () {
         this.buffer = [];
+
         return this;
     },
 
@@ -87,15 +98,20 @@
         if (arguments.length == 1) {
             this.append(arguments[0]);
         }
+
         return this.append("\r\n");
     },
 
     equals: function (sb) {
-        if (sb == null)
+        if (sb == null) {
             return false;
-        if (sb == this)
+        }
+
+        if (sb == this) {
             return true;
-        return (this.toString() === sb.toString());
+        }
+
+        return this.toString() === sb.toString();
     },
 
     remove: function (startIndex, length) {
@@ -113,6 +129,7 @@
             this.buffer[0] = s.substring(0, startIndex);
             this.buffer[1] = s.substring(startIndex + length, s.length);
         }
+
         return this;
     },
 
@@ -124,11 +141,14 @@
         if (arguments.length == 3) {
             // insert value repeated count times 
             var count = arguments[2];
-            if (count == 0)
+
+            if (count == 0) {
                 return this;
+            }
             else if (count < 0) {
                 throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
             }
+
             value = Array(count + 1).join(value).toString();
         }
 
@@ -148,6 +168,7 @@
             this.buffer[1] = value;
             this.buffer[2] = s.substring(index, s.length);
         }
+
         return this;
     },
 
@@ -159,11 +180,11 @@
 
         if (arguments.length == 4) {
             var startIndex = arguments[2],
-                count = arguments[3];
+                count = arguments[3],
+                b = s.substr(startIndex, count);
 
             this.checkLimits(s, startIndex, count);
 
-            var b = s.substr(startIndex, count);
             this.buffer[0] = s.substring(0, startIndex);
             this.buffer[1] = b.replace(r, newValue);
             this.buffer[2] = s.substring(startIndex + count, s.length);
@@ -171,6 +192,7 @@
         else {
             this.buffer[0] = s.replace(r, newValue);
         }
+
         return this;
     },
 

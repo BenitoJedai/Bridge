@@ -65,7 +65,8 @@
     getAbbreviatedDayName: function (dayofweek) {
         if (dayofweek < 0 || dayofweek > 6) {
             throw new Bridge.ArgumentOutOfRangeException("dayofweek");
-        }        
+        }
+
         return this.abbreviatedDayNames[dayofweek];
     },
 
@@ -73,6 +74,7 @@
         if (month < 1 || month > 13) {
             throw new Bridge.ArgumentOutOfRangeException("month");
         }
+
         return this.abbreviatedMonthNames[month - 1];
     },
 
@@ -89,6 +91,7 @@
                 if (returnNull) {
                     return null;
                 }
+
                 throw new Bridge.ArgumentException(null, "format");
             }
 
@@ -102,6 +105,7 @@
         for (f in formats) {
             names = formats[f].split(" ");
             pattern = "";
+
             for (i = 0; i < names.length; i++) {
                 pattern = (i == 0 ? "" : (pattern + " ")) + this[names[i]];
             }
@@ -124,6 +128,7 @@
         if (month < 1 || month > 13) {
             throw new Bridge.ArgumentOutOfRangeException("month");
         }
+
         return this.monthNames[month-1];
     },
 
@@ -131,6 +136,7 @@
         if (dayOfWeek < 0 || dayOfWeek > 6) {
             throw new Bridge.ArgumentOutOfRangeException("dayOfWeek");
         }
+
         return this.shortestDayNames[dayOfWeek];
     },
 
@@ -260,7 +266,7 @@ Bridge.Class.define("Bridge.CultureInfo", {
             this.setCurrentCulture(this.invariantCulture);
         },
 
-        getCurrentCulture : function () {
+        getCurrentCulture: function () {
             return this.currentCulture;
         },
 
@@ -274,6 +280,7 @@ Bridge.Class.define("Bridge.CultureInfo", {
             if (!name) {
                 throw new Bridge.ArgumentNullException("name");
             }
+
             return this.cultures[name];
         },
 
@@ -281,6 +288,7 @@ Bridge.Class.define("Bridge.CultureInfo", {
             var names = Bridge.getPropertyNames(this.cultures),
                 result = [],
                 i;
+
             for (i = 0; i < names.length; i++) {
                 result.push(this.cultures[names[i]]);
             }

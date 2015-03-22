@@ -19,7 +19,7 @@
         return !Bridge.Validation.isEmpty(value);
     },
 
-    email : function (value) {
+    email: function (value) {
         var re = /^(")?(?:[^\."])(?:(?:[\.])?(?:[\w\-!#$%&'*+/=?^_`{|}~]))*\1@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/;
 
         return re.test(value);

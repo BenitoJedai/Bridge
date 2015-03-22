@@ -12,7 +12,7 @@ Bridge.Class.define('Bridge.Task', {
     },
 
     statics: {
-        delay : function (delay, state) {
+        delay: function (delay, state) {
             var task = new Bridge.Task();
 
             setTimeout(function () {
@@ -22,15 +22,16 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        fromResult : function (result) {
+        fromResult: function (result) {
             var task = new Bridge.Task();
+
             t.status = Bridge.TaskStatus.ranToCompletion;
             t.result = result;
 
             return t;
         },
 
-        run : function (fn) {
+        run: function (fn) {
             var task = new Bridge.Task();
 
             setTimeout(function () {
@@ -45,7 +46,7 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        whenAll : function (tasks) {
+        whenAll: function (tasks) {
             var task = new Bridge.Task(),
                 result,
                 executing = tasks.length, 
@@ -101,7 +102,7 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        whenAny : function (tasks) {
+        whenAny: function (tasks) {
             if (!Bridge.isArray(tasks)) {
                 tasks = Array.prototype.slice.call(arguments, 0);
             }
@@ -134,7 +135,7 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        fromCallback : function (target, method) {
+        fromCallback: function (target, method) {
             var task = new Bridge.Task(),
                 args = Array.prototype.slice.call(arguments, 2),
                 callback;
@@ -183,16 +184,16 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        fromPromise : function (promise, handler) {
+        fromPromise: function (promise, handler) {
             var task = new Bridge.Task();
 
             if (!promise.then) {
                 promise = promise.promise();
             }
 
-            promise.then(function() {
+            promise.then(function () {
                 task.setResult(handler ? handler.apply(null, arguments) : arguments);
-            }, function() {
+            }, function () {
                 task.setError(new Error(Array.prototype.slice.call(arguments, 0)));
             });
 
@@ -203,7 +204,7 @@ Bridge.Class.define('Bridge.Task', {
     continueWith: function (continuationAction) {
         var task = new Bridge.Task(),
             me = this,
-            fn = function() {
+            fn = function () {
                 try {
                     task.setResult(continuationAction(me));
                 }
@@ -230,7 +231,7 @@ Bridge.Class.define('Bridge.Task', {
         var me = this;
         this.status = Bridge.TaskStatus.running;
 
-        setTimeout(function() {
+        setTimeout(function () {
             try {
                 var result = me.action(me.state);
                 delete me.action;

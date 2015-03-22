@@ -1,15 +1,15 @@
 ﻿Bridge.Class.define('Bridge.Int', {
     extend: [Bridge.IComparable, Bridge.IFormattable],
     statics: {
-        instanceOf : function (instance) {
+        instanceOf: function (instance) {
             return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;
         },
 
-        getDefaultValue : function () {
+        getDefaultValue: function () {
             return 0;
         },
 
-        format : function (number, format, provider) {            
+        format: function (number, format, provider) {            
             var nf = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo),
                 decimalSeparator = nf.numberDecimalSeparator,
                 groupSeparator = nf.numberGroupSeparator,
@@ -101,6 +101,7 @@
                         }
                         
                         precision -= result.length;
+
                         while (precision-- > 0) {
                             result = "0" + result;
                         }
@@ -110,6 +111,7 @@
                         if (isNaN(precision)) {
                             precision = nf.currencyDecimalDigits;
                         }
+
                         return this.defaultFormat(number, 1, precision, precision, nf, false, "currency");
                     case "R":
                         return "" + number;
@@ -137,6 +139,7 @@
             }
 
             groups = format.split(";");
+
             if (number < 0 && groups.length > 1) {
                 number *= -1;
                 format = groups[1];
@@ -195,6 +198,7 @@
 
             groupIndex = 0;
             groupSize = groups[groupIndex];
+
             if (str.length < groupSize) {
                 buffer = str;
 
@@ -206,9 +210,11 @@
                 index = str.length;
                 done = false;
                 sep = noGroup ? "" : nf[name + "GroupSeparator"];
+
                 while (!done) {
                     length = groupSize;
                     startIndex = index - length;
+
                     if (startIndex < 0) {
                         groupSize += startIndex;
                         length += startIndex;
@@ -221,12 +227,14 @@
                     }
 
                     part = str.substr(startIndex, length);
+
                     if (buffer.length) {
                         buffer = part + sep + buffer;
                     }
                     else {
                         buffer = part;
                     }
+
                     index -= length;
 
                     if (groupIndex < groups.length - 1) {
@@ -242,10 +250,12 @@
 
             if (number < 0) {
                 negPattern = Bridge.NumberFormatInfo[name + "NegativePatterns"][nf[name + "NegativePattern"]];                
+
                 return negPattern.replace("-", nf.negativeSign).replace("%", nf.percentSymbol).replace("$", nf.currencySymbol).replace("n", buffer);
             }
             else if (Bridge.NumberFormatInfo[name + "PositivePatterns"]) {
                 negPattern = Bridge.NumberFormatInfo[name + "PositivePatterns"][nf[name + "PositivePattern"]];
+
                 return negPattern.replace("%", nf.percentSymbol).replace("$", nf.currencySymbol).replace("n", buffer);
             }
         
@@ -270,6 +280,7 @@
                 buffer = "";
 
             name = "number";
+
             if (format.indexOf("%") !== -1) {
                 name = "percent";
             }
@@ -282,6 +293,7 @@
             
                 if (c == "'" || c == '"') {                
                     i = format.indexOf(c, i + 1);
+
                     if (i < 0) {
                         break;
                     }
@@ -326,7 +338,8 @@
             inString = 0;
         
             for (f = 0; f < format.length; f++) {
-                c = format.charAt(f);        
+                c = format.charAt(f);
+
                 if (c == "'" || c == '"') {
                     endIndex = format.indexOf(c, f + 1);
                 
@@ -335,17 +348,20 @@
                     if (endIndex < 0) {
                         break;
                     }
-                    f = endIndex;                    
+
+                    f = endIndex;
                 } else if (c == "\\") {
                     buffer += format.charAt(f + 1);
                     f++;
                 } else if (c == "#" || c == "0") {
                     groupCfg.buffer = buffer;
+
                     if (i < integralDigits) {
                         if (i >= 0) {
                             if (unused) {
                                 this.addGroup(number.substr(0, i), groupCfg);
                             }
+
                             this.addGroup(number.charAt(i), groupCfg);
                         } else if (i >= integralDigits - forcedDigits) {
                             this.addGroup("0", groupCfg);
@@ -416,10 +432,13 @@
 
         tryParseFloat: function (str, provider, result) {
             result.v = 0;
+
             if (str == null) {
                 return false;
             }
+
             var nfInfo = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo);
+
             result.v = parseFloat(str.replace(nfInfo.numberDecimalSeparator, '.'));
 
             if (isNaN(result.v) && str !== nfInfo.nanSymbol) {
@@ -447,7 +466,9 @@
             if (!/^[+-]?[0-9]+$/.test(str)) {
                 throw new Bridge.FormatException("Input string was not in a correct format.");
             }
+
             var result = parseInt(str, radix || 10);
+
             if (isNaN(result)) {
                 throw new Bridge.FormatException("Input string was not in a correct format.");
             }
@@ -455,22 +476,27 @@
             if (result < min || result > max) {
                 throw new Bridge.OverflowException();
             }
+
             return result;
         },
 
         tryParseInt: function (str, result, min, max, radix) {
             result.v = 0;
+
             if (!/^[+-]?[0-9]+$/.test(str)) {
                 return false;
             }
+
             result.v = parseInt(str, radix || 10);
+
             if (result.v < min || result.v > max) {
                 return false;
             }
+
             return true;
         },
 
-        trunc : function (num) {
+        trunc: function (num) {
             if (!Bridge.isNumber(num)) {
                 return null;
             }
@@ -478,7 +504,7 @@
             return num > 0 ? Math.floor(num) : Math.ceil(num);
         },
 
-        div : function (x, y) {
+        div: function (x, y) {
             if (!Bridge.isNumber(x) || !Bridge.isNumber(y)) {
                 return null;
             }
@@ -491,4 +517,5 @@
         }
     }
 });
+
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);

@@ -99,7 +99,7 @@ Bridge.nullable = {
         return Bridge.hasValue(a) && Bridge.hasValue(b) ? a >> b : null;
     },
 
-    sub: function(a, b) {
+    sub: function (a, b) {
 	    return Bridge.hasValue(a) && Bridge.hasValue(b) ? a - b : null;
     },
 
@@ -111,15 +111,15 @@ Bridge.nullable = {
         return Bridge.hasValue(a) ? -a : null;
     },
 
-    not: function(a) {
+    not: function (a) {
 	    return Bridge.hasValue(a) ? !a : null;
     },    
 
-    pos: function(a) {
+    pos: function (a) {
 	    return Bridge.hasValue(a) ? +a : null;
     },    
 
-    lift: function() {
+    lift: function () {
 	    for (var i = 1; i < arguments.length; i++) {
 	        if (!Bridge.hasValue(arguments[i])) {
 	            return null;

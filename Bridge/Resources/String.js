@@ -1,5 +1,5 @@
 Bridge.String = {
-    format : function (format) {
+    format: function (format) {
         var me = this,
             _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
             args = Array.prototype.slice.call(arguments, 1),
@@ -59,7 +59,7 @@ Bridge.String = {
         return braces.substr(0, (braces.length + (remove ? 0 : 1)) / 2);
     },
 
-    alignString : function (str, alignment, pad, dir) {
+    alignString: function (str, alignment, pad, dir) {
         if (!alignment) {
             return str;
         }

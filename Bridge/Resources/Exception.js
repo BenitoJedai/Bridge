@@ -99,6 +99,7 @@ Bridge.Class.define('Bridge.ArgumentOutOfRangeException', {
     constructor: function (paramName, message, innerException, actualValue) {
         if (!message) {
             message = 'Value is out of range.';
+
             if (paramName) {
                 message += '\nParameter name: ' + paramName;
             }
@@ -123,6 +124,7 @@ Bridge.Class.define('Bridge.CultureNotFoundException', {
             if (paramName) {
                 message += '\nParameter name: ' + paramName;
             }
+
             if (invalidCultureName) {
                 message += '\n' + invalidCultureName + ' is an invalid culture identifier.';
             }            

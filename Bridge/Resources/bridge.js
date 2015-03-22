@@ -11,7 +11,7 @@
 window.Bridge = {
     emptyFn: function () { },
 
-    copy : function (to, from, keys, toIf) {
+    copy: function (to, from, keys, toIf) {
         if (typeof keys === 'string') {
             keys = keys.split(/[,;\s]+/);
         }
@@ -81,7 +81,7 @@ window.Bridge = {
         }
     },
 
-    getHashCode : function (value) {
+    getHashCode: function (value) {
         if (Bridge.isEmpty(value, true)) {
             throw new Bridge.InvalidOperationException('HashCode cannot be calculated for empty value');
         }
@@ -118,7 +118,7 @@ window.Bridge = {
         return value.$$hashCode || (value.$$hashCode = (Math.random() * 0x100000000) | 0);
     },
 
-    getDefaultValue : function (type) {
+    getDefaultValue: function (type) {
         if (Bridge.isFunction(type.getDefaultValue)) {
             return type.getDefaultValue();
         }
@@ -139,7 +139,7 @@ window.Bridge = {
         return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
     },
 
-    is : function (obj, type, ignoreFn) {
+    is: function (obj, type, ignoreFn) {
 	    if (typeof type == "string") {
             type = Bridge.unroll(type);
 	    }
@@ -181,11 +181,11 @@ window.Bridge = {
         return false;
 	},
 	
-    as : function (obj, type) {
+    as: function (obj, type) {
 	    return Bridge.is(obj, type) ? obj : null;
     },
 	
-    cast : function(obj, type) {
+    cast: function (obj, type) {
 	    var result = Bridge.as(obj, type);
 
 	    if (result == null) {
@@ -195,7 +195,7 @@ window.Bridge = {
 	    return result;
     },
 	
-	apply : function (obj, values) {
+	apply: function (obj, values) {
 	    var names = Bridge.getPropertyNames(values, false);
 
 	    for (var i = 0; i < names.length; i++) {
@@ -265,7 +265,7 @@ window.Bridge = {
 	    throw new Bridge.InvalidOperationException('Cannot create enumerator');
 	},
 
-	getPropertyNames : function(obj, includeFunctions) {
+	getPropertyNames: function (obj, includeFunctions) {
 	    var names = [],
 	        name;
 
@@ -367,7 +367,7 @@ window.Bridge = {
         return a === b;
     },
 
-    compare : function (a, b) {
+    compare: function (a, b) {
         if (!Bridge.isDefined(a, true)) {
             throw new Bridge.NullReferenceException();
         }
@@ -381,7 +381,7 @@ window.Bridge = {
         return a.compareTo(b);
     },
 
-    equalsT : function (a, b) {
+    equalsT: function (a, b) {
         if (!Bridge.isDefined(a, true)) {
             throw new Bridge.NullReferenceException();
         }
@@ -406,7 +406,7 @@ window.Bridge = {
         return obj.format(formatString);
     },
 
-    getType : function (instance) {
+    getType: function (instance) {
         if (!Bridge.isDefined(instance, true)) {
             throw new Bridge.NullReferenceException('instance is null');
         }
@@ -664,7 +664,7 @@ Bridge.nullable = {
         return Bridge.hasValue(a) && Bridge.hasValue(b) ? a >> b : null;
     },
 
-    sub: function(a, b) {
+    sub: function (a, b) {
 	    return Bridge.hasValue(a) && Bridge.hasValue(b) ? a - b : null;
     },
 
@@ -676,15 +676,15 @@ Bridge.nullable = {
         return Bridge.hasValue(a) ? -a : null;
     },
 
-    not: function(a) {
+    not: function (a) {
 	    return Bridge.hasValue(a) ? !a : null;
     },    
 
-    pos: function(a) {
+    pos: function (a) {
 	    return Bridge.hasValue(a) ? +a : null;
     },    
 
-    lift: function() {
+    lift: function () {
 	    for (var i = 1; i < arguments.length; i++) {
 	        if (!Bridge.hasValue(arguments[i])) {
 	            return null;
@@ -697,7 +697,7 @@ Bridge.nullable = {
 
 Bridge.hasValue = Bridge.nullable.hasValue;
 Bridge.String = {
-    format : function (format) {
+    format: function (format) {
         var me = this,
             _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
             args = Array.prototype.slice.call(arguments, 1),
@@ -757,7 +757,7 @@ Bridge.String = {
         return braces.substr(0, (braces.length + (remove ? 0 : 1)) / 2);
     },
 
-    alignString : function (str, alignment, pad, dir) {
+    alignString: function (str, alignment, pad, dir) {
         if (!alignment) {
             return str;
         }
@@ -1635,7 +1635,7 @@ Bridge.Class.define("Bridge.CultureInfo", {
             this.setCurrentCulture(this.invariantCulture);
         },
 
-        getCurrentCulture : function () {
+        getCurrentCulture: function () {
             return this.currentCulture;
         },
 
@@ -1692,15 +1692,15 @@ Bridge.Class.define("Bridge.CultureInfo", {
 Bridge.Class.define('Bridge.Int', {
     extend: [Bridge.IComparable, Bridge.IFormattable],
     statics: {
-        instanceOf : function (instance) {
+        instanceOf: function (instance) {
             return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;
         },
 
-        getDefaultValue : function () {
+        getDefaultValue: function () {
             return 0;
         },
 
-        format : function (number, format, provider) {            
+        format: function (number, format, provider) {            
             var nf = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.NumberFormatInfo),
                 decimalSeparator = nf.numberDecimalSeparator,
                 groupSeparator = nf.numberGroupSeparator,
@@ -2161,7 +2161,7 @@ Bridge.Class.define('Bridge.Int', {
             return true;
         },
 
-        trunc : function (num) {
+        trunc: function (num) {
             if (!Bridge.isNumber(num)) {
                 return null;
             }
@@ -2169,7 +2169,7 @@ Bridge.Class.define('Bridge.Int', {
             return num > 0 ? Math.floor(num) : Math.ceil(num);
         },
 
-        div : function (x, y) {
+        div: function (x, y) {
             if (!Bridge.isNumber(x) || !Bridge.isNumber(y)) {
                 return null;
             }
@@ -2184,16 +2184,16 @@ Bridge.Class.define('Bridge.Int', {
 });
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);
 Bridge.Date = {    
-    utcNow:  function() {
+    utcNow:  function () {
         var d = new Date();
         return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
     },
-    today : function() {
+    today: function () {
         var d = new Date();
         return new Date(d.getFullYear(), d.getMonth(), d.getDate());
     },
 
-    isUseGenitiveForm: function(format, index, tokenLen, patternToMatch) {
+    isUseGenitiveForm: function (format, index, tokenLen, patternToMatch) {
 	    var i,
             repeat = 0;
         
@@ -2783,7 +2783,7 @@ Bridge.Date = {
         return temp.getTimezoneOffset() != dt.getTimezoneOffset();
     },
 
-    toUTC: function(date) {
+    toUTC: function (date) {
         return new Date(date.getUTCFullYear(), 
                         date.getUTCMonth(), 
                         date.getUTCDate(), 
@@ -2793,7 +2793,7 @@ Bridge.Date = {
                         date.getUTCMilliseconds());
     },
 
-    toLocal: function(date) {
+    toLocal: function (date) {
         return new Date(Date.UTC(date.getFullYear(),
                                  date.getMonth(),
                                  date.getDate(),
@@ -3486,7 +3486,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
             this.count = 0;
         },
 
-        findEntry : function (key) {
+        findEntry: function (key) {
             var hash = this.comparer.getHashCode(key),
                 entries,
                 i;
@@ -3871,7 +3871,7 @@ Bridge.Class.define('Bridge.Task', {
     },
 
     statics: {
-        delay : function (delay, state) {
+        delay: function (delay, state) {
             var task = new Bridge.Task();
 
             setTimeout(function () {
@@ -3881,15 +3881,16 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        fromResult : function (result) {
+        fromResult: function (result) {
             var task = new Bridge.Task();
+
             t.status = Bridge.TaskStatus.ranToCompletion;
             t.result = result;
 
             return t;
         },
 
-        run : function (fn) {
+        run: function (fn) {
             var task = new Bridge.Task();
 
             setTimeout(function () {
@@ -3904,7 +3905,7 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        whenAll : function (tasks) {
+        whenAll: function (tasks) {
             var task = new Bridge.Task(),
                 result,
                 executing = tasks.length, 
@@ -3960,7 +3961,7 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        whenAny : function (tasks) {
+        whenAny: function (tasks) {
             if (!Bridge.isArray(tasks)) {
                 tasks = Array.prototype.slice.call(arguments, 0);
             }
@@ -3993,7 +3994,7 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        fromCallback : function (target, method) {
+        fromCallback: function (target, method) {
             var task = new Bridge.Task(),
                 args = Array.prototype.slice.call(arguments, 2),
                 callback;
@@ -4042,16 +4043,16 @@ Bridge.Class.define('Bridge.Task', {
             return task;
         },
 
-        fromPromise : function (promise, handler) {
+        fromPromise: function (promise, handler) {
             var task = new Bridge.Task();
 
             if (!promise.then) {
                 promise = promise.promise();
             }
 
-            promise.then(function() {
+            promise.then(function () {
                 task.setResult(handler ? handler.apply(null, arguments) : arguments);
-            }, function() {
+            }, function () {
                 task.setError(new Error(Array.prototype.slice.call(arguments, 0)));
             });
 
@@ -4062,7 +4063,7 @@ Bridge.Class.define('Bridge.Task', {
     continueWith: function (continuationAction) {
         var task = new Bridge.Task(),
             me = this,
-            fn = function() {
+            fn = function () {
                 try {
                     task.setResult(continuationAction(me));
                 }
@@ -4089,7 +4090,7 @@ Bridge.Class.define('Bridge.Task', {
         var me = this;
         this.status = Bridge.TaskStatus.running;
 
-        setTimeout(function() {
+        setTimeout(function () {
             try {
                 var result = me.action(me.state);
                 delete me.action;
@@ -4229,7 +4230,7 @@ Bridge.Validation = {
         return !Bridge.Validation.isEmpty(value);
     },
 
-    email : function (value) {
+    email: function (value) {
         var re = /^(")?(?:[^\."])(?:(?:[\.])?(?:[\w\-!#$%&'*+/=?^_`{|}~]))*\1@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/;
 
         return re.test(value);

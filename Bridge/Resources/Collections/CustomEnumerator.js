@@ -15,6 +15,7 @@
         }
         catch (ex) {
             this.dispose.call(this.scope);
+
             throw ex;
         }
     },
