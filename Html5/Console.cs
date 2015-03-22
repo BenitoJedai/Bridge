@@ -32,7 +32,7 @@ namespace Bridge.Html5
         {
         }
 
-        [Template("console.log({value}.toString())")]
+        [Template("console.log(String.fromCharCode({value}))")]
         public static void WriteLine(char value)
         {
         }
