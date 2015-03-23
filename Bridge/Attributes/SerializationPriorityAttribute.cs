@@ -4,9 +4,9 @@ namespace Bridge
 {
     [Ignore]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum | AttributeTargets.Delegate | AttributeTargets.Interface, AllowMultiple = true)]
-    public class SerializationPriorityAttribute : Attribute
+    public class PriorityAttribute : Attribute
     {
-        public SerializationPriorityAttribute(int priority)
+        public PriorityAttribute(int priority)
         {
         }
     }    
