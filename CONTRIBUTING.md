@@ -25,7 +25,7 @@ You can fork our project from GitHub, develop/merge your feature or bugfix, then
 
 1. Pull requests are actual commits with your modified code
 2. One pull request must contain all commits related to that feature or bug fix (full changeset)
-3. Each commit should [make us happy](http://bridge.net/kb/what-is-a-happy-commit/)
+3. Each commit should [make us happy](http://bridge.net/kb/happy-commit/)
 4. The pull request should be closest to the latest target branch (a pull request of a feature from version 1.0 would most likely be unusable for a feature on version 3.0, although you might be able to use git rebase to fix that
 
 ## Submitting Changes
