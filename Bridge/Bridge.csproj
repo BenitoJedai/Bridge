@@ -48,7 +48,7 @@
     <Compile Include="Attributes\IgnoreCastAttribute.cs" />
     <Compile Include="Attributes\IgnoreGenericAttribute.cs" />
     <Compile Include="Attributes\FieldPropertyAttribute.cs" />
-    <Compile Include="Attributes\SerializationPriorityAttribute.cs" />
+    <Compile Include="Attributes\PriorityAttribute.cs" />
     <Compile Include="Attributes\AdapterAttribute.cs" />
     <Compile Include="Attributes\EnumAttribute.cs" />
     <Compile Include="Attributes\AllowAttribute.cs" />

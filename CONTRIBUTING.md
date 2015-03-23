@@ -25,7 +25,7 @@ You can fork our project from GitHub, develop/merge your feature or bugfix, then
 
 1. Pull requests are actual commits with your modified code
 2. One pull request must contain all commits related to that feature or bug fix (full changeset)
-3. Each commit should [make us happy](http://bridge.net/kb/what-is-a-happy-commit/)
+3. Each commit should [make us happy](http://bridge.net/kb/happy-commit/)
 4. The pull request should be closest to the latest target branch (a pull request of a feature from version 1.0 would most likely be unusable for a feature on version 3.0, although you might be able to use git rebase to fix that
 
 ## Submitting Changes
@@ -38,7 +38,7 @@ You can fork our project from GitHub, develop/merge your feature or bugfix, then
 
 Your Pull Request will be reviewed by the Object.NET team. We will analyze your change and if it fits the coding standards and feature demand, we’ll add it to the main project.
 
-## Your feature is Awesomesauce!
+## Your Feature Is Awesomesauce!
 
 Why don't you add it now?
 
@@ -46,19 +46,19 @@ Some features or fixes might be brilliant additions, but break backwards compati
 
 Not to worry, we will try our best to add your contribution into our next release!
 
-## Bug or Feature?
+## Bug Or Feature?
 
 If we still have a bug lurking around we will do our best to fix it promptly.
 
 Bug fixes are much more likely to be accepted in a short term than entirely new features that might compromise other parts of Bridge.NET or developer experience.
 
-## Will I get paid for bugs or features?
+## Will I Get Paid For Bugs Or Features?
 
-You get paid in karma and that warm fuzzy feeling knowing you’ve helped the Bridge.NET community.
+Your reward is the golden glow of sweet karma and that warm fuzzy feeling knowing you’ve helped the Bridge.NET community.
 
-If you turn out to be a **bug squashing** and **feature adding** wizard, we would like to get to know you better. There’s always an open seat at Object.NET for a talented engineer. Please check out our [Jobs](http://bridge.net/jobs/) section for more information about working with Object.NET.
+If you turn out to be a **bug squashing** and **feature adding** magical wizard... we would like to get to know you better. There’s always an open seat at Object.NET for a talented engineer. Please check out our [Jobs](http://object.net/jobs/) section for more information about working with Object.NET.
 
-We are a fully distributed company with [team members](http://object.net/#team) spread across the earth. All positions are Remote.
+We are a fully distributed company with [team members](http://object.net/#team) spread across Earth. All positions are Remote.
 
 Additional Resources
 
