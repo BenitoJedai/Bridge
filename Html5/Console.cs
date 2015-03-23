@@ -12,6 +12,39 @@ namespace Bridge.Html5
     [Name("console")]
     public static class Console
     {
+        /// <summary>
+        /// The Window.prompt() displays a dialog with an optional message prompting the user to input some text.
+        /// </summary>
+        /// <param name="text">text is a string of text to display to the user. This parameter is optional and can be omitted if there is nothing to show in the prompt window.</param>
+        /// <param name="value">value is a string containing the default value displayed in the text input field. It is an optional parameter. Note that in Internet Explorer 7 and 8, if you do not provide this parameter, the string "undefined" is the default value.</param>
+        /// <returns>result is a string containing the text entered by the user, or the value null.</returns>
+        [Template("prompt({text},{value})")]
+        public static string ReadLine(string text, string value)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The Window.prompt() displays a dialog with an optional message prompting the user to input some text.
+        /// </summary>
+        /// <param name="text">text is a string of text to display to the user. This parameter is optional and can be omitted if there is nothing to show in the prompt window.</param>
+        /// <returns>result is a string containing the text entered by the user, or the value null.</returns>
+        [Template("prompt({text})")]
+        public static string ReadLine(string text)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// The Window.prompt() displays a dialog with an optional message prompting the user to input some text.
+        /// </summary>
+        /// <returns>result is a string containing the text entered by the user, or the value null.</returns>
+        [Template("prompt()")]
+        public static string ReadLine()
+        {
+            return null;
+        }
+
         [Name("log")]
         public static void WriteLine(string message)
         {
