@@ -3,7 +3,7 @@ namespace System
 {
 	[Namespace("Bridge")]
 	[Ignore]
-	public interface IFormatProvider 
+    public interface IFormatProvider : IBridgeClass
     {
 		object GetFormat(Type formatType);
 	}

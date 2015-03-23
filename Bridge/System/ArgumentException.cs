@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class ArgumentException : Exception 
+	public class ArgumentException : Exception, IBridgeClass
     {
 		public ArgumentException() 
         {

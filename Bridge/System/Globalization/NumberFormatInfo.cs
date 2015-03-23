@@ -4,7 +4,7 @@ namespace System.Globalization
 {
 	[Namespace("Bridge")]
 	[Ignore]
-    public sealed class NumberFormatInfo : IFormatProvider, ICloneable 
+    public sealed class NumberFormatInfo : IFormatProvider, ICloneable, IBridgeClass
     {
 		public NumberFormatInfo() 
         {

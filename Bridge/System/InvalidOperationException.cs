@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class InvalidOperationException : Exception 
+    public class InvalidOperationException : Exception, IBridgeClass
     {
 		public InvalidOperationException() 
         {

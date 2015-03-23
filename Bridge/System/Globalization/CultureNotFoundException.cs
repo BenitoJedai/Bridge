@@ -4,7 +4,7 @@ namespace System.Globalization
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class CultureNotFoundException : ArgumentException 
+    public class CultureNotFoundException : ArgumentException, IBridgeClass
     {
 		public CultureNotFoundException() 
         {

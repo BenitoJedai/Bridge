@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-    public class OverflowException : ArithmeticException 
+    public class OverflowException : ArithmeticException, IBridgeClass
     {
 		public OverflowException() 
         {

@@ -4,7 +4,7 @@ namespace System.Collections.Generic
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class KeyNotFoundException : Exception 
+    public class KeyNotFoundException : Exception, IBridgeClass
     {
 		public KeyNotFoundException() 
         {

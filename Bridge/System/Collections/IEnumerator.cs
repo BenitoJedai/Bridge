@@ -4,7 +4,7 @@ namespace System.Collections
 {
     [Ignore]
     [Namespace("Bridge")]
-    public interface IEnumerator 
+    public interface IEnumerator : IBridgeClass
     {
         object Current 
         {

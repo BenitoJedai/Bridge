@@ -3,7 +3,7 @@ using Bridge;
 namespace System {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class NotSupportedException : Exception 
+    public class NotSupportedException : Exception, IBridgeClass
     {
 		public NotSupportedException() 
         {

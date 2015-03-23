@@ -4,7 +4,7 @@ namespace System.Collections.Generic
 {
     [Ignore]
     [Namespace("Bridge")]
-    public sealed class KeyValuePair<TKey, TValue> 
+    public sealed class KeyValuePair<TKey, TValue> : IBridgeClass
     {
         internal KeyValuePair() 
         {

@@ -9,7 +9,7 @@ namespace System
 {
     [Ignore]
     [Name("Bridge.Attribute")]
-    public class Attribute
+    public class Attribute: IBridgeClass
     {
         protected Attribute()
         {

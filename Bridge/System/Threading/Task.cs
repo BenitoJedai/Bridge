@@ -5,8 +5,8 @@ using Bridge;
 namespace System.Threading.Tasks 
 {
     [Ignore]
-    [Name("Bridge.Task")]    
-	public class Task : IDisposable 
+    [Name("Bridge.Task")]
+    public class Task : IDisposable, IBridgeClass
     {
 		public Task(Action action) 
         {

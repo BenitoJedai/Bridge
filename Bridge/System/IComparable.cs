@@ -3,7 +3,7 @@ namespace System
 {
     [Ignore]
     [Namespace("Bridge")]
-    public interface IComparable
+    public interface IComparable : IBridgeClass
     {
         [Template("Bridge.compare({this}, {obj})")]
         int CompareTo(Object obj);
@@ -11,7 +11,7 @@ namespace System
 
     [Ignore]
     [Namespace("Bridge")]
-	public interface IComparable<in T> 
+    public interface IComparable<in T> : IBridgeClass
     {
         [Template("Bridge.compare({this}, {other})")]
 		int CompareTo(T other);

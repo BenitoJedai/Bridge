@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class NotImplementedException : Exception 
+    public class NotImplementedException : Exception, IBridgeClass
     {
 		public NotImplementedException() 
         {

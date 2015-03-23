@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class NullReferenceException : Exception 
+    public class NullReferenceException : Exception, IBridgeClass
     {
 		public NullReferenceException() 
         {

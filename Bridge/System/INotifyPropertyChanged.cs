@@ -4,7 +4,7 @@ namespace System.ComponentModel
 {
     [Ignore]
     [Namespace("Bridge")]
-    public interface INotifyPropertyChanged
+    public interface INotifyPropertyChanged: IBridgeClass
     {
         event PropertyChangedEventHandler PropertyChanged;
     }
@@ -14,7 +14,7 @@ namespace System.ComponentModel
 
     [Ignore]
     [Namespace("Bridge")]
-    public class PropertyChangedEventArgs
+    public class PropertyChangedEventArgs : IBridgeClass
     {
         public PropertyChangedEventArgs(string propertyName)
         {

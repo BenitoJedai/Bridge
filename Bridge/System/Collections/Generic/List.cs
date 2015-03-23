@@ -4,7 +4,7 @@ namespace System.Collections.Generic
 {
     [Ignore]
     [Namespace("Bridge")]
-    public sealed class List<T> : ICollection<T> 
+    public sealed class List<T> : ICollection<T>, IBridgeClass
     {
         public List() 
         {

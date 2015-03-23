@@ -4,7 +4,7 @@ namespace System
 {
     [Ignore]
     [Name("Bridge.TimeSpan")]
-    public struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>, IFormattable
+    public struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>, IFormattable, IBridgeClass
     {
         [InlineConst]
         public const long TicksPerDay = 864000000000;

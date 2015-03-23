@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class InvalidCastException : Exception 
+    public class InvalidCastException : Exception, IBridgeClass
     {
 		public InvalidCastException() 
         {

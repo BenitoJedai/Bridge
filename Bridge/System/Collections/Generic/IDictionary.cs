@@ -4,7 +4,7 @@ namespace System.Collections.Generic
 {
     [Ignore]
     [Namespace("Bridge")]
-	public interface IDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>> 
+    public interface IDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IBridgeClass
     {
 		TValue this[TKey key] 
         { 

@@ -5,7 +5,7 @@ namespace System
 {
     [Ignore]
     [Name("Bridge.Exception")]
-    public class Exception 
+    public class Exception : IBridgeClass
     {
         /// <summary>
         /// Gets a collection of key/value pairs that provide additional user-defined information about the exception.

@@ -3,7 +3,7 @@ namespace System
 {
 	[Namespace("Bridge")]
 	[Ignore]
-    public interface ICloneable 
+    public interface ICloneable : IBridgeClass
     {
 		object Clone();
 	}

@@ -4,7 +4,7 @@ namespace System
 {
 	[Ignore]
 	[Namespace("Bridge")]
-	public class FormatException : Exception 
+    public class FormatException : Exception, IBridgeClass
     {
 		public FormatException() 
         {

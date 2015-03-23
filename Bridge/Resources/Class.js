@@ -31,9 +31,12 @@
         }
     };
 
-    Bridge.Class.initConfig = function (extend, base, config, statics, scope) {                
+    Bridge.Class.initConfig = function (extend, base, cfg, statics, scope) {                
         scope.$initMembers = function () {
-            var name;
+            var name,
+                config;
+
+            config = Bridge.isFunction(cfg) ? cfg() : cfg;
 
             if (extend && !statics && base.$initMembers) {
                 base.$initMembers.apply(this, arguments);
@@ -161,9 +164,9 @@
         initializing = false;
 
         if (statics) {
-            var staticsConfig = statics.$config || statics.config;
+            var staticsConfig = statics.$config/* || statics.config*/;
 
-            if (staticsConfig && !Bridge.isFunction(staticsConfig)) {
+            if (staticsConfig/* && !Bridge.isFunction(staticsConfig)*/) {
                 Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
 
                 if (statics.$config) {
@@ -175,9 +178,9 @@
             }
         }        
 
-        var instanceConfig = prop.$config || prop.config;
+        var instanceConfig = prop.$config/* || prop.config*/;
 
-        if (instanceConfig && !Bridge.isFunction(instanceConfig)) {
+        if (instanceConfig/* && !Bridge.isFunction(instanceConfig)*/) {
             Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
 
             if (prop.$config) {

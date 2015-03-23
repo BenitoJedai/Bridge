@@ -4,7 +4,7 @@ namespace System.Collections.Generic
 {
     [Ignore]
     [Namespace("Bridge")]
-    public sealed class Dictionary<TKey, TValue> : IDictionary<TKey, TValue> 
+    public sealed class Dictionary<TKey, TValue> : IDictionary<TKey, TValue>, IBridgeClass
     {
         public Dictionary() 
         {

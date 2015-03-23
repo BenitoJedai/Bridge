@@ -4,7 +4,7 @@ namespace System.Text
 {
     [Ignore]
     [Namespace("Bridge.Text")]
-    public class StringBuilder
+    public class StringBuilder : IBridgeClass
     {
         public StringBuilder()
             : this(string.Empty)
