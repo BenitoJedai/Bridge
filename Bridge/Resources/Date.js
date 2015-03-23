@@ -451,6 +451,17 @@
 
                 int += ss.length;
             }
+            else if (token == "u") {
+                ff = this.subparseInt(str, int, 1, 7);
+
+                if (ff == null) {
+                    invalid = true;
+
+                    break;
+                }
+
+                int += ff.length;
+            }
             else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
                 ff = this.subparseInt(str, int, token.length, 7);
 

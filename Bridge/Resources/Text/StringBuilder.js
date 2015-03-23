@@ -2,9 +2,11 @@
     statics: {
     },
 
-    config: {
-        fields: {
-            buffer: []
+    $config: function () { 
+        return {
+            fields: {
+                buffer: []
+            }
         }
     },
 

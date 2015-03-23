@@ -36,10 +36,12 @@
         }
     },
 
-    config : {
-        fields: {
-            ticks: 0
-        }
+    $config : function () {
+        return {
+            fields: {
+                ticks: 0
+            }
+        };
     },
 
     constructor: function () {

@@ -1442,7 +1442,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
                 timeSeparator: ":",
                 universalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
                 yearMonthPattern: "MMMM, yyyy",
-                roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffzzz"
+                roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.uzzz"
             });
         }
     },
@@ -2690,6 +2690,17 @@ Bridge.Date = {
 
                 int += ss.length;
             }
+            else if (token == "u") {
+                ff = this.subparseInt(str, int, 1, 7);
+
+                if (ff == null) {
+                    invalid = true;
+
+                    break;
+                }
+
+                int += ff.length;
+            }
             else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
                 ff = this.subparseInt(str, int, token.length, 7);
 
@@ -2990,10 +3001,12 @@ Bridge.Class.define('Bridge.TimeSpan', {
         }
     },
 
-    config : {
-        fields: {
-            ticks: 0
-        }
+    $config : function () {
+        return {
+            fields: {
+                ticks: 0
+            }
+        };
     },
 
     constructor: function () {
@@ -3154,9 +3167,11 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
     statics: {
     },
 
-    config: {
-        fields: {
-            buffer: []
+    $config: function () { 
+        return {
+            fields: {
+                buffer: []
+            }
         }
     },
 

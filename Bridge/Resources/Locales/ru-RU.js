@@ -55,6 +55,6 @@
         timeSeparator: ":",
         universalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
         yearMonthPattern: "MMMM yyyy",
-        roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffzzz"
+        roundtripFormat: "yyyy'-'MM'-'dd'T'HH':'mm':'ss.uzzz"
     })
 });
