@@ -1,4 +1,7 @@
 Bridge.String = {
+    isNullOrEmpty: function (value) {
+        return Bridge.isEmpty(value, false);
+    },
     fromCharCount: function (c, count) {
         if (count >= 0) {
             return String(Array(count + 1).join(String.fromCharCode(c)));

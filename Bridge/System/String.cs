@@ -36,6 +36,17 @@ namespace System
         public String(char c, int count) { }
 
         /// <summary>
+        /// Indicates whether the specified string is null or an Empty string.
+        /// </summary>
+        /// <param name="value">The string to test. </param>
+        /// <returns>true if the value parameter is null or an empty string (""); otherwise, false.</returns>
+        [Template("Bridge.String.isNullOrEmpty({value})")]
+        public static bool IsNullOrEmpty(string value)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// The static String.fromCharCode() method returns a string created by using the specified sequence of Unicode values.
         /// </summary>
         /// <param name="numbers">A sequence of numbers that are Unicode values.</param>
