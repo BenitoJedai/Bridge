@@ -1,4 +1,12 @@
 Bridge.String = {
+    fromCharCount: function (c, count) {
+        if (count >= 0) {
+            return String(Array(count + 1).join(String.fromCharCode(c)));
+        }
+        else {
+            throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
+        }
+    },
     format: function (format) {
         var me = this,
             _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,

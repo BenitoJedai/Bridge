@@ -28,6 +28,14 @@ namespace System
         public String(object thing) { }
 
         /// <summary>
+        /// Constructs a string from the value indicated by a specified character repeated a specified number of times.
+        /// </summary>
+        /// <param name="c">A character.</param>
+        /// <param name="count">The number of times the character occurs.</param>
+        [Template("Bridge.String.fromCharCount({c}, {count})")]
+        public String(char c, int count) { }
+
+        /// <summary>
         /// The static String.fromCharCode() method returns a string created by using the specified sequence of Unicode values.
         /// </summary>
         /// <param name="numbers">A sequence of numbers that are Unicode values.</param>
