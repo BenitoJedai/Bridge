@@ -8,12 +8,6 @@
     <AdditionalExplicitAssemblyReferences />
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="Bridge.dll">
-      <HintPath>$(OutputPath)Bridge.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
   <Target Name="AfterBuild">
     <GenerateScript
       OutputPath="$(OutputPath)"

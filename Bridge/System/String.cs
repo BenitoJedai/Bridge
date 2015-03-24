@@ -28,6 +28,36 @@ namespace System
         public String(object thing) { }
 
         /// <summary>
+        /// Constructs a string from the value indicated by a specified character repeated a specified number of times.
+        /// </summary>
+        /// <param name="c">A character.</param>
+        /// <param name="count">The number of times the character occurs.</param>
+        [Template("Bridge.String.fromCharCount({c}, {count})")]
+        public String(char c, int count) { }
+
+        /// <summary>
+        /// Indicates whether the specified string is null or an Empty string.
+        /// </summary>
+        /// <param name="value">The string to test. </param>
+        /// <returns>true if the value parameter is null or an empty string (""); otherwise, false.</returns>
+        [Template("Bridge.String.isNullOrEmpty({value})")]
+        public static bool IsNullOrEmpty(string value)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
+        /// </summary>
+        /// <param name="value">The string to test.</param>
+        /// <returns>true if the value parameter is null or String.Empty, or if value consists exclusively of white-space characters. </returns>
+        [Template("Bridge.String.isNullOrWhiteSpace({value})")]
+        public static bool IsNullOrWhiteSpace(string value)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// The static String.fromCharCode() method returns a string created by using the specified sequence of Unicode values.
         /// </summary>
         /// <param name="numbers">A sequence of numbers that are Unicode values.</param>
@@ -507,6 +537,15 @@ namespace System
         public string ToUpperCase() 
         { 
             return null; 
+        }
+
+        /// <summary>
+        /// The trim() method removes whitespace from both ends of a string. Whitespace in this context is all the whitespace characters (space, tab, no-break space, etc.) and all the line terminator characters (LF, CR, etc.).
+        /// </summary>
+        /// <returns>The trimmed string</returns>
+        public string Trim()
+        {
+            return null;
         }
         
         /// <summary>
