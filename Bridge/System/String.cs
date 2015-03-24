@@ -47,6 +47,17 @@ namespace System
         }
 
         /// <summary>
+        /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
+        /// </summary>
+        /// <param name="value">The string to test.</param>
+        /// <returns>true if the value parameter is null or String.Empty, or if value consists exclusively of white-space characters. </returns>
+        [Template("Bridge.String.isNullOrWhiteSpace({value})")]
+        public static bool IsNullOrWhiteSpace(string value)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// The static String.fromCharCode() method returns a string created by using the specified sequence of Unicode values.
         /// </summary>
         /// <param name="numbers">A sequence of numbers that are Unicode values.</param>

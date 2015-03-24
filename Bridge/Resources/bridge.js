@@ -697,6 +697,9 @@ Bridge.nullable = {
 
 Bridge.hasValue = Bridge.nullable.hasValue;
 Bridge.String = {
+    isNullOrWhiteSpace: function (value) {
+        return value === null || value.match(/^ *$/) !== null;
+    },
     isNullOrEmpty: function (value) {
         return Bridge.isEmpty(value, false);
     },
