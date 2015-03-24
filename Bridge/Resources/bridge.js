@@ -2477,6 +2477,10 @@ Bridge.Date = {
     },
 
     parse: function (value, provider) {
+        var dt = Date.parse(value);
+        if (!isNaN(dt)) {
+            return new Date(dt);
+        }
         return this.parseExact(value, null, provider);
     },    
 
@@ -2697,9 +2701,13 @@ Bridge.Date = {
                     invalid = true;
 
                     break;
-                }
+                }                
 
                 int += ff.length;
+
+                if (ff.length > 3) {
+                    ff = ff.substring(0, 3);
+                }
             }
             else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
                 ff = this.subparseInt(str, int, token.length, 7);
@@ -2708,9 +2716,13 @@ Bridge.Date = {
                     invalid = true;
 
                     break;
-                }
+                }               
 
                 int += ff.length;
+
+                if (ff.length > 3) {
+                    ff = ff.substring(0, 3);
+                }
             }
             else if (token == "t") {
                 if (str.substring(int, int + 1).toLowerCase() == am.charAt(0).toLowerCase()) {
