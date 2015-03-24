@@ -527,6 +527,15 @@ namespace System
         { 
             return null; 
         }
+
+        /// <summary>
+        /// The trim() method removes whitespace from both ends of a string. Whitespace in this context is all the whitespace characters (space, tab, no-break space, etc.) and all the line terminator characters (LF, CR, etc.).
+        /// </summary>
+        /// <returns>The trimmed string</returns>
+        public string Trim()
+        {
+            return null;
+        }
         
         /// <summary>
         /// The toLocaleUpperCase() method returns the calling string value converted to upper case, according to any locale-specific case mappings.
