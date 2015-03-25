@@ -606,19 +606,36 @@
 
                 if ((!inQuotes && ((token == ":" && name != df.timeSeparator) ||
                     (token == "/" && name != df.dateSeparator))) ||
-                    (name != token && token != "'")) {
+                    (name != token && token != "'" && token != '"' && token != "\\")) {
                     invalid = true;
 
                     break;
                 }
 
-                if (token != "'") {
+                if (inQuotes == "\\") {
+                    inQuotes = false;
+                }
+
+                if (token != "'" && token != '"' && token != "\\") {
                     int += token.length;
                 }
                 else {
-                    inQuotes = !inQuotes;
+                    if (inQuotes === false) {
+                        inQuotes = token;
+                    }
+                    else {
+                        if (inQuotes != token) {
+                            invalid = true;
+                            break;
+                        }
+                        inQuotes = false;
+                    }
                 }
             }
+        }
+
+        if (inQuotes) {
+            invalid = true;
         }
         
         if (!invalid) {
