@@ -42,6 +42,14 @@ window.Bridge = {
         return scope;
     },
 
+    ready: function (fn) {
+        if (typeof window.jQuery !== 'undefined') {
+            $(fn);
+        } else {
+            Bridge.on('DOMContentLoaded', document, fn);
+        }
+    },
+
     on: function (event, elem, fn) {
         function listenHandler(e) {
             var ret = fn.apply(this, arguments);
