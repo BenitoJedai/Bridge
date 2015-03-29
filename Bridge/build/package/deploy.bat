@@ -1,2 +1,3 @@
 SET _=%~dp0
-xcopy "%_%..\output" "%_%..\..\..\MyWebApplication\resources\js" /Y
+SET dest="%_%..\..\..\MyWebApplication\resources\js"
+IF EXIST %dest% xcopy "%_%..\output" %dest% /Y
