@@ -31,10 +31,12 @@ namespace System.Text.RegularExpressions
 
 		public string this[int index] 
         { 
+            [Ignore]
             get 
             { 
                 return null; 
-            } 
+            }
+            [Ignore]
             set 
             {
             } 

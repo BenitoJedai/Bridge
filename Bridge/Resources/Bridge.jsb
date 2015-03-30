@@ -22,6 +22,7 @@
   <file name="Validation.js" />
   <file name="Attribute.js" />
   <file name="INotifyPropertyChanged.js" />
+  <file name="Array.js" />
   <target name="Bridge.NET" file="$output\bridge.js" debug="True">
     <include name="Core.js" />
     <include name="Nullable.js" />
@@ -45,5 +46,6 @@
     <include name="Validation.js" />
     <include name="Attribute.js" />
     <include name="INotifyPropertyChanged.js" />
+    <include name="Array.js" />
   </target>
 </project>

@@ -15,10 +15,12 @@ namespace System
 
         public object this[int index]
         {
+            [Ignore]
             get
             {
                 return null;
             }
+            [Ignore]
             set
             {
             }

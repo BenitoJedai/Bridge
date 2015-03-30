@@ -57,7 +57,7 @@ namespace System.Collections.Generic
 
         public TValue this[TKey key]
         {
-            [Template("get({0})")]
+            [Template("get({0})")]            
             get
             {
                 return default(TValue);

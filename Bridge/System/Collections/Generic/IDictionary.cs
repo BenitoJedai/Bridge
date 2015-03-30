@@ -7,8 +7,10 @@ namespace System.Collections.Generic
     public interface IDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IBridgeClass
     {
 		TValue this[TKey key] 
-        { 
-            get; 
+        {
+            [Template("get({0})")]
+            get;
+            [Template("set({0})")]
             set; 
         }
 

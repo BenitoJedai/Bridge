@@ -9,10 +9,12 @@ namespace System
     {
         public virtual object this[string name] 
         { 
+            [Ignore]
             get 
             { 
                 return null; 
-            } 
+            }
+            [Ignore]
             set 
             { 
             } 
