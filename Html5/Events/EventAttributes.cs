@@ -36,12 +36,13 @@ namespace Bridge.Html5
     }  
 
     [Ignore]
-    public class DOMContentLoadedAttribute : EventAttribute
+    public class ReadyAttribute : EventAttribute
     {
-        public const string Event = "DOMContentLoaded";
+        new public const string Format = "Bridge.ready(this.{2});";
+        public const string Event = "ready";
 
-        public DOMContentLoadedAttribute(string selector = "document", HtmlEventTarget target = HtmlEventTarget.Raw)
-        {            
+        public ReadyAttribute()
+        {
         }
     }
 
