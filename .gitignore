@@ -130,3 +130,4 @@ Build/*.dll
 Build/*.xml
 Build/*.exe
 Build/*.nupkg
+Bridge.dev.sln
