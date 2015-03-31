@@ -29,3 +29,5 @@ Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
     }));
 });
+
+Bridge.Class.define('Bridge.IPromise', {});

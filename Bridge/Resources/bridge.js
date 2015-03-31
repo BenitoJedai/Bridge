@@ -1414,6 +1414,7 @@ Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
     }));
 });
 
+Bridge.Class.define('Bridge.IPromise', {});
 Bridge.Class.define("Bridge.DateTimeFormatInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 

@@ -6,6 +6,7 @@ namespace System.Threading.Tasks
     /// http://wiki.commonjs.org/wiki/Promises/A
 	/// </summary>
 	[Ignore]
+    [Name("Bridge.IPromise")]
 	public interface IPromise 
     {
 		/// <summary>
