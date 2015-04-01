@@ -28,6 +28,7 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="text">The string to parse as JSON. See the JSON object for a description of JSON syntax.</param>
         /// <returns>The Object corresponding to the given JSON text.</returns>
+        [Template("Bridge.merge(new {T}(), JSON.parse({text}))")]
         public static T Parse<T>(string text)
         {
             return default(T);
@@ -61,6 +62,7 @@ namespace Bridge.Html5
         /// <param name="text">The string to parse as JSON. See the JSON object for a description of JSON syntax.</param>
         /// <param name="reviver">If a function, prescribes how the value originally produced by parsing is transformed, before being returned.</param>
         /// <returns>The Object corresponding to the given JSON text.</returns>
+        [Template("Bridge.merge(new {T}(), JSON.parse({text}, {reviver}))")]
         public static T Parse<T>(string text, Delegate reviver)
         {
             return default(T);
@@ -72,6 +74,7 @@ namespace Bridge.Html5
         /// <param name="text">The string to parse as JSON. See the JSON object for a description of JSON syntax.</param>
         /// <param name="reviver">If a function, prescribes how the value originally produced by parsing is transformed, before being returned.</param>
         /// <returns>The Object corresponding to the given JSON text.</returns>
+        [Template("Bridge.merge(new {T}(), JSON.parse({text}, {reviver}))")]
         public static T Parse<T>(string text, Func<string, object, object> reviver)
         {
             return default(T);

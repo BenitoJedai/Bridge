@@ -250,9 +250,15 @@ window.Bridge = {
 	            else if (value && value.constructor === Object) {
 	                toValue = to[key];
 	                Bridge.merge(toValue, value);
-	            }
+	            }	            
 	            else {
-	                to[key] = value;
+	                var setter = "set" + key.charAt(0).toUpperCase() + key.slice(1);
+	                if (typeof to[setter] == "function" && typeof value != "function") {
+	                    to[setter](value);
+	                }
+	                else {
+	                    to[key] = value;
+	                }
 	            }
 	        }
 	    }
