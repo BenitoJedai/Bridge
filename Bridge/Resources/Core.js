@@ -244,7 +244,7 @@ window.Bridge = {
 	                if (typeof to[setter] == "function" && typeof value != "function") {
 	                    to[setter](value);
 	                }
-	                else if (value && value.constructor === Object) {
+	                else if (value && value.constructor === Object && to[key]) {
 	                    toValue = to[key];
 	                    Bridge.merge(toValue, value);
 	                }
