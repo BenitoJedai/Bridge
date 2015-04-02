@@ -4,8 +4,8 @@ using System;
 
 namespace Bridge
 {
-    [Name("Bridge")]
     [Ignore]
+    [Name("Bridge")]
     public static class Script
     {
         public static object Apply(object obj, object values)
@@ -295,12 +295,12 @@ namespace Bridge
         }
 
         [Template("{scope}[{name}].call({scope}, {args})")]
-        public static void Call(object scope, string name, params object[] args)
+        public static void ScopedCall(object scope, string name, params object[] args)
         {
         }
 
         [Template("{scope}[{name}].call({scope}, {args})")]
-        public static T Call<T>(object scope, string name, params object[] args)
+        public static T ScopedCall<T>(object scope, string name, params object[] args)
         {
             return default(T);
         }
