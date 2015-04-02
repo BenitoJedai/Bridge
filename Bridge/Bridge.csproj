@@ -72,6 +72,8 @@
     <Compile Include="System\ArgumentNullException.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArithmeticException.cs" />
+    <Compile Include="System\Collections\Generic\IList.cs" />
+    <Compile Include="System\Collections\ObjectModel\ReadOnlyCollection.cs" />
     <Compile Include="System\OverflowException.cs" />
     <Compile Include="System\Globalization\CultureNotFoundException.cs" />
     <Compile Include="System\ArgumentOutOfRangeException.cs" />

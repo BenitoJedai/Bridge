@@ -18,24 +18,7 @@ namespace System
             set 
             { 
             } 
-        }
-
-        //[Template("{this}")]
-        //public readonly dynamic This;
-
-        public readonly Type Constructor;
-
-        [Template("{this}")]
-        public virtual dynamic ToDynamic()
-        {
-            return null;
-        }
-
-        [Template("$$name")]
-        public virtual string GetClassName()
-        {
-            return null;
-        }
+        }        
 
         public virtual string ToString() 
         { 
@@ -112,21 +95,25 @@ namespace System
         {
             return null;
         }
+
+        public readonly Type Constructor;
+
+        [Template("{this}")]
+        public virtual dynamic ToDynamic()
+        {
+            return null;
+        }
+
+        [Template("$$name")]
+        public virtual string GetClassName()
+        {
+            return null;
+        }
     }
 
     [Ignore]
     public static class ObjectExtensions
     {
-        [Template("{obj}[{name}] = {args}")]
-        public static void AddMember(this object obj, string name, object member)
-        {
-        }
-
-        [Template("Bridge.fn.call({obj}, {name}, {args})")]
-        public static void CallFn(this object obj, string name, params object[] args)
-        {
-        }
-
         [Template("{0}")]
         public static T As<T>(this object obj)
         {

@@ -278,9 +278,48 @@ namespace Bridge
             return null;
         }
 
+        [Template("this")]
         public static T This<T>()
         {
             return default(T);
+        }
+
+        [Template("{scope}[{name}] = {value}")]
+        public static void Set(object scope, string name, object value)
+        {
+        }
+
+        [Template("window[{name}] = {value}")]
+        public static void Set(string name, object value)
+        {
+        }
+
+        [Template("{scope}[{name}].call({scope}, {args})")]
+        public static void Call(object scope, string name, params object[] args)
+        {
+        }
+
+        [Template("{scope}[{name}].call({scope}, {args})")]
+        public static T Call<T>(object scope, string name, params object[] args)
+        {
+            return default(T);
+        }
+
+        [Template("window[{name}].call(null, {args})")]
+        public static void Call(string name, params object[] args)
+        {
+        }
+
+        [Template("window[{name}].call(null, {args})")]
+        public static T Call<T>(string name, params object[] args)
+        {
+            return default(T);
+        }
+
+        [Template("window")]
+        public static dynamic ToDynamic()
+        {
+            return null;
         }
     }
 }

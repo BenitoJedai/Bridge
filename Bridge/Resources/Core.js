@@ -440,6 +440,8 @@ window.Bridge = {
         call: function (obj, fnName){
             var args = Array.prototype.slice.call(arguments, 2);
 
+            obj = obj || window;
+
             return obj[fnName].apply(obj, args);
         },
 

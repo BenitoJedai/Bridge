@@ -44,3 +44,11 @@ Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
         extend: [Bridge.IEnumerable$1(Bridge.KeyValuePair$2(TKey, TValue))],
     }));
 });
+
+Bridge.Class.generic('Bridge.IList$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IList$1', T);
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.ICollection$1(T)]
+    }));
+});

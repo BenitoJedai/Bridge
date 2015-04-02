@@ -3607,6 +3607,13 @@ Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
     }));
 });
 
+Bridge.Class.generic('Bridge.IList$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.IList$1', T);
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.ICollection$1(T)]
+    }));
+});
 Bridge.Class.define("Bridge.CustomEnumerator", {
     extend: [Bridge.IEnumerator],
 
@@ -3967,15 +3974,18 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
         },
 
         set: function (index, value) {
+            this.checkReadOnly();
             this.checkIndex(index);
             this.items[index] = value;
         },
 
         add: function (value) {
+            this.checkReadOnly();
             this.items.push(value);
         },
 
         addRange: function (items) {
+            this.checkReadOnly();
             var array = Bridge.toArray(items),
                 i,
                 len;
@@ -3986,6 +3996,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
         },
 
         clear: function () {
+            this.checkReadOnly();
             this.items = [];
         },
 
@@ -4043,6 +4054,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
         },
 
         insert: function (index, item) {
+            this.checkReadOnly();
             if (index != 0) {
                 this.checkIndex(index);
             }
@@ -4081,6 +4093,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
         },
 
         remove: function (item) {
+            this.checkReadOnly();
             var index = this.indexOf(item);
 
             this.checkIndex(index);
@@ -4088,37 +4101,66 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
         },
 
         removeAt: function (index) {
+            this.checkReadOnly();
             this.checkIndex(index);
             this.items.splice(index, 1);
         },
 
         removeRange: function (index, count) {
+            this.checkReadOnly();
             this.checkIndex(index);
             this.items.splice(index, count);
         },
 
         reverse: function () {
+            this.checkReadOnly();
             this.items.reverse();
         },
 
         slice: function (start, end) {
+            this.checkReadOnly();
             this.items.slice(start, end);
         },
 
         sort: function (comparison) {
+            this.checkReadOnly();
             this.items.sort(comparison);
         },
 
         splice: function (start, count, items) {
+            this.checkReadOnly();
             this.items.splice(start, count, items);
         },
 
         unshift: function () {
+            this.checkReadOnly();
             this.items.unshift();
         },
 
         toArray: function () {
             return Bridge.toArray(this);
+        },
+
+        checkReadOnly: function () {
+            if (this.readOnly) {
+                throw new Bridge.NotSupportedException();
+            }
+        }
+    }));
+});
+
+Bridge.Class.generic('Bridge.ReadOnlyCollection$1', function (T) {
+    var $$name = Bridge.Class.genericName('Bridge.ReadOnlyCollection$1', T);
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+        extend: [Bridge.List$1(T)],
+        constructor: function (list) {
+            if (list == null) {
+                throw new Bridge.ArgumentNullException("list");
+            }
+            
+            Bridge.ReadOnlyCollection$1.prototype.$constructor.call(this, list);
+            this.readOnly = true;
         }
     }));
 });
