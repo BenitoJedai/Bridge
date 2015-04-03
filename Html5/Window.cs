@@ -1038,30 +1038,9 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="handler">the function you want to be called repeatedly.</param>
         /// <returns>a unique interval ID you can pass to clearInterval().</returns>
-        public static int SetInterval(Delegate handler)
-        {
-            return 0;
-        }
-
-        /// <summary>
-        /// Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function.
-        /// </summary>
-        /// <param name="handler">the function you want to be called repeatedly.</param>
-        /// <returns>a unique interval ID you can pass to clearInterval().</returns>
         public static int SetInterval(Action handler) 
         { 
             return 0; 
-        }
-
-        /// <summary>
-        /// Calls a function or executes a code snippet repeatedly, with a fixed time delay between each call to that function.
-        /// </summary>
-        /// <param name="handler">the function you want to be called repeatedly.</param>
-        /// <param name="delay">the number of milliseconds (thousandths of a second) that the setInterval() function should wait before each call to func.</param>
-        /// <returns>a unique interval ID you can pass to clearInterval().</returns>
-        public static int SetInterval(Delegate handler, int delay)
-        {
-            return 0;
         }
 
         /// <summary>
@@ -1137,30 +1116,9 @@ namespace Bridge.Html5
         /// </summary>
         /// <param name="handler"> the function you want to execute after delay milliseconds.</param>
         /// <returns> the numerical ID of the timeout, which can be used later with window.clearTimeout().</returns>
-        public static int SetTimeout(Delegate handler)
-        {
-            return 0;
-        }
-
-        /// <summary>
-        /// Calls a function or executes a code snippet after a specified delay.
-        /// </summary>
-        /// <param name="handler"> the function you want to execute after delay milliseconds.</param>
-        /// <returns> the numerical ID of the timeout, which can be used later with window.clearTimeout().</returns>
         public static int SetTimeout(Action handler) 
         { 
             return 0; 
-        }
-
-        /// <summary>
-        /// Calls a function or executes a code snippet after a specified delay.
-        /// </summary>
-        /// <param name="handler"> the function you want to execute after delay milliseconds.</param>
-        /// <param name="delay"> the number of milliseconds (thousandths of a second) that the function call should be delayed by. The actual delay may be longer;</param>
-        /// <returns> the numerical ID of the timeout, which can be used later with window.clearTimeout().</returns>
-        public static int SetTimeout(Delegate handler, int delay)
-        {
-            return 0;
         }
 
         /// <summary>

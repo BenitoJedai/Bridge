@@ -1130,7 +1130,7 @@ namespace Bridge.Html5
         /// <summary>
         /// The position CSS property chooses alternative rules for positioning elements, designed to be useful for scripted animation effects.
         /// </summary>
-        public string Position;
+        public Position Position;
 
         /// <summary>
         /// The quotes CSS property indicates how user agents should render quotation marks.
