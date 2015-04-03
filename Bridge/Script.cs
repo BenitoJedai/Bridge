@@ -323,8 +323,19 @@ namespace Bridge
         {
         }
 
+        [Template("{scope:raw}[{name}]()")]
+        public static void ScopedCall(object scope, string name)
+        {
+        }
+
         [Template("{scope:raw}[{name}].call({scope:raw}, {args})")]
         public static T ScopedCall<T>(object scope, string name, params object[] args)
+        {
+            return default(T);
+        }
+
+        [Template("{scope:raw}[{name}]()")]
+        public static T ScopedCall<T>(object scope, string name)
         {
             return default(T);
         }
@@ -334,8 +345,19 @@ namespace Bridge
         {
         }
 
+        [Template("{name:raw}()")]
+        public static void Call(string name)
+        {
+        }
+
         [Template("{name:raw}.call(null, {args})")]
         public static T Call<T>(string name, params object[] args)
+        {
+            return default(T);
+        }
+
+        [Template("{name:raw}()")]
+        public static T Call<T>(string name)
         {
             return default(T);
         }
