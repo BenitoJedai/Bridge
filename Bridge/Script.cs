@@ -284,39 +284,63 @@ namespace Bridge
             return default(T);
         }
 
-        [Template("{scope}[{name}] = {value}")]
+        [Template("{scope:raw}[{name}] = {value}")]
         public static void Set(object scope, string name, object value)
         {
         }
 
-        [Template("window[{name}] = {value}")]
+        [Template("{name:raw} = {value}")]
         public static void Set(string name, object value)
         {
         }
 
-        [Template("{scope}[{name}].call({scope}, {args})")]
+        [Template("{name:raw}")]
+        public static object Get(string name)
+        {
+            return null;
+        }
+
+        [Template("{scope:raw}[{name}]")]
+        public static object Get(object scope, string name)
+        {
+            return null;
+        }
+
+        [Template("{name:raw}")]
+        public static T Get<T>(string name)
+        {
+            return default(T);
+        }
+
+        [Template("{scope:raw}[{name}]")]
+        public static T Get<T>(object scope, string name)
+        {
+            return default(T);
+        }
+
+        [Template("{scope:raw}[{name}].call({scope:raw}, {args})")]
         public static void ScopedCall(object scope, string name, params object[] args)
         {
         }
 
-        [Template("{scope}[{name}].call({scope}, {args})")]
+        [Template("{scope:raw}[{name}].call({scope:raw}, {args})")]
         public static T ScopedCall<T>(object scope, string name, params object[] args)
         {
             return default(T);
         }
 
-        [Template("window[{name}].call(null, {args})")]
+        [Template("{name:raw}.call(null, {args})")]
         public static void Call(string name, params object[] args)
         {
         }
 
-        [Template("window[{name}].call(null, {args})")]
+        [Template("{name:raw}.call(null, {args})")]
         public static T Call<T>(string name, params object[] args)
         {
             return default(T);
         }
 
-        [Template("window")]
+        [Template(String.Empty)]
         public static dynamic ToDynamic()
         {
             return null;
