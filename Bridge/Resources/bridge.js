@@ -1125,7 +1125,7 @@ Bridge.String = {
 
 
         addExtend: function (cls, extend) {        
-            Array.prototype.push.apply(cls.$$extend, extend);
+            Array.prototype.push.apply(cls.$$extends, extend);
 
             for (i = 0; i < extend.length; i++) {
                 scope = extend[i];
