@@ -267,6 +267,8 @@
         return Class;
     };
 
+    Bridge.define = Bridge.Class.define;
+
     Bridge.Class.addExtend = function (cls, extend) {        
         Array.prototype.push.apply(cls.$$extend, extend);
 

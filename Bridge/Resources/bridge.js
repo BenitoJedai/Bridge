@@ -8,7 +8,7 @@
 
 // @source resources/Core.js
 
-window.Bridge = {
+var Bridge = {
     emptyFn: function () { },
 
     copy: function (to, from, keys, toIf) {
@@ -59,7 +59,7 @@ window.Bridge = {
     },
 
     on: function (event, elem, fn) {
-        function listenHandler(e) {
+        var listenHandler = function (e) {
             var ret = fn.apply(this, arguments);
 
             if (ret === false) {
@@ -70,7 +70,7 @@ window.Bridge = {
             return(ret);
         }
 
-        function attachHandler() {            
+        var attachHandler = function () {            
             var ret = fn.call(elem, window.event);
 
             if (ret === false) {
@@ -447,6 +447,8 @@ window.Bridge = {
     fn: {
         call: function (obj, fnName){
             var args = Array.prototype.slice.call(arguments, 2);
+
+            obj = obj || window;
 
             return obj[fnName].apply(obj, args);
         },
@@ -1113,6 +1115,8 @@ Bridge.String = {
 
         return Class;
     };
+
+    Bridge.define = Bridge.Class.define;
 
     Bridge.Class.addExtend = function (cls, extend) {        
         Array.prototype.push.apply(cls.$$extend, extend);
