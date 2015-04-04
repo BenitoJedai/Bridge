@@ -1,4 +1,4 @@
-﻿Bridge.Class.define('Bridge.ArrayEnumerator', {
+﻿Bridge.define('Bridge.ArrayEnumerator', {
     constructor: function (array) {
         this.array = array;
         this.reset();

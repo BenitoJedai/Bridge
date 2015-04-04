@@ -158,6 +158,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Array.js" />
+    <Content Include="Resources\Finally.js" />
+    <Content Include="Resources\Init.js" />
     <Content Include="Resources\Attribute.js" />
     <Content Include="Resources\Browser.js" />
     <Content Include="Resources\Class.js" />

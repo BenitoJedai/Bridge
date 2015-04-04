@@ -1,4 +1,4 @@
-﻿Bridge.Class.define('Bridge.Text.StringBuilder', {
+﻿Bridge.define('Bridge.Text.StringBuilder', {
     statics: {
     },
 

@@ -1,4 +1,6 @@
-﻿Bridge.Class.define('Bridge.Int', {
+﻿// @source Integer.js
+
+Bridge.define('Bridge.Int', {
     extend: [Bridge.IComparable, Bridge.IFormattable],
     statics: {
         instanceOf: function (instance) {
@@ -27,6 +29,7 @@
             }
             
             match = format.match(/^([a-zA-Z])(\d*)$/);
+
             if (match) {
                 fs = match[1].toUpperCase();
                 precision = parseInt(match[2], 10);
@@ -92,6 +95,7 @@
                         if (isNaN(precision)) {
                             precision = nf.percentDecimalDigits;
                         }
+
                         return this.defaultFormat(number * 100, 1, precision, precision, nf, false, "percent");
                     case "X":
                         var result = Math.round(number).toString(16);
@@ -174,6 +178,7 @@
             str = "" + (Math.round(Math.abs(number) * roundingFactor) / roundingFactor);
 
             decimalIndex = str.indexOf(".");
+
             if (decimalIndex > 0) {
                 decimalPart = nf[name + "DecimalSeparator"] + str.substr(decimalIndex + 1);
                 str = str.substr(0, decimalIndex);

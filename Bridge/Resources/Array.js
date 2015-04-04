@@ -1,5 +1,7 @@
-﻿Bridge.Array = {
-    toIndex: function(arr, indices) {
+﻿// @source Array.js
+
+Bridge.Array = {
+    toIndex: function (arr, indices) {
         if (indices.length != (arr.$s ? arr.$s.length : 1)) {
             throw new Bridge.ArgumentException("Invalid number of indices");
         }
@@ -10,19 +12,23 @@
 
         var idx = indices[0],
             i;
+
         if (arr.$s) {
             for (i = 1; i < arr.$s.length; i++) {
                 if (indices[i] < 0 || indices[i] >= arr.$s[i]) {
                     throw new Bridge.ArgumentException("Index " + i + " out of range");
                 }
+
                 idx = idx * arr.$s[i] + indices[i];
             }
         }
+
         return idx;
     },
 
     get: function (indices) {
         var r = this[Bridge.Array.toIndex(this, indices)];
+
         return typeof r !== "undefined" ? r : this.$v;
     },
 
@@ -54,6 +60,7 @@
             for (i = 0; i < arr.length; i++) {                
                 indices = [];
                 flatIdx = i;
+
                 for (s = arr.$s.length - 1; s >= 0; s--) {
                     idx = flatIdx % arr.$s[s];
                     indices.unshift(idx);
@@ -61,9 +68,11 @@
                 }
 
                 v = initValues;
+
                 for (idx = 0; idx < indices.length; idx++) {
                     v = v[indices[idx]];
                 }
+
                 arr[i] = v;
             }            
         }

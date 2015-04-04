@@ -1,4 +1,6 @@
-﻿Bridge.Date = {    
+﻿// @source Date.js
+
+Bridge.Date = {
     utcNow:  function () {
         var d = new Date();
 

@@ -1,6 +1,6 @@
-// @source resources/Core.js
+// @source Core.js
 
-window.Bridge = {
+var Bridge = {
     emptyFn: function () { },
 
     copy: function (to, from, keys, toIf) {
@@ -33,7 +33,7 @@ window.Bridge = {
 
         for (i = 0; i < nsParts.length; i++) {
             if (typeof scope[nsParts[i]] == 'undefined') {
-                scope[nsParts[i]] = {};
+                scope[nsParts[i]] = { };
             }
 
             scope = scope[nsParts[i]];
@@ -51,7 +51,7 @@ window.Bridge = {
     },
 
     on: function (event, elem, fn) {
-        function listenHandler(e) {
+        var listenHandler = function (e) {
             var ret = fn.apply(this, arguments);
 
             if (ret === false) {
@@ -62,7 +62,7 @@ window.Bridge = {
             return(ret);
         }
 
-        function attachHandler() {            
+        var attachHandler = function () {            
             var ret = fn.call(elem, window.event);
 
             if (ret === false) {

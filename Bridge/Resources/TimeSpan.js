@@ -1,4 +1,4 @@
-﻿Bridge.Class.define('Bridge.TimeSpan', {
+﻿Bridge.define('Bridge.TimeSpan', {
     extend: [Bridge.IComparable],
     statics: {
         fromDays: function (value) {

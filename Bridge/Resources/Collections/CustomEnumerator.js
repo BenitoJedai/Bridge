@@ -1,4 +1,4 @@
-﻿Bridge.Class.define("Bridge.CustomEnumerator", {
+﻿Bridge.define("Bridge.CustomEnumerator", {
     extend: [Bridge.IEnumerator],
 
     constructor: function (moveNext, getCurrent, reset, dispose, scope) {

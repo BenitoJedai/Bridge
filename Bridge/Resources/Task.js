@@ -1,7 +1,7 @@
 
-// @source resources/Task.js
+// @source Task.js
 
-Bridge.Class.define('Bridge.Task', {
+Bridge.define('Bridge.Task', {
     constructor: function (action, state) {
         this.action = action;
         this.state = state;
@@ -176,7 +176,7 @@ Bridge.Class.define('Bridge.Task', {
                 task.setResult(value);
             };
 
-            args[0] = args[0] || {};
+            args[0] = args[0] || { };
             args[0][name] = callback;
 
             target[method].apply(target, args);
@@ -338,7 +338,7 @@ Bridge.Class.define('Bridge.Task', {
     }
 });
 
-Bridge.Class.define('Bridge.TaskStatus', {
+Bridge.define('Bridge.TaskStatus', {
     $statics: {
         created: 0,
         waitingForActivation: 1,

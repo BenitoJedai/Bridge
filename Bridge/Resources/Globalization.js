@@ -1,4 +1,6 @@
-﻿Bridge.Class.define("Bridge.DateTimeFormatInfo", {
+﻿// @source Globalization.js
+
+Bridge.define("Bridge.DateTimeFormatInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
@@ -95,7 +97,7 @@
                 throw new Bridge.ArgumentException(null, "format");
             }
 
-            formats = {};
+            formats = { };
             formats[format] = f[format];
         }
         else {
@@ -169,7 +171,7 @@
     }
 });
 
-Bridge.Class.define("Bridge.NumberFormatInfo", {
+Bridge.define("Bridge.NumberFormatInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
@@ -251,12 +253,12 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
     }
 });
 
-Bridge.Class.define("Bridge.CultureInfo", {
+Bridge.define("Bridge.CultureInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
         constructor: function () {
-            this.cultures = {};
+            this.cultures = { };
             this.invariantCulture = Bridge.merge(new Bridge.CultureInfo("en-US"), {
                 englishName: "English (United States)",
                 nativeName: "English (United States)",

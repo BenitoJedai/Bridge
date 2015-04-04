@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project path="" name="Bridge.NET" author="Object.NET, Inc." version="1.0.0" copyright="@version   : 1.0.0 - Bridge.NET&#xD;&#xA;@author    : Object.NET, Inc. http://www.bridge.net/&#xD;&#xA;@date      : 2015-03-23&#xD;&#xA;@copyright : Copyright (c) 2008-2015, Object.NET, Inc. (http://www.object.net/). All rights reserved.&#xD;&#xA;@license   : See license.txt and https://github.com/bridgedotnet/Bridge.NET/blob/master/LICENSE." output="$project" source="False" minify="False" doc="False" master="true" zip="true">
+  <file name="Init.js" />
   <file name="Core.js" />
   <file name="Nullable.js" />
   <file name="String.js" />
@@ -24,6 +25,7 @@
   <file name="INotifyPropertyChanged.js" />
   <file name="Array.js" />
   <target name="Bridge.NET" file="$output\bridge.js" debug="True">
+    <include name="Init.js" />
     <include name="Core.js" />
     <include name="Nullable.js" />
     <include name="String.js" />

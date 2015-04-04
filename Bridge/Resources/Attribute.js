@@ -1,1 +1,3 @@
-﻿Bridge.Class.define('Bridge.Attribute', { });
+﻿// @source Attribute.js
+
+Bridge.define('Bridge.Attribute', {});

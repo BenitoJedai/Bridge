@@ -1,5 +1,4 @@
-﻿
-// @source resources/Browser.js
+﻿// @source Browser.js
 
 (function () {
     var check = function (regex) {

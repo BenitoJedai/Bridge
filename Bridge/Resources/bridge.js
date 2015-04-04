@@ -6,7 +6,8 @@
  * @license   : See license.txt and https://github.com/bridgedotnet/Bridge.NET/blob/master/LICENSE.
  */
 
-// @source resources/Core.js
+
+// @source Core.js
 
 var Bridge = {
     emptyFn: function () { },
@@ -41,7 +42,7 @@ var Bridge = {
 
         for (i = 0; i < nsParts.length; i++) {
             if (typeof scope[nsParts[i]] == 'undefined') {
-                scope[nsParts[i]] = {};
+                scope[nsParts[i]] = { };
             }
 
             scope = scope[nsParts[i]];
@@ -580,6 +581,7 @@ var Bridge = {
     }
 };
 
+
 // @source resources/Core.js
 
 Bridge.nullable = {
@@ -712,13 +714,17 @@ Bridge.nullable = {
 };
 
 Bridge.hasValue = Bridge.nullable.hasValue;
+// @source String.js
+
 Bridge.String = {
     isNullOrWhiteSpace: function (value) {
         return value === null || value.match(/^ *$/) !== null;
     },
+
     isNullOrEmpty: function (value) {
         return Bridge.isEmpty(value, false);
     },
+
     fromCharCount: function (c, count) {
         if (count >= 0) {
             return String(Array(count + 1).join(String.fromCharCode(c)));
@@ -727,6 +733,7 @@ Bridge.String = {
             throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
         }
     },
+
     format: function (format) {
         var me = this,
             _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
@@ -851,328 +858,329 @@ Bridge.String = {
     }
 };
 
-// @source resources/Class.js
+// @source Class.js
 
 
 
-// Inspired by base2 and Prototype
 (function () {
     var initializing = false;
 
-    // The base Class implementation (does nothing)
-    Bridge.Class = function () { };
-    Bridge.Class.cache = {};
-    
-    Bridge.Class.initCtor = function () {
-        var value = arguments[0];
-        if (this.$multipleCtors && arguments.length > 0 && typeof value == 'string') {
-            value = value === "constructor" ? "$constructor" : value;
+    // The base Class implementation
+    Bridge.Class = {
+        cache: { },
 
-            if ((value === "$constructor" || Bridge.String.startsWith(value, "constructor\\$")) && Bridge.isFunction(this[value])) {
-                this[value].apply(this, Array.prototype.slice.call(arguments, 1));
+        initCtor: function () {
+            var value = arguments[0];
 
-                return;
-            }            
-        }
+            if (this.$multipleCtors && arguments.length > 0 && typeof value == 'string') {
+                value = value === "constructor" ? "$constructor" : value;
 
-        if (this.$constructor) {
-            this.$constructor.apply(this, arguments);
-        }
-    };
+                if ((value === "$constructor" || Bridge.String.startsWith(value, "constructor\\$")) && Bridge.isFunction(this[value])) {
+                    this[value].apply(this, Array.prototype.slice.call(arguments, 1));
 
-    Bridge.Class.initConfig = function (extend, base, cfg, statics, scope) {                
-        scope.$initMembers = function () {
-            var name,
-                config;
-
-            config = Bridge.isFunction(cfg) ? cfg() : cfg;
-
-            if (extend && !statics && base.$initMembers) {
-                base.$initMembers.apply(this, arguments);
+                    return;
+                }            
             }
 
-            if (config.fields) {
-                for (name in config.fields) {
-                    this[name] = config.fields[name];
+            if (this.$constructor) {
+                this.$constructor.apply(this, arguments);
+            }
+        },
+
+        initConfig: function (extend, base, cfg, statics, scope) {                
+            scope.$initMembers = function () {
+                var name,
+                    config;
+
+                config = Bridge.isFunction(cfg) ? cfg() : cfg;
+
+                if (extend && !statics && base.$initMembers) {
+                    base.$initMembers.apply(this, arguments);
                 }
-            }
 
-            if (config.properties) {
-                for (name in config.properties) {
-                    this[name] = config.properties[name];
-                    
-                    var rs = name.charAt(0) == "$",
-                        cap = rs ? name.slice(1) : name;
-
-                    this["get" + cap] = (function (name) {
-                        return function () {
-                            return this[name];
-                        };                        
-                    })(name);
-
-                    this["set" + cap] = (function (name) {
-                        return function (value) {
-                            this[name] = value;
-                        };
-                    })(name);
-                }
-            }
-
-            if (config.events) {
-                for (name in config.events) {
-                    this[name] = config.events[name];
-
-                    var rs = name.charAt(0) == "$",
-                        cap = rs ? name.slice(1) : name;
-
-                    this["add" + cap] = (function (name) {
-                        return function (value) {
-                            this[name] = Bridge.fn.combine(this[name], value);
-                        };
-                    })(name);
-
-                    this["remove" + cap] = (function (name) {
-                        return function (value) {
-                            this[name] = Bridge.fn.remove(this[name], value);
-                        };
-                    })(name);
-                }
-            }
-            if (config.alias) {
-                for (name in config.alias) {
-                    if (this[name]) {
-                        this[name] = this[config.alias[name]];
+                if (config.fields) {
+                    for (name in config.fields) {
+                        this[name] = config.fields[name];
                     }
                 }
-            }
 
-            if (config.init) {
-                config.init.apply(this, arguments);
-            }
-        };
-    };
+                if (config.properties) {
+                    for (name in config.properties) {
+                        this[name] = config.properties[name];
+                    
+                        var rs = name.charAt(0) == "$",
+                            cap = rs ? name.slice(1) : name;
 
-    // Create a new Class that inherits from this class
-    Bridge.Class.define = function (className, prop) {
-        var extend = prop.$extend || prop.extend,
-            statics = prop.$statics || prop.statics,
-            base = extend ? extend[0].prototype : this.prototype,
-            prototype,
-            nameParts,
-            scope = prop.$scope || window,
-            i,
-            v,
-            ctorCounter,
-            isCtor,
-            name;
+                        this["get" + cap] = (function (name) {
+                            return function () {
+                                return this[name];
+                            };                        
+                        })(name);
 
-        if (Bridge.isFunction(extend)) {
-            extend = null;
-        }
-        else if (prop.$extend) {
-            delete prop.$extend;
-        }
-        else {
-            delete prop.extend;
-        }
-
-        if (Bridge.isFunction(statics)) {
-            statics = null;
-        }
-        else if (prop.$statics) {
-			delete prop.$statics;
-		}
-		else {
-			delete prop.statics;
-		}
-
-        // The dummy class constructor
-        function Class() {
-            if (!(this instanceof Class)) {
-                var args = Array.prototype.slice.call(arguments, 0),
-                    object = Object.create(Class.prototype),
-                    result = Class.apply(object, args);
-
-                return typeof result === 'object' ? result : object;
-            }
-
-            // All construction is actually done in the init method
-            if (!initializing) {
-                if (this.$initMembers) {
-                    this.$initMembers.apply(this, arguments);
+                        this["set" + cap] = (function (name) {
+                            return function (value) {
+                                this[name] = value;
+                            };
+                        })(name);
+                    }
                 }
 
-                this.$$initCtor.apply(this, arguments);
-            }
-        }
+                if (config.events) {
+                    for (name in config.events) {
+                        this[name] = config.events[name];
 
-        // Instantiate a base class (but only create the instance,
-        // don't run the init constructor)
-        initializing = true;
-        prototype = extend ? new extend[0]() : new Object();
-        initializing = false;
+                        var rs = name.charAt(0) == "$",
+                            cap = rs ? name.slice(1) : name;
 
-        if (statics) {
-            var staticsConfig = statics.$config;
+                        this["add" + cap] = (function (name) {
+                            return function (value) {
+                                this[name] = Bridge.fn.combine(this[name], value);
+                            };
+                        })(name);
 
-            if (staticsConfig) {
-                Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
-
-                if (statics.$config) {
-                    delete statics.$config;
+                        this["remove" + cap] = (function (name) {
+                            return function (value) {
+                                this[name] = Bridge.fn.remove(this[name], value);
+                            };
+                        })(name);
+                    }
                 }
-                else {
-                    delete statics.config;
+                if (config.alias) {
+                    for (name in config.alias) {
+                        if (this[name]) {
+                            this[name] = this[config.alias[name]];
+                        }
+                    }
                 }
+
+                if (config.init) {
+                    config.init.apply(this, arguments);
+                }
+            };
+        },
+
+        // Create a new Class that inherits from this class
+        define: function (className, prop) {
+            var extend = prop.$extend || prop.extend,
+                statics = prop.$statics || prop.statics,
+                base = extend ? extend[0].prototype : this.prototype,
+                prototype,
+                nameParts,
+                scope = prop.$scope || window,
+                i,
+                v,
+                ctorCounter,
+                isCtor,
+                name;
+
+            if (Bridge.isFunction(extend)) {
+                extend = null;
             }
-        }        
-
-        var instanceConfig = prop.$config;
-
-        if (instanceConfig) {
-            Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
-
-            if (prop.$config) {
-                delete prop.$config;
+            else if (prop.$extend) {
+                delete prop.$extend;
             }
             else {
-                delete prop.config;
-            }
-        }
-        else {
-            prop.$initMembers = extend ? function () {
-                base.$initMembers.apply(this, arguments);
-            } : function () { };
-        }
-
-        prop.$$initCtor = Bridge.Class.initCtor;
-
-        // Copy the properties over onto the new prototype
-        ctorCounter = 0;
-
-        for (name in prop) {            
-            v = prop[name];
-            isCtor = name === "constructor";
-
-            if (Bridge.isFunction(v) && (isCtor || Bridge.String.startsWith(name, "constructor\\$"))) {
-                ctorCounter++;
+                delete prop.extend;
             }
 
-            prototype[isCtor ? "$constructor" : name] = prop[name];
-        }
-
-        if (ctorCounter == 0) {
-            prototype.$constructor = extend ? function () {
-                base.$constructor();
-            } : function () { };
-        }
-
-        if (ctorCounter > 1) {
-            prototype.$multipleCtors = true;
-        }
-
-        prototype.$$name = className;        
-
-        // Populate our constructed prototype object
-        Class.prototype = prototype;
-
-        // Enforce the constructor to be what we expect
-        Class.prototype.constructor = Class;
-
-        Class.$$name = className;
-
-        if (statics) {
-            for (name in statics) {
-                Class[name] = statics[name];
+            if (Bridge.isFunction(statics)) {
+                statics = null;
             }
-        }
-
-        scope = Bridge.Class.set(scope, className, Class);
-
-        if (!extend) {
-            extend = [Object];
-        }
-
-        Class.$$extend = extend;
-
-        for (i = 0; i < extend.length; i++) {
-            scope = extend[i];
-
-            if (!scope.$$inheritors) {
-                scope.$$inheritors = [];
+            else if (prop.$statics) {
+                delete prop.$statics;
+            }
+            else {
+                delete prop.statics;
             }
 
-            scope.$$inheritors.push(Class);
-        }
+            // The dummy class constructor
+            function Class() {
+                if (!(this instanceof Class)) {
+                    var args = Array.prototype.slice.call(arguments, 0),
+                        object = Object.create(Class.prototype),
+                        result = Class.apply(object, args);
+
+                    return typeof result === 'object' ? result : object;
+                }
+
+                // All construction is actually done in the init method
+                if (!initializing) {
+                    if (this.$initMembers) {
+                        this.$initMembers.apply(this, arguments);
+                    }
+
+                    this.$$initCtor.apply(this, arguments);
+                }
+            }
+
+            // Instantiate a base class (but only create the instance,
+            // don't run the init constructor)
+            initializing = true;
+            prototype = extend ? new extend[0]() : new Object();
+            initializing = false;
+
+            if (statics) {
+                var staticsConfig = statics.$config;
+
+                if (staticsConfig) {
+                    Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
+
+                    if (statics.$config) {
+                        delete statics.$config;
+                    }
+                    else {
+                        delete statics.config;
+                    }
+                }
+            }        
+
+            var instanceConfig = prop.$config;
+
+            if (instanceConfig) {
+                Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
+
+                if (prop.$config) {
+                    delete prop.$config;
+                }
+                else {
+                    delete prop.config;
+                }
+            }
+            else {
+                prop.$initMembers = extend ? function () {
+                    base.$initMembers.apply(this, arguments);
+                } : function () { };
+            }
+
+            prop.$$initCtor = Bridge.Class.initCtor;
+
+            // Copy the properties over onto the new prototype
+            ctorCounter = 0;
+
+            for (name in prop) {            
+                v = prop[name];
+                isCtor = name === "constructor";
+
+                if (Bridge.isFunction(v) && (isCtor || Bridge.String.startsWith(name, "constructor\\$"))) {
+                    ctorCounter++;
+                }
+
+                prototype[isCtor ? "$constructor" : name] = prop[name];
+            }
+
+            if (ctorCounter == 0) {
+                prototype.$constructor = extend ? function () {
+                    base.$constructor();
+                } : function () { };
+            }
+
+            if (ctorCounter > 1) {
+                prototype.$multipleCtors = true;
+            }
+
+            prototype.$$name = className;        
+
+            // Populate our constructed prototype object
+            Class.prototype = prototype;
+
+            // Enforce the constructor to be what we expect
+            Class.prototype.constructor = Class;
+
+            Class.$$name = className;
+
+            if (statics) {
+                for (name in statics) {
+                    Class[name] = statics[name];
+                }
+            }
+
+            scope = Bridge.Class.set(scope, className, Class);
+
+            if (!extend) {
+                extend = [Object];
+            }
+
+            Class.$$extend = extend;
+
+            for (i = 0; i < extend.length; i++) {
+                scope = extend[i];
+
+                if (!scope.$$inheritors) {
+                    scope.$$inheritors = [];
+                }
+
+                scope.$$inheritors.push(Class);
+            }
         
-        if (Class.$initMembers) {
-            Class.$initMembers.call(Class);
-        }
+            if (Class.$initMembers) {
+                Class.$initMembers.call(Class);
+            }
 
-        if (Class.constructor) {
-            Class.constructor.call(Class);
-        }
+            if (Class.constructor) {
+                Class.constructor.call(Class);
+            }
 
-        return Class;
+            return Class;
+        },
+
+
+        addExtend: function (cls, extend) {        
+            Array.prototype.push.apply(cls.$$extend, extend);
+
+            for (i = 0; i < extend.length; i++) {
+                scope = extend[i];
+
+                if (!scope.$$inheritors) {
+                    scope.$$inheritors = [];
+                }
+
+                scope.$$inheritors.push(cls);
+            }
+        },
+
+        set: function (scope, className, cls) {
+            var nameParts = className.split('.');
+
+            for (i = 0; i < (nameParts.length - 1) ; i++) {
+                if (typeof scope[nameParts[i]] == 'undefined') {
+                    scope[nameParts[i]] = { };
+                }
+
+                scope = scope[nameParts[i]];
+            }
+
+            scope[nameParts[nameParts.length - 1]] = cls;
+
+            return scope;
+        },
+
+        genericName: function () {
+            var name = arguments[0];
+
+            for (var i = 1; i < arguments.length; i++) {
+                name += '$' + Bridge.getTypeName(arguments[i]);
+            }
+
+            return name;
+        },
+
+        generic: function (className, scope, fn) {
+            if (!fn) {
+                fn = scope;
+                scope = window;
+            }
+
+            Bridge.Class.set(scope, className, fn);
+
+            return fn;
+        }
     };
 
     Bridge.define = Bridge.Class.define;
-
-    Bridge.Class.addExtend = function (cls, extend) {        
-        Array.prototype.push.apply(cls.$$extend, extend);
-
-        for (i = 0; i < extend.length; i++) {
-            scope = extend[i];
-
-            if (!scope.$$inheritors) {
-                scope.$$inheritors = [];
-            }
-
-            scope.$$inheritors.push(cls);
-        }
-    };
-
-    Bridge.Class.set = function (scope, className, cls) {
-        var nameParts = className.split('.');
-
-        for (i = 0; i < (nameParts.length - 1) ; i++) {
-            if (typeof scope[nameParts[i]] == 'undefined') {
-                scope[nameParts[i]] = {};
-            }
-
-            scope = scope[nameParts[i]];
-        }
-
-        scope[nameParts[nameParts.length - 1]] = cls;
-
-        return scope;
-    };
-
-    Bridge.Class.genericName = function () {
-        var name = arguments[0];
-
-        for (var i = 1; i < arguments.length; i++) {
-            name += '$' + Bridge.getTypeName(arguments[i]);
-        }
-
-        return name;
-    };
-
-    Bridge.Class.generic = function (className, scope, fn) {
-        if (!fn) {
-            fn = scope;
-            scope = window;
-        }
-
-        Bridge.Class.set(scope, className, fn);
-
-        return fn;
-    };
 })();
+// @source Exception.js
 
-// @source resources/Task.js
-
-Bridge.Class.define('Bridge.Exception', {
+Bridge.define('Bridge.Exception', {
     constructor: function (message, innerException) {
         this.message = message;
         this.innerException = innerException;
@@ -1222,7 +1230,7 @@ Bridge.Class.define('Bridge.Exception', {
     }
 });
 
-Bridge.Class.define('Bridge.ErrorException', {
+Bridge.define('Bridge.ErrorException', {
     extend: [Bridge.Exception],
 
     constructor: function (error) {
@@ -1236,7 +1244,7 @@ Bridge.Class.define('Bridge.ErrorException', {
     }
 });
 
-Bridge.Class.define('Bridge.ArgumentException', {
+Bridge.define('Bridge.ArgumentException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, paramName, innerException) {
@@ -1249,7 +1257,7 @@ Bridge.Class.define('Bridge.ArgumentException', {
     }
 });
 
-Bridge.Class.define('Bridge.ArgumentNullException', {
+Bridge.define('Bridge.ArgumentNullException', {
     extend: [Bridge.ArgumentException],
 
     constructor: function (paramName, message, innerException) {
@@ -1265,7 +1273,7 @@ Bridge.Class.define('Bridge.ArgumentNullException', {
     }
 });
 
-Bridge.Class.define('Bridge.ArgumentOutOfRangeException', {
+Bridge.define('Bridge.ArgumentOutOfRangeException', {
     extend: [Bridge.ArgumentException],
 
     constructor: function (paramName, message, innerException, actualValue) {
@@ -1287,7 +1295,7 @@ Bridge.Class.define('Bridge.ArgumentOutOfRangeException', {
     }
 });
 
-Bridge.Class.define('Bridge.CultureNotFoundException', {
+Bridge.define('Bridge.CultureNotFoundException', {
     extend: [Bridge.ArgumentException],
 
     constructor: function (paramName, invalidCultureName, message, innerException) {
@@ -1313,7 +1321,7 @@ Bridge.Class.define('Bridge.CultureNotFoundException', {
     }
 });
 
-Bridge.Class.define('Bridge.KeyNotFoundException', {
+Bridge.define('Bridge.KeyNotFoundException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1321,7 +1329,7 @@ Bridge.Class.define('Bridge.KeyNotFoundException', {
     }
 });
 
-Bridge.Class.define('Bridge.ArithmeticException', {
+Bridge.define('Bridge.ArithmeticException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1329,7 +1337,7 @@ Bridge.Class.define('Bridge.ArithmeticException', {
     }
 });
 
-Bridge.Class.define('Bridge.DivideByZeroException', {
+Bridge.define('Bridge.DivideByZeroException', {
     extend: [Bridge.ArithmeticException],
 
     constructor: function (message, innerException) {
@@ -1337,7 +1345,7 @@ Bridge.Class.define('Bridge.DivideByZeroException', {
     }
 });
 
-Bridge.Class.define('Bridge.OverflowException', {
+Bridge.define('Bridge.OverflowException', {
     extend: [Bridge.ArithmeticException],
 
     constructor: function (message, innerException) {
@@ -1345,7 +1353,7 @@ Bridge.Class.define('Bridge.OverflowException', {
     }
 });
 
-Bridge.Class.define('Bridge.FormatException', {
+Bridge.define('Bridge.FormatException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1353,7 +1361,7 @@ Bridge.Class.define('Bridge.FormatException', {
     }
 });
 
-Bridge.Class.define('Bridge.InvalidCastException', {
+Bridge.define('Bridge.InvalidCastException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1361,7 +1369,7 @@ Bridge.Class.define('Bridge.InvalidCastException', {
     }
 });
 
-Bridge.Class.define('Bridge.InvalidOperationException', {
+Bridge.define('Bridge.InvalidOperationException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1369,7 +1377,7 @@ Bridge.Class.define('Bridge.InvalidOperationException', {
     }
 });
 
-Bridge.Class.define('Bridge.NotImplementedException', {
+Bridge.define('Bridge.NotImplementedException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1377,7 +1385,7 @@ Bridge.Class.define('Bridge.NotImplementedException', {
     }
 });
 
-Bridge.Class.define('Bridge.NotSupportedException', {
+Bridge.define('Bridge.NotSupportedException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
@@ -1385,14 +1393,17 @@ Bridge.Class.define('Bridge.NotSupportedException', {
     }
 });
 
-Bridge.Class.define('Bridge.NullReferenceException', {
+Bridge.define('Bridge.NullReferenceException', {
     extend: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Object is null.", innerException);
     }
 });
-Bridge.Class.define('Bridge.IFormattable', {
+
+// @source Interfaces.js
+
+Bridge.define('Bridge.IFormattable', {
     statics: {
         $is: function (obj) {
             if (Bridge.isNumber(obj)) {
@@ -1408,24 +1419,29 @@ Bridge.Class.define('Bridge.IFormattable', {
     }
 });
 
-Bridge.Class.define('Bridge.IComparable', { });
+Bridge.define('Bridge.IComparable', { });
 
-Bridge.Class.define('Bridge.IFormatProvider', {});
-Bridge.Class.define('Bridge.ICloneable', {});
+Bridge.define('Bridge.IFormatProvider', { });
+
+Bridge.define('Bridge.ICloneable', { });
+
 Bridge.Class.generic('Bridge.IComparable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IComparable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
-    }));
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, { }));
 });
 
 Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEquatable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
-    }));
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, { }));
 });
 
-Bridge.Class.define('Bridge.IPromise', {});
-Bridge.Class.define("Bridge.DateTimeFormatInfo", {
+Bridge.define('Bridge.IPromise', { });
+
+// @source Globalization.js
+
+Bridge.define("Bridge.DateTimeFormatInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
@@ -1522,7 +1538,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
                 throw new Bridge.ArgumentException(null, "format");
             }
 
-            formats = {};
+            formats = { };
             formats[format] = f[format];
         }
         else {
@@ -1596,7 +1612,7 @@ Bridge.Class.define("Bridge.DateTimeFormatInfo", {
     }
 });
 
-Bridge.Class.define("Bridge.NumberFormatInfo", {
+Bridge.define("Bridge.NumberFormatInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
@@ -1678,12 +1694,12 @@ Bridge.Class.define("Bridge.NumberFormatInfo", {
     }
 });
 
-Bridge.Class.define("Bridge.CultureInfo", {
+Bridge.define("Bridge.CultureInfo", {
     extend: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
         constructor: function () {
-            this.cultures = {};
+            this.cultures = { };
             this.invariantCulture = Bridge.merge(new Bridge.CultureInfo("en-US"), {
                 englishName: "English (United States)",
                 nativeName: "English (United States)",
@@ -1749,7 +1765,10 @@ Bridge.Class.define("Bridge.CultureInfo", {
         ]);
     }
 });
-Bridge.Class.define('Bridge.Int', {
+
+// @source Integer.js
+
+Bridge.define('Bridge.Int', {
     extend: [Bridge.IComparable, Bridge.IFormattable],
     statics: {
         instanceOf: function (instance) {
@@ -1778,6 +1797,7 @@ Bridge.Class.define('Bridge.Int', {
             }
             
             match = format.match(/^([a-zA-Z])(\d*)$/);
+
             if (match) {
                 fs = match[1].toUpperCase();
                 precision = parseInt(match[2], 10);
@@ -1843,6 +1863,7 @@ Bridge.Class.define('Bridge.Int', {
                         if (isNaN(precision)) {
                             precision = nf.percentDecimalDigits;
                         }
+
                         return this.defaultFormat(number * 100, 1, precision, precision, nf, false, "percent");
                     case "X":
                         var result = Math.round(number).toString(16);
@@ -1925,6 +1946,7 @@ Bridge.Class.define('Bridge.Int', {
             str = "" + (Math.round(Math.abs(number) * roundingFactor) / roundingFactor);
 
             decimalIndex = str.indexOf(".");
+
             if (decimalIndex > 0) {
                 decimalPart = nf[name + "DecimalSeparator"] + str.substr(decimalIndex + 1);
                 str = str.substr(0, decimalIndex);
@@ -2270,7 +2292,10 @@ Bridge.Class.define('Bridge.Int', {
 });
 
 Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEquatable$1(Bridge.Int)]);
-Bridge.Date = {    
+
+// @source Date.js
+
+Bridge.Date = {
     utcNow:  function () {
         var d = new Date();
 
@@ -3025,7 +3050,8 @@ Bridge.Date = {
                                  date.getMilliseconds()));
     }
 };
-Bridge.Class.define('Bridge.TimeSpan', {
+
+Bridge.define('Bridge.TimeSpan', {
     extend: [Bridge.IComparable],
     statics: {
         fromDays: function (value) {
@@ -3225,7 +3251,7 @@ Bridge.Class.define('Bridge.TimeSpan', {
 });
 
 Bridge.Class.addExtend(Bridge.TimeSpan, [Bridge.IComparable$1(Bridge.TimeSpan), Bridge.IEquatable$1(Bridge.TimeSpan)]);
-Bridge.Class.define('Bridge.Text.StringBuilder', {
+Bridge.define('Bridge.Text.StringBuilder', {
     statics: {
     },
 
@@ -3439,8 +3465,7 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
         }
     }
 });
-
-// @source resources/Browser.js
+// @source Browser.js
 
 (function () {
     var check = function (regex) {
@@ -3564,17 +3589,18 @@ Bridge.Class.define('Bridge.Text.StringBuilder', {
         standalone: !!window.navigator.standalone
     };
 })();
-Bridge.Class.define('Bridge.IEnumerable', {});
-Bridge.Class.define('Bridge.IEnumerator', {});
-Bridge.Class.define('Bridge.IEqualityComparer', {});
-Bridge.Class.define('Bridge.ICollection', {
+
+Bridge.define('Bridge.IEnumerable', { });
+Bridge.define('Bridge.IEnumerator', { });
+Bridge.define('Bridge.IEqualityComparer', { });
+Bridge.define('Bridge.ICollection', {
     extend: [Bridge.IEnumerable]
 });
 
 Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerator$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IEnumerator]
     }));
 });
@@ -3582,7 +3608,7 @@ Bridge.Class.generic('Bridge.IEnumerator$1', function (T) {
 Bridge.Class.generic('Bridge.IEnumerable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEnumerable$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IEnumerable]
     }));
 });
@@ -3590,7 +3616,7 @@ Bridge.Class.generic('Bridge.IEnumerable$1', function (T) {
 Bridge.Class.generic('Bridge.ICollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.ICollection$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IEnumerable$1(T)]
     }));
 });
@@ -3598,7 +3624,7 @@ Bridge.Class.generic('Bridge.ICollection$1', function (T) {
 Bridge.Class.generic('Bridge.IEqualityComparer$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEqualityComparer$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IEqualityComparer]
     }));
 });
@@ -3606,7 +3632,7 @@ Bridge.Class.generic('Bridge.IEqualityComparer$1', function (T) {
 Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.IDictionary$2', TKey, TValue);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IEnumerable$1(Bridge.KeyValuePair$2(TKey, TValue))],
     }));
 });
@@ -3614,11 +3640,11 @@ Bridge.Class.generic('Bridge.IDictionary$2', function (TKey, TValue) {
 Bridge.Class.generic('Bridge.IList$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IList$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.ICollection$1(T)]
     }));
 });
-Bridge.Class.define("Bridge.CustomEnumerator", {
+Bridge.define("Bridge.CustomEnumerator", {
     extend: [Bridge.IEnumerator],
 
     constructor: function (moveNext, getCurrent, reset, dispose, scope) {
@@ -3655,7 +3681,7 @@ Bridge.Class.define("Bridge.CustomEnumerator", {
             this.$dispose.call(this.scope);
     }
 });
-Bridge.Class.define('Bridge.ArrayEnumerator', {
+Bridge.define('Bridge.ArrayEnumerator', {
     constructor: function (array) {
         this.array = array;
         this.reset();
@@ -3678,7 +3704,7 @@ Bridge.Class.define('Bridge.ArrayEnumerator', {
 Bridge.Class.generic('Bridge.EqualityComparer$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.EqualityComparer$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IEqualityComparer$1(T)],
 
         equals: function (x, y) {
@@ -3700,7 +3726,7 @@ Bridge.EqualityComparer$1.default = new Bridge.EqualityComparer$1(Object)();
 Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.KeyValuePair$2', TKey, TValue);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         constructor: function (key, value) {
             this.key = key;
             this.value = value;
@@ -3711,7 +3737,7 @@ Bridge.Class.generic('Bridge.KeyValuePair$2', function (TKey, TValue) {
 Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.Dictionary$2', TKey, TValue);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.IDictionary$2(TKey, TValue)],
 
         constructor: function (obj, comparer) {
@@ -3747,7 +3773,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
         },
 
         clear: function () {
-            this.entries = {};
+            this.entries = { };
             this.count = 0;
         },
 
@@ -3907,7 +3933,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
 Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.DictionaryCollection$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.ICollection$1(T)],
 
         constructor: function (dictionary, keys) {
@@ -3947,7 +3973,7 @@ Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
 Bridge.Class.generic('Bridge.List$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.List$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.ICollection$1(T), Bridge.ICollection],
         constructor: function (obj) {
             if (Object.prototype.toString.call(obj) === '[object Array]') {
@@ -4156,7 +4182,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
 Bridge.Class.generic('Bridge.ReadOnlyCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.ReadOnlyCollection$1', T);
 
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
         extend: [Bridge.List$1(T)],
         constructor: function (list) {
             if (list == null) {
@@ -4169,9 +4195,9 @@ Bridge.Class.generic('Bridge.ReadOnlyCollection$1', function (T) {
     }));
 });
 
-// @source resources/Task.js
+// @source Task.js
 
-Bridge.Class.define('Bridge.Task', {
+Bridge.define('Bridge.Task', {
     constructor: function (action, state) {
         this.action = action;
         this.state = state;
@@ -4346,7 +4372,7 @@ Bridge.Class.define('Bridge.Task', {
                 task.setResult(value);
             };
 
-            args[0] = args[0] || {};
+            args[0] = args[0] || { };
             args[0][name] = callback;
 
             target[method].apply(target, args);
@@ -4508,7 +4534,7 @@ Bridge.Class.define('Bridge.Task', {
     }
 });
 
-Bridge.Class.define('Bridge.TaskStatus', {
+Bridge.define('Bridge.TaskStatus', {
     $statics: {
         created: 0,
         waitingForActivation: 1,
@@ -4631,16 +4657,24 @@ Bridge.Validation = {
         return (checksum % 10) == 0;
     }
 };
-Bridge.Class.define('Bridge.Attribute', { });
-Bridge.Class.define('Bridge.INotifyPropertyChanged', {});
+// @source Attribute.js
 
-Bridge.Class.define('Bridge.PropertyChangedEventArgs', {
+Bridge.define('Bridge.Attribute', {});
+
+// @source INotifyPropertyChanged.js
+
+Bridge.define('Bridge.INotifyPropertyChanged', {});
+
+Bridge.define('Bridge.PropertyChangedEventArgs', {
     constructor: function (propertyName) {
         this.propertyName = propertyName;
     }
 });
+
+// @source Array.js
+
 Bridge.Array = {
-    toIndex: function(arr, indices) {
+    toIndex: function (arr, indices) {
         if (indices.length != (arr.$s ? arr.$s.length : 1)) {
             throw new Bridge.ArgumentException("Invalid number of indices");
         }
@@ -4651,19 +4685,23 @@ Bridge.Array = {
 
         var idx = indices[0],
             i;
+
         if (arr.$s) {
             for (i = 1; i < arr.$s.length; i++) {
                 if (indices[i] < 0 || indices[i] >= arr.$s[i]) {
                     throw new Bridge.ArgumentException("Index " + i + " out of range");
                 }
+
                 idx = idx * arr.$s[i] + indices[i];
             }
         }
+
         return idx;
     },
 
     get: function (indices) {
         var r = this[Bridge.Array.toIndex(this, indices)];
+
         return typeof r !== "undefined" ? r : this.$v;
     },
 
@@ -4695,6 +4733,7 @@ Bridge.Array = {
             for (i = 0; i < arr.length; i++) {                
                 indices = [];
                 flatIdx = i;
+
                 for (s = arr.$s.length - 1; s >= 0; s--) {
                     idx = flatIdx % arr.$s[s];
                     indices.unshift(idx);
@@ -4702,9 +4741,11 @@ Bridge.Array = {
                 }
 
                 v = initValues;
+
                 for (idx = 0; idx < indices.length; idx++) {
                     v = v[indices[idx]];
                 }
+
                 arr[i] = v;
             }            
         }
@@ -4712,3 +4753,4 @@ Bridge.Array = {
         return arr;
     }
 };
+

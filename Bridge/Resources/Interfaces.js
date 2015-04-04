@@ -1,4 +1,6 @@
-﻿Bridge.Class.define('Bridge.IFormattable', {
+﻿// @source Interfaces.js
+
+Bridge.define('Bridge.IFormattable', {
     statics: {
         $is: function (obj) {
             if (Bridge.isNumber(obj)) {
@@ -14,20 +16,22 @@
     }
 });
 
-Bridge.Class.define('Bridge.IComparable', { });
+Bridge.define('Bridge.IComparable', { });
 
-Bridge.Class.define('Bridge.IFormatProvider', {});
-Bridge.Class.define('Bridge.ICloneable', {});
+Bridge.define('Bridge.IFormatProvider', { });
+
+Bridge.define('Bridge.ICloneable', { });
+
 Bridge.Class.generic('Bridge.IComparable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IComparable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
-    }));
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, { }));
 });
 
 Bridge.Class.generic('Bridge.IEquatable$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.IEquatable$1', T);
-    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.Class.define($$name, {
-    }));
+
+    return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, { }));
 });
 
-Bridge.Class.define('Bridge.IPromise', {});
+Bridge.define('Bridge.IPromise', { });
