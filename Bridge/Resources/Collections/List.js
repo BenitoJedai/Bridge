@@ -2,7 +2,7 @@ Bridge.Class.generic('Bridge.List$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.List$1', T);
 
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
-        extend: [Bridge.ICollection$1(T), Bridge.ICollection],
+        $extends: [Bridge.ICollection$1(T), Bridge.ICollection],
         constructor: function (obj) {
             if (Object.prototype.toString.call(obj) === '[object Array]') {
                 this.items = obj;
@@ -211,7 +211,7 @@ Bridge.Class.generic('Bridge.ReadOnlyCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.ReadOnlyCollection$1', T);
 
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
-        extend: [Bridge.List$1(T)],
+        $extends: [Bridge.List$1(T)],
         constructor: function (list) {
             if (list == null) {
                 throw new Bridge.ArgumentNullException("list");

@@ -1,5 +1,5 @@
 ﻿Bridge.define("Bridge.CustomEnumerator", {
-    extend: [Bridge.IEnumerator],
+    $extends: [Bridge.IEnumerator],
 
     constructor: function (moveNext, getCurrent, reset, dispose, scope) {
         this.$moveNext = moveNext;

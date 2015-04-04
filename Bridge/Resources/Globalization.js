@@ -1,7 +1,7 @@
 ﻿// @source Globalization.js
 
 Bridge.define("Bridge.DateTimeFormatInfo", {
-    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+    $extends: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
         $allStandardFormats: {
@@ -172,7 +172,7 @@ Bridge.define("Bridge.DateTimeFormatInfo", {
 });
 
 Bridge.define("Bridge.NumberFormatInfo", {
-    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+    $extends: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
         constructor: function () {
@@ -254,7 +254,7 @@ Bridge.define("Bridge.NumberFormatInfo", {
 });
 
 Bridge.define("Bridge.CultureInfo", {
-    extend: [Bridge.IFormatProvider, Bridge.ICloneable],
+    $extends: [Bridge.IFormatProvider, Bridge.ICloneable],
 
     statics: {
         constructor: function () {

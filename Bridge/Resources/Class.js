@@ -104,7 +104,7 @@
 
         // Create a new Class that inherits from this class
         define: function (className, prop) {
-            var extend = prop.$extend || prop.extend,
+            var extend = prop.$extends,
                 statics = prop.$statics || prop.statics,
                 base = extend ? extend[0].prototype : this.prototype,
                 prototype,
@@ -119,11 +119,11 @@
             if (Bridge.isFunction(extend)) {
                 extend = null;
             }
-            else if (prop.$extend) {
-                delete prop.$extend;
+            else if (prop.$extends) {
+                delete prop.$extends;
             }
             else {
-                delete prop.extend;
+                delete prop.extends;
             }
 
             if (Bridge.isFunction(statics)) {
@@ -243,7 +243,7 @@
                 extend = [Object];
             }
 
-            Class.$$extend = extend;
+            Class.$$extends = extend;
 
             for (i = 0; i < extend.length; i++) {
                 scope = extend[i];

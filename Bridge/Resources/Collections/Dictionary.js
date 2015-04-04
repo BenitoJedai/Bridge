@@ -13,7 +13,7 @@ Bridge.Class.generic('Bridge.Dictionary$2', function (TKey, TValue) {
     var $$name = Bridge.Class.genericName('Bridge.Dictionary$2', TKey, TValue);
 
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
-        extend: [Bridge.IDictionary$2(TKey, TValue)],
+        $extends: [Bridge.IDictionary$2(TKey, TValue)],
 
         constructor: function (obj, comparer) {
             this.comparer = comparer || Bridge.EqualityComparer$1.default;
@@ -209,7 +209,7 @@ Bridge.Class.generic('Bridge.DictionaryCollection$1', function (T) {
     var $$name = Bridge.Class.genericName('Bridge.DictionaryCollection$1', T);
 
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
-        extend: [Bridge.ICollection$1(T)],
+        $extends: [Bridge.ICollection$1(T)],
 
         constructor: function (dictionary, keys) {
             this.dictionary = dictionary;
