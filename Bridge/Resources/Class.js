@@ -1,15 +1,10 @@
 ﻿// @source Class.js
 
-/* Simple JavaScript Inheritance
- * By John Resig http://ejohn.org/
- * MIT Licensed.
- */
-
 (function () {
     var initializing = false;
 
     // The base Class implementation
-    Bridge.Class = {
+    var base = {
         cache: { },
 
         initCtor: function () {
@@ -319,5 +314,6 @@
         }
     };
 
+    Bridge.Class = base;
     Bridge.define = Bridge.Class.define;
 })();

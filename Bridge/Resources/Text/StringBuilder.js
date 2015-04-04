@@ -1,4 +1,6 @@
-﻿Bridge.define('Bridge.Text.StringBuilder', {
+﻿// @source Text/StringBuilder.js
+
+Bridge.define('Bridge.Text.StringBuilder', {
     $config: function () {
         return {
             fields: {
