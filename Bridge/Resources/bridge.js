@@ -3252,14 +3252,9 @@ Bridge.define('Bridge.TimeSpan', {
 
 Bridge.Class.addExtend(Bridge.TimeSpan, [Bridge.IComparable$1(Bridge.TimeSpan), Bridge.IEquatable$1(Bridge.TimeSpan)]);
 Bridge.define('Bridge.Text.StringBuilder', {
-    statics: {
-    },
-
-    $config: function () { 
-        return {
-            fields: {
-                buffer: []
-            }
+    $config: {
+        fields: {
+            buffer: []
         }
     },
 

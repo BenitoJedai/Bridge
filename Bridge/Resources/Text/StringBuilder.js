@@ -1,12 +1,7 @@
 ﻿Bridge.define('Bridge.Text.StringBuilder', {
-    statics: {
-    },
-
-    $config: function () { 
-        return {
-            fields: {
-                buffer: []
-            }
+    $config: {
+        fields: {
+            buffer: []
         }
     },
 
