@@ -49,7 +49,7 @@
     operaVersion = version(isOpera, /version\/(\d+\.\d+)/),
     safariVersion = version(isSafari, /version\/(\d+\.\d+)/),
     webKitVersion = version(isWebKit, /webkit\/(\d+\.\d+)/),
-    isSecure = /^https/i.test(window.location.protocol),
+    isSecure = Bridge.global.location ? /^https/i.test(Bridge.global.location.protocol) : false,
     isiPhone = /iPhone/i.test(navigator.platform),
     isiPod = /iPod/i.test(navigator.platform),
     isiPad = /iPad/i.test(navigator.userAgent),
@@ -119,6 +119,6 @@
         isTablet: isTablet,
         isPhone: isPhone,
         iOS: isiPhone || isiPad || isiPod,
-        standalone: !!window.navigator.standalone
+        standalone: Bridge.global.navigator ? !!Bridge.global.navigator.standalone : false
     };
 })();

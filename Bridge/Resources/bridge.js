@@ -10,6 +10,8 @@
 // @source Core.js
 
 var Bridge = {
+    global: (function () { return this; })(),
+
     emptyFn: function () { },
 
     copy: function (to, from, keys, toIf) {
@@ -37,7 +39,7 @@ var Bridge = {
         var nsParts = ns.split('.');
 
         if (!scope) {
-            scope = window;
+            scope = Bridge.global;
         }
 
         for (i = 0; i < nsParts.length; i++) {
@@ -52,7 +54,7 @@ var Bridge = {
     },
 
     ready: function (fn) {
-        if (typeof window.jQuery !== 'undefined') {
+        if (typeof Bridge.global.jQuery !== 'undefined') {
             $(fn);
         } else {
             Bridge.on('DOMContentLoaded', document, fn);
@@ -72,11 +74,11 @@ var Bridge = {
         }
 
         var attachHandler = function () {            
-            var ret = fn.call(elem, window.event);
+            var ret = fn.call(elem, Bridge.global.event);
 
             if (ret === false) {
-                window.event.returnValue = false;
-                window.event.cancelBubble = true;
+                Bridge.global.event.returnValue = false;
+                Bridge.global.event.cancelBubble = true;
             }
 
             return (ret);
@@ -354,7 +356,7 @@ var Bridge = {
 
     unroll: function (value) {
         var d = value.split("."),
-            o = window[d[0]],
+            o = Bridge.global[d[0]],
             i;
 
         for (var i = 1; i < d.length; i++) {
@@ -449,7 +451,7 @@ var Bridge = {
         call: function (obj, fnName){
             var args = Array.prototype.slice.call(arguments, 2);
 
-            obj = obj || window;
+            obj = obj || Bridge.global;
 
             return obj[fnName].apply(obj, args);
         },
@@ -966,7 +968,7 @@ Bridge.String = {
                 base = extend ? extend[0].prototype : this.prototype,
                 prototype,
                 nameParts,
-                scope = prop.$scope || window,
+                scope = prop.$scope || Bridge.global,
                 i,
                 v,
                 ctorCounter,
@@ -1167,7 +1169,7 @@ Bridge.String = {
         generic: function (className, scope, fn) {
             if (!fn) {
                 fn = scope;
-                scope = window;
+                scope = Bridge.global;
             }
 
             Bridge.Class.set(scope, className, fn);
@@ -3513,7 +3515,7 @@ Bridge.define('Bridge.Text.StringBuilder', {
     operaVersion = version(isOpera, /version\/(\d+\.\d+)/),
     safariVersion = version(isSafari, /version\/(\d+\.\d+)/),
     webKitVersion = version(isWebKit, /webkit\/(\d+\.\d+)/),
-    isSecure = /^https/i.test(window.location.protocol),
+    isSecure = Bridge.global.location ? /^https/i.test(Bridge.global.location.protocol) : false,
     isiPhone = /iPhone/i.test(navigator.platform),
     isiPod = /iPod/i.test(navigator.platform),
     isiPad = /iPad/i.test(navigator.userAgent),
@@ -3583,7 +3585,7 @@ Bridge.define('Bridge.Text.StringBuilder', {
         isTablet: isTablet,
         isPhone: isPhone,
         iOS: isiPhone || isiPad || isiPod,
-        standalone: !!window.navigator.standalone
+        standalone: Bridge.global.navigator ? !!Bridge.global.navigator.standalone : false
     };
 })();
 

@@ -109,7 +109,7 @@
                 base = extend ? extend[0].prototype : this.prototype,
                 prototype,
                 nameParts,
-                scope = prop.$scope || window,
+                scope = prop.$scope || Bridge.global,
                 i,
                 v,
                 ctorCounter,
@@ -310,7 +310,7 @@
         generic: function (className, scope, fn) {
             if (!fn) {
                 fn = scope;
-                scope = window;
+                scope = Bridge.global;
             }
 
             Bridge.Class.set(scope, className, fn);

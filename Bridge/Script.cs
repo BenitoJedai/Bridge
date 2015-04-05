@@ -362,7 +362,7 @@ namespace Bridge
             return default(T);
         }
 
-        [GlobalTarget("window")]
+        [GlobalTarget("Bridge.global")]
         public static dynamic ToDynamic()
         {
             return null;
