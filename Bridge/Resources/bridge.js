@@ -595,14 +595,14 @@
         },
 
         getValue: function (obj) {
-            if (!Bridge.nullable.hasValue(obj)) {
+            if (!Bridge.Nullable.hasValue(obj)) {
                 throw new Bridge.InvalidOperationException("Nullable instance doesn't have a value.");
             }
             return obj;
         },
 
         getValueOrDefault: function (obj, defValue) {
-            return Bridge.nullable.hasValue(obj) ? obj : defValue;
+            return Bridge.Nullable.hasValue(obj) ? obj : defValue;
         },
 
         add: function (a, b) {
@@ -718,8 +718,8 @@
         }
     };
 
-    Bridge.nullable = nullable;
-    Bridge.hasValue = Bridge.nullable.hasValue;
+    Bridge.Nullable = nullable;
+    Bridge.hasValue = Bridge.Nullable.hasValue;
 })();
 // @source String.js
 

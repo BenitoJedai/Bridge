@@ -585,5 +585,17 @@ namespace System
             return false;
         }
 
+        public string this[int index]
+        {
+            [Ignore]
+            get
+            {
+                return null;
+            }
+            [Ignore]
+            set
+            {
+            }
+        }
     }
 }

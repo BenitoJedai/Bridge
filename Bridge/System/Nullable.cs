@@ -12,7 +12,7 @@ namespace System
         
         public bool HasValue
         {
-            [Template("Bridge.nullable.hasValue({this})")]
+            [Template("Bridge.Nullable.hasValue({this})")]
             get
             {
                 return false;
@@ -21,20 +21,20 @@ namespace System
         
         public T Value
         {
-            [Template("Bridge.nullable.getValue({this})")]
+            [Template("Bridge.Nullable.getValue({this})")]
             get
             {
                 return default(T);
             }
         }
 
-        [Template("Bridge.nullable.getValueOrDefault({this})")]
+        [Template("Bridge.Nullable.getValueOrDefault({this})")]
 		public T GetValueOrDefault() 
         {
 			return default(T);
 		}
 
-        [Template("Bridge.nullable.getValueOrDefault({this}, {0})")]
+        [Template("Bridge.Nullable.getValueOrDefault({this}, {0})")]
 		public T GetValueOrDefault(T defaultValue) 
         {
 			return default(T);
@@ -45,7 +45,7 @@ namespace System
 			return null;
 		}
 
-        [Template("Bridge.nullable.getValue({this})")]
+        [Template("Bridge.Nullable.getValue({this})")]
 		public static explicit operator T(T? value) 
         {
 			return default(T);
