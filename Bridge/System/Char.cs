@@ -105,11 +105,5 @@ namespace System
         {
 			return false;
 		}
-
-        [Template("String.fromCharCode({this})")]
-        public static implicit operator String(char ch)
-        {
-            return null;
-        }
 	}
 }

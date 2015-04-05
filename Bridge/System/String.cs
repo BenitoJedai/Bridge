@@ -585,16 +585,13 @@ namespace System
             return false;
         }
 
-        public string this[int index]
+        public char this[int index]
         {
             [Ignore]
+            [Template("charCodeAt({0})")]
             get
             {
-                return null;
-            }
-            [Ignore]
-            set
-            {
+                return default(char);
             }
         }
     }
