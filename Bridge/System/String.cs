@@ -557,6 +557,17 @@ namespace System
             return null; 
         }
 
+        /// <summary>
+        /// Returns a value indicating whether a specified substring occurs within this string.
+        /// </summary>
+        /// <param name="value">The string to seek. </param>
+        /// <returns>true if the value parameter occurs within this string, or if value is the empty string (""); otherwise, false.</returns>
+        [Template("Bridge.String.contains({this},{value})")]
+        public bool Contains(string value)
+        {
+            return false;
+        }
+
         [Template("Bridge.String.endsWith({this}, {suffix})")]
         public bool EndsWith(string suffix)
         {

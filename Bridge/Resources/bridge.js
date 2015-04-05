@@ -863,6 +863,10 @@
             }
 
             return str.match(suffix + "$") !== null;
+        },
+
+        contains: function (str, value) {
+            return str.indexOf(value) > -1;
         }
     };
 
