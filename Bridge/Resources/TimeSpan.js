@@ -1,7 +1,7 @@
 ﻿// @source TimeSpan.js
 
 Bridge.define('Bridge.TimeSpan', {
-    $extends: [Bridge.IComparable],
+    inherits: [Bridge.IComparable],
     statics: {
         fromDays: function (value) {
             return new Bridge.TimeSpan(value * 864e9);

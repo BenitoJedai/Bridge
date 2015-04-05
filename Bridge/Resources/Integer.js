@@ -1,7 +1,7 @@
 ﻿// @source Integer.js
 
 Bridge.define('Bridge.Int', {
-    $extends: [Bridge.IComparable, Bridge.IFormattable],
+    inherits: [Bridge.IComparable, Bridge.IFormattable],
     statics: {
         instanceOf: function (instance) {
             return typeof(instance) === 'number' && isFinite(instance) && Math.round(instance, 0) == instance;

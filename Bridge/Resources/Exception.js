@@ -51,7 +51,7 @@ Bridge.define('Bridge.Exception', {
 });
 
 Bridge.define('Bridge.ErrorException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (error) {
         Bridge.Exception.prototype.$constructor.call(this, error.message);
@@ -65,7 +65,7 @@ Bridge.define('Bridge.ErrorException', {
 });
 
 Bridge.define('Bridge.ArgumentException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, paramName, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Value does not fall within the expected range.", innerException);
@@ -78,7 +78,7 @@ Bridge.define('Bridge.ArgumentException', {
 });
 
 Bridge.define('Bridge.ArgumentNullException', {
-    $extends: [Bridge.ArgumentException],
+    inherits: [Bridge.ArgumentException],
 
     constructor: function (paramName, message, innerException) {
         if (!message) {
@@ -94,7 +94,7 @@ Bridge.define('Bridge.ArgumentNullException', {
 });
 
 Bridge.define('Bridge.ArgumentOutOfRangeException', {
-    $extends: [Bridge.ArgumentException],
+    inherits: [Bridge.ArgumentException],
 
     constructor: function (paramName, message, innerException, actualValue) {
         if (!message) {
@@ -116,7 +116,7 @@ Bridge.define('Bridge.ArgumentOutOfRangeException', {
 });
 
 Bridge.define('Bridge.CultureNotFoundException', {
-    $extends: [Bridge.ArgumentException],
+    inherits: [Bridge.ArgumentException],
 
     constructor: function (paramName, invalidCultureName, message, innerException) {
         if (!message) {
@@ -142,7 +142,7 @@ Bridge.define('Bridge.CultureNotFoundException', {
 });
 
 Bridge.define('Bridge.KeyNotFoundException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Key not found.", innerException);
@@ -150,7 +150,7 @@ Bridge.define('Bridge.KeyNotFoundException', {
 });
 
 Bridge.define('Bridge.ArithmeticException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Overflow or underflow in the arithmetic operation.", innerException);
@@ -158,7 +158,7 @@ Bridge.define('Bridge.ArithmeticException', {
 });
 
 Bridge.define('Bridge.DivideByZeroException', {
-    $extends: [Bridge.ArithmeticException],
+    inherits: [Bridge.ArithmeticException],
 
     constructor: function (message, innerException) {
         Bridge.ArithmeticException.prototype.$constructor.call(this, message || "Division by 0.", innerException);
@@ -166,7 +166,7 @@ Bridge.define('Bridge.DivideByZeroException', {
 });
 
 Bridge.define('Bridge.OverflowException', {
-    $extends: [Bridge.ArithmeticException],
+    inherits: [Bridge.ArithmeticException],
 
     constructor: function (message, innerException) {
         Bridge.ArithmeticException.prototype.$constructor.call(this, message || "Arithmetic operation resulted in an overflow.", innerException);
@@ -174,7 +174,7 @@ Bridge.define('Bridge.OverflowException', {
 });
 
 Bridge.define('Bridge.FormatException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Invalid format.", innerException);
@@ -182,7 +182,7 @@ Bridge.define('Bridge.FormatException', {
 });
 
 Bridge.define('Bridge.InvalidCastException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "The cast is not valid.", innerException);
@@ -190,7 +190,7 @@ Bridge.define('Bridge.InvalidCastException', {
 });
 
 Bridge.define('Bridge.InvalidOperationException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Operation is not valid due to the current state of the object.", innerException);
@@ -198,7 +198,7 @@ Bridge.define('Bridge.InvalidOperationException', {
 });
 
 Bridge.define('Bridge.NotImplementedException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "The method or operation is not implemented.", innerException);
@@ -206,7 +206,7 @@ Bridge.define('Bridge.NotImplementedException', {
 });
 
 Bridge.define('Bridge.NotSupportedException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Specified method is not supported.", innerException);
@@ -214,7 +214,7 @@ Bridge.define('Bridge.NotSupportedException', {
 });
 
 Bridge.define('Bridge.NullReferenceException', {
-    $extends: [Bridge.Exception],
+    inherits: [Bridge.Exception],
 
     constructor: function (message, innerException) {
         Bridge.Exception.prototype.$constructor.call(this, message || "Object is null.", innerException);

@@ -99,7 +99,7 @@
 
         // Create a new Class that inherits from this class
         define: function (className, prop) {
-            var extend = prop.$extends,
+            var extend = prop.$inherits || prop.inherits,
                 statics = prop.$statics || prop.statics,
                 base = extend ? extend[0].prototype : this.prototype,
                 prototype,
@@ -114,11 +114,11 @@
             if (Bridge.isFunction(extend)) {
                 extend = null;
             }
-            else if (prop.$extends) {
-                delete prop.$extends;
+            else if (prop.$inherits) {
+                delete prop.$inherits;
             }
             else {
-                delete prop.extends;
+                delete prop.inherits;
             }
 
             if (Bridge.isFunction(statics)) {
@@ -238,7 +238,7 @@
                 extend = [Object];
             }
 
-            Class.$$extends = extend;
+            Class.$$inherits = extend;
 
             for (i = 0; i < extend.length; i++) {
                 scope = extend[i];
@@ -263,7 +263,7 @@
 
 
         addExtend: function (cls, extend) {        
-            Array.prototype.push.apply(cls.$$extends, extend);
+            Array.prototype.push.apply(cls.$$inherits, extend);
 
             for (i = 0; i < extend.length; i++) {
                 scope = extend[i];

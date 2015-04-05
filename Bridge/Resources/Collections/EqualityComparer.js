@@ -2,7 +2,7 @@
     var $$name = Bridge.Class.genericName('Bridge.EqualityComparer$1', T);
 
     return Bridge.Class.cache[$$name] || (Bridge.Class.cache[$$name] = Bridge.define($$name, {
-        $extends: [Bridge.IEqualityComparer$1(T)],
+        inherits: [Bridge.IEqualityComparer$1(T)],
 
         equals: function (x, y) {
             if (!Bridge.isDefined(x, true)) {
