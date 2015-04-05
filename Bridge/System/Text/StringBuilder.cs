@@ -30,13 +30,10 @@ namespace System.Text
             return null;
         }
 
-        public int Length
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        /// <summary>
+        /// Gets or sets the length of the current StringBuilder object.
+        /// </summary>
+        public int Length { get; set; }
        
         public StringBuilder Append(bool value)
         {
