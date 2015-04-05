@@ -1,4 +1,3 @@
-
 // @source Task.js
 
 Bridge.define('Bridge.Task', {

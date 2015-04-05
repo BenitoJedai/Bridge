@@ -1,4 +1,6 @@
-﻿Bridge.define('Bridge.TimeSpan', {
+﻿// @source TimeSpan.js
+
+Bridge.define('Bridge.TimeSpan', {
     $extends: [Bridge.IComparable],
     statics: {
         fromDays: function (value) {

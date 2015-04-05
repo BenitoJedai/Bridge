@@ -9,866 +9,872 @@
 
 // @source Core.js
 
-var Bridge = {
-    global: (function () { return this; })(),
+(function () {
+    var core = {
+        global: (function () { return this; })(),
+		
+		emptyFn: function () { },
 
-    emptyFn: function () { },
+        copy: function (to, from, keys, toIf) {
+            if (typeof keys === 'string') {
+                keys = keys.split(/[,;\s]+/);
+            }
 
-    copy: function (to, from, keys, toIf) {
-        if (typeof keys === 'string') {
-            keys = keys.split(/[,;\s]+/);
-        }
+            for (var name, i = 0, n = keys ? keys.length : 0; i < n; i++) {
+                name = keys[i];
 
-        for (var name, i = 0, n = keys ? keys.length : 0; i < n; i++) {
-            name = keys[i];
-
-            if (toIf !== true || to[name] === undefined) {
-                if (Bridge.is(from[name], Bridge.ICloneable)) {
-                    to[name] = from[name].clone();
+                if (toIf !== true || to[name] === undefined) {
+                    if (Bridge.is(from[name], Bridge.ICloneable)) {
+                        to[name] = from[name].clone();
+                    }
+                    else {
+                        to[name] = from[name];
+                    }
                 }
-                else {
-                    to[name] = from[name];
+            }
+
+            return to;
+        },
+
+        ns: function (ns, scope) {
+            var nsParts = ns.split('.');
+
+            if (!scope) {
+                scope = window;
+            }
+
+            for (i = 0; i < nsParts.length; i++) {
+                if (typeof scope[nsParts[i]] == 'undefined') {
+                    scope[nsParts[i]] = { };
                 }
-            }
-        }
 
-        return to;
-    },
-
-    ns: function (ns, scope) {
-        var nsParts = ns.split('.');
-
-        if (!scope) {
-            scope = Bridge.global;
-        }
-
-        for (i = 0; i < nsParts.length; i++) {
-            if (typeof scope[nsParts[i]] == 'undefined') {
-                scope[nsParts[i]] = { };
+                scope = scope[nsParts[i]];
             }
 
-            scope = scope[nsParts[i]];
-        }
+            return scope;
+        },
 
-        return scope;
-    },
+        ready: function (fn) {
+            if (typeof window.jQuery !== 'undefined') {
+                $(fn);
+            } else {
+                Bridge.on('DOMContentLoaded', document, fn);
+            }
+        },
 
-    ready: function (fn) {
-        if (typeof Bridge.global.jQuery !== 'undefined') {
-            $(fn);
-        } else {
-            Bridge.on('DOMContentLoaded', document, fn);
-        }
-    },
+        on: function (event, elem, fn) {
+            var listenHandler = function (e) {
+                var ret = fn.apply(this, arguments);
 
-    on: function (event, elem, fn) {
-        var listenHandler = function (e) {
-            var ret = fn.apply(this, arguments);
+                if (ret === false) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
 
-            if (ret === false) {
-                e.stopPropagation();
-                e.preventDefault();
+                return(ret);
             }
 
-            return(ret);
-        }
+            var attachHandler = function () {            
+                var ret = fn.call(elem, window.event);
 
-        var attachHandler = function () {            
-            var ret = fn.call(elem, Bridge.global.event);
+                if (ret === false) {
+                    window.event.returnValue = false;
+                    window.event.cancelBubble = true;
+                }
 
-            if (ret === false) {
-                Bridge.global.event.returnValue = false;
-                Bridge.global.event.cancelBubble = true;
+                return (ret);
             }
 
-            return (ret);
-        }
+            if (elem.addEventListener) {
+                elem.addEventListener(event, listenHandler, false);
+            }
+            else {
+                elem.attachEvent("on" + event, attachHandler);
+            }
+        },
 
-        if (elem.addEventListener) {
-            elem.addEventListener(event, listenHandler, false);
-        }
-        else {
-            elem.attachEvent("on" + event, attachHandler);
-        }
-    },
-
-    getHashCode: function (value) {
-        if (Bridge.isEmpty(value, true)) {
-            throw new Bridge.InvalidOperationException('HashCode cannot be calculated for empty value');
-        }
-
-        if (Bridge.isFunction(value.getHashCode)) {
-            return value.getHashCode();
-        }
-
-        if (Bridge.isBoolean(value)) {
-            return obj ? 1 : 0;
-        }
-
-        if (Bridge.isDate(value)) {
-            return value.valueOf() & 0xFFFFFFFF;
-        }
-
-        if (Bridge.isNumber(value)) {            
-            value = value.toExponential();
-
-            return parseInt(value.substr(0, value.indexOf('e')).replace('.', ''), 10) & 0xFFFFFFFF;
-        }        
-
-        if (Bridge.isString(value)) {
-            var hash = 0,
-                i;
-
-            for (i = 0; i < value.length; i++) {
-                hash = (((hash << 5) - hash) + value.charCodeAt(i)) & 0xFFFFFFFF;
+        getHashCode: function (value) {
+            if (Bridge.isEmpty(value, true)) {
+                throw new Bridge.InvalidOperationException('HashCode cannot be calculated for empty value');
             }
 
-            return hash;
-        }
+            if (Bridge.isFunction(value.getHashCode)) {
+                return value.getHashCode();
+            }
+
+            if (Bridge.isBoolean(value)) {
+                return obj ? 1 : 0;
+            }
+
+            if (Bridge.isDate(value)) {
+                return value.valueOf() & 0xFFFFFFFF;
+            }
+
+            if (Bridge.isNumber(value)) {            
+                value = value.toExponential();
+
+                return parseInt(value.substr(0, value.indexOf('e')).replace('.', ''), 10) & 0xFFFFFFFF;
+            }        
+
+            if (Bridge.isString(value)) {
+                var hash = 0,
+                    i;
+
+                for (i = 0; i < value.length; i++) {
+                    hash = (((hash << 5) - hash) + value.charCodeAt(i)) & 0xFFFFFFFF;
+                }
+
+                return hash;
+            }
         
-        return value.$$hashCode || (value.$$hashCode = (Math.random() * 0x100000000) | 0);
-    },
+            return value.$$hashCode || (value.$$hashCode = (Math.random() * 0x100000000) | 0);
+        },
 
-    getDefaultValue: function (type) {
-        if (Bridge.isFunction(type.getDefaultValue)) {
-            return type.getDefaultValue();
-        }
-        else if (type === Boolean) {
-            return false;
-        }
-        else if (type === Date) {
-            return new Date(0);
-        }
-        else if (type === Number) {
-            return 0;
-        }
+        getDefaultValue: function (type) {
+            if (Bridge.isFunction(type.getDefaultValue)) {
+                return type.getDefaultValue();
+            }
+            else if (type === Boolean) {
+                return false;
+            }
+            else if (type === Date) {
+                return new Date(0);
+            }
+            else if (type === Number) {
+                return 0;
+            }
 
-        return null;
-    },
+            return null;
+        },
 
-    getTypeName: function (type) {
-        return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
-    },
+        getTypeName: function (type) {
+            return type.$$name || (type.toString().match(/^\s*function\s*([^\s(]+)/) || [])[1] || "Object";
+        },
 
-    is: function (obj, type, ignoreFn) {
-	    if (typeof type == "string") {
-            type = Bridge.unroll(type);
-	    }
-
-        if (obj == null) {
-	        return false;
-        }
-
-        if (ignoreFn !== true) {
-	        if (Bridge.isFunction(type.$is)) {
-	            return type.$is(obj);
+        is: function (obj, type, ignoreFn) {
+	        if (typeof type == "string") {
+                type = Bridge.unroll(type);
 	        }
 
-	        if (Bridge.isFunction(type.instanceOf)) {
-	            return type.instanceOf(obj);
-	        }
-        }	  
+            if (obj == null) {
+	            return false;
+            }
 
-        if ((obj.constructor == type) || (obj instanceof type)) {
-	        return true;
-        }
+            if (ignoreFn !== true) {
+	            if (Bridge.isFunction(type.$is)) {
+	                return type.$is(obj);
+	            }
 
-        if (Bridge.isArray(obj) && type == Bridge.IEnumerable) {
-            return true;
-        }
+	            if (Bridge.isFunction(type.instanceOf)) {
+	                return type.instanceOf(obj);
+	            }
+            }	  
 
-        if (!type.$$inheritors) {
-            return false;
-        }
-
-        var inheritors = type.$$inheritors;	  
-
-        for (var i = 0; i < inheritors.length; i++) {
-            if (Bridge.is(obj, inheritors[i])) {
+            if ((obj.constructor == type) || (obj instanceof type)) {
 	            return true;
+            }
+
+            if (Bridge.isArray(obj) && type == Bridge.IEnumerable) {
+                return true;
+            }
+
+            if (!type.$$inheritors) {
+                return false;
+            }
+
+            var inheritors = type.$$inheritors;	  
+
+            for (var i = 0; i < inheritors.length; i++) {
+                if (Bridge.is(obj, inheritors[i])) {
+	                return true;
+	            }
+            }
+
+            return false;
+	    },
+	
+        as: function (obj, type) {
+	        return Bridge.is(obj, type) ? obj : null;
+        },
+	
+        cast: function (obj, type) {
+	        var result = Bridge.as(obj, type);
+
+	        if (result == null) {
+	            throw new Bridge.InvalidCastException('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
 	        }
-        }
 
-        return false;
-	},
+	        return result;
+        },
 	
-    as: function (obj, type) {
-	    return Bridge.is(obj, type) ? obj : null;
-    },
-	
-    cast: function (obj, type) {
-	    var result = Bridge.as(obj, type);
+	    apply: function (obj, values) {
+	        var names = Bridge.getPropertyNames(values, false);
 
-	    if (result == null) {
-	        throw new Bridge.InvalidCastException('Unable to cast type ' + Bridge.getTypeName(obj.constructor) + ' to type ' + Bridge.getTypeName(type));
-	    }
+	        for (var i = 0; i < names.length; i++) {
+	            var name = names[i];
 
-	    return result;
-    },
-	
-	apply: function (obj, values) {
-	    var names = Bridge.getPropertyNames(values, false);
+	            if (typeof obj[name] == "function" && typeof values[name] != "function") {
+	                obj[name](values[name]);
+	            }
+	            else {
+	                obj[name] = values[name];
+	            }
+	        }
 
-	    for (var i = 0; i < names.length; i++) {
-	        var name = names[i];
+	        return obj;
+        },
 
-	        if (typeof obj[name] == "function" && typeof values[name] != "function") {
-	            obj[name](values[name]);
+	    merge: function (to, from) {
+	        var object,
+                key,
+			    i,
+                value,
+                toValue,
+			    fn;
+
+	        if (Bridge.isArray(from) && Bridge.isFunction(to.add || to.push)) {
+	            fn = Bridge.isArray(to) ? to.push : to.add;
+
+	            for (i = 0; i < from.length; i++) {
+	                fn.apply(to, from[i]);
+	            }
 	        }
 	        else {
-	            obj[name] = values[name];
-	        }
-	    }
+	            for (key in from) {
+	                value = from[key];
 
-	    return obj;
-    },
-
-	merge: function (to, from) {
-	    var object,
-            key,
-			i,
-            value,
-            toValue,
-			fn;
-
-	    if (Bridge.isArray(from) && Bridge.isFunction(to.add || to.push)) {
-	        fn = Bridge.isArray(to) ? to.push : to.add;
-
-	        for (i = 0; i < from.length; i++) {
-	            fn.apply(to, from[i]);
-	        }
-	    }
-	    else {
-	        for (key in from) {
-	            value = from[key];
-
-	            if (typeof to[key] == "function" && typeof value != "function") {
-	                if (key.match(/^\s*get[A-Z]/)) {
-	                    Bridge.merge(to[key](), value);
-	                }
+	                if (typeof to[key] == "function" && typeof value != "function") {
+	                    if (key.match(/^\s*get[A-Z]/)) {
+	                        Bridge.merge(to[key](), value);
+	                    }
+	                    else {
+	                        to[key](value);
+	                    }
+	                }	            	            
 	                else {
-	                    to[key](value);
-	                }
-	            }	            	            
-	            else {
-	                var setter = "set" + key.charAt(0).toUpperCase() + key.slice(1);
-	                if (typeof to[setter] == "function" && typeof value != "function") {
-	                    to[setter](value);
-	                }
-	                else if (value && value.constructor === Object && to[key]) {
-	                    toValue = to[key];
-	                    Bridge.merge(toValue, value);
-	                }
-	                else {
-	                    to[key] = value;
+	                    var setter = "set" + key.charAt(0).toUpperCase() + key.slice(1);
+	                    if (typeof to[setter] == "function" && typeof value != "function") {
+	                        to[setter](value);
+	                    }
+	                    else if (value && value.constructor === Object && to[key]) {
+	                        toValue = to[key];
+	                        Bridge.merge(toValue, value);
+	                    }
+	                    else {
+	                        to[key] = value;
+	                    }
 	                }
 	            }
 	        }
-	    }
 
-	    return to;
-	},
+	        return to;
+	    },
 
-	getEnumerator: function (obj) {
-	    if (obj && obj.getEnumerator) {
-	      return obj.getEnumerator();
-	    }
+	    getEnumerator: function (obj) {
+	        if (obj && obj.getEnumerator) {
+	          return obj.getEnumerator();
+	        }
 
-	    if ((Object.prototype.toString.call(obj) === '[object Array]') ||
-            (obj && Bridge.isDefined(obj.length))) {
-	      return new Bridge.ArrayEnumerator(obj);
-	    }
+	        if ((Object.prototype.toString.call(obj) === '[object Array]') ||
+                (obj && Bridge.isDefined(obj.length))) {
+	          return new Bridge.ArrayEnumerator(obj);
+	        }
 	    
-	    throw new Bridge.InvalidOperationException('Cannot create enumerator');
-	},
+	        throw new Bridge.InvalidOperationException('Cannot create enumerator');
+	    },
 
-	getPropertyNames: function (obj, includeFunctions) {
-	    var names = [],
-	        name;
+	    getPropertyNames: function (obj, includeFunctions) {
+	        var names = [],
+	            name;
 
-	    for (name in obj) {
-            if (includeFunctions || typeof obj[name] !== 'function') {
-                names.push(name);
-            }
-	    }
+	        for (name in obj) {
+                if (includeFunctions || typeof obj[name] !== 'function') {
+                    names.push(name);
+                }
+	        }
 
-	    return names;
-	},
+	        return names;
+	    },
 
-	isDefined: function (value, noNull) {
-	    return typeof value !== 'undefined' && (noNull ? value != null : true);
-	},
+	    isDefined: function (value, noNull) {
+	        return typeof value !== 'undefined' && (noNull ? value != null : true);
+	    },
 
-	isEmpty: function (value, allowEmpty) {
-	    return (value == null) || (!allowEmpty ? value === '' : false) || ((!allowEmpty && Bridge.isArray(value)) ? value.length === 0 : false);
-	},
+	    isEmpty: function (value, allowEmpty) {
+	        return (value == null) || (!allowEmpty ? value === '' : false) || ((!allowEmpty && Bridge.isArray(value)) ? value.length === 0 : false);
+	    },
 
-	toArray: function (ienumerable) {
-	    var i,
-	        item,
-            len,
-	        result = [];
+	    toArray: function (ienumerable) {
+	        var i,
+	            item,
+                len,
+	            result = [];
 
-	    if (Bridge.isArray(ienumerable)) {
-            for (i = 0, len = ienumerable.length; i < len; ++i) {
-                result.push(ienumerable[i]);
-            }
-	    }
-	    else {
-            i = Bridge.getEnumerator(ienumerable);
+	        if (Bridge.isArray(ienumerable)) {
+                for (i = 0, len = ienumerable.length; i < len; ++i) {
+                    result.push(ienumerable[i]);
+                }
+	        }
+	        else {
+                i = Bridge.getEnumerator(ienumerable);
 
-            while (i.moveNext()) {
-                item = i.getCurrent();
-                result.push(item);
-            }
-	    }	    
+                while (i.moveNext()) {
+                    item = i.getCurrent();
+                    result.push(item);
+                }
+	        }	    
 
-	    return result;
-	},
+	        return result;
+	    },
 
-    isArray: function (obj) {
-        return Object.prototype.toString.call(obj) === '[object Array]';
-    },
-
-    isFunction: function (obj) {
-        return typeof (obj) === 'function';
-    },
-
-    isDate: function (obj) {
-        return Object.prototype.toString.call(obj) === '[object Date]';
-    },
-
-    isNull: function (value) {
-        return (value === null) || (value === undefined);
-    },
-
-    isBoolean: function (value) {
-        return typeof value === 'boolean';
-    },
-
-    isNumber: function (value) {
-        return typeof value === 'number' && isFinite(value);
-    },
-
-    isString: function (value) {
-        return typeof value === 'string';
-    },
-
-    unroll: function (value) {
-        var d = value.split("."),
-            o = Bridge.global[d[0]],
-            i;
-
-        for (var i = 1; i < d.length; i++) {
-            if (!o) {
-                return null;
-            }
-
-            o = o[d[i]];
-        }
-
-        return o;
-    },
-
-    equals: function (a, b) {
-        if (a && Bridge.isFunction(a.equals)) {
-            return a.equals(b);
-        }
-        else if (Bridge.isDate(a) && Bridge.isDate(b)) {
-            return a.valueOf() === b.valueOf();
-        }
-        else if (Bridge.isNull(a) && Bridge.isNull(b)) {
-            return true;
-        }
-        
-        return a === b;
-    },
-
-    compare: function (a, b) {
-        if (!Bridge.isDefined(a, true)) {
-            throw new Bridge.NullReferenceException();
-        }
-        else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
-            return a < b ? -1 : (a > b ? 1 : 0);
-        }
-        else if (Bridge.isDate(a)) {
-            return Bridge.compare(a.valueOf(), b.valueOf());
-        }
-
-        return a.compareTo(b);
-    },
-
-    equalsT: function (a, b) {
-        if (!Bridge.isDefined(a, true)) {
-            throw new Bridge.NullReferenceException();
-        }
-        else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
-            return a === b;
-        }
-        else if (Bridge.isDate(a)) {
-            return a.valueOf() === b.valueOf();
-        }
-        
-        return a.equalsT(b);
-    },
-
-    format: function (obj, formatString) {
-        if (Bridge.isNumber(obj)) {
-            return Bridge.Int.format(obj, formatString);
-        }
-        else if (Bridge.isDate(obj)) {
-            return Bridge.Date.format(obj, formatString);
-        }
-
-        return obj.format(formatString);
-    },
-
-    getType: function (instance) {
-        if (!Bridge.isDefined(instance, true)) {
-            throw new Bridge.NullReferenceException('instance is null');
-        }
-
-        try {
-            return instance.constructor;
-        } catch (ex) {
-            return Object;
-        }
-    },
-
-    isLower: function isLower(c) {
-        var s = String.fromCharCode(c);
-
-        return s === s.toLowerCase() && s !== s.toUpperCase();
-    },
-
-    isUpper: function isUpper(c) {
-        var s = String.fromCharCode(c);
-
-        return s !== s.toLowerCase() && s === s.toUpperCase();
-    },
-
-    fn: {
-        call: function (obj, fnName){
-            var args = Array.prototype.slice.call(arguments, 2);
-
-            obj = obj || Bridge.global;
-
-            return obj[fnName].apply(obj, args);
+        isArray: function (obj) {
+            return Object.prototype.toString.call(obj) === '[object Array]';
         },
 
-        bind: function (obj, method, args, appendArgs) {
-            if (method && method.$method == method && method.$scope == obj) {
-                return method;
+        isFunction: function (obj) {
+            return typeof (obj) === 'function';
+        },
+
+        isDate: function (obj) {
+            return Object.prototype.toString.call(obj) === '[object Date]';
+        },
+
+        isNull: function (value) {
+            return (value === null) || (value === undefined);
+        },
+
+        isBoolean: function (value) {
+            return typeof value === 'boolean';
+        },
+
+        isNumber: function (value) {
+            return typeof value === 'number' && isFinite(value);
+        },
+
+        isString: function (value) {
+            return typeof value === 'string';
+        },
+
+        unroll: function (value) {
+            var d = value.split("."),
+                o = window[d[0]],
+                i;
+
+            for (var i = 1; i < d.length; i++) {
+                if (!o) {
+                    return null;
+                }
+
+                o = o[d[i]];
             }
 
-            var fn = null;
+            return o;
+        },
 
-            if (arguments.length === 2) {
-                fn = function () {
-                    return method.apply(obj, arguments)
-                };
+        equals: function (a, b) {
+            if (a && Bridge.isFunction(a.equals)) {
+                return a.equals(b);
             }
-            else {
-                fn = function () {
-                    var callArgs = args || arguments;
+            else if (Bridge.isDate(a) && Bridge.isDate(b)) {
+                return a.valueOf() === b.valueOf();
+            }
+            else if (Bridge.isNull(a) && Bridge.isNull(b)) {
+                return true;
+            }
+        
+            return a === b;
+        },
 
-                    if (appendArgs === true) {
-                        callArgs = Array.prototype.slice.call(arguments, 0);
-                        callArgs = callArgs.concat(args);
-                    }
-                    else if (typeof appendArgs == 'number') {
-                        callArgs = Array.prototype.slice.call(arguments, 0);
+        compare: function (a, b) {
+            if (!Bridge.isDefined(a, true)) {
+                throw new Bridge.NullReferenceException();
+            }
+            else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
+                return a < b ? -1 : (a > b ? 1 : 0);
+            }
+            else if (Bridge.isDate(a)) {
+                return Bridge.compare(a.valueOf(), b.valueOf());
+            }
 
-                        if (appendArgs === 0) {
-                            callArgs.unshift.apply(callArgs, args);
+            return a.compareTo(b);
+        },
+
+        equalsT: function (a, b) {
+            if (!Bridge.isDefined(a, true)) {
+                throw new Bridge.NullReferenceException();
+            }
+            else if (Bridge.isNumber(a) || Bridge.isString(a) || Bridge.isBoolean(a)) {
+                return a === b;
+            }
+            else if (Bridge.isDate(a)) {
+                return a.valueOf() === b.valueOf();
+            }
+        
+            return a.equalsT(b);
+        },
+
+        format: function (obj, formatString) {
+            if (Bridge.isNumber(obj)) {
+                return Bridge.Int.format(obj, formatString);
+            }
+            else if (Bridge.isDate(obj)) {
+                return Bridge.Date.format(obj, formatString);
+            }
+
+            return obj.format(formatString);
+        },
+
+        getType: function (instance) {
+            if (!Bridge.isDefined(instance, true)) {
+                throw new Bridge.NullReferenceException('instance is null');
+            }
+
+            try {
+                return instance.constructor;
+            } catch (ex) {
+                return Object;
+            }
+        },
+
+        isLower: function isLower(c) {
+            var s = String.fromCharCode(c);
+
+            return s === s.toLowerCase() && s !== s.toUpperCase();
+        },
+
+        isUpper: function isUpper(c) {
+            var s = String.fromCharCode(c);
+
+            return s !== s.toLowerCase() && s === s.toUpperCase();
+        },
+
+        fn: {
+            call: function (obj, fnName){
+                var args = Array.prototype.slice.call(arguments, 2);
+
+                obj = obj || window;
+
+                return obj[fnName].apply(obj, args);
+            },
+
+            bind: function (obj, method, args, appendArgs) {
+                if (method && method.$method == method && method.$scope == obj) {
+                    return method;
+                }
+
+                var fn = null;
+
+                if (arguments.length === 2) {
+                    fn = function () {
+                        return method.apply(obj, arguments)
+                    };
+                }
+                else {
+                    fn = function () {
+                        var callArgs = args || arguments;
+
+                        if (appendArgs === true) {
+                            callArgs = Array.prototype.slice.call(arguments, 0);
+                            callArgs = callArgs.concat(args);
                         }
-                        else if (appendArgs < callArgs.length) {
-                            callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+                        else if (typeof appendArgs == 'number') {
+                            callArgs = Array.prototype.slice.call(arguments, 0);
+
+                            if (appendArgs === 0) {
+                                callArgs.unshift.apply(callArgs, args);
+                            }
+                            else if (appendArgs < callArgs.length) {
+                                callArgs.splice.apply(callArgs, [appendArgs, 0].concat(args));
+                            }
+                            else {
+                                callArgs.push.apply(callArgs, args);
+                            }
                         }
-                        else {
-                            callArgs.push.apply(callArgs, args);
-                        }
-                    }
+
+                        return method.apply(obj, callArgs);
+                    };
+                }
+
+                fn.$method = method;
+                fn.$scope = obj;
+
+                return fn;
+            },
+
+            bindScope: function (obj, method) {
+                var fn = function () {
+                    var callArgs = Array.prototype.slice.call(arguments, 0);
+
+                    callArgs.unshift.apply(callArgs, [obj]);
 
                     return method.apply(obj, callArgs);
                 };
-            }
 
-            fn.$method = method;
-            fn.$scope = obj;
+                fn.$method = method;
+                fn.$scope = obj;
 
-            return fn;
-        },
+                return fn;
+            },
 
-        bindScope: function (obj, method) {
-            var fn = function () {
-                var callArgs = Array.prototype.slice.call(arguments, 0);
+            $build: function (handlers) {
+                var fn = function () {
+                    var list = arguments.callee.$invocationList,
+                        result,
+                        i,
+                        handler;
 
-                callArgs.unshift.apply(callArgs, [obj]);
+                    for (i = 0; i < list.length; i++) {
+                        handler = list[i];
+                        result = handler.apply(null, arguments);
+                    }
 
-                return method.apply(obj, callArgs);
-            };
+                    return result;
+                };
 
-            fn.$method = method;
-            fn.$scope = obj;
+                fn.$invocationList = handlers ? Array.prototype.slice.call(handlers, 0) : [];
 
-            return fn;
-        },
-
-        $build: function (handlers) {
-            var fn = function () {
-                var list = arguments.callee.$invocationList,
-                    result,
-                    i,
-                    handler;
-
-                for (i = 0; i < list.length; i++) {
-                    handler = list[i];
-                    result = handler.apply(null, arguments);
+                if (fn.$invocationList.length == 0) {
+                    return null;
                 }
 
-                return result;
-            };
+                return fn;
+            },
 
-            fn.$invocationList = handlers ? Array.prototype.slice.call(handlers, 0) : [];
+            combine: function (fn1, fn2) {
+                if (!fn1 || !fn2) {                
+                    return fn1 || fn2;
+                }
 
-            if (fn.$invocationList.length == 0) {
-                return null;
-            }
+                var list1 = fn1.$invocationList ? fn1.$invocationList : [fn1],
+                    list2 = fn2.$invocationList ? fn2.$invocationList : [fn2];
 
-            return fn;
-        },
+                return Bridge.fn.$build(list1.concat(list2));
+            },
 
-        combine: function (fn1, fn2) {
-            if (!fn1 || !fn2) {                
-                return fn1 || fn2;
-            }
+            remove: function (fn1, fn2) {
+                if (!fn1 || !fn2) {
+                    return fn1 || null;
+                }
 
-            var list1 = fn1.$invocationList ? fn1.$invocationList : [fn1],
-                list2 = fn2.$invocationList ? fn2.$invocationList : [fn2];
-
-            return Bridge.fn.$build(list1.concat(list2));
-        },
-
-        remove: function (fn1, fn2) {
-            if (!fn1 || !fn2) {
-                return fn1 || null;
-            }
-
-            var list1 = fn1.$invocationList ? fn1.$invocationList : [fn1],
-                list2 = fn2.$invocationList ? fn2.$invocationList : [fn2],
-                result = [],
-                exclude,
-                i, j;
+                var list1 = fn1.$invocationList ? fn1.$invocationList : [fn1],
+                    list2 = fn2.$invocationList ? fn2.$invocationList : [fn2],
+                    result = [],
+                    exclude,
+                    i, j;
             
-            for (i = list1.length - 1; i >= 0; i--) {
-                exclude = false;
+                for (i = list1.length - 1; i >= 0; i--) {
+                    exclude = false;
 
-                for (j = 0; j < list2.length; j++) {
-                    if (list1[i] === list2[j] || (list1[i].$method === list2[j].$method && list1[i].$scope === list2[j].$scope)) {
-                        exclude = true;
-                        break;
+                    for (j = 0; j < list2.length; j++) {
+                        if (list1[i] === list2[j] || (list1[i].$method === list2[j].$method && list1[i].$scope === list2[j].$scope)) {
+                            exclude = true;
+                            break;
+                        }
+                    }
+
+                    if (!exclude) {
+                        result.push(list1[i]);
                     }
                 }
 
-                if (!exclude) {
-                    result.push(list1[i]);
+                result.reverse();
+
+                return Bridge.fn.$build(result);
+            }
+        }
+    };
+
+    Bridge = core;
+})();
+// @source Nullable.js
+
+(function () {
+    var nullable = {
+        hasValue: function (obj) {
+            return (obj !== null) && (obj !== undefined);
+        },
+
+        getValue: function (obj) {
+            if (!Bridge.nullable.hasValue(obj)) {
+                throw new Bridge.InvalidOperationException("Nullable instance doesn't have a value.");
+            }
+            return obj;
+        },
+
+        getValueOrDefault: function (obj, defValue) {
+            return Bridge.nullable.hasValue(obj) ? obj : defValue;
+        },
+
+        add: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a + b : null;
+        },
+
+        band: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a & b : null;
+        },
+
+        bor: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a | b : null;
+        },
+
+        and: function (a, b) {
+            if (a === true && b === true) {
+                return true;
+            }
+            else if (a === false || b === false) {
+                return false;
+            }
+
+            return null;
+        },
+
+        or: function (a, b) {
+            if (a === true || b === true) {
+                return true;
+            }
+            else if (a === false && b === false) {
+                return false;
+            }
+
+            return null;
+        },
+
+        div: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a / b : null;
+        },
+
+        eq: function (a, b) {
+            return !Bridge.hasValue(a) ? !Bridge.hasValue(b) : (a === b);
+        },
+
+        xor: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a ^ b : null;
+        },
+
+        gt: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) && a > b;
+        },
+
+        gte: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) && a >= b;
+        },
+
+        neq: function (a, b) {
+            return !Bridge.hasValue(a) ? Bridge.hasValue(b) : (a !== b);
+        },
+
+        lt: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) && a < b;
+        },
+
+        lte: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) && a <= b;
+        },
+
+        mod: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a % b : null;
+        },
+
+        mul: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a * b : null;
+        },
+
+        sl: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a << b : null;
+        },
+
+        sr: function (a, b) {
+            return Bridge.hasValue(a) && Bridge.hasValue(b) ? a >> b : null;
+        },
+
+        sub: function (a, b) {
+	        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a - b : null;
+        },
+
+        bnot: function (a) {
+            return Bridge.hasValue(a) ? ~a : null;
+        },
+
+        neg: function (a) {
+            return Bridge.hasValue(a) ? -a : null;
+        },
+
+        not: function (a) {
+	        return Bridge.hasValue(a) ? !a : null;
+        },    
+
+        pos: function (a) {
+	        return Bridge.hasValue(a) ? +a : null;
+        },    
+
+        lift: function () {
+	        for (var i = 1; i < arguments.length; i++) {
+	            if (!Bridge.hasValue(arguments[i])) {
+	                return null;
+	            }
+	        }
+
+	        return arguments[0].apply(null, Array.prototype.slice.call(arguments, 1));
+        }
+    };
+
+    Bridge.nullable = nullable;
+    Bridge.hasValue = Bridge.nullable.hasValue;
+})();
+// @source String.js
+
+(function () {
+    var string = {
+        isNullOrWhiteSpace: function (value) {
+            return value === null || value.match(/^ *$/) !== null;
+        },
+
+        isNullOrEmpty: function (value) {
+            return Bridge.isEmpty(value, false);
+        },
+
+        fromCharCount: function (c, count) {
+            if (count >= 0) {
+                return String(Array(count + 1).join(String.fromCharCode(c)));
+            }
+            else {
+                throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
+            }
+        },
+
+        format: function (format) {
+            var me = this,
+                _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
+                args = Array.prototype.slice.call(arguments, 1),
+                fn = this.decodeBraceSequence;
+
+            return format.replace(_formatRe, function (m, openBrace, elementContent, index, align, format, closeBrace, repeatOpenBrace, repeatCloseBrace) {
+                if (repeatOpenBrace) {
+                    return fn(repeatOpenBrace);
+                }
+
+                if (repeatCloseBrace) {
+                    return fn(repeatCloseBrace);
+                }
+
+                if (openBrace.length % 2 == 0 || closeBrace.length % 2 == 0) {
+                    return fn(openBrace) + elementContent + fn(closeBrace);
+                }
+
+                return fn(openBrace, true) + me.handleElement(index, align, format, args) + fn(closeBrace, true);
+            });
+        },
+
+        handleElement: function (index, alignment, formatStr, args) {
+            var value;
+
+            index = parseInt(index, 10)
+
+            if (index > args.length - 1) {
+                throw new Bridge.FormatException("Input string was not in a correct format.");
+            }
+
+            value = args[index];
+
+            if (value == null)
+            {
+                value = "";
+            }
+
+            if (formatStr && Bridge.is(value, Bridge.IFormattable)) {            
+                value = Bridge.format(value, formatStr);
+            }
+            else {
+                value = "" + value;
+            }        
+
+            if (alignment) {
+                alignment = parseInt(alignment, 10);
+                if (!Bridge.isNumber(alignment)) {
+                    alignment = null;
                 }
             }
 
-            result.reverse();
+            return Bridge.String.alignString(value.toString(), alignment);
+        },
 
-            return Bridge.fn.$build(result);
-        }
-    }
-};
+        decodeBraceSequence: function (braces, remove) {        
+            return braces.substr(0, (braces.length + (remove ? 0 : 1)) / 2);
+        },
 
-
-// @source resources/Core.js
-
-Bridge.nullable = {
-    hasValue: function (obj) {
-        return (obj !== null) && (obj !== undefined);
-    },
-
-    getValue: function (obj) {
-        if (!Bridge.nullable.hasValue(obj)) {
-            throw new Bridge.InvalidOperationException("Nullable instance doesn't have a value.");
-        }
-        return obj;
-    },
-
-    getValueOrDefault: function (obj, defValue) {
-        return Bridge.nullable.hasValue(obj) ? obj : defValue;
-    },
-
-    add: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a + b : null;
-    },
-
-    band: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a & b : null;
-    },
-
-    bor: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a | b : null;
-    },
-
-    and: function (a, b) {
-        if (a === true && b === true) {
-            return true;
-        }
-        else if (a === false || b === false) {
-            return false;
-        }
-
-        return null;
-    },
-
-    or: function (a, b) {
-        if (a === true || b === true) {
-            return true;
-        }
-        else if (a === false && b === false) {
-            return false;
-        }
-
-        return null;
-    },
-
-    div: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a / b : null;
-    },
-
-    eq: function (a, b) {
-        return !Bridge.hasValue(a) ? !Bridge.hasValue(b) : (a === b);
-    },
-
-    xor: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a ^ b : null;
-    },
-
-    gt: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) && a > b;
-    },
-
-    gte: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) && a >= b;
-    },
-
-    neq: function (a, b) {
-        return !Bridge.hasValue(a) ? Bridge.hasValue(b) : (a !== b);
-    },
-
-    lt: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) && a < b;
-    },
-
-    lte: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) && a <= b;
-    },
-
-    mod: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a % b : null;
-    },
-
-    mul: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a * b : null;
-    },
-
-    sl: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a << b : null;
-    },
-
-    sr: function (a, b) {
-        return Bridge.hasValue(a) && Bridge.hasValue(b) ? a >> b : null;
-    },
-
-    sub: function (a, b) {
-	    return Bridge.hasValue(a) && Bridge.hasValue(b) ? a - b : null;
-    },
-
-    bnot: function (a) {
-        return Bridge.hasValue(a) ? ~a : null;
-    },
-
-    neg: function (a) {
-        return Bridge.hasValue(a) ? -a : null;
-    },
-
-    not: function (a) {
-	    return Bridge.hasValue(a) ? !a : null;
-    },    
-
-    pos: function (a) {
-	    return Bridge.hasValue(a) ? +a : null;
-    },    
-
-    lift: function () {
-	    for (var i = 1; i < arguments.length; i++) {
-	        if (!Bridge.hasValue(arguments[i])) {
-	            return null;
-	        }
-	    }
-
-	    return arguments[0].apply(null, Array.prototype.slice.call(arguments, 1));
-    }
-};
-
-Bridge.hasValue = Bridge.nullable.hasValue;
-// @source String.js
-
-Bridge.String = {
-    isNullOrWhiteSpace: function (value) {
-        return value === null || value.match(/^ *$/) !== null;
-    },
-
-    isNullOrEmpty: function (value) {
-        return Bridge.isEmpty(value, false);
-    },
-
-    fromCharCount: function (c, count) {
-        if (count >= 0) {
-            return String(Array(count + 1).join(String.fromCharCode(c)));
-        }
-        else {
-            throw new Bridge.ArgumentOutOfRangeException("count", "cannot be less than zero");
-        }
-    },
-
-    format: function (format) {
-        var me = this,
-            _formatRe = /(\{+)((\d+|[a-zA-Z_$]\w+(?:\.[a-zA-Z_$]\w+|\[\d+\])*)(?:\,(-?\d*))?(?:\:([^\}]*))?)(\}+)|(\{+)|(\}+)/g,
-            args = Array.prototype.slice.call(arguments, 1),
-            fn = this.decodeBraceSequence;
-
-        return format.replace(_formatRe, function (m, openBrace, elementContent, index, align, format, closeBrace, repeatOpenBrace, repeatCloseBrace) {
-            if (repeatOpenBrace) {
-                return fn(repeatOpenBrace);
+        alignString: function (str, alignment, pad, dir) {
+            if (!alignment) {
+                return str;
             }
 
-            if (repeatCloseBrace) {
-                return fn(repeatCloseBrace);
+            if (!pad) {
+                pad = " ";
             }
 
-            if (openBrace.length % 2 == 0 || closeBrace.length % 2 == 0) {
-                return fn(openBrace) + elementContent + fn(closeBrace);
+            if (!dir) {
+                dir = alignment < 0 ? 1 : 2;
             }
 
-            return fn(openBrace, true) + me.handleElement(index, align, format, args) + fn(closeBrace, true);
-        });
-    },
+            alignment = Math.abs(alignment);
 
-    handleElement: function (index, alignment, formatStr, args) {
-        var value;
+            if (alignment + 1 >= str.length) {
+                switch (dir) {
+                    case 2:
+                        str = Array(alignment + 1 - str.length).join(pad) + str;
+                        break;
 
-        index = parseInt(index, 10)
+                    case 3:
+                        var padlen = alignment - str.length,
+                            right = Math.ceil(padlen / 2),
+                            left = padlen - right;
 
-        if (index > args.length - 1) {
-            throw new Bridge.FormatException("Input string was not in a correct format.");
-        }
+                        str = Array(left + 1).join(pad) + str + Array(right + 1).join(pad);
+                        break;
 
-        value = args[index];
-
-        if (value == null)
-        {
-            value = "";
-        }
-
-        if (formatStr && Bridge.is(value, Bridge.IFormattable)) {            
-            value = Bridge.format(value, formatStr);
-        }
-        else {
-            value = "" + value;
-        }        
-
-        if (alignment) {
-            alignment = parseInt(alignment, 10);
-            if (!Bridge.isNumber(alignment)) {
-                alignment = null;
+                    case 1:
+                    default:
+                        str = str + Array(alignment + 1 - str.length).join(pad);
+                        break;
+                }
             }
-        }
 
-        return Bridge.String.alignString(value.toString(), alignment);
-    },
-
-    decodeBraceSequence: function (braces, remove) {        
-        return braces.substr(0, (braces.length + (remove ? 0 : 1)) / 2);
-    },
-
-    alignString: function (str, alignment, pad, dir) {
-        if (!alignment) {
             return str;
-        }
+        },
 
-        if (!pad) {
-            pad = " ";
-        }
-
-        if (!dir) {
-            dir = alignment < 0 ? 1 : 2;
-        }
-
-        alignment = Math.abs(alignment);
-
-        if (alignment + 1 >= str.length) {
-            switch (dir) {
-                case 2:
-                    str = Array(alignment + 1 - str.length).join(pad) + str;
-                    break;
-
-                case 3:
-                    var padlen = alignment - str.length,
-                        right = Math.ceil(padlen / 2),
-                        left = padlen - right;
-
-                    str = Array(left + 1).join(pad) + str + Array(right + 1).join(pad);
-                    break;
-
-                case 1:
-                default:
-                    str = str + Array(alignment + 1 - str.length).join(pad);
-                    break;
+        startsWith: function (str, prefix) {
+            if (!prefix.length) {
+                return true;
             }
+
+            if (prefix.length > str.length) {
+                return false;
+            }
+
+            return str.match("^" + prefix) !== null;
+        },
+
+        endsWith: function (str, suffix) {
+            if (!suffix.length) {
+                return true;
+            }
+
+            if (suffix.length > str.length) {
+                return false;
+            }
+
+            return str.match(suffix + "$") !== null;
         }
+    };
 
-        return str;
-    },
-
-    startsWith: function (str, prefix) {
-        if (!prefix.length) {
-            return true;
-        }
-
-        if (prefix.length > str.length) {
-            return false;
-        }
-
-        return str.match("^" + prefix) !== null;
-    },
-
-    endsWith: function (str, suffix) {
-        if (!suffix.length) {
-            return true;
-        }
-
-        if (suffix.length > str.length) {
-            return false;
-        }
-
-        return str.match(suffix + "$") !== null;
-    }
-};
-
+    Bridge.String = string;
+})();
 // @source Class.js
-
-
 
 (function () {
     var initializing = false;
 
     // The base Class implementation
-    Bridge.Class = {
+    var base = {
         cache: { },
 
         initCtor: function () {
@@ -1178,6 +1184,7 @@ Bridge.String = {
         }
     };
 
+    Bridge.Class = base;
     Bridge.define = Bridge.Class.define;
 })();
 // @source Exception.js
@@ -2297,761 +2304,766 @@ Bridge.Class.addExtend(Bridge.Int, [Bridge.IComparable$1(Bridge.Int), Bridge.IEq
 
 // @source Date.js
 
-Bridge.Date = {
-    utcNow:  function () {
-        var d = new Date();
+(function () {
+    var date = {
+        utcNow:  function () {
+            var d = new Date();
 
-        return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
-    },
+            return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
+        },
 
-    today: function () {
-        var d = new Date();
+        today: function () {
+            var d = new Date();
 
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    },
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        },
 
-    isUseGenitiveForm: function (format, index, tokenLen, patternToMatch) {
-	    var i,
-            repeat = 0;
+        isUseGenitiveForm: function (format, index, tokenLen, patternToMatch) {
+	        var i,
+                repeat = 0;
         
-	    for (i = index - 1; i >= 0 && format[i] != patternToMatch; i--) { 
-	    }
+	        for (i = index - 1; i >= 0 && format[i] != patternToMatch; i--) { 
+	        }
 
-        if (i >= 0) {
-            while (--i >= 0 && format[i] == patternToMatch) {
-                repeat++;
-            }
+            if (i >= 0) {
+                while (--i >= 0 && format[i] == patternToMatch) {
+                    repeat++;
+                }
 
-            if (repeat <= 1) {
-                return true;
+                if (repeat <= 1) {
+                    return true;
+                }
             }
-        }
 	
-        for (i = index + tokenLen; i < format.length && format[i] != patternToMatch; i++) {
-        }
-
-        if (i < format.length) {
-            repeat = 0;
-
-            while (++i < format.length && format[i] == patternToMatch) {
-                repeat++;
+            for (i = index + tokenLen; i < format.length && format[i] != patternToMatch; i++) {
             }
 
-            if (repeat <= 1) {
-                return true;
-            }
-        }
-        return false;
-    },
+            if (i < format.length) {
+                repeat = 0;
 
-    format: function (date, format, provider) {
-        var me = this,
-            df = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),        
-            year = date.getFullYear(),
-            month = date.getMonth(),
-            dayOfMonth = date.getDate(),
-            dayOfWeek = date.getDay(),
-            hour = date.getHours(),
-            minute = date.getMinutes(),
-            second = date.getSeconds(),
-            millisecond = date.getMilliseconds,
-            timezoneOffset = date.getTimezoneOffset(),
-            formats;
+                while (++i < format.length && format[i] == patternToMatch) {
+                    repeat++;
+                }
 
-        format = format || "G";
-
-        if (format.length == 1) {
-            formats = df.getAllDateTimePatterns(format, true);
-            format = formats ? formats[0] : format;
-        }
-        else if (format.length == 2 && format.charAt(0) == "%") {
-            format = format.charAt(1);
-        }
-
-        return format.replace(/(\\.|'[^']*'|"[^"]*"|d{1,4}|M{1,4}|yyyy|yy|y|HH?|hh?|mm?|ss?|tt?|f{1,3}|z{1,3}|\:|\/)/g,
-			function (match, group, index) {
-			    var part = match;
-
-			    switch (match) {
-			        case "dddd":
-			            part = df.dayNames[dayOfWeek];
-
-			            break;
-			        case "ddd":
-			            part = df.abbreviatedDayNames[dayOfWeek];
-
-			            break;
-			        case "dd":
-			            part = dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth;
-
-			            break;
-			        case "d":
-			            part = dayOfMonth;
-
-			            break;
-			        case "MMMM":
-			            if (me.isUseGenitiveForm(format, index, 4, "d")) {
-			                part = df.monthGenitiveNames[month];
-			            }
-			            else {
-			                part = df.monthNames[month];
-			            }
-
-			            break;
-			        case "MMM":
-			            if (me.isUseGenitiveForm(format, index, 3, "d")) {
-			                part = df.abbreviatedMonthGenitiveNames[month];
-			            }
-			            else {
-			                part = df.abbreviatedMonthNames[month];
-			            }
-
-			            break;
-			        case "MM":
-			            part = (month + 1) < 10 ? "0" + (month + 1) : (month + 1);
-
-			            break;
-			        case "M":
-			            part = month + 1;
-
-			            break;
-			        case "yyyy":
-			            part = year;
-
-			            break;
-			        case "yy":
-			            part = (year % 100).toString();
-
-			            if (part.length == 1) {
-			                part = "0" + part;
-			            }
-
-			            break;
-			        case "y":
-			            part = year % 100;
-
-			            break;
-			        case "h":
-			        case "hh":
-			            part = hour % 12;
-
-			            if (!part) {
-			                part = "12";
-			            }
-			            else if (match == "hh" && part.length == 1) {
-			                part = "0" + part;
-			            }
-
-			            break;
-			        case "HH":
-			            part = hour.toString();
-
-			            if (part.length == 1) {
-			                part = "0" + part;
-			            }
-
-			            break;
-			        case "H":
-			            part = hour;
-			            break;
-			        case "mm":
-			            part = minute.toString();
-
-			            if (part.length == 1) {
-			                part = "0" + part;
-			            }
-
-			            break;
-			        case "m":
-			            part = minute;
-
-			            break;
-			        case "ss":
-			            part = second.toString();
-
-			            if (part.length == 1) {
-			                part = "0" + part;
-			            }
-
-			            break;
-			        case "s":
-			            part = second;
-			            break;
-			        case "t":
-			        case "tt":
-			            part = (hour < 12) ? df.amDesignator : df.pmDesignator;
-
-			            if (match == "t") {
-			                part = part.charAt(0);
-			            }
-
-			            break;
-			        case "f":
-			        case "ff":
-			        case "fff":
-			            part = millisecond.toString();
-
-			            if (part.length < 3) {
-			                part = Array(3 - part.length).join("0") + part;
-			            }
-
-			            if (match == "ff") {
-			                part = part.substr(0, 2);
-			            }
-			            else if (match == "f") {
-			                part = part.charAt(0);
-			            }
-
-			            break;
-			        case "z":
-			            part = timezoneOffset / 60;
-			            part = ((part >= 0) ? "-" : "+") + Math.floor(Math.abs(part));
-
-			            break;
-			        case "zz":
-			        case "zzz":
-			            part = timezoneOffset / 60;			            
-			            part = ((part >= 0) ? "-" : "+") + Bridge.String.alignString(Math.floor(Math.abs(part)).toString(), 2, "0", 2);
-
-			            if (match == "zzz") {
-			                part += df.timeSeparator + Bridge.String.alignString(Math.floor(Math.abs(timezoneOffset % 60)).toString(), 2, "0", 2);
-			            }
-
-			            break;
-			        case ":":
-			            part = df.timeSeparator;
-
-			            break;
-			        case "/":
-			            part = df.dateSeparator;
-
-			            break;
-			        default:
-			            part = match.substr(1, match.length - 1 - (match.charAt(0) != "\\"));
-
-			            break;
-			    }
-
-			    return part;
-			});
-    },
-
-    parse: function (value, provider) {
-        var dt = Date.parse(value);
-        if (!isNaN(dt)) {
-            return new Date(dt);
-        }
-        return this.parseExact(value, null, provider);
-    },    
-
-    parseExact: function (str, format, provider, silent) {
-        if (!format) {
-            format = ["G", "g", "F", "f", "D", "d", "R", "r", "s", "U", "u", "O", "o", "Y", "y", "M", "m", "T", "t"];
-        }
-
-        if (Bridge.isArray(format)) {
-            var i,
-                d;
-
-            for (i = 0; i < format.length; i++) {
-                d = Bridge.Date.parseExact(str, format[i], provider, true);
-
-                if (d != null) {
-                    return d;
+                if (repeat <= 1) {
+                    return true;
                 }
             }
+            return false;
+        },
 
-            if (silent) {
-                return null;
+        format: function (date, format, provider) {
+            var me = this,
+                df = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),        
+                year = date.getFullYear(),
+                month = date.getMonth(),
+                dayOfMonth = date.getDate(),
+                dayOfWeek = date.getDay(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                millisecond = date.getMilliseconds,
+                timezoneOffset = date.getTimezoneOffset(),
+                formats;
+
+            format = format || "G";
+
+            if (format.length == 1) {
+                formats = df.getAllDateTimePatterns(format, true);
+                format = formats ? formats[0] : format;
+            }
+            else if (format.length == 2 && format.charAt(0) == "%") {
+                format = format.charAt(1);
             }
 
-            throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
-        }
+            return format.replace(/(\\.|'[^']*'|"[^"]*"|d{1,4}|M{1,4}|yyyy|yy|y|HH?|hh?|mm?|ss?|tt?|f{1,3}|z{1,3}|\:|\/)/g,
+			    function (match, group, index) {
+			        var part = match;
 
-        var df = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),
-            am = df.amDesignator,
-            pm = df.pmDesignator,
-            int = 0,
-            index = 0,
-            i,
-            c,
-            token,
-            year = 0,
-            month = 1,
-            date = 1,
-            hh = 0,
-            mm = 0,
-            ss = 0,
-            ff = 0,
-            tt = "",
-            zzh = 0,
-            zzm = 0,
-            zzi,
-            sign,
-            neg,
-            names,
-            name,
-            invalid = false,
-            inQuotes = false;
+			        switch (match) {
+			            case "dddd":
+			                part = df.dayNames[dayOfWeek];
 
-        if (str == null) {
-            throw new Bridge.ArgumentNullException("str");
-        }
+			                break;
+			            case "ddd":
+			                part = df.abbreviatedDayNames[dayOfWeek];
 
-        format = format || "G";
+			                break;
+			            case "dd":
+			                part = dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth;
 
-        if (format.length == 1) {
-            formats = df.getAllDateTimePatterns(format, true);
-            format = formats ? formats[0] : format;
-        }
-        else if (format.length == 2 && format.charAt(0) == "%") {
-            format = format.charAt(1);
-        }
+			                break;
+			            case "d":
+			                part = dayOfMonth;
 
-        while (index < format.length) {            
-            c = format.charAt(index);
-            token = "";
+			                break;
+			            case "MMMM":
+			                if (me.isUseGenitiveForm(format, index, 4, "d")) {
+			                    part = df.monthGenitiveNames[month];
+			                }
+			                else {
+			                    part = df.monthNames[month];
+			                }
 
-            while ((format.charAt(index) == c) && (index < format.length)) {
-                token += c;
-                index++
+			                break;
+			            case "MMM":
+			                if (me.isUseGenitiveForm(format, index, 3, "d")) {
+			                    part = df.abbreviatedMonthGenitiveNames[month];
+			                }
+			                else {
+			                    part = df.abbreviatedMonthNames[month];
+			                }
+
+			                break;
+			            case "MM":
+			                part = (month + 1) < 10 ? "0" + (month + 1) : (month + 1);
+
+			                break;
+			            case "M":
+			                part = month + 1;
+
+			                break;
+			            case "yyyy":
+			                part = year;
+
+			                break;
+			            case "yy":
+			                part = (year % 100).toString();
+
+			                if (part.length == 1) {
+			                    part = "0" + part;
+			                }
+
+			                break;
+			            case "y":
+			                part = year % 100;
+
+			                break;
+			            case "h":
+			            case "hh":
+			                part = hour % 12;
+
+			                if (!part) {
+			                    part = "12";
+			                }
+			                else if (match == "hh" && part.length == 1) {
+			                    part = "0" + part;
+			                }
+
+			                break;
+			            case "HH":
+			                part = hour.toString();
+
+			                if (part.length == 1) {
+			                    part = "0" + part;
+			                }
+
+			                break;
+			            case "H":
+			                part = hour;
+			                break;
+			            case "mm":
+			                part = minute.toString();
+
+			                if (part.length == 1) {
+			                    part = "0" + part;
+			                }
+
+			                break;
+			            case "m":
+			                part = minute;
+
+			                break;
+			            case "ss":
+			                part = second.toString();
+
+			                if (part.length == 1) {
+			                    part = "0" + part;
+			                }
+
+			                break;
+			            case "s":
+			                part = second;
+			                break;
+			            case "t":
+			            case "tt":
+			                part = (hour < 12) ? df.amDesignator : df.pmDesignator;
+
+			                if (match == "t") {
+			                    part = part.charAt(0);
+			                }
+
+			                break;
+			            case "f":
+			            case "ff":
+			            case "fff":
+			                part = millisecond.toString();
+
+			                if (part.length < 3) {
+			                    part = Array(3 - part.length).join("0") + part;
+			                }
+
+			                if (match == "ff") {
+			                    part = part.substr(0, 2);
+			                }
+			                else if (match == "f") {
+			                    part = part.charAt(0);
+			                }
+
+			                break;
+			            case "z":
+			                part = timezoneOffset / 60;
+			                part = ((part >= 0) ? "-" : "+") + Math.floor(Math.abs(part));
+
+			                break;
+			            case "zz":
+			            case "zzz":
+			                part = timezoneOffset / 60;			            
+			                part = ((part >= 0) ? "-" : "+") + Bridge.String.alignString(Math.floor(Math.abs(part)).toString(), 2, "0", 2);
+
+			                if (match == "zzz") {
+			                    part += df.timeSeparator + Bridge.String.alignString(Math.floor(Math.abs(timezoneOffset % 60)).toString(), 2, "0", 2);
+			                }
+
+			                break;
+			            case ":":
+			                part = df.timeSeparator;
+
+			                break;
+			            case "/":
+			                part = df.dateSeparator;
+
+			                break;
+			            default:
+			                part = match.substr(1, match.length - 1 - (match.charAt(0) != "\\"));
+
+			                break;
+			        }
+
+			        return part;
+			    });
+        },
+
+        parse: function (value, provider) {
+            var dt = Date.parse(value);
+            if (!isNaN(dt)) {
+                return new Date(dt);
             }
-            
-            if (token == "yyyy" || token == "yy" || token == "y") {
-                if (token == "yyyy") {
-                    year = this.subparseInt(str, int, 4, 4);
-                }
-                else if (token == "yy") {
-                    year = this.subparseInt(str, int, 2, 2);
-                }
-                else if (token == "y") {
-                    year = this.subparseInt(str, int, 2, 4);
-                }
+            return this.parseExact(value, null, provider);
+        },    
 
-                if (year == null) {
-                    invalid = true;
-                    break;
-                }
-
-                int += year.length;
-
-                if (year.length == 2) {
-                    year = ~~year;
-                    year = (year > 30 ? 1900 : 2000) + year;
-                }
+        parseExact: function (str, format, provider, silent) {
+            if (!format) {
+                format = ["G", "g", "F", "f", "D", "d", "R", "r", "s", "U", "u", "O", "o", "Y", "y", "M", "m", "T", "t"];
             }
-            else if (token == "MMM" || token == "MMMM") {
-                month = 0;
 
-                if (token === "MMM") {
-                    if (this.isUseGenitiveForm(format, index, 3, "d")) {
-                        names = df.abbreviatedMonthGenitiveNames;
-                    }
-                    else {
-                        names = df.abbreviatedMonthNames;
-                    }
-                }
-                else {
-                    if (this.isUseGenitiveForm(format, index, 4, "d")) {
-                        names = df.monthGenitiveNames;
-                    }
-                    else {
-                        names = df.monthNames;
-                    }
-                }                
-                
-                for (i = 0; i < names.length; i++) {
-                    name = names[i];
+            if (Bridge.isArray(format)) {
+                var i,
+                    d;
 
-                    if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {
-                        month = (i % 12) + 1;
-                        int += name.length;
+                for (i = 0; i < format.length; i++) {
+                    d = Bridge.Date.parseExact(str, format[i], provider, true);
 
-                        break;
+                    if (d != null) {
+                        return d;
                     }
                 }
 
-                if ((month < 1) || (month > 12)) {
-                    invalid = true;
-
-                    break;
-                }
-            }
-            else if (token == "MM" || token == "M") {
-                month = this.subparseInt(str, int, token.length, 2);
-
-                if (month == null || month < 1 || month > 12) {
-                    invalid = true;
-
-                    break;
-                }
-
-                int += month.length;
-            }
-            else if (token == "dddd" || token == "ddd") {
-                names = token === "ddd" ? df.abbreviatedDayNames : df.dayNames;
-
-                for (i = 0; i < names.length; i++) {
-                    name = names[i];
-
-                    if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {                        
-                        int += name.length;
-
-                        break;
-                    }
-                }
-            }
-            else if (token == "dd" || token == "d") {
-                date = this.subparseInt(str, int, token.length, 2);
-
-                if (date == null || date < 1 || date > 31) {
-                    invalid = true;
-
-                    break;
-                }
-
-                int += date.length;
-            }
-            else if (token == "hh" || token == "h") {
-                hh = this.subparseInt(str, int, token.length, 2);
-
-                if (hh == null || hh < 1 || hh > 12) {
-                    invalid = true;
-
-                    break;
-                }
-
-                int += hh.length;
-            }
-            else if (token == "HH" || token == "H") {
-                hh = this.subparseInt(str, int, token.length, 2);
-
-                if (hh == null || hh < 0 || hh > 23) {
-                    invalid = true;
-
-                    break;
-                }
-
-                int += hh.length;
-            }
-            else if (token == "mm" || token == "m") {
-                mm = this.subparseInt(str, int, token.length, 2);
-
-                if (mm == null || mm < 0 || mm > 59) {
+                if (silent) {
                     return null;
                 }
 
-                int += mm.length;
+                throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
             }
-            else if (token == "ss" || token == "s") {
-                ss = this.subparseInt(str, int, token.length, 2);
 
-                if (ss == null || ss < 0 || ss > 59) {
-                    invalid = true;
+            var df = (provider || Bridge.CultureInfo.getCurrentCulture()).getFormat(Bridge.DateTimeFormatInfo),
+                am = df.amDesignator,
+                pm = df.pmDesignator,
+                int = 0,
+                index = 0,
+                i,
+                c,
+                token,
+                year = 0,
+                month = 1,
+                date = 1,
+                hh = 0,
+                mm = 0,
+                ss = 0,
+                ff = 0,
+                tt = "",
+                zzh = 0,
+                zzm = 0,
+                zzi,
+                sign,
+                neg,
+                names,
+                name,
+                invalid = false,
+                inQuotes = false;
 
-                    break;
-                }
-
-                int += ss.length;
+            if (str == null) {
+                throw new Bridge.ArgumentNullException("str");
             }
-            else if (token == "u") {
-                ff = this.subparseInt(str, int, 1, 7);
 
-                if (ff == null) {
-                    invalid = true;
+            format = format || "G";
 
-                    break;
-                }                
-
-                int += ff.length;
-
-                if (ff.length > 3) {
-                    ff = ff.substring(0, 3);
-                }
+            if (format.length == 1) {
+                formats = df.getAllDateTimePatterns(format, true);
+                format = formats ? formats[0] : format;
             }
-            else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
-                ff = this.subparseInt(str, int, token.length, 7);
-
-                if (ff == null) {
-                    invalid = true;
-
-                    break;
-                }               
-
-                int += ff.length;
-
-                if (ff.length > 3) {
-                    ff = ff.substring(0, 3);
-                }
+            else if (format.length == 2 && format.charAt(0) == "%") {
+                format = format.charAt(1);
             }
-            else if (token == "t") {
-                if (str.substring(int, int + 1).toLowerCase() == am.charAt(0).toLowerCase()) {
-                    tt = am;
+
+            while (index < format.length) {            
+                c = format.charAt(index);
+                token = "";
+
+                while ((format.charAt(index) == c) && (index < format.length)) {
+                    token += c;
+                    index++
                 }
-                else if (str.substring(int, int + 1).toLowerCase() == pm.charAt(0).toLowerCase()) {
-                    tt = pm;
+            
+                if (token == "yyyy" || token == "yy" || token == "y") {
+                    if (token == "yyyy") {
+                        year = this.subparseInt(str, int, 4, 4);
+                    }
+                    else if (token == "yy") {
+                        year = this.subparseInt(str, int, 2, 2);
+                    }
+                    else if (token == "y") {
+                        year = this.subparseInt(str, int, 2, 4);
+                    }
+
+                    if (year == null) {
+                        invalid = true;
+                        break;
+                    }
+
+                    int += year.length;
+
+                    if (year.length == 2) {
+                        year = ~~year;
+                        year = (year > 30 ? 1900 : 2000) + year;
+                    }
                 }
-                else {
-                    invalid = true;
+                else if (token == "MMM" || token == "MMMM") {
+                    month = 0;
 
-                    break;
-                }
-
-                int += 1;
-            }
-            else if (token == "tt") {
-                if (str.substring(int, int + 2).toLowerCase() == am.toLowerCase()) {
-                    tt = am;
-                }
-                else if (str.substring(int, int + 2).toLowerCase() == pm.toLowerCase()) {
-                    tt = pm;
-                }
-                else {
-                    invalid = true;
-
-                    break;
-                }
-
-                int += 2;
-            }
-            else if (token == "z" || token == "zz") {
-                sign = str.charAt(int);
-
-                if (sign == "-") {
-                    neg = true;
-                }
-                else if (sign == "+") {
-                    neg = false;
-                }
-                else {
-                    invalid = true;
-
-                    break;
-                }
-
-                int++;
-
-                zzh = this.subparseInt(str, int, 1, 2);
-
-                if (zzh == null || zzh > 14) {
-                    invalid = true;
-
-                    break;
-                }
-
-                int += zzh.length;
-
-                if (neg) {
-                    zzh = -zzh;
-                }                
-            }
-            else if (token == "zzz") {
-                name = str.substring(int, int + 6);
-                int += 6;
-
-                if (name.length != 6) {
-                    invalid = true;
-
-                    break;
-                }
-
-                sign = name.charAt(0);
-
-                if (sign == "-") {
-                    neg = true;
-                }
-                else if (sign == "+") {
-                    neg = false;
-                }
-                else {
-                    invalid = true;
-
-                    break;
-                }
-
-                zzi = 1;
-                zzh = this.subparseInt(name, zzi, 1, 2);
-
-                if (zzh == null || zzh > 14) {
-                    invalid = true;
-
-                    break;
-                }
-
-                zzi += zzh.length;
-
-                if (neg) {
-                    zzh = -zzh;
-                }
-
-                if (name.charAt(zzi) != df.timeSeparator) {
-                    invalid = true;
-
-                    break;
-                }
-
-                zzi++;
-
-                zzm = this.subparseInt(name, zzi, 1, 2);
-
-                if (zzm == null || zzh > 59) {
-                    invalid = true;
-
-                    break;
-                }                
-            }
-            else {
-                name = str.substring(int, int + token.length);
-
-                if ((!inQuotes && ((token == ":" && name != df.timeSeparator) ||
-                    (token == "/" && name != df.dateSeparator))) ||
-                    (name != token && token != "'" && token != '"' && token != "\\")) {
-                    invalid = true;
-
-                    break;
-                }
-
-                if (inQuotes == "\\") {
-                    inQuotes = false;
-                }
-
-                if (token != "'" && token != '"' && token != "\\") {
-                    int += token.length;
-                }
-                else {
-                    if (inQuotes === false) {
-                        inQuotes = token;
+                    if (token === "MMM") {
+                        if (this.isUseGenitiveForm(format, index, 3, "d")) {
+                            names = df.abbreviatedMonthGenitiveNames;
+                        }
+                        else {
+                            names = df.abbreviatedMonthNames;
+                        }
                     }
                     else {
-                        if (inQuotes != token) {
-                            invalid = true;
+                        if (this.isUseGenitiveForm(format, index, 4, "d")) {
+                            names = df.monthGenitiveNames;
+                        }
+                        else {
+                            names = df.monthNames;
+                        }
+                    }                
+                
+                    for (i = 0; i < names.length; i++) {
+                        name = names[i];
+
+                        if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {
+                            month = (i % 12) + 1;
+                            int += name.length;
+
                             break;
                         }
+                    }
+
+                    if ((month < 1) || (month > 12)) {
+                        invalid = true;
+
+                        break;
+                    }
+                }
+                else if (token == "MM" || token == "M") {
+                    month = this.subparseInt(str, int, token.length, 2);
+
+                    if (month == null || month < 1 || month > 12) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += month.length;
+                }
+                else if (token == "dddd" || token == "ddd") {
+                    names = token === "ddd" ? df.abbreviatedDayNames : df.dayNames;
+
+                    for (i = 0; i < names.length; i++) {
+                        name = names[i];
+
+                        if (str.substring(int, int + name.length).toLowerCase() == name.toLowerCase()) {                        
+                            int += name.length;
+
+                            break;
+                        }
+                    }
+                }
+                else if (token == "dd" || token == "d") {
+                    date = this.subparseInt(str, int, token.length, 2);
+
+                    if (date == null || date < 1 || date > 31) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += date.length;
+                }
+                else if (token == "hh" || token == "h") {
+                    hh = this.subparseInt(str, int, token.length, 2);
+
+                    if (hh == null || hh < 1 || hh > 12) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += hh.length;
+                }
+                else if (token == "HH" || token == "H") {
+                    hh = this.subparseInt(str, int, token.length, 2);
+
+                    if (hh == null || hh < 0 || hh > 23) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += hh.length;
+                }
+                else if (token == "mm" || token == "m") {
+                    mm = this.subparseInt(str, int, token.length, 2);
+
+                    if (mm == null || mm < 0 || mm > 59) {
+                        return null;
+                    }
+
+                    int += mm.length;
+                }
+                else if (token == "ss" || token == "s") {
+                    ss = this.subparseInt(str, int, token.length, 2);
+
+                    if (ss == null || ss < 0 || ss > 59) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += ss.length;
+                }
+                else if (token == "u") {
+                    ff = this.subparseInt(str, int, 1, 7);
+
+                    if (ff == null) {
+                        invalid = true;
+
+                        break;
+                    }                
+
+                    int += ff.length;
+
+                    if (ff.length > 3) {
+                        ff = ff.substring(0, 3);
+                    }
+                }
+                else if (token == "fffffff" || token == "ffffff" || token == "fffff" || token == "ffff" || token == "fff" || token == "ff" || token == "f") {
+                    ff = this.subparseInt(str, int, token.length, 7);
+
+                    if (ff == null) {
+                        invalid = true;
+
+                        break;
+                    }               
+
+                    int += ff.length;
+
+                    if (ff.length > 3) {
+                        ff = ff.substring(0, 3);
+                    }
+                }
+                else if (token == "t") {
+                    if (str.substring(int, int + 1).toLowerCase() == am.charAt(0).toLowerCase()) {
+                        tt = am;
+                    }
+                    else if (str.substring(int, int + 1).toLowerCase() == pm.charAt(0).toLowerCase()) {
+                        tt = pm;
+                    }
+                    else {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += 1;
+                }
+                else if (token == "tt") {
+                    if (str.substring(int, int + 2).toLowerCase() == am.toLowerCase()) {
+                        tt = am;
+                    }
+                    else if (str.substring(int, int + 2).toLowerCase() == pm.toLowerCase()) {
+                        tt = pm;
+                    }
+                    else {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += 2;
+                }
+                else if (token == "z" || token == "zz") {
+                    sign = str.charAt(int);
+
+                    if (sign == "-") {
+                        neg = true;
+                    }
+                    else if (sign == "+") {
+                        neg = false;
+                    }
+                    else {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int++;
+
+                    zzh = this.subparseInt(str, int, 1, 2);
+
+                    if (zzh == null || zzh > 14) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    int += zzh.length;
+
+                    if (neg) {
+                        zzh = -zzh;
+                    }                
+                }
+                else if (token == "zzz") {
+                    name = str.substring(int, int + 6);
+                    int += 6;
+
+                    if (name.length != 6) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    sign = name.charAt(0);
+
+                    if (sign == "-") {
+                        neg = true;
+                    }
+                    else if (sign == "+") {
+                        neg = false;
+                    }
+                    else {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    zzi = 1;
+                    zzh = this.subparseInt(name, zzi, 1, 2);
+
+                    if (zzh == null || zzh > 14) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    zzi += zzh.length;
+
+                    if (neg) {
+                        zzh = -zzh;
+                    }
+
+                    if (name.charAt(zzi) != df.timeSeparator) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    zzi++;
+
+                    zzm = this.subparseInt(name, zzi, 1, 2);
+
+                    if (zzm == null || zzh > 59) {
+                        invalid = true;
+
+                        break;
+                    }                
+                }
+                else {
+                    name = str.substring(int, int + token.length);
+
+                    if ((!inQuotes && ((token == ":" && name != df.timeSeparator) ||
+                        (token == "/" && name != df.dateSeparator))) ||
+                        (name != token && token != "'" && token != '"' && token != "\\")) {
+                        invalid = true;
+
+                        break;
+                    }
+
+                    if (inQuotes == "\\") {
                         inQuotes = false;
+                    }
+
+                    if (token != "'" && token != '"' && token != "\\") {
+                        int += token.length;
+                    }
+                    else {
+                        if (inQuotes === false) {
+                            inQuotes = token;
+                        }
+                        else {
+                            if (inQuotes != token) {
+                                invalid = true;
+                                break;
+                            }
+                            inQuotes = false;
+                        }
                     }
                 }
             }
-        }
 
-        if (inQuotes) {
-            invalid = true;
-        }
-        
-        if (!invalid) {
-            if (int != str.length) {
+            if (inQuotes) {
                 invalid = true;
             }
-            else if (month == 2) {
-                if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
-                    if (date > 29) {
+        
+            if (!invalid) {
+                if (int != str.length) {
+                    invalid = true;
+                }
+                else if (month == 2) {
+                    if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
+                        if (date > 29) {
+                            invalid = true;
+                        }
+                    }
+                    else if (date > 28) {
                         invalid = true;
                     }
                 }
-                else if (date > 28) {
-                    invalid = true;
+                else if ((month == 4) || (month == 6) || (month == 9) || (month == 11)) {
+                    if (date > 30) {
+                        invalid = true;
+                    }
                 }
             }
-            else if ((month == 4) || (month == 6) || (month == 9) || (month == 11)) {
-                if (date > 30) {
-                    invalid = true;
+
+            if (invalid) {
+                if (silent) {
+                    return null;
+                }
+
+                throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
+            }
+        
+            if (hh < 12 && tt == pm) {
+                hh = hh - 0 + 12;
+            }
+            else if (hh > 11 && tt == am) {
+                hh -= 12;
+            }
+
+            if (zzh == 0 && zzm == 0) {
+                return new Date(year, month - 1, date, hh, mm, ss, ff);
+            }
+
+            return new Date(Date.UTC(year, month - 1, date, hh - zzh, mm - zzm, ss, ff));
+        },
+
+        subparseInt: function (str, index, min, max) {
+            var x,
+                token;
+
+            for (x = max; x >= min; x--) {
+                token = str.substring(index, index + x);
+
+                if (token.length < min) {
+                    return null;
+                }
+
+                if (/^\d+$/.test(token)) {
+                    return token;
                 }
             }
-        }
 
-        if (invalid) {
-            if (silent) {
-                return null;
-            }
+            return null;
+        },
 
-            throw new Bridge.FormatException("String does not contain a valid string representation of a date and time.");
-        }
+        tryParse: function (value, provider, result) {
+            result.v = this.parseExact(value, null, provider, true);
         
-        if (hh < 12 && tt == pm) {
-            hh = hh - 0 + 12;
-        }
-        else if (hh > 11 && tt == am) {
-            hh -= 12;
-        }
+            if (result.v == null) {
+                result.v = new Date(-864e13);
 
-        if (zzh == 0 && zzm == 0) {
-            return new Date(year, month - 1, date, hh, mm, ss, ff);
-        }
-
-        return new Date(Date.UTC(year, month - 1, date, hh - zzh, mm - zzm, ss, ff));
-    },
-
-    subparseInt: function (str, index, min, max) {
-        var x,
-            token;
-
-        for (x = max; x >= min; x--) {
-            token = str.substring(index, index + x);
-
-            if (token.length < min) {
-                return null;
+                return false;
             }
 
-            if (/^\d+$/.test(token)) {
-                return token;
+            return true;
+        },
+
+        tryParseExact: function (value, format, provider, result) {
+            result.v = this.parseExact(value, format, provider, true);
+
+            if (result.v == null) {
+                result.v = new Date(-864e13);
+
+                return false;
             }
+
+            return true;
+        },
+
+        isDaylightSavingTime: function (dt) {
+            var temp = Bridge.Date.today();
+
+            temp.setMonth(0);
+            temp.setDate(1);
+
+            return temp.getTimezoneOffset() != dt.getTimezoneOffset();
+        },
+
+        toUTC: function (date) {
+            return new Date(date.getUTCFullYear(), 
+                            date.getUTCMonth(), 
+                            date.getUTCDate(), 
+                            date.getUTCHours(), 
+                            date.getUTCMinutes(), 
+                            date.getUTCSeconds(), 
+                            date.getUTCMilliseconds());
+        },
+
+        toLocal: function (date) {
+            return new Date(Date.UTC(date.getFullYear(),
+                                     date.getMonth(),
+                                     date.getDate(),
+                                     date.getHours(),
+                                     date.getMinutes(),
+                                     date.getSeconds(),
+                                     date.getMilliseconds()));
         }
+    };
 
-        return null;
-    },
-
-    tryParse: function (value, provider, result) {
-        result.v = this.parseExact(value, null, provider, true);
-        
-        if (result.v == null) {
-            result.v = new Date(-864e13);
-
-            return false;
-        }
-
-        return true;
-    },
-
-    tryParseExact: function (value, format, provider, result) {
-        result.v = this.parseExact(value, format, provider, true);
-
-        if (result.v == null) {
-            result.v = new Date(-864e13);
-
-            return false;
-        }
-
-        return true;
-    },
-
-    isDaylightSavingTime: function (dt) {
-        var temp = Bridge.Date.today();
-
-        temp.setMonth(0);
-        temp.setDate(1);
-
-        return temp.getTimezoneOffset() != dt.getTimezoneOffset();
-    },
-
-    toUTC: function (date) {
-        return new Date(date.getUTCFullYear(), 
-                        date.getUTCMonth(), 
-                        date.getUTCDate(), 
-                        date.getUTCHours(), 
-                        date.getUTCMinutes(), 
-                        date.getUTCSeconds(), 
-                        date.getUTCMilliseconds());
-    },
-
-    toLocal: function (date) {
-        return new Date(Date.UTC(date.getFullYear(),
-                                 date.getMonth(),
-                                 date.getDate(),
-                                 date.getHours(),
-                                 date.getMinutes(),
-                                 date.getSeconds(),
-                                 date.getMilliseconds()));
-    }
-};
+    Bridge.Date = date;
+})();
+// @source TimeSpan.js
 
 Bridge.define('Bridge.TimeSpan', {
     $extends: [Bridge.IComparable],
@@ -3253,6 +3265,8 @@ Bridge.define('Bridge.TimeSpan', {
 });
 
 Bridge.Class.addExtend(Bridge.TimeSpan, [Bridge.IComparable$1(Bridge.TimeSpan), Bridge.IEquatable$1(Bridge.TimeSpan)]);
+// @source Text/StringBuilder.js
+
 Bridge.define('Bridge.Text.StringBuilder', {
     $config: function () {
         return {
@@ -3525,7 +3539,7 @@ Bridge.define('Bridge.Text.StringBuilder', {
     isTablet = isiPad,
     isPhone = !isDesktop && !isTablet;
 
-    Bridge.Browser = {
+    var browser = {
         isStrict: isStrict,
         isIEQuirks: isIE && (!isStrict && (isIE6 || isIE7 || isIE8 || isIE9)),
         isOpera: isOpera,
@@ -3587,6 +3601,8 @@ Bridge.define('Bridge.Text.StringBuilder', {
         iOS: isiPhone || isiPad || isiPod,
         standalone: Bridge.global.navigator ? !!Bridge.global.navigator.standalone : false
     };
+
+    Bridge.Browser = browser;
 })();
 
 Bridge.define('Bridge.IEnumerable', { });
@@ -4193,7 +4209,6 @@ Bridge.Class.generic('Bridge.ReadOnlyCollection$1', function (T) {
         }
     }));
 });
-
 // @source Task.js
 
 Bridge.define('Bridge.Task', {
@@ -4545,120 +4560,126 @@ Bridge.define('Bridge.TaskStatus', {
         faulted: 7
     }
 });
-Bridge.Validation = {
-    isNull: function (value) {
-        return !Bridge.isDefined(value, true);
-    },
+// @source Validation.js
 
-    isEmpty: function (value) {
-        return value == null || value.length === 0 || Bridge.is(value, Bridge.ICollection) ? value.getCount() == 0 : false;
-    },
+(function () {
+    var validation = {
+        isNull: function (value) {
+            return !Bridge.isDefined(value, true);
+        },
 
-    isNotEmptyOrWhitespace: function (value) {
-        return Bridge.isDefined(value, true) && !(/^$|\s+/.test(value));
-    },
+        isEmpty: function (value) {
+            return value == null || value.length === 0 || Bridge.is(value, Bridge.ICollection) ? value.getCount() == 0 : false;
+        },
 
-    isNotNull: function (value) {
-        return Bridge.isDefined(value, true);
-    },
+        isNotEmptyOrWhitespace: function (value) {
+            return Bridge.isDefined(value, true) && !(/^$|\s+/.test(value));
+        },
 
-    isNotEmpty: function (value) {
-        return !Bridge.Validation.isEmpty(value);
-    },
+        isNotNull: function (value) {
+            return Bridge.isDefined(value, true);
+        },
 
-    email: function (value) {
-        var re = /^(")?(?:[^\."])(?:(?:[\.])?(?:[\w\-!#$%&'*+/=?^_`{|}~]))*\1@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/;
+        isNotEmpty: function (value) {
+            return !Bridge.Validation.isEmpty(value);
+        },
 
-        return re.test(value);
-    },
+        email: function (value) {
+            var re = /^(")?(?:[^\."])(?:(?:[\.])?(?:[\w\-!#$%&'*+/=?^_`{|}~]))*\1@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/;
 
-    url: function (value) {
-        var re = /(((^https?)|(^ftp)):\/\/((([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*)|(localhost|LOCALHOST))\/?)/i;
+            return re.test(value);
+        },
 
-        return re.test(value);
-    },
+        url: function (value) {
+            var re = /(((^https?)|(^ftp)):\/\/((([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*)|(localhost|LOCALHOST))\/?)/i;
 
-    alpha: function (value) {
-        var re = /^[a-zA-Z_]+$/;
+            return re.test(value);
+        },
 
-        return re.test(value);
-    },
+        alpha: function (value) {
+            var re = /^[a-zA-Z_]+$/;
 
-    alphaNum: function (value) {
-        var re = /^[a-zA-Z_]+$/;
+            return re.test(value);
+        },
 
-        return re.test(value);
-    },
+        alphaNum: function (value) {
+            var re = /^[a-zA-Z_]+$/;
 
-    creditCard: function (value, type) {
-        var re,
-            checksum,
-            i,
-            digit;
+            return re.test(value);
+        },
 
-        if (type == "Visa") {
-            // Visa: length 16, prefix 4, dashes optional.
-            re = /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/;
-        }
-        else if (type == "MasterCard") {
-            // Mastercard: length 16, prefix 51-55, dashes optional.
-            re = /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/;
-        }
-        else if (type == "Discover") {
-            // Discover: length 16, prefix 6011, dashes optional.
-            re = /^6011-?\d{4}-?\d{4}-?\d{4}$/;
-        }
-        else if (type == "AmericanExpress") {
-            // American Express: length 15, prefix 34 or 37.
-            re = /^3[4,7]\d{13}$/;
-        }
-        else if (type == "DinersClub") {
-            // Diners: length 14, prefix 30, 36, or 38.
-            re = /^3[0,6,8]\d{12}$/;
-        }
-        else {
-            // Basing min and max length on
-            // http://developer.ean.com/general_info/Valid_Credit_Card_Types
-            if (!value || value.length < 13 || value.length > 19) {
+        creditCard: function (value, type) {
+            var re,
+                checksum,
+                i,
+                digit;
+
+            if (type == "Visa") {
+                // Visa: length 16, prefix 4, dashes optional.
+                re = /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/;
+            }
+            else if (type == "MasterCard") {
+                // Mastercard: length 16, prefix 51-55, dashes optional.
+                re = /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/;
+            }
+            else if (type == "Discover") {
+                // Discover: length 16, prefix 6011, dashes optional.
+                re = /^6011-?\d{4}-?\d{4}-?\d{4}$/;
+            }
+            else if (type == "AmericanExpress") {
+                // American Express: length 15, prefix 34 or 37.
+                re = /^3[4,7]\d{13}$/;
+            }
+            else if (type == "DinersClub") {
+                // Diners: length 14, prefix 30, 36, or 38.
+                re = /^3[0,6,8]\d{12}$/;
+            }
+            else {
+                // Basing min and max length on
+                // http://developer.ean.com/general_info/Valid_Credit_Card_Types
+                if (!value || value.length < 13 || value.length > 19) {
+                    return false;
+                }
+
+                re = /[^0-9 \-]+/;
+            }
+
+            if (!re.test(value)) {
                 return false;
             }
 
-            re = /[^0-9 \-]+/;
-        }
+            // Remove all dashes for the checksum checks to eliminate negative numbers
+            value = value.split("-").join("");
 
-        if (!re.test(value)) {
-            return false;
-        }
+            // Checksum ("Mod 10")
+            // Add even digits in even length strings or odd digits in odd length strings.
+            checksum = 0;
 
-        // Remove all dashes for the checksum checks to eliminate negative numbers
-        value = value.split("-").join("");
-
-        // Checksum ("Mod 10")
-        // Add even digits in even length strings or odd digits in odd length strings.
-        checksum = 0;
-
-        for (i = (2 - (value.length % 2)) ; i <= value.length; i += 2) {
-            checksum += parseInt(ccnum.charAt(i - 1));
-        }
-
-        // Analyze odd digits in even length strings or even digits in odd length strings.
-        for (i = (value.length % 2) + 1; i < value.length; i += 2) {
-            digit = parseInt(value.charAt(i - 1)) * 2;
-
-            if (digit < 10) {
-                checksum += digit;
+            for (i = (2 - (value.length % 2)) ; i <= value.length; i += 2) {
+                checksum += parseInt(ccnum.charAt(i - 1));
             }
-            else {
-                checksum += (digit - 9);
-            }
-        }
 
-        return (checksum % 10) == 0;
-    }
-};
+            // Analyze odd digits in even length strings or even digits in odd length strings.
+            for (i = (value.length % 2) + 1; i < value.length; i += 2) {
+                digit = parseInt(value.charAt(i - 1)) * 2;
+
+                if (digit < 10) {
+                    checksum += digit;
+                }
+                else {
+                    checksum += (digit - 9);
+                }
+            }
+
+            return (checksum % 10) == 0;
+        }
+    };
+
+    Bridge.Validation = validation;
+})();
 // @source Attribute.js
 
-Bridge.define('Bridge.Attribute', {});
+Bridge.define('Bridge.Attribute', { });
 
 // @source INotifyPropertyChanged.js
 
@@ -4672,84 +4693,88 @@ Bridge.define('Bridge.PropertyChangedEventArgs', {
 
 // @source Array.js
 
-Bridge.Array = {
-    toIndex: function (arr, indices) {
-        if (indices.length != (arr.$s ? arr.$s.length : 1)) {
-            throw new Bridge.ArgumentException("Invalid number of indices");
-        }
-
-        if (indices[0] < 0 || indices[0] >= (arr.$s ? arr.$s[0] : arr.length)) {
-            throw new Bridge.ArgumentException("Index 0 out of range");
-        }
-
-        var idx = indices[0],
-            i;
-
-        if (arr.$s) {
-            for (i = 1; i < arr.$s.length; i++) {
-                if (indices[i] < 0 || indices[i] >= arr.$s[i]) {
-                    throw new Bridge.ArgumentException("Index " + i + " out of range");
-                }
-
-                idx = idx * arr.$s[i] + indices[i];
+(function () {
+    var array = {
+        toIndex: function (arr, indices) {
+            if (indices.length != (arr.$s ? arr.$s.length : 1)) {
+                throw new Bridge.ArgumentException("Invalid number of indices");
             }
-        }
 
-        return idx;
-    },
+            if (indices[0] < 0 || indices[0] >= (arr.$s ? arr.$s[0] : arr.length)) {
+                throw new Bridge.ArgumentException("Index 0 out of range");
+            }
 
-    get: function (indices) {
-        var r = this[Bridge.Array.toIndex(this, indices)];
+            var idx = indices[0],
+                i;
 
-        return typeof r !== "undefined" ? r : this.$v;
-    },
+            if (arr.$s) {
+                for (i = 1; i < arr.$s.length; i++) {
+                    if (indices[i] < 0 || indices[i] >= arr.$s[i]) {
+                        throw new Bridge.ArgumentException("Index " + i + " out of range");
+                    }
 
-    set: function (indices, value) {
-        this[Bridge.Array.toIndex(this, indices)] = value;
-    },
-
-    create: function (defvalue, initValues, sizes) {
-        var arr = [],
-            length = arguments[2],
-            i, s, v,
-            idx,
-            indices,
-            flatIdx;
-
-        arr.$v = defvalue;
-        arr.$s = [];
-        arr.get = Bridge.Array.get;
-        arr.set = Bridge.Array.set;
-        
-        for (i = 2; i < arguments.length; i++) {
-            length *= arguments[i];
-            arr.$s[i - 2] = arguments[i];            
-        }
-
-        arr.length = length;
-
-        if (initValues) {                        
-            for (i = 0; i < arr.length; i++) {                
-                indices = [];
-                flatIdx = i;
-
-                for (s = arr.$s.length - 1; s >= 0; s--) {
-                    idx = flatIdx % arr.$s[s];
-                    indices.unshift(idx);
-                    flatIdx = Bridge.Int.div(flatIdx - idx, arr.$s[s]);
+                    idx = idx * arr.$s[i] + indices[i];
                 }
+            }
 
-                v = initValues;
+            return idx;
+        },
 
-                for (idx = 0; idx < indices.length; idx++) {
-                    v = v[indices[idx]];
+        get: function (indices) {
+            var r = this[Bridge.Array.toIndex(this, indices)];
+
+            return typeof r !== "undefined" ? r : this.$v;
+        },
+
+        set: function (indices, value) {
+            this[Bridge.Array.toIndex(this, indices)] = value;
+        },
+
+        create: function (defvalue, initValues, sizes) {
+            var arr = [],
+                length = arguments[2],
+                i, s, v,
+                idx,
+                indices,
+                flatIdx;
+
+            arr.$v = defvalue;
+            arr.$s = [];
+            arr.get = Bridge.Array.get;
+            arr.set = Bridge.Array.set;
+
+            for (i = 2; i < arguments.length; i++) {
+                length *= arguments[i];
+                arr.$s[i - 2] = arguments[i];
+            }
+
+            arr.length = length;
+
+            if (initValues) {
+                for (i = 0; i < arr.length; i++) {
+                    indices = [];
+                    flatIdx = i;
+
+                    for (s = arr.$s.length - 1; s >= 0; s--) {
+                        idx = flatIdx % arr.$s[s];
+                        indices.unshift(idx);
+                        flatIdx = Bridge.Int.div(flatIdx - idx, arr.$s[s]);
+                    }
+
+                    v = initValues;
+
+                    for (idx = 0; idx < indices.length; idx++) {
+                        v = v[indices[idx]];
+                    }
+
+                    arr[i] = v;
                 }
+            }
 
-                arr[i] = v;
-            }            
+            return arr;
         }
-        
-        return arr;
-    }
-};
+    };
+
+    Bridge.Array = array;
+})();
 
