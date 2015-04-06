@@ -37,6 +37,41 @@ namespace Bridge.Html5
         }
 
         /// <summary>
+        /// Returns CanvasRenderingContext2D drawing context on the canvas, or null if the context ID is not supported.
+        /// A drawing context lets you draw on the canvas.
+        /// </summary>
+        /// <param name="contextId">The context's id</param>
+        /// <returns>A CanvasRenderingContext2D drawing context object.</returns>
+        public virtual CanvasRenderingContext2D GetContext(CanvasTypes.CanvasContext2DType contextId)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Returns WebGLRenderingContext drawing context on the canvas, or null if the context ID is not supported.
+        /// A drawing context lets you draw on the canvas. This context is only available on browsers that implement
+        /// WebGL (OpenGL ES 2.0).
+        /// </summary>
+        /// <param name="contextId">The context's id</param>
+        /// <returns>A WebGLRenderingContext drawing context object.</returns>
+        public virtual WebGLRenderingContext GetContext(CanvasTypes.CanvasContextWebGLType contextId)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Returns WebGL2RenderingContext drawing context on the canvas, or null if the context ID is not supported.
+        /// A drawing context lets you draw on the canvas. This context is only available on browsers that implement
+        /// WebGL 2 (OpenGL ES 3.0).
+        /// </summary>
+        /// <param name="contextId">The context's id</param>
+        /// <returns>A WebGL2RenderingContext drawing context object.</returns>
+        public virtual WebGL2RenderingContext GetContext(CanvasTypes.CanvasContextWebGL2Type contextId)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Returns a data: URL containing a representation of the image in the format specified by type (defaults to PNG). The returned image is 96dpi.
         /// If the height or width of the canvas is 0, "data:," representing the empty string, is returned.
         /// If the type requested is not image/png, and the returned value starts with data:image/png, then the requested type is not supported.
@@ -80,12 +115,12 @@ namespace Bridge.Html5
     }
 
     // TODO: Not implemented
-    public class CanvasRenderingContext2D
+    public class WebGLRenderingContext
     {
     }
 
     // TODO: Not implemented
-    public class WebGLRenderingContext
+    public class WebGL2RenderingContext
     {
     }
 }

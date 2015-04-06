@@ -50,8 +50,16 @@
     <Compile Include="ClientRectList.cs" />
     <Compile Include="CompatMode.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="Interfaces\CanvasGradient.cs" />
+    <Compile Include="Interfaces\CanvasPattern.cs" />
+    <Compile Include="Interfaces\SVGMatrix.cs" />
+    <Compile Include="Interfaces\Types\CanvasCompositeOperationType.cs" />
+    <Compile Include="Interfaces\Types\CanvasContextTypes.cs" />
+    <Compile Include="Interfaces\Types\CanvasTypes.cs" />
+    <Compile Include="Interfaces\CanvasRenderingContext2D.cs" />
     <Compile Include="Elements\ElementType.cs" />
     <Compile Include="Events\EventAttributes.cs" />
+    <Compile Include="Interfaces\TextMetrics.cs" />
     <Compile Include="JSON.cs" />
     <Compile Include="CSS\AlignContent.cs" />
     <Compile Include="CSS\AlignItems.cs" />
