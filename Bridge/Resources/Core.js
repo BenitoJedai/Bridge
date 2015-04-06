@@ -4,7 +4,45 @@
     var core = {
         global: (function () { return this; })(),
 		
-		emptyFn: function () { },
+        emptyFn: function () { },
+
+        property : function (scope, name, v) {
+            scope[name] = v;
+
+            var rs = name.charAt(0) == "$",
+                cap = rs ? name.slice(1) : name;
+
+            scope["get" + cap] = (function (name) {
+                return function () {
+                    return this[name];
+                };
+            })(name);
+
+            scope["set" + cap] = (function (name) {
+                return function (value) {
+                    this[name] = value;
+                };
+            })(name);
+        },
+
+        event: function (scope, name, v) {
+            scope[name] = v;
+
+            var rs = name.charAt(0) == "$",
+                cap = rs ? name.slice(1) : name;
+
+            scope["add" + cap] = (function (name) {
+                return function (value) {
+                    this[name] = Bridge.fn.combine(this[name], value);
+                };
+            })(name);
+
+            scope["remove" + cap] = (function (name) {
+                return function (value) {
+                    this[name] = Bridge.fn.remove(this[name], value);
+                };
+            })(name);
+        },
 
         copy: function (to, from, keys, toIf) {
             if (typeof keys === 'string') {

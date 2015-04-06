@@ -44,43 +44,13 @@
 
                 if (config.properties) {
                     for (name in config.properties) {
-                        this[name] = config.properties[name];
-                    
-                        var rs = name.charAt(0) == "$",
-                            cap = rs ? name.slice(1) : name;
-
-                        this["get" + cap] = (function (name) {
-                            return function () {
-                                return this[name];
-                            };                        
-                        })(name);
-
-                        this["set" + cap] = (function (name) {
-                            return function (value) {
-                                this[name] = value;
-                            };
-                        })(name);
+                        Bridge.property(this, name, config.properties[name]);                        
                     }
                 }
 
                 if (config.events) {
                     for (name in config.events) {
-                        this[name] = config.events[name];
-
-                        var rs = name.charAt(0) == "$",
-                            cap = rs ? name.slice(1) : name;
-
-                        this["add" + cap] = (function (name) {
-                            return function (value) {
-                                this[name] = Bridge.fn.combine(this[name], value);
-                            };
-                        })(name);
-
-                        this["remove" + cap] = (function (name) {
-                            return function (value) {
-                                this[name] = Bridge.fn.remove(this[name], value);
-                            };
-                        })(name);
+                        Bridge.event(this, name, config.events[name]);
                     }
                 }
                 if (config.alias) {
@@ -99,6 +69,7 @@
 
         // Create a new Class that inherits from this class
         define: function (className, prop) {
+            prop = prop || {};
             var extend = prop.$inherits || prop.inherits,
                 statics = prop.$statics || prop.statics,
                 base = extend ? extend[0].prototype : this.prototype,
@@ -250,13 +221,15 @@
                 scope.$$inheritors.push(Class);
             }
         
-            if (Class.$initMembers) {
-                Class.$initMembers.call(Class);
-            }
+            setTimeout(function () {
+                if (Class.$initMembers) {
+                    Class.$initMembers.call(Class);
+                }
 
-            if (Class.constructor) {
-                Class.constructor.call(Class);
-            }
+                if (Class.constructor) {
+                    Class.constructor.call(Class);
+                }
+            }, 0);            
 
             return Class;
         },
