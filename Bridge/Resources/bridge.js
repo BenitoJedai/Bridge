@@ -1032,9 +1032,9 @@
             initializing = false;
 
             if (statics) {
-                var staticsConfig = statics.$config;
+                var staticsConfig = statics.$config || statics.config;
 
-                if (staticsConfig) {
+                if (staticsConfig && !Bridge.isFunction(staticsConfig)) {
                     Bridge.Class.initConfig(extend, base, staticsConfig, true, Class);
 
                     if (statics.$config) {
@@ -1046,9 +1046,9 @@
                 }
             }        
 
-            var instanceConfig = prop.$config;
+            var instanceConfig = prop.$config || prop.config;
 
-            if (instanceConfig) {
+            if (instanceConfig && !Bridge.isFunction(instanceConfig)) {
                 Bridge.Class.initConfig(extend, base, instanceConfig, false, prop);
 
                 if (prop.$config) {
@@ -4747,7 +4747,7 @@ Bridge.define('Bridge.PropertyChangedEventArgs', {
             arr.get = Bridge.Array.get;
             arr.set = Bridge.Array.set;
 
-            for (i = 2; i < arguments.length; i++) {
+            for (i = 3; i < arguments.length; i++) {
                 length *= arguments[i];
                 arr.$s[i - 2] = arguments[i];
             }

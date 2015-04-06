@@ -50,7 +50,7 @@
             arr.get = Bridge.Array.get;
             arr.set = Bridge.Array.set;
 
-            for (i = 2; i < arguments.length; i++) {
+            for (i = 3; i < arguments.length; i++) {
                 length *= arguments[i];
                 arr.$s[i - 2] = arguments[i];
             }
