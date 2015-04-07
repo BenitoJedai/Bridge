@@ -78,7 +78,7 @@
             var nsParts = ns.split('.');
 
             if (!scope) {
-                scope = window;
+                scope = Bridge.global;
             }
 
             for (i = 0; i < nsParts.length; i++) {
@@ -93,10 +93,15 @@
         },
 
         ready: function (fn) {
-            if (typeof window.jQuery !== 'undefined') {
+            if (typeof Bridge.global.jQuery !== 'undefined') {
                 $(fn);
             } else {
-                Bridge.on('DOMContentLoaded', document, fn);
+                if (document.readyState == "complete" || document.readyState == "loaded") {
+                    fn();
+                }
+                else {
+                    Bridge.on('DOMContentLoaded', document, fn);
+                }
             }
         },
 
@@ -113,11 +118,11 @@
             }
 
             var attachHandler = function () {            
-                var ret = fn.call(elem, window.event);
+                var ret = fn.call(elem, Bridge.global.event);
 
                 if (ret === false) {
-                    window.event.returnValue = false;
-                    window.event.cancelBubble = true;
+                    Bridge.global.event.returnValue = false;
+                    Bridge.global.event.cancelBubble = true;
                 }
 
                 return (ret);
@@ -395,7 +400,7 @@
 
         unroll: function (value) {
             var d = value.split("."),
-                o = window[d[0]],
+                o = Bridge.global[d[0]],
                 i;
 
             for (var i = 1; i < d.length; i++) {
@@ -490,7 +495,7 @@
             call: function (obj, fnName){
                 var args = Array.prototype.slice.call(arguments, 2);
 
-                obj = obj || window;
+                obj = obj || Bridge.global;
 
                 return obj[fnName].apply(obj, args);
             },
@@ -1133,13 +1138,15 @@
                 scope.$$inheritors.push(Class);
             }
         
-            if (Class.$initMembers) {
-                Class.$initMembers.call(Class);
-            }
+            setTimeout(function () {
+                if (Class.$initMembers) {
+                    Class.$initMembers.call(Class);
+                }
 
-            if (Class.constructor) {
-                Class.constructor.call(Class);
-            }
+                if (Class.constructor) {
+                    Class.constructor.call(Class);
+                }
+            }, 0);            
 
             return Class;
         },
