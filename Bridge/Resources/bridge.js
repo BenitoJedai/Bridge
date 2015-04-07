@@ -93,7 +93,7 @@
         },
 
         ready: function (fn) {
-            if (typeof Bridge.global.jQuery !== 'undefined') {
+            if (typeof window.jQuery !== 'undefined') {
                 $(fn);
             } else {
                 Bridge.on('DOMContentLoaded', document, fn);
@@ -1133,17 +1133,13 @@
                 scope.$$inheritors.push(Class);
             }
         
-            var delayInit = function () {
-                if (Class.$initMembers) {
-                    Class.$initMembers.call(Class);
-                }
+            if (Class.$initMembers) {
+                Class.$initMembers.call(Class);
+            }
 
-                if (Class.constructor) {
-                    Class.constructor.call(Class);
-                }
-            };
-
-            setTimeout(delayInit, 0);            
+            if (Class.constructor) {
+                Class.constructor.call(Class);
+            }
 
             return Class;
         },
