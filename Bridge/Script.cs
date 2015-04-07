@@ -340,7 +340,7 @@ namespace Bridge
             return default(T);
         }
 
-        [Template("{name:raw}.call(null, {args})")]
+        [Template("{name:raw}({args})")]
         public static void Call(string name, params object[] args)
         {
         }
@@ -350,7 +350,7 @@ namespace Bridge
         {
         }
 
-        [Template("{name:raw}.call(null, {args})")]
+        [Template("{name:raw}({args})")]
         public static T Call<T>(string name, params object[] args)
         {
             return default(T);
