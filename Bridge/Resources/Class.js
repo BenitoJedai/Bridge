@@ -221,15 +221,13 @@
                 scope.$$inheritors.push(Class);
             }
         
-            setTimeout(function () {
-                if (Class.$initMembers) {
-                    Class.$initMembers.call(Class);
-                }
+            if (Class.$initMembers) {
+                Class.$initMembers.call(Class);
+            }
 
-                if (Class.constructor) {
-                    Class.constructor.call(Class);
-                }
-            }, 0);            
+            if (Class.constructor) {
+                Class.constructor.call(Class);
+            }
 
             return Class;
         },
